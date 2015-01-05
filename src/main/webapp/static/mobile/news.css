@@ -1,0 +1,7 @@
+body#news{font-size: 16px;color: rgb(85, 85, 85);font-family: Arial, Helvetica, sans-serif;}
+.bs-callout-info {background-color: #f4f8fa;border-color: #5bc0de;}
+.bs-callout {padding: 10px 0 10px 2px;border-left: 3px solid #eee;border-left: 3px solid #eee;font-size: 14px}
+.text-wrap{line-height: 19px;font-size: 15px;margin-bottom: 10px;}
+ #news-name {padding-bottom: 10px;border-bottom: 1px dotted #ccc;}
+#news-name {color: #000;font-size: 20px;font-weight: bold;white-space: pre-wrap;word-wrap: normal;word-break: normal;}
+.activity-meta {display: inline-block;line-height: 16px;vertical-align: middle;margin-left: 8px;padding-top: 2px;padding-bottom: 2px;color: #8c8c8c;font-size: 11px;}

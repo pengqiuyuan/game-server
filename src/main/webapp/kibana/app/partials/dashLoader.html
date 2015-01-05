@@ -1,0 +1,10 @@
+<style>
+  .noarrow>a:after {
+    display: none !important;
+  }
+</style>
+
+<li ng-repeat="pulldown in dashboard.current.nav" ng-controller="PulldownCtrl" ng-show="pulldown.enable"><kibana-simple-panel type="pulldown.type" ng-cloak></kibana-simple-panel></li>
+
+<li ng-show="dashboard.current.editable" bs-tooltip="'Configure dashboard'" data-placement="bottom"><a class="link" config-modal="app/partials/dasheditor.html" kbn-model="dashboard"><i class='icon-cog'></i></a></li>
+
