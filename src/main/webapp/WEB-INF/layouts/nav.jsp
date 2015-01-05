@@ -137,6 +137,7 @@
 						                  <li><a tabindex="-1" href="${ctx}/manage/count/user?id=1">用户相关日志(总)</a></li>
 						                  <li><a href="${ctx}/manage/count/user?id=2">用户登录</a></li>
 						                  <li><a href="${ctx}/manage/count/user?id=3">用户创建</a></li>
+						                  <li><a href="${ctx}/manage/count/user?id=4">在线用户</a></li>
 						                </ul>
 					               </li>	
 							</shiro:hasAnyRoles>

@@ -159,6 +159,8 @@ public class CountController extends BaseController{
 			url = "redirect:/kibana/index.html#/dashboard/file/userLogin.json"; 
 		}else if(id == 3){
 			url = "redirect:/kibana/index.html#/dashboard/file/userCreate.json"; 
+		}else if(id == 4){
+			url = "redirect:/kibana/index.html#/dashboard/file/userOnline.json"; 
 		}
 		return url;
 	}	
