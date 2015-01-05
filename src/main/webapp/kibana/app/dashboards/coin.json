@@ -136,8 +136,8 @@
           "editable": true,
           "type": "table",
           "loadingEditor": false,
-          "size": 100,
-          "pages": 10,
+          "size": 25,
+          "pages": 20,
           "offset": 0,
           "sort": [
             "time",
