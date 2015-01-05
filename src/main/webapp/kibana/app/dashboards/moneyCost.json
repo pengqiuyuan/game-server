@@ -123,6 +123,55 @@
           "error": false,
           "span": 12,
           "editable": true,
+          "type": "table",
+          "loadingEditor": false,
+          "size": 25,
+          "pages": 20,
+          "offset": 0,
+          "sort": [
+            "time",
+            "desc"
+          ],
+          "overflow": "min-height",
+          "fields": [
+            "_type",
+            "日期",
+            "游戏ID",
+            "国家ID",
+            "游戏平台ID",
+            "服务器ID",
+            "玩家平台ID",
+            "玩家GUID",
+            "玩家名字",
+            "日志分类关键字"
+          ],
+          "highlight": [],
+          "sortable": true,
+          "header": true,
+          "paging": true,
+          "field_list": true,
+          "all_fields": false,
+          "trimFactor": 300,
+          "localTime": false,
+          "timeField": "@timestamp",
+          "spyable": true,
+          "exportable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              1
+            ]
+          },
+          "style": {
+            "font-size": "9pt"
+          },
+          "normTimes": true,
+          "title": "真实充值币消耗"
+        },
+        {
+          "error": false,
+          "span": 12,
+          "editable": true,
           "type": "bettermap",
           "loadingEditor": false,
           "field": "geoip.location",
@@ -236,55 +285,6 @@
           "tstat": "total",
           "valuefield": "",
           "title": "真实充值币消耗百分比表"
-        },
-        {
-          "error": false,
-          "span": 12,
-          "editable": true,
-          "type": "table",
-          "loadingEditor": false,
-          "size": 100,
-          "pages": 10,
-          "offset": 0,
-          "sort": [
-            "time",
-            "desc"
-          ],
-          "overflow": "min-height",
-          "fields": [
-            "_type",
-            "日期",
-            "游戏ID",
-            "国家ID",
-            "游戏平台ID",
-            "服务器ID",
-            "玩家平台ID",
-            "玩家GUID",
-            "玩家名字",
-            "日志分类关键字"
-          ],
-          "highlight": [],
-          "sortable": true,
-          "header": true,
-          "paging": true,
-          "field_list": true,
-          "all_fields": false,
-          "trimFactor": 300,
-          "localTime": false,
-          "timeField": "@timestamp",
-          "spyable": true,
-          "exportable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              1
-            ]
-          },
-          "style": {
-            "font-size": "9pt"
-          },
-          "normTimes": true,
-          "title": "真实充值币消耗"
         }
       ],
       "notice": false
