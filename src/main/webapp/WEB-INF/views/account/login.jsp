@@ -12,6 +12,9 @@
 
 <body>
 	<form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
+		<fieldset>
+			<legend>管理员登陆</legend>
+
 	<%
 	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 	if(error != null){
@@ -22,16 +25,20 @@
 	<%
 	}
 	%>
+		
 		<div class="control-group">
-			<label for="username" class="control-label">名称:</label>
-			<div class="controls">
-				<input type="text" id="username"  name="username"  value="${username}" class="input-medium large_input required"/>
-			</div>
-		</div>
+			<label class="control-label" for="username">用户名：</label>
+				<div class="controls">
+					<input class="input-xlarge focused" name="username" id="username" type="text" value="">
+					<span class="help-inline">请输入登录用户名.</span>
+				</div>
+		</div>		
+		
 		<div class="control-group">
-			<label for="password" class="control-label">密码:</label>
+			<label class="control-label" for="password">登录密码：</label>
 			<div class="controls">
-				<input type="password" id="password" name="password" class="input-medium  large_input required"/>
+				<input class="input-xlarge" name="password" id="password" type="password" value="">
+				<span class="help-inline">请输入登录密码.</span>
 			</div>
 		</div>
 				
@@ -44,6 +51,7 @@
 			 -->
 			</div>
 		</div>
+		</fieldset>
 	</form>
 
 	<script>
