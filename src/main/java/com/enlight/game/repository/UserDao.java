@@ -12,7 +12,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import com.enlight.game.entity.User;
 
 
-public interface UserDao extends PagingAndSortingRepository<com.enlight.game.entity.User, Long>, JpaSpecificationExecutor<User> {
+public interface UserDao extends PagingAndSortingRepository<User, Long>, JpaSpecificationExecutor<User> {
 	User findByLoginName(String loginName);
 
 	
