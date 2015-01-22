@@ -20,15 +20,20 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.modules.utils.Encodes;
 
 import com.enlight.game.entity.User;
+import com.enlight.game.entity.UserRole;
+import com.enlight.game.service.userRole.UserRoleService;
 import com.google.common.base.Objects;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
 	protected AccountService accountService;
-
+	
+	@Autowired
+	protected UserRoleService userRoleService;
 	/**
 	 * 认证回调函数,登录时调用.
 	 */
@@ -40,7 +45,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			if(isNomal(user))
 			{
 			byte[] salt = Encodes.decodeHex(user.getSalt());
-			return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName()),
+			return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),user.getStoreId()),
 					user.getPassword(), ByteSource.Util.bytes(salt), getName());
 			}
 			return null;
@@ -63,6 +68,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
 		User user = accountService.findUserByLoginName(shiroUser.loginName);
+		//UserRole userRole = userRoleService.findByStoreId(Long.parseLong(shiroUser.getStoreId())).get(0);
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		info.addRoles(user.getRoleList());
 		return info;
@@ -91,11 +97,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		public Long id;
 		public String loginName;
 		public String name;
-
-		public ShiroUser(Long id, String loginName, String name) {
+		public String storeId;
+		
+		public ShiroUser(Long id, String loginName, String name,String storeId) {
 			this.id = id;
 			this.loginName = loginName;
 			this.name = name;
+			this.storeId = storeId;
 		}
 
 		public String getName() {
@@ -109,6 +117,12 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		public String toString() {
 			return loginName;
 		}
+
+
+		public String getStoreId() {
+			return storeId;
+		}
+
 
 		/**
 		 * 重载hashCode,只计算loginName;

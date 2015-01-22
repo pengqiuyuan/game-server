@@ -1,11 +1,14 @@
 package com.enlight.game.web.controller.mgr;
 
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 
 
 /**
@@ -26,6 +29,7 @@ public class CountController extends BaseController{
 	@RequestMapping(value = "/item", method = RequestMethod.GET)
 	public String item(@RequestParam(value = "id")long id){
 		logger.debug("item coming...");
+		ShiroUser shiroUser = getCurrentUserName();
 		String url = null;
 		if(id == 1){
 			url = "redirect:/kibana/index.html#/dashboard/file/item.json"; 
@@ -164,5 +168,14 @@ public class CountController extends BaseController{
 		}
 		return url;
 	}	
+	
+	
+	/**
+	 * 取出Shiro中的当前用户Id.
+	 */
+	public ShiroUser getCurrentUserName() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user;
+	}
 
 }

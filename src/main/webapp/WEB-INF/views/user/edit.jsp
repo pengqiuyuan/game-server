@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
-
+<%@ taglib prefix="huake" uri="/huake"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
@@ -38,37 +38,49 @@
 	</div>
 </div>
 
-<div
-	class="control-group">
-	<label class="control-label" for="storeId">部门:</label>
-	<div class="controls">
-	
-					<select name="storeId">		
-				
-						
-					<c:forEach items="${stores}" var="item" >
-					<option value="${item.id }"   ${user.storeId == item.id ? "selected":"" }>
-					${item.name }
-					</option>
-					</c:forEach>
-					</select>	
-		</div>
-</div>
-
-<div
-	class="control-group">
-	<label class="control-label" for="type">操作员类型:</label>
-	<div class="controls">
-		<select  name="roles">
-		<shiro:hasRole name="admin">
-		    <option value="admin" ${ user.roles == 'admin' ? 'selected' : ''}>总管理员</option>
-			<option value="business"  ${ user.roles == 'business' ? 'selected' : ''} >总业务员</option>
-		</shiro:hasRole>	
-		    <option value="store_admin"  ${ user.roles == 'store_admin' ? 'selected' : ''} >部门管理员</option>
-			<option value="store_business"  ${ user.roles == 'store_business' ? 'selected' : ''} >部门业务员</option>
-		</select>
+	<div class="control-group ">
+			<label class="control-label" for="serverName">服务器大区：</label>
+			<div class="controls">	
+				<c:forEach items="${serverZones}" var="item" varStatus="i">
+							   <input type="checkbox" name="serverName" value="${item}" checked="checked"  class="box" />
+					           	<span><huake:getServerZoneNameTag id="${item}"></huake:getServerZoneNameTag></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					         <c:if test="${(i.index+1)%5 == 0}">
+							<br/>
+							<br/>
+							</c:if>
+				</c:forEach>			
+			</div>
 	</div>
-</div>
+
+	<div class="page-header">
+	  	<span id="addfield" class="btn btn-info">新加项目权限组</span>
+	</div>
+	<div id="field">
+		<c:forEach items="${userRoles}" var="item" varStatus="i">
+			<div class="control-group">
+				<label class="control-label" for="storename">选择项目：</label>
+				<input id="storename" type="text" name="storename" value="<huake:getStoreNameTag id="${item.storeId}"></huake:getStoreNameTag>"  class="input-large"  />
+				<input type="hidden" name="storeId" value="${item.storeId}" > 
+			</div>
+			<div class="control-group">
+				<label for="role" class="control-label">权限组：</label>
+					<input id="roleCode" type="text" name="role" value="${item.role}"  class="input-large"  />
+			</div>
+			<div class="control-group">
+					<label for="functions" class="control-label">功能选项：</label>
+						<div class="controls" id="functions">
+							<c:forEach items="${item.functions}" var="item" varStatus="i">
+								   <input onclick='return false' type="checkbox" name="functions" value="${item}" checked="checked" class="box" />
+						           	<span>${item}、<huake:getFunctionNameTag id="${item}"></huake:getFunctionNameTag></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						         <c:if test="${(i.index+1)%5 == 0}">
+								<br/>
+								<br/>
+								</c:if>
+							</c:forEach>
+						</div>
+			</div>
+		</c:forEach>
+	</div>
 
 
 	<div

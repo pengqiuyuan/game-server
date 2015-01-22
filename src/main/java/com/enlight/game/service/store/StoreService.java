@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import com.enlight.game.entity.User;
 import com.enlight.game.repository.StoreDao;
 import com.enlight.game.repository.UserDao;
 import com.enlight.game.service.account.AccountService;
+import com.google.common.collect.ImmutableList;
 
 
 @Component
@@ -168,23 +170,6 @@ public class StoreService {
 		return storeDao.findAll(spec);
 	}
 
-	/**
-	 * 用户自提货，返回一个唯一的用户选择提货的门店
-	 * 
-	 * @param id
-	 * @return pengqiuyuan
-	 */
-	public Stores findOneByUid(Long id) {
-		Map<String, SearchFilter> filters = new HashMap<String, SearchFilter>();
-		User user = accountService.getUser(id);
-		filters.put("id",
-				new SearchFilter("id", Operator.EQ, user.getStoreId()));
-		filters.put("status", new SearchFilter("status", Operator.EQ,
-				Stores.STATUS_VALIDE));
-		Specification<Stores> spec = DynamicSpecifications.bySearchFilter(
-				filters.values(), Stores.class);
-		return storeDao.findOne(spec);
-	}
 
 	/**
 	 * 更改排序字段
@@ -238,16 +223,15 @@ public class StoreService {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 
 		User user = accountService.getUser(userId);
-		if (!user.getRoles().equals(User.USER_ROLE_ADMIN)
-				&& !user.getRoles().equals(User.USER_ROLE_BUSINESS)) {
-			filters.put("id",
-					new SearchFilter("id", Operator.EQ, user.getStoreId()));
+		if (!user.getRoles().equals(User.USER_ROLE_ADMIN) && !user.getRoles().equals(User.USER_ROLE_BUSINESS)) {
+			List<String> storeIds  = ImmutableList.copyOf(StringUtils.split(user.getStoreId(), ","));
+			for (String id : storeIds) {
+				filters.put("id",new SearchFilter("id", Operator.EQ, Long.parseLong(id)));
+			}
 		}
-		filters.put("status", new SearchFilter("status", Operator.EQ,
-				Stores.STATUS_VALIDE));
+		filters.put("status", new SearchFilter("status", Operator.EQ,Stores.STATUS_VALIDE));
 
-		Specification<Stores> spec = DynamicSpecifications.bySearchFilter(
-				filters.values(), Stores.class);
+		Specification<Stores> spec = DynamicSpecifications.bySearchFilter(filters.values(), Stores.class);
 		return spec;
 	}
 

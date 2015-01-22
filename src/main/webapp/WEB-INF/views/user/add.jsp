@@ -29,7 +29,7 @@ margin-left:10px;
 	class="control-group">
 	<label class="control-label" for="name">名称：</label>
 	<div class="controls">
-		<input type="text" name="name" class="input-large " value=""   />
+		<input type="text" name="name" class="input-large" value=""   />
 	</div>
 </div>
 
@@ -37,7 +37,7 @@ margin-left:10px;
 	class="control-group">
 	<label class="control-label" for="loginName">登入名：</label>
 	<div class="controls">
-		<input type="text" name="loginName" value=""   class="input-large"  />
+		<input id="loginName" type="text" name="loginName" value=""   class="input-large"  />
 	</div>
 </div>
 
@@ -52,40 +52,53 @@ margin-left:10px;
 		<label class="control-label" >确认密码：</label>
 		<div class="controls">
 			<input type="password" id="confirmPwdCipher" name="confirmPwdCipher"  class="input-large"  />
+	   </div>
+	</div>
+	
+	<div class="control-group ">
+		<label class="control-label" for="serverName">服务器大区：</label>
+		<div class="controls">	
+			<c:forEach items="${serverZones}" var="item" varStatus="i">
+						   <input type="checkbox" name="serverName" value="${item.id}"  class="box" />
+				           	<span>${item.serverName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				         <c:if test="${(i.index+1)%5 == 0}">
+						<br/>
+						<br/>
+						</c:if>
+			</c:forEach>			
 		</div>
 	</div>
-
-<div
-	class="control-group">
-	<label class="control-label" for="storeId">部门</label>
+	<div class="page-header">
+	  	<span id="addfield" class="btn btn-info">新加项目权限组</span>
+	</div>
+	<div id="field">
+		
+	</div>
+<%-- <div class="control-group">
+	<label class="control-label" for="storeId">选择项目：</label>
 	<div class="controls">
-
-					<select name="storeId">		
-				
-					<c:forEach items="${stores}" var="item" >
+		<select name="storeId" id="storeId">	
+		    <option value="">请选择项目</option>	
+			<c:forEach items="${stores}" var="item" >
 					<option value="${item.id }"  >
 					${item.name }
 					</option>
-					</c:forEach>
-					</select>	
-		</div>
-</div>
-
-<div
-	class="control-group">
-	<label class="control-label" for="type">操作员类型：</label>
-	<div class="controls">
-		<select  name="roles">
-		    <shiro:hasRole name="admin">
-			<option value="admin">总管理员</option>
-			<option value="business" >总业务员</option>
-			</shiro:hasRole>
-		    <option value="store_admin">部门管理员</option>
-			<option value="store_business" >部门业务员</option>
-		</select>
+			</c:forEach>
+		</select>	
 	</div>
 </div>
 
+<div class="control-group">
+		<label for="role" class="control-label">权限组：</label>
+			<div class="controls" >
+				<select  id="roleCode" name="role"  class="role-select"></select> 
+			</div>
+</div>
+<div class="control-group">
+		<label for="functions" class="control-label">功能选项：</label>
+			<div class="controls" id="functions">
+			</div>
+</div> --%>
 
 	<div
 		class="control-group ">
@@ -97,15 +110,65 @@ margin-left:10px;
 			</select>
 		</div>
 	</div>
-			
+	<input type="hidden" name="roles" value="" >		
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
 				 <a href="<%=request.getContextPath()%>/manage/user/index" class="btn btn-primary">返回</a>
 	        </div>
 	</form>
 	<script type="text/javascript">
-
+	 var i=0;
+	$("#addfield").click(function(){	     
+		 ++i;
+	     $("#field").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions"+i+"'></div></div>" );
+	     $("#field").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode"+i+"' name='role'  class='role-select'></select></div></div>" );
+	     $("#field").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId"+i+"'><option value=''>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	</div></div>" );
+	     
+	     $("#roleCode"+i).change(function(e){
+			var gameId = $("#storeId"+i).val();
+			var role = $("#roleCode"+i).val();
+			$("#functions"+i).empty();
+			e.preventDefault();
+			$.ajax({                                               
+				url: '<%=request.getContextPath()%>/manage/user/findFunctions?gameId='+gameId+'&role='+role, 
+				type: 'GET',
+				contentType: "application/json;charset=UTF-8",		
+				dataType: 'text',
+				success: function(data){
+	 				var parsedJson = $.parseJSON(data);
+					 jQuery.each(parsedJson, function(index, itemData) {
+					 $("#functions"+i).append("<input type='checkbox' onclick='return false' name='functions' value='"+itemData.function+"' checked='checked' class='box' /><span>"+itemData.function+"、"+itemData.functionName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
+					 }); 
+				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+			});
+		}); 
+		
+		$("#storeId"+i).change(function(e){
+			var value = $("#storeId"+i).val();
+	 		$("#roleCode"+i).empty();
+			e.preventDefault();
+			$.ajax({
+				url: '<%=request.getContextPath()%>/manage/user/findRoles?gameId=' + value, 
+				type: 'GET',
+				contentType: "application/json;charset=UTF-8",
+				data: JSON.stringify({name:value}),					
+				dataType: 'text',
+				success: function(data){
+					var parsedJson = $.parseJSON(data);
+					$("#roleCode"+i).append("<option value=''>"+"选择权限组"+"</option>");
+					 jQuery.each(parsedJson, function(index, itemData) {
+					 $("#roleCode"+i).append("<option value='"+itemData+"'>"+itemData+"</option>"); 
+					 });
+				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+			});
+		});
+	}); 
+	
 $(function(){
+	
+	//聚焦第一个输入框
+	$("#loginName").focus();
+	
 	$("#inputForm").validate({
 		rules:{
 			name:{
@@ -114,6 +177,7 @@ $(function(){
 				maxlength:10
 			},
 			loginName:{
+				remote: '<%=request.getContextPath()%>/manage/user/checkLoginName',
 				required:true,
 				minlength:2,
 				maxlength:10
@@ -133,6 +197,7 @@ $(function(){
 				minlength:"用户名长度2-10位"
 			},
 			loginName:{
+				remote: "用户登录名已存在",
 				required:"必须填写",
 				minlength:"登入名长度2-10位"
 			},pwdCipher:{
@@ -147,6 +212,7 @@ $(function(){
 			}
 		}
 	});
+	
 })
 
 </script> 

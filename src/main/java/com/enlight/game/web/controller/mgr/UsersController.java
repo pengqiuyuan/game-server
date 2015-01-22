@@ -3,6 +3,7 @@ package com.enlight.game.web.controller.mgr;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -26,14 +27,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
-
+import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.Log;
+import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.entity.User;
+import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.log.LogService;
+import com.enlight.game.service.roleFunction.RoleFunctionService;
+import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.user.UserService;
+import com.enlight.game.service.userRole.UserRoleService;
 import com.google.common.collect.Maps;
 
 
@@ -85,12 +91,22 @@ public class UsersController extends BaseController{
 	@Autowired
 	private LogService logService;
 	
+	@Autowired
+	private ServerZoneService serverZoneService;
+	
+	@Autowired
+	private RoleFunctionService roleFunctionService;
+	
+	@Autowired
+	private UserRoleService userRoleService;
+	
 	/**
 	 *  用户管理首页
-	 * @param pageNumber 当前�?	 * @param pageSize   显示条数
+	 * @param pageNumber 当前	 
+	 * @param pageSize   显示条数
 	 * @param sortType  排序
 	 * @param model   返回对象
-	 * @param request  封装的请�?	 * @return
+	 * @param request  封装的请	
 	 */
 	@RequestMapping(value = "index", method = RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
@@ -111,21 +127,30 @@ public class UsersController extends BaseController{
 	
 	
 	/**
-	 * 操作员编辑页�?	 * @param oid 用户ID
+	 * 操作员编辑页	 
+	 * @param oid 用户ID
 	 * @return
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.GET)
 	public String edit(@RequestParam(value = "id")long id,Model model){
 		User user = userService.findById(id);
 		Long userId = getCurrentUserId();
-		model.addAttribute("stores",storeService.findListByUid(userId));
+		//model.addAttribute("stores",storeService.findListByUid(userId));
+		List<UserRole> userRoles = userRoleService.findByUserId(id);
+		model.addAttribute("userRoles", userRoles);
+		if(userRoles.isEmpty()){
+			model.addAttribute("serverZones",null);
+		}else{
+			model.addAttribute("serverZones",userRoles.get(0).getServerZoneList());
+		}
 		model.addAttribute("user", user);
 		model.addAttribute("id", id);
 		return "/user/edit";
 	}
 	
 	/**
-	 * 操作员更新页�?	 * @param user 用户
+	 * 操作员更新页	 
+	 * @param user 用户
 	 * @return
 	 */
 	@RequestMapping(value = "update", method = RequestMethod.POST)
@@ -138,27 +163,56 @@ public class UsersController extends BaseController{
 	}
 	
 	/**
-	 * 新增操作员页�?	 * @param uid 租户ID
+	 * 新增操作员页	
+	 * @param uid 租户ID
 	 * @return
 	 */
 	@RequestMapping(value = "add", method = RequestMethod.GET)
 	public String addUser(Model model){
 		Long userId = getCurrentUserId();
 		model.addAttribute("stores",storeService.findListByUid(userId));
+		model.addAttribute("serverZones",serverZoneService.findAll());
 		return "/user/add";
 	}
 	
 	/**
-	 * 新增操作�?	 * @param Usertest 用户
+	 * 新增操作	 
+	 * @param Usertest 用户
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public String saveUser(User user,ServletRequest request,Model model,RedirectAttributes redirectAttributes){
+		String serverZones = "";
+		for(String str0 : request.getParameterValues("serverName")){
+			serverZones=serverZones+","+str0;
+		}
 		String password = request.getParameter("confirmPwdCipher");
 		user.setPlainPassword(password);
 		boolean flag = userService.isOnly(user.getLoginName());
 		if(flag){
-			accountService.registerUser(user);
+			accountService.register(user);
+			if (request.getParameterValues("storeId") != null && request.getParameterValues("role") != null) {
+				if (request.getParameterValues("storeId") != null && request.getParameterValues("role").length > 0) {
+					for (int i = 0; i < request.getParameterValues("storeId").length; i++) {
+						List<String> funcs = roleFunctionService.findByGameIdAndRoleFunctions(Long.parseLong(request.getParameterValues("storeId")[i]), request.getParameterValues("role")[i]);
+						String functions = "";
+						for (String string : funcs) {
+							functions = functions + ","+string;
+						}
+						UserRole userRole = new UserRole();
+						userRole.setCrDate(new Date());
+						userRole.setUpDate(new Date());
+						userRole.setStatus(UserRole.STATUS_VALIDE);
+						userRole.setUserId(accountService.register(user).getId());
+						userRole.setServerZone(serverZones);
+						userRole.setFunctions(functions);
+						userRole.setStoreId(Long.parseLong(request.getParameterValues("storeId")[i]));
+						userRole.setRole(request.getParameterValues("role")[i]);
+						userRoleService.save(userRole);
+					}
+				}
+			}
+			
 			redirectAttributes.addFlashAttribute("message", "新增用户成功");
 			String message = "添加:" +user.toString();
 			logService.log(getCurrentUserName(), message, Log.TYPE_USER);
@@ -166,10 +220,7 @@ public class UsersController extends BaseController{
 		}
 		model.addAttribute("storeId", user.getStoreId());
 		model.addAttribute("message", "用户名重复！");
-
 	    return "/user/add"; 
-
-		
 	}
 
 	/**
@@ -204,7 +255,8 @@ public class UsersController extends BaseController{
 
 	
 	/**
-	 * 冻结	 * @param oid 用户id
+	 * 冻结	 
+	 * @param oid 用户id
 	 */
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -220,7 +272,8 @@ public class UsersController extends BaseController{
 	}
 	
 	/**
-	 * 删除	 * @param oid 用户id
+	 * 删除	 
+	 * @param oid 用户id
 	 */
 	@RequestMapping(value = "delUser", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -236,7 +289,8 @@ public class UsersController extends BaseController{
 	}
 	
 	/**
-	 * �?��操作�?	 * @param oid 用户id
+	 * 操作	 
+	 * @param oid 用户id
 	 */
 	@RequestMapping(value = "active", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -281,5 +335,46 @@ public class UsersController extends BaseController{
 		return user.name;
 	}
 	
+	/**
+	 * 根据项目查找对应权限组
+	 * @param 
+	 * @return
+	 * @throws AppBizException
+	 */
+	@RequestMapping(value="/findRoles",method=RequestMethod.GET)	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<RoleFunction> findRoles(@RequestParam(value="gameId",required=true) Long gameId) throws AppBizException{
+		System.out.println(roleFunctionService.findByGameId(gameId));
+		return roleFunctionService.findByGameId(gameId);
+	}
 	
+	/**
+	 * 根据项目、权限组 查找对应功能
+	 * @param
+	 * @return
+	 * @throws AppBizException
+	 */
+	@RequestMapping(value="/findFunctions",method=RequestMethod.GET)	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<RoleFunction> findFunctions(
+			@RequestParam(value="gameId") Long gameId,
+			@RequestParam(value="role") String role) throws AppBizException{
+		roleFunctionService.findByGameIdAndRole(gameId, role);
+		return roleFunctionService.findByGameIdAndRole(gameId, role);
+	}
+	
+	/**
+	 * Ajax请求校验loginName是否唯一。
+	 */
+	@RequestMapping(value = "/checkLoginName")
+	@ResponseBody
+	public String checkLoginName(@RequestParam("loginName") String loginName) {
+		if (accountService.findUserByLoginName(loginName) == null) {
+			return "true";
+		} else {
+			return "false";
+		}
+	}
 }

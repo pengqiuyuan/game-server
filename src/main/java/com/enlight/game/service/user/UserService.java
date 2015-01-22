@@ -1,8 +1,10 @@
 package com.enlight.game.service.user;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +20,7 @@ import org.springside.modules.persistence.SearchFilter.Operator;
 import com.enlight.game.entity.User;
 import com.enlight.game.repository.UserDao;
 import com.enlight.game.service.account.AccountService;
+import com.google.common.collect.ImmutableList;
 
 
 @Component
@@ -144,11 +147,12 @@ public class UserService {
 	private Specification<User> buildSpecification(Long userId, Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		User user = accountService.getUser(userId);
-		
 		if(!user.getRoles().equals(User.USER_ROLE_ADMIN) && !user.getRoles().equals(User.USER_ROLE_BUSINESS) )
 		{
-			filters.put("storeId", new SearchFilter("storeId", Operator.EQ, user.getStoreId()));
-			filters.put("roles", new SearchFilter("roles", Operator.EQ, User.USER_ROLE_BUSINESS));
+			List<String> storeIds  = ImmutableList.copyOf(StringUtils.split(user.getStoreId(), ","));
+			for (String id : storeIds) {
+				filters.put("storeId",new SearchFilter("storeId", Operator.EQ, id));
+			}
 		}
 		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
 		return spec;

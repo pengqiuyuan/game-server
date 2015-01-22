@@ -63,6 +63,12 @@ public class AccountService {
 		user.setRegisterDate(clock.getCurrentDate());
 		userDao.save(user);
 	}
+	
+	public User register(User user) {
+		entryptPassword(user);
+		user.setRegisterDate(clock.getCurrentDate());
+		return userDao.save(user);
+	}
 
 	public void updateUser(User user) {
 		if (StringUtils.isNotBlank(user.getPlainPassword())) {

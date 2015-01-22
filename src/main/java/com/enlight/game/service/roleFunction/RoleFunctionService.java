@@ -53,8 +53,16 @@ public class RoleFunctionService {
 		return roleFunctionDao.findByGameIdAndRole(gameId, role);
 	}
 	
+	public List<String> findByGameIdAndRoleFunctions(Long gameId,String role){
+		return roleFunctionDao.findByGameIdAndRoleOnlyFunc(gameId, role);
+	}
+	
 	public void delById(long id){
 		roleFunctionDao.delete(id);
+	}
+	
+	public List<RoleFunction> findByGameId(Long gameId){
+		return roleFunctionDao.findByGameId(gameId);
 	}
 	
 	/**
@@ -135,7 +143,7 @@ public class RoleFunctionService {
 
 		User user = accountService.getUser(userId);
 		if (!user.getRoles().equals(User.USER_ROLE_ADMIN) && !user.getRoles().equals(User.USER_ROLE_BUSINESS)) {
-			filters.put("id",new SearchFilter("id", Operator.EQ, user.getStoreId()));
+			filters.put("gameId",new SearchFilter("gameId", Operator.EQ, user.getStoreId()));
 		}
 		filters.put("status", new SearchFilter("status", Operator.EQ,RoleFunction.STATUS_VALIDE));
 
