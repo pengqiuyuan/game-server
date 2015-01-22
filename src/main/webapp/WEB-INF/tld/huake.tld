@@ -22,4 +22,33 @@
 		</attribute>
 	</tag>
 	
+			<tag>
+		<description>
+			数据字典格式标签
+		</description>
+		<name>getServerZoneNameTag</name>
+		<tag-class>com.enlight.game.tags.GetServerZoneNameTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+				<tag>
+		<description>
+			数据字典格式标签
+		</description>
+		<name>getFunctionNameTag</name>
+		<tag-class>com.enlight.game.tags.GetFunctionNameTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	
 </taglib>
