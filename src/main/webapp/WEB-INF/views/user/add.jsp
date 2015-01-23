@@ -118,16 +118,22 @@ margin-left:10px;
 	</form>
 	<script type="text/javascript">
 	 var i=0;
-	$("#addfield").click(function(){	     
-		 ++i;
-	     $("#field").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions"+i+"'></div></div>" );
-	     $("#field").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode"+i+"' name='role'  class='role-select'></select></div></div>" );
-	     $("#field").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId"+i+"'><option value=''>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	</div></div>" );
+	$("#addfield").click(function(){
+		 i++;
+	     $("#field").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
+	     $("#field").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode' name='role'  class='role-select'></select></div></div>" );
+	     $("#field").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	</div></div>" );
+	  		$('select[name="storeId"]').each(function(){
+	  			if($(this).val()!=0){
+				    $("#field").children(":first").children().children("#storeId").find("option[value='"+$(this).val()+"']").remove();	
+	  			}
+			});
 	     
-	     $("#roleCode"+i).change(function(e){
-			var gameId = $("#storeId"+i).val();
-			var role = $("#roleCode"+i).val();
-			$("#functions"+i).empty();
+	     $("#roleCode").change(function(e){
+			var gameId = $(this).parent().parent().prev().children().children("#storeId").val();
+			var role = $(this).children('option:selected').val();
+			var th = $(this).parent().parent().next().children("#functions");
+			th.empty();
 			e.preventDefault();
 			$.ajax({                                               
 				url: '<%=request.getContextPath()%>/manage/user/findFunctions?gameId='+gameId+'&role='+role, 
@@ -137,15 +143,17 @@ margin-left:10px;
 				success: function(data){
 	 				var parsedJson = $.parseJSON(data);
 					 jQuery.each(parsedJson, function(index, itemData) {
-					 $("#functions"+i).append("<input type='checkbox' onclick='return false' name='functions' value='"+itemData.function+"' checked='checked' class='box' /><span>"+itemData.function+"、"+itemData.functionName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
+					 th.append("<input type='checkbox' onclick='return false' name='functions' value='"+itemData.function+"' checked='checked' class='box' /><span>"+itemData.function+"、"+itemData.functionName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
 					 }); 
 				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 			});
 		}); 
 		
-		$("#storeId"+i).change(function(e){
-			var value = $("#storeId"+i).val();
-	 		$("#roleCode"+i).empty();
+		$("#storeId").change(function(e){
+			var value = $(this).children('option:selected').val();
+	 		var th = $(this).parent().parent().next().children().children("#roleCode");
+	 		$(this).find("option:not(:selected)").remove();
+	 		th.empty();
 			e.preventDefault();
 			$.ajax({
 				url: '<%=request.getContextPath()%>/manage/user/findRoles?gameId=' + value, 
@@ -155,13 +163,14 @@ margin-left:10px;
 				dataType: 'text',
 				success: function(data){
 					var parsedJson = $.parseJSON(data);
-					$("#roleCode"+i).append("<option value=''>"+"选择权限组"+"</option>");
+					th.append("<option value=''>"+"选择权限组"+"</option>");
 					 jQuery.each(parsedJson, function(index, itemData) {
-					 $("#roleCode"+i).append("<option value='"+itemData+"'>"+itemData+"</option>"); 
+					 th.append("<option value='"+itemData+"'>"+itemData+"</option>"); 
 					 });
 				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 			});
 		});
+		
 	}); 
 	
 $(function(){

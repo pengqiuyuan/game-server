@@ -14,26 +14,22 @@
              <div class="nav-collapse" style="padding-top: 10px;font-size: 18px;font-weight: bold;color:black;float: left;width: 200px;">
                                                   光线游戏内容管理平台
             </div>
-            <shiro:hasAnyRoles name='admin,business,store_admin,store_business'>
+            <shiro:hasAnyRoles name='admin,1,2,3,4,5,6,7,8'>
 			<div class="nav-collapse">
 				<ul class="nav navbar-nav">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">系统管理 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 					     	<!-- 总店管理员，分店管理员 -->
-							<shiro:hasAnyRoles name="admin,store_admin">
+							<shiro:hasAnyRoles name="admin">
 								<li><a href="${ctx}/manage/user/index">用户管理</a></li>
 							</shiro:hasAnyRoles>
 							<!-- 总店管理员，总店业务员，分店管理员 -->
-							<shiro:hasAnyRoles name="admin,store_admin,business">
-							<li><a href="${ctx}/manage/store/index">部门管理</a></li>
-							</shiro:hasAnyRoles>
-							<shiro:hasAnyRoles name="admin,business">
-							</shiro:hasAnyRoles>
 							<shiro:hasAnyRoles name="admin">
+							<li><a href="${ctx}/manage/store/index">项目管理</a></li>
 							</shiro:hasAnyRoles>
 							<li><a href="#">意见反馈管理</a></li>
-							<shiro:hasAnyRoles name="admin,business">
+							<shiro:hasAnyRoles name="admin">
 							<li><a href="${ctx}/manage/log/index">日志管理</a></li>
 							</shiro:hasAnyRoles>
 							<li class="divider"></li>
@@ -43,25 +39,40 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">服务器管理 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">服务器管理</a></li>
+						    <shiro:hasAnyRoles name='admin,1'>
+								<li><a href="#">服务器搜索与查看</a></li>
+							</shiro:hasAnyRoles>
+							<shiro:hasAnyRoles name='admin,2'>
+								<li><a href="#">服务器配置与开关</a></li>
+							</shiro:hasAnyRoles>
 						</ul>
 				    </li>
 
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">玩家账号<b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">玩家信息</a></li>
+							<shiro:hasAnyRoles name='admin,3'>
+							<li><a href="#">游戏玩家列表查看与搜索</a></li>
+								</shiro:hasAnyRoles>
+							<shiro:hasAnyRoles name='admin,4'>
+								<li><a href="#">角色数据修改与登录封禁</a></li>
+							</shiro:hasAnyRoles>
 						</ul>
 					</li>
 					
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">系统邮件 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">邮件管理</a></li>
+							<shiro:hasAnyRoles name='admin,5'>
+								<li><a href="#">邮件查看与检索</a></li>
+							</shiro:hasAnyRoles>
+							<shiro:hasAnyRoles name='admin,6'>
+								<li><a href="#">新增邮件</a></li>
+							</shiro:hasAnyRoles>
 						</ul>
 					</li>
 						
-                 <shiro:hasAnyRoles name="admin,store_admin">
+                 <shiro:hasAnyRoles name="admin">
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">统计日志展示<b class="caret"></b></a>
 						<ul class="dropdown-menu">					
 							
