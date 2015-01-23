@@ -25,6 +25,7 @@
 		<property name="successUrl" value="/" />
 		<property name="filterChainDefinitions">
 			<value>
+				/login/findStores = anon
 				/login = authc
 				/logout = logout
 				/static/** = anon

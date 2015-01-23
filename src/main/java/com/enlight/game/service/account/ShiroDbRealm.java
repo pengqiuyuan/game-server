@@ -8,7 +8,9 @@ package com.enlight.game.service.account;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletRequest;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -20,6 +22,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.web.subject.WebSubject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.modules.utils.Encodes;
 
@@ -33,7 +36,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	protected AccountService accountService;
 	
 	@Autowired
-	protected UserRoleService userRoleService;
+	protected UserRoleService userRoleService;  
 	/**
 	 * 认证回调函数,登录时调用.
 	 */
@@ -41,11 +44,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user = accountService.findUserByLoginName(token.getUsername());
+		ServletRequest request = ((WebSubject)SecurityUtils.getSubject()).getServletRequest();
+		String storeId = request.getParameter("storeId");;
 		if (user != null) {
 			if(isNomal(user))
 			{
 			byte[] salt = Encodes.decodeHex(user.getSalt());
-			return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),user.getStoreId()),
+			return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId),
 					user.getPassword(), ByteSource.Util.bytes(salt), getName());
 			}
 			return null;
@@ -68,9 +73,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
 		User user = accountService.findUserByLoginName(shiroUser.loginName);
-		//UserRole userRole = userRoleService.findByStoreId(Long.parseLong(shiroUser.getStoreId())).get(0);
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		info.addRoles(user.getRoleList());
+		if(user.getRoles().length() == 0){
+			UserRole userRole = userRoleService.findByStoreId(Long.parseLong(shiroUser.getStoreId())).get(0);
+			info.addRoles(userRole.getRoleList());
+		}else if(user.getRoles().equals(User.USER_ROLE_ADMIN)){
+			info.addRoles(user.getRoleList());
+		}
 		return info;
 	}
 
