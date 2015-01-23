@@ -37,6 +37,9 @@ public class UserRole extends BaseEntry{
 	//项目id
 	private Long storeId;
 	
+	@Transient
+	private String storeName;
+	
 	//权限组
 	private String role;
 	
@@ -84,6 +87,16 @@ public class UserRole extends BaseEntry{
 	}
 	
 	@Transient
+	public String getStoreName() {
+		return storeName;
+	}
+
+	@Transient
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+
+	@Transient
 	@JsonIgnore
 	public List<String> getServerZoneList() {
 		// 角色列表在数据库中实际以逗号分隔字符串存储，因此返回不能修改的List.
@@ -96,7 +109,7 @@ public class UserRole extends BaseEntry{
 		// 角色列表在数据库中实际以逗号分隔字符串存储，因此返回不能修改的List.
 		return ImmutableList.copyOf(StringUtils.split(functions, ","));
 	}
-
+	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

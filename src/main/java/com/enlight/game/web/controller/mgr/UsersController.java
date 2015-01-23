@@ -345,7 +345,6 @@ public class UsersController extends BaseController{
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<RoleFunction> findRoles(@RequestParam(value="gameId",required=true) Long gameId) throws AppBizException{
-		System.out.println(roleFunctionService.findByGameId(gameId));
 		return roleFunctionService.findByGameId(gameId);
 	}
 	
