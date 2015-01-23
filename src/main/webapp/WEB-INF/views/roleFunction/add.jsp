@@ -25,7 +25,7 @@ margin-left:10px;
 		<div class="control-group">
 			<label class="control-label" for="gameId">项目名称</label>
 			<div class="controls">
-				<select name="gameId">		
+				<select id="gameId" name="gameId">		
 					<c:forEach items="${stores}" var="item" >
 						<option value="${item.id }"  >
 							${item.name }
@@ -38,7 +38,7 @@ margin-left:10px;
 			class="control-group">
 			<label class="control-label" for="role">权限名称：</label>
 			<div class="controls">
-				<input type="text" name="role" class="input-large " value=""  placeholder="建议最高权限从0开始, 低级权限索引号逐渐加1" />
+				<input type="text" id="role" name="role" class="input-large " value=""  placeholder="建议最高权限从0开始, 低级权限索引号逐渐加1" />
 			</div>
 		</div>
 		
@@ -82,13 +82,15 @@ $(function(){
 		return this.optional(element) || (tel.test(value)); 
 
 		}, "数字格式错误");
-	
+	$("#role").focus();
+	var gameId = $("#gameId").val();
 	$("#inputForm").validate({
 		rules:{
 			gameName:{
 				required:true
 			},
 			role:{
+				remote: '<%=request.getContextPath()%>/manage/roleFunction/checkRoleFunctionName?storeId='+gameId,
 				rules:true,
 				required:true
 			},
@@ -100,6 +102,7 @@ $(function(){
 				required:"必须填写",
 			},
 			role:{
+				remote: "权限组名称已存在",
 				required:"必须填写",
 			},
 			functions:{

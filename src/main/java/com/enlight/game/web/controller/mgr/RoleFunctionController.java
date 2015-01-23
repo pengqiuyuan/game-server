@@ -228,6 +228,16 @@ public class RoleFunctionController extends BaseController{
 		return "/roleFunction/info";
 	}
 	
+	@RequestMapping(value = "/checkRoleFunctionName")
+	@ResponseBody
+	public String checkRoleFunctionName(@RequestParam("role") String role,@RequestParam("storeId") Long storeId) {
+		if (roleFunctionService.isOnly(storeId, role)) {
+			return "true";
+		} else {
+			return "false";
+		}
+	}
+	
 	/**
 	 * 取出Shiro中的当前用户Id.
 	 */
