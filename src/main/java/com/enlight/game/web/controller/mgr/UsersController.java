@@ -172,6 +172,7 @@ public class UsersController extends BaseController{
 		return "/user/edit";
 	}
 	
+	
 	/**
 	 * 操作员更新页	 
 	 * @param user 用户
@@ -554,5 +555,43 @@ public class UsersController extends BaseController{
 		return map;
 	}
 	
+	/**
+	 * GM用户项目权限查看
+	 * @param oid 用户ID
+	 * @return
+	 */
+	@RequestMapping(value = "role", method = RequestMethod.GET)
+	public String role(@RequestParam(value = "id")long id,Model model){
+		User user = userService.findById(id);
+		List<UserRole> userRoles = userRoleService.findByUserId(id);
+		List<String> serverZones = user.getServerZoneList();
+		List<ServerZone> serverZonesAll = serverZoneService.findAll();
+		List<String> serverZ = new ArrayList<String>();
+		for (ServerZone s : serverZonesAll) {
+			serverZ.add(s.getId().toString());
+		}
+		for (ServerZone s : serverZonesAll) {
+			for (String sz : serverZones) {
+				if(s.getId().toString() != sz ){
+					serverZ.remove(sz);
+				}
+			}
+		}
+		if(userRoles.isEmpty()){
+			model.addAttribute("userRoles", userRoles);
+			model.addAttribute("serverZones",serverZones);
+			model.addAttribute("serverZonesNot",StringUtils.join(serverZ,","));
+		}else{
+			for (UserRole userRole : userRoles) {
+				userRole.setRoleFunctions(roleFunctionService.findByGameId(userRole.getStoreId()));
+			}
+			model.addAttribute("userRoles", userRoles);
+			model.addAttribute("serverZones",serverZones);
+			model.addAttribute("serverZonesNot",StringUtils.join(serverZ,","));
+		}
+		model.addAttribute("user", user);
+		model.addAttribute("id", id);
+		return "/user/role";
+	}
 	
 }

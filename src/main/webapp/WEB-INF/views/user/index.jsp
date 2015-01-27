@@ -78,14 +78,20 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
-									<shiro:hasAnyRoles name="admin">
+
 									<c:if test="${item.roles != 'admin' ? 'true':'false' }">
+									<shiro:hasAnyRoles name="admin">
 									<li><a href="<%=request.getContextPath()%>/manage/user/edit?id=${item.id}"><i class="icon-edit"></i>修改</a></li>
+									</shiro:hasAnyRoles>
+									<li><a href="<%=request.getContextPath()%>/manage/user/role?id=${item.id}"><i class="icon-edit"></i>项目权限查看</a></li>
+									<shiro:hasAnyRoles name="admin">
 									<li><a href="javascript:void(0);" rel="${item.id}" class="del"><i class="icon-th"></i>冻结</a></li>
 									<li><a href="javascript:void(0);" rel="${item.id}" class="unlock" ><i class="icon-th"></i>激活</a></li>
 									<li><a href="javascript:void(0);" rel="${item.id}" class="userdel" ><i class="icon-th"></i>删除</a></li>
-							        </c:if>
 							        </shiro:hasAnyRoles>
+							        </c:if>
+
+							        
 									<li><a href="<%=request.getContextPath()%>/manage/user/resetPwd?id=${item.id}"><i class="icon-edit"></i>重置密码</a></li>
 						
 								</ul>
