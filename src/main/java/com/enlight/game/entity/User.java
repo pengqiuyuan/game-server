@@ -59,6 +59,9 @@ public class User extends IdEntity{
 	private String roles;
 	private Date registerDate;
 	private String storeId;
+	
+	//服务器大区id  ios官方  IOS越狱 ,多个服务区大区，下划线隔开如：1,2,3
+	private String serverZone;
 
 	/**
 	 * 邮箱
@@ -180,6 +183,14 @@ public class User extends IdEntity{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public String getServerZone() {
+		return serverZone;
+	}
+
+	public void setServerZone(String serverZone) {
+		this.serverZone = serverZone;
+	}
 	@Transient
 	@JsonIgnore
 	public List<String> getRoleList() {
@@ -197,6 +208,13 @@ public class User extends IdEntity{
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+	
+	@Transient
+	@JsonIgnore
+	public List<String> getServerZoneList() {
+		// 角色列表在数据库中实际以逗号分隔字符串存储，因此返回不能修改的List.
+		return ImmutableList.copyOf(StringUtils.split(serverZone, ","));
 	}
 
 }

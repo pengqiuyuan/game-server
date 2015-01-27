@@ -21,13 +21,13 @@
   -->
 
 
-<title>后台用户管理</title>
+<title>用户管理</title>
 </head>
 <body>
    
 	<div >
 		<div class="page-header">
-			<h2>后台用户管理</h2>
+			<h2>用户管理</h2>
 		</div>
 		<div>
 		 <c:if test="${not empty message}">
@@ -78,20 +78,15 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
+									<shiro:hasAnyRoles name="admin">
 									<c:if test="${item.roles != 'admin' ? 'true':'false' }">
-									<li><a
-										href="<%=request.getContextPath()%>/manage/user/edit?id=${item.id}"><i
-											class="icon-edit"></i>修改</a></li>
-									<li><a href="javascript:void(0);" rel="${item.id}"
-										class="del"><i class="icon-th"></i>冻结</a></li>
-									<li><a href="javascript:void(0);" rel="${item.id}"
-										class="unlock" ><i class="icon-th"></i>激活</a></li>
-									<li><a href="javascript:void(0);" rel="${item.id}"
-										class="userdel" ><i class="icon-th"></i>删除</a></li>
-							            </c:if>
-									<li><a
-										href="<%=request.getContextPath()%>/manage/user/resetPwd?id=${item.id}"><i
-											class="icon-edit"></i>重置密码</a></li>
+									<li><a href="<%=request.getContextPath()%>/manage/user/edit?id=${item.id}"><i class="icon-edit"></i>修改</a></li>
+									<li><a href="javascript:void(0);" rel="${item.id}" class="del"><i class="icon-th"></i>冻结</a></li>
+									<li><a href="javascript:void(0);" rel="${item.id}" class="unlock" ><i class="icon-th"></i>激活</a></li>
+									<li><a href="javascript:void(0);" rel="${item.id}" class="userdel" ><i class="icon-th"></i>删除</a></li>
+							        </c:if>
+							        </shiro:hasAnyRoles>
+									<li><a href="<%=request.getContextPath()%>/manage/user/resetPwd?id=${item.id}"><i class="icon-edit"></i>重置密码</a></li>
 						
 								</ul>
 							</div>

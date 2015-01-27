@@ -20,6 +20,7 @@
 	<div class="page-header">
    		<h2>用户修改</h2>
  	</div>
+
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/user/update" >
 	<input type="hidden" id="userId" name="id" value="${user.id}" > 
 	  <div
@@ -43,6 +44,14 @@
 			<div class="controls">	
 				<c:forEach items="${serverZones}" var="item" varStatus="i">
 							   <input type="checkbox" name="serverName" value="${item}" checked="checked"  class="box" />
+					           	<span><huake:getServerZoneNameTag id="${item}"></huake:getServerZoneNameTag></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					         <c:if test="${(i.index+1)%5 == 0}">
+							<br/>
+							<br/>
+							</c:if>
+				</c:forEach>
+				<c:forEach items="${serverZonesNot}" var="item" varStatus="i">
+							   <input type="checkbox" name="serverName" value="${item}" class="box" />
 					           	<span><huake:getServerZoneNameTag id="${item}"></huake:getServerZoneNameTag></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					         <c:if test="${(i.index+1)%5 == 0}">
 							<br/>
@@ -125,9 +134,9 @@ $(function(){
  				if(parsedJson.stos!=null){
 					$("#field").prepend("<div id='item"+parsedJson.stos.id+"'></div>");
 					$("#item"+parsedJson.stos.id).prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
-					$("#item"+parsedJson.stos.id).prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><select  id='roleCode111' name='role' class='roleCode'><option value='0'>请选择项目</option></select></div>" );
+					$("#item"+parsedJson.stos.id).prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><select  id='roleCode' name='role' class='roleCode'><option value='0'>请选择项目</option></select></div>" );
 					jQuery.each(parsedJson.rolefuncs, function(index, itemData) {
-						$("#roleCode111").append("<option value='"+itemData+"'>"+itemData+"</option>"); 
+						$("#roleCode").append("<option value='"+itemData+"'>"+itemData+"</option>"); 
 					});
 					$("#item"+parsedJson.stos.id).prepend( "<div class='control-group'><label class='control-label' for='storename'>选择项目：</label><input id='storename' type='text' name='storename' value='"+parsedJson.stos.name+"'  class='input-large'  readonly='readonly'/><input type='hidden' id='storeId' name='storeId' value='"+parsedJson.stos.id+"'>&nbsp;<span id='"+parsedJson.stos.id+"'  class='del btn btn-danger'>删除权限组</span></div>" );
 
@@ -145,9 +154,12 @@ $(function(){
 							dataType: 'text',
 							success: function(data){
 				 				var parsedJson = $.parseJSON(data);
-								 jQuery.each(parsedJson, function(index, itemData) {
+								 jQuery.each(parsedJson.roleFunctions, function(index, itemData) {
 								 th.append("<input type='checkbox' onclick='return false' name='functions' value='"+itemData.function+"' checked='checked' class='box' /><span>"+itemData.function+"、"+itemData.functionName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
 								 }); 
+								 
+								 $("#message").remove();
+								 $("#inputForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>"+parsedJson.message+"</div>");
 							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 						});
 					}); 
@@ -160,6 +172,9 @@ $(function(){
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
 							success: function(data){
+								var parsedJson = $.parseJSON(data);
+								$("#message").remove();
+								$("#inputForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>"+parsedJson.message+"</div>");
 							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 						});
 				    	$('#item'+$(this).attr("id")).remove();
@@ -185,9 +200,11 @@ $(function(){
 			dataType: 'text',
 			success: function(data){
  				var parsedJson = $.parseJSON(data);
-				 jQuery.each(parsedJson, function(index, itemData) {
+				 jQuery.each(parsedJson.roleFunctions, function(index, itemData) {
 				 th.append("<input type='checkbox' onclick='return false' name='functions' value='"+itemData.function+"' checked='checked' class='box' /><span>"+itemData.function+"、"+itemData.functionName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
 				 }); 
+				 $("#message").remove();
+				 $("#inputForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>"+parsedJson.message+"</div>");
 			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 		});
 	}); 
@@ -200,6 +217,9 @@ $(function(){
 			contentType: "application/json;charset=UTF-8",		
 			dataType: 'text',
 			success: function(data){
+				var parsedJson = $.parseJSON(data);
+				$("#message").remove();
+				$("#inputForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>"+parsedJson.message+"</div>");
 			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 		});
     	$('#item'+$(this).attr("id")).remove();
@@ -213,12 +233,18 @@ $(function(){
 			},
 			loginName:{
 				required:true
+			},
+			serverName:{
+				required:true
 			}
 		},messages:{
 			name:{
 				required:"必须填写",
 			},
 			loginName:{
+				required:"必须填写",
+			},
+			serverName:{
 				required:"必须填写",
 			}
 		}

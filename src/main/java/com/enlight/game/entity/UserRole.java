@@ -31,9 +31,6 @@ public class UserRole extends BaseEntry{
 	//GM用户id
 	private Long userId;
 	
-	//服务器大区id  ios官方  IOS越狱 ,多个服务区大区，下划线隔开如：1,2,3
-	private String serverZone;
-	
 	//项目id
 	private Long storeId;
 	
@@ -57,13 +54,7 @@ public class UserRole extends BaseEntry{
 		this.userId = userId;
 	}
 
-	public String getServerZone() {
-		return serverZone;
-	}
 
-	public void setServerZone(String serverZone) {
-		this.serverZone = serverZone;
-	}
 
 	public Long getStoreId() {
 		return storeId;
@@ -97,13 +88,6 @@ public class UserRole extends BaseEntry{
 	@Transient
 	public void setStoreName(String storeName) {
 		this.storeName = storeName;
-	}
-
-	@Transient
-	@JsonIgnore
-	public List<String> getServerZoneList() {
-		// 角色列表在数据库中实际以逗号分隔字符串存储，因此返回不能修改的List.
-		return ImmutableList.copyOf(StringUtils.split(serverZone, ","));
 	}
 	
 	@Transient

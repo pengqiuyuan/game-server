@@ -32,6 +32,7 @@ import org.springside.modules.web.Servlets;
 import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.Log;
 import com.enlight.game.entity.RoleFunction;
+import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
@@ -140,15 +141,31 @@ public class UsersController extends BaseController{
 		Long userId = getCurrentUserId();
 		//model.addAttribute("stores",storeService.findListByUid(userId));
 		List<UserRole> userRoles = userRoleService.findByUserId(id);
+		
+		List<String> serverZones = user.getServerZoneList();
+		List<ServerZone> serverZonesAll = serverZoneService.findAll();
+		List<String> serverZ = new ArrayList<String>();
+		for (ServerZone s : serverZonesAll) {
+			serverZ.add(s.getId().toString());
+		}
+		for (ServerZone s : serverZonesAll) {
+			for (String sz : serverZones) {
+				if(s.getId().toString() != sz ){
+					serverZ.remove(sz);
+				}
+			}
+		}
 		if(userRoles.isEmpty()){
 			model.addAttribute("userRoles", userRoles);
-			model.addAttribute("serverZones",null);
+			model.addAttribute("serverZones",serverZones);
+			model.addAttribute("serverZonesNot",StringUtils.join(serverZ,","));
 		}else{
 			for (UserRole userRole : userRoles) {
 				userRole.setRoleFunctions(roleFunctionService.findByGameId(userRole.getStoreId()));
 			}
 			model.addAttribute("userRoles", userRoles);
-			model.addAttribute("serverZones",userRoles.get(0).getServerZoneList());
+			model.addAttribute("serverZones",serverZones);
+			model.addAttribute("serverZonesNot",StringUtils.join(serverZ,","));
 		}
 		model.addAttribute("user", user);
 		model.addAttribute("id", id);
@@ -171,9 +188,9 @@ public class UsersController extends BaseController{
 		}
 		List<UserRole> userRoles = userRoleService.findByUserId(user.getId());
 		for (UserRole userRole : userRoles) {
-			userRole.setServerZone(serverNa);
 			userRoleService.save(userRole);
 		}
+		user.setServerZone(serverNa);
 		userService.update(user);
 		redirectAttributes.addFlashAttribute("message", "修改用户成功");
 		String message = "修改:" +user.toString();
@@ -209,6 +226,7 @@ public class UsersController extends BaseController{
 		user.setPlainPassword(password);
 		boolean flag = userService.isOnly(user.getLoginName());
 		if(flag){
+			user.setServerZone(serverZones);
 			accountService.register(user);
 			if (request.getParameterValues("storeId") != null && request.getParameterValues("role") != null) {
 				if (request.getParameterValues("storeId") != null && request.getParameterValues("role").length > 0) {
@@ -223,7 +241,6 @@ public class UsersController extends BaseController{
 						userRole.setUpDate(new Date());
 						userRole.setStatus(UserRole.STATUS_VALIDE);
 						userRole.setUserId(accountService.register(user).getId());
-						userRole.setServerZone(serverZones);
 						userRole.setFunctions(functions);
 						userRole.setStoreId(Long.parseLong(request.getParameterValues("storeId")[i]));
 						userRole.setRole(request.getParameterValues("role")[i]);
@@ -392,7 +409,7 @@ public class UsersController extends BaseController{
 	@RequestMapping(value="/updateFunctions",method=RequestMethod.GET)	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<RoleFunction> updateFunctions(
+	public Map<String, Object> updateFunctions(
 			@RequestParam(value="gameId") Long gameId,
 			@RequestParam(value="userId") Long userId,
 			@RequestParam(value="role") String role) throws AppBizException{
@@ -407,7 +424,11 @@ public class UsersController extends BaseController{
 			userRoles.get(0).setRole(role);
 			userRoleService.save(userRoles.get(0));
 		}
-		return roleFunctionService.findByGameIdAndRole(gameId, role);
+		List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(gameId, role);
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("roleFunctions", roleFunctions);
+		map.put("message", "权限组已更新对应功能");
+		return map;
 	}
 	
 	/**
@@ -419,7 +440,7 @@ public class UsersController extends BaseController{
 	@RequestMapping(value="/insertFunctions",method=RequestMethod.GET)	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<RoleFunction> insertFunctions(
+	public Map<String, Object> insertFunctions(
 			@RequestParam(value="gameId") Long gameId,
 			@RequestParam(value="userId") Long userId,
 			@RequestParam(value="role") String role) throws AppBizException{
@@ -441,12 +462,22 @@ public class UsersController extends BaseController{
 		userRoleService.save(userRole);
 
 		User user = accountService.getUser(userId);
-		String storeId = user.getStoreId();
-		storeId = storeId+","+gameId;
+		String storeId = null;
+		storeId = user.getStoreId();
+		if(storeId!=null){
+			storeId = storeId+","+gameId;
+		}else{
+			storeId=gameId.toString();
+		}
+
 		user.setStoreId(storeId);
 		accountService.updateUser(user);
 		
-		return roleFunctionService.findByGameIdAndRole(gameId, role);
+		List<RoleFunction> roleFuncts = roleFunctionService.findByGameIdAndRole(gameId, role);
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("roleFunctions", roleFuncts);
+		map.put("message", "权限组添加成功");
+		return map;
 	}
 	
 	/**
@@ -471,7 +502,8 @@ public class UsersController extends BaseController{
 	@RequestMapping(value="delUserRole",method=RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> delUserRole(@RequestParam(value="gameId")long gameId,@RequestParam(value="userId")long userId,Model model){
+	public Map<String,Object> delUserRole(@RequestParam(value="gameId")long gameId
+			,@RequestParam(value="userId")long userId,Model model){
 		User user =userService.findById(userId);
 		List<String> storeIds =  user.getStoreIds();
 		List<String> rest = new ArrayList<String>(storeIds);
@@ -485,6 +517,7 @@ public class UsersController extends BaseController{
 		userRoleService.delUserRole(gameId,userId);
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("success", "true");
+		map.put("message", "权限组删除成功");
 		return map;
 	}
 	

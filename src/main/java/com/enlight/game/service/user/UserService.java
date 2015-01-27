@@ -86,6 +86,7 @@ public class UserService {
 		user1.setRoles(user.getRoles());
 		user1.setStatus(user.getStatus());
 		user1.setUpDate(user.getUpDate());
+		user1.setServerZone(user.getServerZone());
 		userDao.save(user1);
 	}
 	
@@ -148,7 +149,7 @@ public class UserService {
 	private Specification<User> buildSpecification(Long userId, Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		User user = accountService.getUser(userId);
-		if(!user.getRoles().equals(User.USER_ROLE_ADMIN) && !user.getRoles().equals(User.USER_ROLE_BUSINESS) )
+		if(!user.getRoles().equals(User.USER_ROLE_ADMIN))
 		{
 			filters.put("id",new SearchFilter("id", Operator.EQ, userId));
 		}
