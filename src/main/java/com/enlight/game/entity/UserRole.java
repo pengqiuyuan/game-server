@@ -45,6 +45,9 @@ public class UserRole extends BaseEntry{
 	
 	//权限组对应功能 1,2,3
 	private String functions;
+	
+	@Transient
+	private List<RoleFunction> roleFunctions;
 
 	public Long getUserId() {
 		return userId;
@@ -110,6 +113,18 @@ public class UserRole extends BaseEntry{
 		return ImmutableList.copyOf(StringUtils.split(functions, ","));
 	}
 	
+	
+	@Transient
+	@JsonIgnore
+	public List<RoleFunction> getRoleFunctions() {
+		return roleFunctions;
+	}
+	@Transient
+	@JsonIgnore
+	public void setRoleFunctions(List<RoleFunction> roleFunctions) {
+		this.roleFunctions = roleFunctions;
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

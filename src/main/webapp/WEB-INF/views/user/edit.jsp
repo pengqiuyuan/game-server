@@ -21,7 +21,7 @@
    		<h2>用户修改</h2>
  	</div>
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/user/update" >
-	<input type="hidden" name="id" value="${user.id}" > 
+	<input type="hidden" id="userId" name="id" value="${user.id}" > 
 	  <div
 	class="control-group">
 	<label class="control-label" for="name">用户名:</label>
@@ -57,14 +57,22 @@
 	</div>
 	<div id="field">
 		<c:forEach items="${userRoles}" var="item" varStatus="i">
+			<div id="item${item.storeId}">
 			<div class="control-group">
 				<label class="control-label" for="storename">选择项目：</label>
-				<input id="storename" type="text" name="storename" value="<huake:getStoreNameTag id="${item.storeId}"></huake:getStoreNameTag>"  class="input-large"  />
-				<input type="hidden" name="storeId" value="${item.storeId}" > 
+				<input id="storename" type="text" name="storename" value="<huake:getStoreNameTag id="${item.storeId}"></huake:getStoreNameTag>"  class="input-large"  readonly="readonly"/>
+				<input type="hidden" id="storeId" name="storeId" value="${item.storeId}" >
+				<span id="${item.storeId}"  class="del btn btn-danger">删除权限组</span> 
 			</div>
 			<div class="control-group">
-				<label for="role" class="control-label">权限组：</label>
-					<input id="roleCode" type="text" name="role" value="${item.role}"  class="input-large"  />
+				<label for="role" class="control-label">权限组：</label>					
+					<select id='roleCode' name="role" class="roleCode">		
+							<c:forEach items="${item.roleFunctions}" var="it" >
+								<option value="${it}" ${it == item.role ? 'selected' : '' }>
+									${it}
+								</option>
+							</c:forEach>
+					</select>
 			</div>
 			<div class="control-group">
 					<label for="functions" class="control-label">功能选项：</label>
@@ -79,7 +87,9 @@
 							</c:forEach>
 						</div>
 			</div>
+		</div>
 		</c:forEach>
+
 	</div>
 
 
@@ -93,6 +103,7 @@
 			</select>
 		</div>
 	</div>
+	<input type="hidden" name="roles" value="" >
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
 				 <a href="<%=request.getContextPath()%>/manage/user/index" class="btn btn-primary">返回</a>
@@ -101,6 +112,100 @@
 	<script type="text/javascript">
 
 $(function(){
+	var userId = $("#userId").val();
+	var i=0;
+	$("#addfield").click(function(){
+		$.ajax({                                               
+			url: '<%=request.getContextPath()%>/manage/user/findStoreId?userId='+userId, 
+			type: 'GET',
+			contentType: "application/json;charset=UTF-8",		
+			dataType: 'text',
+			success: function(data){
+ 				var parsedJson = $.parseJSON(data);
+ 				if(parsedJson.stos!=null){
+					$("#field").prepend("<div id='item"+parsedJson.stos.id+"'></div>");
+					$("#item"+parsedJson.stos.id).prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
+					$("#item"+parsedJson.stos.id).prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><select  id='roleCode111' name='role' class='roleCode'><option value='0'>请选择项目</option></select></div>" );
+					jQuery.each(parsedJson.rolefuncs, function(index, itemData) {
+						$("#roleCode111").append("<option value='"+itemData+"'>"+itemData+"</option>"); 
+					});
+					$("#item"+parsedJson.stos.id).prepend( "<div class='control-group'><label class='control-label' for='storename'>选择项目：</label><input id='storename' type='text' name='storename' value='"+parsedJson.stos.name+"'  class='input-large'  readonly='readonly'/><input type='hidden' id='storeId' name='storeId' value='"+parsedJson.stos.id+"'>&nbsp;<span id='"+parsedJson.stos.id+"'  class='del btn btn-danger'>删除权限组</span></div>" );
+
+				    $(".roleCode").change(function(e){
+						var gameId = $(this).parent().prev().children("#storeId").val();
+						var role = $(this).children('option:selected').val();
+				    	var userId = $("#userId").val();
+						var th = $(this).parent().next().children("#functions");
+						th.empty();
+						e.preventDefault();
+						$.ajax({                                               
+							url: '<%=request.getContextPath()%>/manage/user/insertFunctions?gameId='+gameId+'&role='+role+'&userId='+userId, 
+							type: 'GET',
+							contentType: "application/json;charset=UTF-8",		
+							dataType: 'text',
+							success: function(data){
+				 				var parsedJson = $.parseJSON(data);
+								 jQuery.each(parsedJson, function(index, itemData) {
+								 th.append("<input type='checkbox' onclick='return false' name='functions' value='"+itemData.function+"' checked='checked' class='box' /><span>"+itemData.function+"、"+itemData.functionName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
+								 }); 
+							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+						});
+					}); 
+				    
+				    $(".del").click(function(){
+				    	var gameId = $(this).attr("id");
+						$.ajax({                                               
+							url: '<%=request.getContextPath()%>/manage/user/delUserRole?gameId='+gameId + '&userId=' + userId, 
+							type: 'DELETE',
+							contentType: "application/json;charset=UTF-8",		
+							dataType: 'text',
+							success: function(data){
+							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+						});
+				    	$('#item'+$(this).attr("id")).remove();
+				    });
+				    
+ 				}	
+			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+		});
+		
+	}); 
+
+    $(".roleCode").change(function(e){
+		var gameId = $(this).parent().prev().children("#storeId").val();
+		var role = $(this).children('option:selected').val();
+    	var userId = $("#userId").val();
+		var th = $(this).parent().next().children("#functions");
+		th.empty();
+		e.preventDefault();
+		$.ajax({                                               
+			url: '<%=request.getContextPath()%>/manage/user/updateFunctions?gameId='+gameId+'&role='+role+'&userId='+userId, 
+			type: 'GET',
+			contentType: "application/json;charset=UTF-8",		
+			dataType: 'text',
+			success: function(data){
+ 				var parsedJson = $.parseJSON(data);
+				 jQuery.each(parsedJson, function(index, itemData) {
+				 th.append("<input type='checkbox' onclick='return false' name='functions' value='"+itemData.function+"' checked='checked' class='box' /><span>"+itemData.function+"、"+itemData.functionName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
+				 }); 
+			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+		});
+	}); 
+	
+    $(".del").click(function(){
+    	var gameId = $(this).attr("id");
+		$.ajax({                                               
+			url: '<%=request.getContextPath()%>/manage/user/delUserRole?gameId='+gameId + '&userId=' + userId, 
+			type: 'DELETE',
+			contentType: "application/json;charset=UTF-8",		
+			dataType: 'text',
+			success: function(data){
+			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+		});
+    	$('#item'+$(this).attr("id")).remove();
+    });
+	
+    
 	$("#inputForm").validate({
 		rules:{
 			name:{

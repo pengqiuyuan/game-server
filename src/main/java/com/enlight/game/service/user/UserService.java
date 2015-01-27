@@ -95,6 +95,7 @@ public class UserService {
 	 */
 	public void del(User user){
 		User user1 = this.findById(user.getId());
+		user1.setRoles("");
 		user1.setStatus(User.STATUS_INVALIDE);
 		userDao.save(user1);
 	}
@@ -149,10 +150,7 @@ public class UserService {
 		User user = accountService.getUser(userId);
 		if(!user.getRoles().equals(User.USER_ROLE_ADMIN) && !user.getRoles().equals(User.USER_ROLE_BUSINESS) )
 		{
-			List<String> storeIds  = ImmutableList.copyOf(StringUtils.split(user.getStoreId(), ","));
-			for (String id : storeIds) {
-				filters.put("storeId",new SearchFilter("storeId", Operator.EQ, id));
-			}
+			filters.put("id",new SearchFilter("id", Operator.EQ, userId));
 		}
 		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
 		return spec;

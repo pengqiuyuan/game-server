@@ -74,10 +74,15 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
 		User user = accountService.findUserByLoginName(shiroUser.loginName);
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		if(user.getRoles().length() == 0){
-			UserRole userRole = userRoleService.findByStoreId(Long.parseLong(shiroUser.getStoreId())).get(0);
+		if(user.getRoles().length() == 0 
+				&& user.getStoreId()!=null 
+				&& user.getStoreId()!="" 
+				&&user.getStoreId().length()!=0){
+			UserRole userRole = userRoleService.findByUserIdAndStoreId(user.getId(),Long.parseLong(shiroUser.getStoreId())).get(0);
 			info.addRoles(userRole.getRoleList());
 		}else if(user.getRoles().equals(User.USER_ROLE_ADMIN)){
+			info.addRoles(user.getRoleList());
+		}else{
 			info.addRoles(user.getRoleList());
 		}
 		return info;

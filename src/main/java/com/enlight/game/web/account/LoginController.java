@@ -61,13 +61,19 @@ public class LoginController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<UserRole> findStores(@RequestParam(value="loginName") String loginName) throws AppBizException{
 		User user = accountService.findUserByLoginName(loginName);
-		List<UserRole> userRoles = userRoleService.findByUserId(user.getId());
-		if(!userRoles.isEmpty()){
-			for (UserRole userRole : userRoles) {
-				userRole.setStoreName(storeService.findById(userRole.getStoreId()).getName());
+		try {
+			List<UserRole> userRoles = userRoleService.findByUserId(user.getId());
+			if(!userRoles.isEmpty()){
+				for (UserRole userRole : userRoles) {
+					userRole.setStoreName(storeService.findById(userRole.getStoreId()).getName());
+				}
 			}
+			return userRoles;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
 		}
-		return userRoles;
+
 	}
 
 }

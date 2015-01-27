@@ -20,16 +20,11 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown">系统管理 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-					     	<!-- 总店管理员，分店管理员 -->
-							<shiro:hasAnyRoles name="admin">
-								<li><a href="${ctx}/manage/user/index">用户管理</a></li>
-							</shiro:hasAnyRoles>
-							<!-- 总店管理员，总店业务员，分店管理员 -->
+							<li><a href="${ctx}/manage/user/index">用户管理</a></li>
 							<shiro:hasAnyRoles name="admin">
 							<li><a href="${ctx}/manage/store/index">项目管理</a></li>
-							</shiro:hasAnyRoles>
+							<li><a href="${ctx}/manage/roleFunction/index">功能权限管理</a></li>
 							<li><a href="#">意见反馈管理</a></li>
-							<shiro:hasAnyRoles name="admin">
 							<li><a href="${ctx}/manage/log/index">日志管理</a></li>
 							</shiro:hasAnyRoles>
 							<li class="divider"></li>

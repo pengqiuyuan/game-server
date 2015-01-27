@@ -186,6 +186,13 @@ public class User extends IdEntity{
 		// 角色列表在数据库中实际以逗号分隔字符串存储，因此返回不能修改的List.
 		return ImmutableList.copyOf(StringUtils.split(roles, ","));
 	}
+	
+	@Transient
+	@JsonIgnore
+	public List<String> getStoreIds() {
+		// 角色列表在数据库中实际以逗号分隔字符串存储，因此返回不能修改的List.
+		return ImmutableList.copyOf(StringUtils.split(storeId, ","));
+	}
 
 	@Override
 	public String toString() {

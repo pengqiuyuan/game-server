@@ -65,6 +65,10 @@ public class RoleFunctionService {
 		return roleFunctionDao.findByGameId(gameId);
 	}
 	
+	public List<String> findByGameIdStr(Long gameId){
+		return roleFunctionDao.findByGameIdStr(gameId);
+	}
+	
 	/**
 	 * 根据项目索引+权限索引  判断权限组是否
 	 * @param roleFunction

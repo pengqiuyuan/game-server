@@ -33,4 +33,16 @@ public class UserRoleService {
 	public List<UserRole> findByStoreId(Long storeId){
 		return userRoleDao.findByStoreId(storeId);
 	}
+	
+	public List<UserRole> findByUserIdAndStoreId(Long userId,Long storeId){
+		return userRoleDao.findByUserIdAndStoreId(userId,storeId);
+	}
+	
+	public void delUserRole(Long storeId,Long userId){
+		userRoleDao.delByStoreId(storeId,userId);
+	}
+	
+	public void delByUserId(Long userId){
+		userRoleDao.delByUserId(userId);
+	}
 }
