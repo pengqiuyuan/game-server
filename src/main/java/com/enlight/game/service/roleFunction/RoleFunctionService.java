@@ -69,6 +69,10 @@ public class RoleFunctionService {
 		return roleFunctionDao.findByGameIdStr(gameId);
 	}
 	
+	public void delByStoreId(Long storeId){
+		roleFunctionDao.delByStoreId(storeId);
+	}
+	
 	/**
 	 * 根据项目索引+权限索引  判断权限组是否
 	 * @param roleFunction

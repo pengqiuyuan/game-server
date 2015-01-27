@@ -12,13 +12,13 @@
 
 
 
-<title>部门管理</title>
+<title>项目管理</title>
 </head>
 <body>
    
 	<div >
 		<div class="page-header">
-			<h2>部门管理</h2>
+			<h2>项目管理</h2>
 		</div>
 		<div>
 		 <c:if test="${not empty message}">
@@ -109,7 +109,7 @@
 	<shiro:hasAnyRoles name="admin">
 		<div class="form-actions">
 			<a href="<%=request.getContextPath()%>/manage/store/add"
-				class="btn btn-primary">新增部门</a>	
+				class="btn btn-primary">新增项目</a>	
 		</div>
 	</shiro:hasAnyRoles>
 	</div>

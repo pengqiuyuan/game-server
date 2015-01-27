@@ -37,4 +37,9 @@ public interface UserRoleDao extends PagingAndSortingRepository<UserRole, Long>,
 	@Modifying
 	@Query("delete from UserRole userRole where userRole.storeId =?1 and userRole.role =?2 and userRole.status='1'")
 	void delByStoreIdAndRole(Long storeId,String role);
+	
+	@Modifying
+	@Query("delete from UserRole userRole where userRole.storeId =?1")
+	void delByStoreId(Long storeId);
+	
 }

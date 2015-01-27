@@ -1,6 +1,7 @@
 package com.enlight.game.web.controller.mgr;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.ServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +33,15 @@ import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.Log;
 import com.enlight.game.entity.Stores;
+import com.enlight.game.entity.User;
+import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.log.LogService;
+import com.enlight.game.service.roleFunction.RoleFunctionService;
 import com.enlight.game.service.store.StoreService;
+import com.enlight.game.service.user.UserService;
+import com.enlight.game.service.userRole.UserRoleService;
 import com.enlight.game.util.ImageUploadService;
 import com.google.common.collect.Maps;
 
@@ -88,6 +95,15 @@ public class StoresController extends BaseController{
 	@Autowired
 	private LogService logService;
 	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private UserRoleService userRoleService;
+	
+	@Autowired
+	private RoleFunctionService roleFunctionService;
+	
 	/**
 	 *  门店管理首页
 
@@ -111,7 +127,7 @@ public class StoresController extends BaseController{
 	
 	
 	/**
-	 * 操作员编辑页�?	 * @param oid 用户ID
+	 * 操作员编辑页	 * @param oid 用户ID
 	 * @return
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.GET)
@@ -123,7 +139,7 @@ public class StoresController extends BaseController{
 	}
 	
 	/**
-	 * 操作员更新页�?
+	 * 操作员更新页
 	 * 	 * @param store 用户
 	 * @return
 	 */
@@ -151,7 +167,7 @@ public class StoresController extends BaseController{
 	}
 	
 	/**
-	 * 新增操作员页�?	 * @param uid 租户ID
+	 * 新增操作员页	 * @param uid 租户ID
 	 * @return
 	 */
 	@RequestMapping(value = "add", method = RequestMethod.GET)
@@ -161,7 +177,7 @@ public class StoresController extends BaseController{
 	}
 	
 	/**
-	 * 新增操作�?	 * @param Storestest 用户
+	 * 新增操作	 * @param Storestest 用户
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
@@ -204,7 +220,8 @@ public class StoresController extends BaseController{
 		return map;
 	}
 	/**
-	 * 删除操作�?	 * @param oid 用户id
+	 * 删除操作	 
+	 * @param oid 用户id
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
@@ -214,10 +231,32 @@ public class StoresController extends BaseController{
 		 Map<String,Object> map = new HashMap<String, Object>();
 		if(id == 0)
 		{
-			throw new Exception("不能删除主部门！");
+			throw new Exception("不能删除主项目！");
 		}
 		Stores store = storeService.findById(id);
 		storeService.del(store);
+		//功能表
+		roleFunctionService.delByStoreId(id);
+		
+		//用户表
+		List<UserRole> userRoles = userRoleService.findByStoreId(id);
+		for (UserRole userRole : userRoles) {
+			User user =userService.findById(userRole.getUserId());
+			List<String> stIds = user.getStoreIds();
+			List<String> storeIds = new ArrayList<String>(stIds);
+			for (String s : stIds) {
+				if(Long.parseLong(s) == id){
+					storeIds.remove(s);
+				}
+			}
+			user.setStoreId(StringUtils.join(storeIds,","));
+			userService.update(user);
+		}
+		//权限
+		userRoleService.delByStoreId(id);
+		
+		
+		
 		String message = "删除:" +store.getName();
 		logService.log(getCurrentUserName(), message, Log.TYPE_STORE);
 		map.put("success", "true");

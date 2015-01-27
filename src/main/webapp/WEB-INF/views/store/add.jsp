@@ -5,7 +5,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-	<title>新增部门</title>
+	<title>新增项目</title>
 <style type="text/css"> 
 .error{ 
 color:Red; 
@@ -17,7 +17,7 @@ margin-left:10px;
 <body>
 
 	<div class="page-header">
-   		<h2>新增部门</h2>
+   		<h2>新增项目</h2>
  	</div>
  	 <c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
