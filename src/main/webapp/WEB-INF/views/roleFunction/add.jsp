@@ -25,7 +25,8 @@ margin-left:10px;
 		<div class="control-group">
 			<label class="control-label" for="gameId">项目名称</label>
 			<div class="controls">
-				<select id="gameId" name="gameId">		
+				<select id="gameId" name="gameId">
+				    <option value="0">--选择项目--</option>		
 					<c:forEach items="${stores}" var="item" >
 						<option value="${item.id }"  >
 							${item.name }
@@ -82,15 +83,30 @@ $(function(){
 		return this.optional(element) || (tel.test(value)); 
 
 		}, "数字格式错误");
-	$("#role").focus();
-	var gameId = $("#gameId").val();
+
+	$("#role").change(function(e){
+		var gameId = $("#gameId").val();
+		var role = $("#role").val();
+		$.ajax({                                               
+			url: '<%=request.getContextPath()%>/manage/roleFunction/checkRoleFunctionName?storeId='+gameId+'&role=' + role, 
+			type: 'GET',
+			contentType: "application/json;charset=UTF-8",		
+			dataType: 'text',
+			success: function(data){
+				if(data=="false"){	
+					$("#role").after("<span for='role' class='error'>权限组已存在</span>");
+				}
+			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+		});
+	});
+	
+	
 	$("#inputForm").validate({
 		rules:{
 			gameName:{
 				required:true
 			},
 			role:{
-				remote: '<%=request.getContextPath()%>/manage/roleFunction/checkRoleFunctionName?storeId='+gameId,
 				rules:true,
 				required:true
 			},
@@ -102,7 +118,6 @@ $(function(){
 				required:"必须填写",
 			},
 			role:{
-				remote: "权限组名称已存在",
 				required:"必须填写",
 			},
 			functions:{
