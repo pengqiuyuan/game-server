@@ -73,7 +73,7 @@ public class RoleFunctionService {
 	 * 根据项目索引+权限索引  判断权限组是否
 	 * @param roleFunction
 	 */
-	public boolean isOnly(long gameId,String role){
+	public boolean isOnly(Long gameId,String role){
 		List<RoleFunction> roleFunctions = roleFunctionDao.findByGameIdAndRole(gameId, role);
 		return roleFunctions.isEmpty();
 	}

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.ServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +29,15 @@ import org.springside.modules.web.Servlets;
 import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.entity.Stores;
+import com.enlight.game.entity.User;
+import com.enlight.game.entity.UserRole;
+import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
 import com.enlight.game.service.roleFunction.RoleFunctionService;
 import com.enlight.game.service.store.StoreService;
+import com.enlight.game.service.user.UserService;
+import com.enlight.game.service.userRole.UserRoleService;
 import com.google.common.collect.Maps;
 
 /**
@@ -70,6 +76,12 @@ public class RoleFunctionController extends BaseController{
 	
 	@Autowired
 	private EnumFunctionService enumFunctionService;
+	
+	@Autowired
+	private UserRoleService userRoleService;
+	
+	@Autowired
+	private UserService userService;
 	
 	/**
 	 * 游戏功能权限分配管理首页
@@ -146,7 +158,33 @@ public class RoleFunctionController extends BaseController{
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String,Object> del(@RequestParam(value="id")long id,Model model){
+		RoleFunction function = roleFunctionService.findById(id);
 		roleFunctionService.delById(id);
+		List<String> functions = roleFunctionService.findByGameIdAndRoleFunctions(function.getGameId(), function.getRole());
+		if(functions!=null && functions.size()!=0){
+			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(function.getGameId(), function.getRole());
+			for (UserRole userRole : userRoles) {
+				userRole.setFunctions(StringUtils.join(functions,","));
+				userRoleService.save(userRole);
+			}
+		}else{
+			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(function.getGameId(), function.getRole());
+			for (UserRole userRole : userRoles) {
+				User user =userService.findById(userRole.getUserId());
+				List<String> stIds = user.getStoreIds();
+				List<String> storeIds = new ArrayList<String>(stIds);
+				for (String s : stIds) {
+					if(Long.parseLong(s) == function.getGameId()){
+						storeIds.remove(s);
+					}
+				}
+				user.setStoreId(StringUtils.join(storeIds,","));
+				userService.update(user);
+			}
+			userRoleService.delByStoreIdAndRole(function.getGameId(), function.getRole());
+		}
+
+
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("success", "true");
 		return map;
@@ -230,8 +268,8 @@ public class RoleFunctionController extends BaseController{
 	
 	@RequestMapping(value = "/checkRoleFunctionName")
 	@ResponseBody
-	public String checkRoleFunctionName(@RequestParam("role") String role,@RequestParam("storeId") Long storeId) {
-		if (roleFunctionService.isOnly(storeId, role)) {
+	public String checkRoleFunctionName(@RequestParam("role") String role,@RequestParam("storeId") String storeId) {
+		if (roleFunctionService.isOnly(Long.parseLong(storeId), role)) {
 			return "true";
 		} else {
 			return "false";

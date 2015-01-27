@@ -102,7 +102,7 @@
 					
 						<a
 							href="<%=request.getContextPath()%>/manage/user/detail?id=${item.id}"
-							 data-fancybox-type="iframe" rel="fancy" title="用户详细" class="showInfo" >${item.name }</a>
+							 data-fancybox-type="iframe" rel="fancy" title="用户详细" class="showInfo" >${item.name}</a>
 						</td>
 
 						<td>
