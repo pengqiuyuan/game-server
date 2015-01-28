@@ -80,20 +80,20 @@ margin-left:10px;
 	   <div class="form-actions">
   			<button type="submit" class="btn btn-primary" id="submit">保存</button>
 			<a href="<%=request.getContextPath()%>/manage/roleFunction/index?search_EQ_gameId=${roleFunction.gameId}" class="btn btn-primary">返回</a>
-			<a href="#" class="btn btn-danger">删除当前权限</a>
+<!-- 			<a href="#" class="btn btn-danger">删除当前权限</a> -->
 	   </div>
 	</form>
 	<script type="text/javascript">
 
 $(function(){
 	
-	jQuery.validator.addMethod("rules", function(value, element) { 
+/* 	jQuery.validator.addMethod("rules", function(value, element) { 
 
 		var tel = /^([0-9])*$/; 
 
 		return this.optional(element) || (tel.test(value)); 
 
-		}, "数字格式错误");
+		}, "数字格式错误"); */
 	
 	$("#inputForm").validate({
 		rules:{
@@ -101,7 +101,6 @@ $(function(){
 				required:true
 			},
 			role:{
-				rules:true,
 				required:true
 			},
 			functions:{

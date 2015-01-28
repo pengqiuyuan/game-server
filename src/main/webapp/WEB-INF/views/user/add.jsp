@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
@@ -110,6 +110,7 @@ margin-left:10px;
 			</select>
 		</div>
 	</div>
+	<input type="hidden" id="storeslength" value="${fn:length(stores)}" >		
 	<input type="hidden" name="roles" value="" >		
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
@@ -119,10 +120,11 @@ margin-left:10px;
 	<script type="text/javascript">
 	 var i=0;
 	$("#addfield").click(function(){
-		 i++;
-	     $("#field").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
-	     $("#field").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode' name='role'  class='role-select'></select></div></div>" );
-	     $("#field").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	</div></div>" );
+		i++;
+		if(i<=$("#storeslength").val()){
+		     $("#field").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
+		     $("#field").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode' name='role'  class='role-select'></select></div></div>" );
+		     $("#field").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	</div></div>" );
 	  		$('select[name="storeId"]').each(function(){
 	  			if($(this).val()!=0){
 				    $("#field").children(":first").children().children("#storeId").find("option[value='"+$(this).val()+"']").remove();	
@@ -170,7 +172,7 @@ margin-left:10px;
 				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 			});
 		});
-		
+	 }
 	}); 
 	
 $(function(){
@@ -199,6 +201,8 @@ $(function(){
 				minlength:5,
 				maxlength:15,
 				equalTo: "#pwdCipher"
+			},serverName:{
+				required:true
 			}
 		},messages:{
 			name:{
@@ -218,6 +222,8 @@ $(function(){
 				minlength:"密码长度5-15位",
 				maxlength:"密码长度5-15位",
 				equalTo: "两次输入密码不一致，请重新输入"
+			},serverName:{
+				required:"必须填写"
 			}
 		}
 	});

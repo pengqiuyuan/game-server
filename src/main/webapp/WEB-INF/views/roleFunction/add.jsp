@@ -25,8 +25,7 @@ margin-left:10px;
 		<div class="control-group">
 			<label class="control-label" for="gameId">项目名称</label>
 			<div class="controls">
-				<select id="gameId" name="gameId">
-				    <option value="0">--选择项目--</option>		
+				<select id="gameId" name="gameId">	
 					<c:forEach items="${stores}" var="item" >
 						<option value="${item.id }"  >
 							${item.name }
@@ -39,7 +38,7 @@ margin-left:10px;
 			class="control-group">
 			<label class="control-label" for="role">权限名称：</label>
 			<div class="controls">
-				<input type="text" id="role" name="role" class="input-large " value=""  placeholder="建议最高权限从0开始, 低级权限索引号逐渐加1" />
+				<input type="text" id="role" name="role" class="input-large " value=""  placeholder="如：超级管理员、2级管理员..." />
 			</div>
 		</div>
 		
@@ -76,13 +75,13 @@ margin-left:10px;
 
 $(function(){
 	
-	jQuery.validator.addMethod("rules", function(value, element) { 
+/* 	jQuery.validator.addMethod("rules", function(value, element) { 
 
 		var tel = /^([0-9])*$/; 
 
 		return this.optional(element) || (tel.test(value)); 
 
-		}, "数字格式错误");
+		}, "数字格式错误"); */
 
 	$("#role").change(function(e){
 		var gameId = $("#gameId").val();
@@ -103,17 +102,22 @@ $(function(){
 	
 	$("#inputForm").validate({
 		rules:{
+			gameId:{
+				required:true
+			},
 			gameName:{
 				required:true
 			},
 			role:{
-				rules:true,
 				required:true
 			},
 			functions:{
 	     		required:true
 			}
 		},messages:{
+			gameId:{
+				required:"必须填写",
+			},
 			gameName:{
 				required:"必须填写",
 			},

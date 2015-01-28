@@ -75,7 +75,7 @@
 			</div>
 			<div class="control-group">
 				<label for="role" class="control-label">权限组：</label>					
-					<select id='roleCode' name="role" class="roleCode">		
+					<select id='roleCode' name="role" class="roleCode">	
 							<c:forEach items="${item.roleFunctions}" var="it" >
 								<option value="${it}" ${it == item.role ? 'selected' : '' }>
 									${it}

@@ -144,23 +144,9 @@ public class StoresController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String updateStores(Stores store,@RequestParam("fileInput_thum") List<CommonsMultipartFile> fileInputxs,RedirectAttributes redirectAttributes){
-	
-		// 上传缩略图
-		if (null != fileInputxs) {
-			for (CommonsMultipartFile fileInput : fileInputxs) {
-				if (fileInput != null
-						&& fileInput.getOriginalFilename() != null
-						&& !fileInput.getOriginalFilename().equals("")) {
-					Map<String, String> result = imageService.uploadThumbnailsImage(fileInput, null);	
-					store.setThumb(result.get(ImageUploadService.IMAGE_ORIGIN_URL));
-				
-				}
-			}
-		}
-		
-		storeService.update(store);
-		redirectAttributes.addFlashAttribute("message", "修改门店成功");
+	public String updateStores(Stores store,RedirectAttributes redirectAttributes){
+	    storeService.update(store);
+		redirectAttributes.addFlashAttribute("message", "修改项目成功");
 		String message = "修改:" +store.toString();
 		logService.log(getCurrentUserName(), message, Log.TYPE_STORE);
 	    return "redirect:/manage/store/index";
@@ -181,22 +167,9 @@ public class StoresController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public String saveStores(Stores store,@RequestParam("fileInput_thum") List<CommonsMultipartFile> fileInputxs,RedirectAttributes redirectAttributes){
-		
-		// 上传缩略图
-		if (null != fileInputxs) {
-			for (CommonsMultipartFile fileInput : fileInputxs) {
-				if (fileInput != null
-						&& fileInput.getOriginalFilename() != null
-						&& !fileInput.getOriginalFilename().equals("")) {
-					Map<String, String> result = imageService.uploadThumbnailsImage(fileInput, null);	
-					store.setThumb(result.get(ImageUploadService.IMAGE_ORIGIN_URL));
-				
-				}
-			}
-		}
+	public String saveStores(Stores store,RedirectAttributes redirectAttributes){
 		storeService.save(store);
-		redirectAttributes.addFlashAttribute("message", "新增门店成功");
+		redirectAttributes.addFlashAttribute("message", "新增项目成功");
 		String message = "新增:" +store.toString();
 		logService.log(getCurrentUserName(), message, Log.TYPE_STORE);
 		return "redirect:/manage/store/index";

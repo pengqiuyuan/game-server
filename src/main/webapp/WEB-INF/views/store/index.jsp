@@ -70,7 +70,7 @@
 										href="<%=request.getContextPath()%>/manage/store/edit?id=${item.id}"><i
 											class="icon-edit"></i>修改</a></li>
 											<shiro:hasAnyRoles name="admin">
-									<c:if test="${item.id == 1 ? false : true}">
+									<c:if test="${item.id == 0 ? false : true}">
 									<li><a href="javascript:void(0);" rel="${item.id}"
 										class="del"><i class="icon-th"></i>删除 </a></li>
 										</c:if>

@@ -31,7 +31,7 @@ margin-left:10px;
 	</div>
 </div>
 
-<div
+<!-- <div
 	class="control-group">
 	<label class="control-label" for="addr">缩略图：</label>
 	<div class="controls">
@@ -48,7 +48,7 @@ margin-left:10px;
 		<input type="text" name="addr" value=""   class="input-large"  />
 		<a id="searchCoordinate" class="btn" target="_blank" href="http://api.map.baidu.com/lbsapi/getpoint/index.html">尝试查询经纬度</a>
 	</div>
-</div>
+</div> -->
 
 <div
 	class="control-group">
