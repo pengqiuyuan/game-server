@@ -40,6 +40,8 @@
 							<shiro:hasAnyRoles name='admin,2'>
 								<li><a href="#">服务器配置与开关</a></li>
 							</shiro:hasAnyRoles>
+							<li class="divider"></li>
+							<li><a href="#">sample</a></li>
 						</ul>
 				    </li>
 
@@ -52,6 +54,8 @@
 							<shiro:hasAnyRoles name='admin,4'>
 								<li><a href="#">角色数据修改与登录封禁</a></li>
 							</shiro:hasAnyRoles>
+							<li class="divider"></li>
+							<li><a href="#">sample</a></li>
 						</ul>
 					</li>
 					
@@ -64,92 +68,97 @@
 							<shiro:hasAnyRoles name='admin,6'>
 								<li><a href="#">新增邮件</a></li>
 							</shiro:hasAnyRoles>
+							<li class="divider"></li>
+							<li><a href="#">sample</a></li>
 						</ul>
 					</li>
 						
-                 <shiro:hasAnyRoles name="admin">
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">统计日志展示<b class="caret"></b></a>
 						<ul class="dropdown-menu">					
-							
+							<shiro:hasAnyRoles name="admin,9">
 							<li class="dropdown-submenu">
 			                    <a tabindex="-1" href="#">道具日志</a>
 				                <ul class="dropdown-menu">
-				                  <li><a tabindex="-1" href="${ctx}/manage/count/item?id=1">道具日志(总)</a></li>
-				                  <li><a href="${ctx}/manage/count/item?id=2">道具获得</a></li>
-				                  <li><a href="${ctx}/manage/count/item?id=3">道具消耗</a></li>
+				                  <li><a tabindex="-1" href="${ctx}/manage/count/item?id=1#/dashboard/file/item.json">道具日志(总)</a></li>
+				                  <li><a href="${ctx}/manage/count/item?id=2#/dashboard/file/itemGet.json">道具获得</a></li>
+				                  <li><a href="${ctx}/manage/count/item?id=3#/dashboard/file/itemCost.json">道具消耗</a></li>
 				                </ul>
 			               </li>
-			               
+			               </shiro:hasAnyRoles>
+			               <shiro:hasAnyRoles name="admin,10">
 			               <li class="dropdown-submenu">
 			                    <a tabindex="-1" href="#">体力日志</a>
 				                <ul class="dropdown-menu">
-				                  <li><a tabindex="-1" href="${ctx}/manage/count/ap?id=1">体力日志(总)</a></li>
-				                  <li><a href="${ctx}/manage/count/ap?id=2">体力获得</a></li>
-				                  <li><a href="${ctx}/manage/count/ap?id=3">体力消耗</a></li>
+				                  <li><a tabindex="-1" href="${ctx}/manage/count/ap?id=1#/dashboard/file/ap.json">体力日志(总)</a></li>
+				                  <li><a href="${ctx}/manage/count/ap?id=2#/dashboard/file/apGet.json">体力获得</a></li>
+				                  <li><a href="${ctx}/manage/count/ap?id=3#/dashboard/file/apCost.json">体力消耗</a></li>
 				                </ul>
 			               </li>
-							
-							<shiro:hasAnyRoles name="admin">
+							</shiro:hasAnyRoles>
+							<shiro:hasAnyRoles name="admin,11">
 									<li class="dropdown-submenu">
 					                    <a tabindex="-1" href="#">真实充值币日志</a>
 						                <ul class="dropdown-menu">
-						                  <li><a tabindex="-1" href="${ctx}/manage/count/money?id=1">真实充值币日志(总)</a></li>
-						                  <li><a href="${ctx}/manage/count/money?id=2">真实充值币获得</a></li>
-						                  <li><a href="${ctx}/manage/count/money?id=3">真实充值币消耗</a></li>
+						                  <li><a tabindex="-1" href="${ctx}/manage/count/money?id=1#/dashboard/file/money.json">真实充值币日志(总)</a></li>
+						                  <li><a href="${ctx}/manage/count/money?id=2#/dashboard/file/moneyGet.json">真实充值币获得</a></li>
+						                  <li><a href="${ctx}/manage/count/money?id=3#/dashboard/file/moneyCost.json">真实充值币消耗</a></li>
 						                </ul>
 					               </li>
 							</shiro:hasAnyRoles>
-							
+							<shiro:hasAnyRoles name="admin,12">
 							<li class="dropdown-submenu">
 			                    <a tabindex="-1" href="#">虚拟充值币日志</a>
 				                <ul class="dropdown-menu">
-				                  <li><a tabindex="-1" href="${ctx}/manage/count/dummy?id=1">虚拟充值币日志(总)</a></li>
-				                  <li><a href="${ctx}/manage/count/dummy?id=2">虚拟充值币获得</a></li>
-				                  <li><a href="${ctx}/manage/count/dummy?id=3">虚拟充值币消耗</a></li>
+				                  <li><a tabindex="-1" href="${ctx}/manage/count/dummy?id=1#/dashboard/file/dummy.json">虚拟充值币日志(总)</a></li>
+				                  <li><a href="${ctx}/manage/count/dummy?id=2#/dashboard/file/dummyGet.json">虚拟充值币获得</a></li>
+				                  <li><a href="${ctx}/manage/count/dummy?id=3#/dashboard/file/dummyCost.json">虚拟充值币消耗</a></li>
 				                </ul>
 			               </li>
-			               
+			               </shiro:hasAnyRoles>
+			               <shiro:hasAnyRoles name="admin,13">
 			               <li class="dropdown-submenu">
 			                    <a tabindex="-1" href="#">游戏币日志</a>
 				                <ul class="dropdown-menu">
-				                  <li><a tabindex="-1" href="${ctx}/manage/count/coin?id=1">游戏币日志(总)</a></li>
-				                  <li><a href="${ctx}/manage/count/coin?id=2">游戏币获得</a></li>
-				                  <li><a href="${ctx}/manage/count/coin?id=3">游戏币消耗</a></li>
+				                  <li><a tabindex="-1" href="${ctx}/manage/count/coin?id=1#/dashboard/file/coin.json">游戏币日志(总)</a></li>
+				                  <li><a href="${ctx}/manage/count/coin?id=2#/dashboard/file/coinGet.json">游戏币获得</a></li>
+				                  <li><a href="${ctx}/manage/count/coin?id=3#/dashboard/file/coinCost.json">游戏币消耗</a></li>
 				                </ul>
 			               </li>
-			               
+			               </shiro:hasAnyRoles>
+			               <shiro:hasAnyRoles name="admin,14">
 			               <li class="dropdown-submenu">
 			                    <a tabindex="-1" href="#">竞技场徽章(货币)日志</a>
 				                <ul class="dropdown-menu">
-				                  <li><a tabindex="-1" href="${ctx}/manage/count/arenacoin?id=1">竞技场徽章(货币)日志(总)</a></li>
-				                  <li><a href="${ctx}/manage/count/arenacoin?id=2">竞技场徽章获得</a></li>
-				                  <li><a href="${ctx}/manage/count/arenacoin?id=3">竞技场徽章消耗</a></li>
+				                  <li><a tabindex="-1" href="${ctx}/manage/count/arenacoin?id=1#/dashboard/file/arenacoin.json">竞技场徽章(货币)日志(总)</a></li>
+				                  <li><a href="${ctx}/manage/count/arenacoin?id=2#/dashboard/file/arenacoinGet.json">竞技场徽章获得</a></li>
+				                  <li><a href="${ctx}/manage/count/arenacoin?id=3#/dashboard/file/arenacoinCost.json">竞技场徽章消耗</a></li>
 				                </ul>
 			               </li>
-			               
+			               </shiro:hasAnyRoles>
+			               <shiro:hasAnyRoles name="admin,15">
 			               <li class="dropdown-submenu">
 			                    <a tabindex="-1" href="#">燃烧远征龙鳞币(货币)日志</a>
 				                <ul class="dropdown-menu">
-				                  <li><a tabindex="-1" href="${ctx}/manage/count/expeditioncoin?id=1">燃烧远征龙鳞币(货币)(总)</a></li>
-				                  <li><a href="${ctx}/manage/count/expeditioncoin?id=2">燃烧远征龙鳞币获得</a></li>
-				                  <li><a href="${ctx}/manage/count/expeditioncoin?id=3">燃烧远征龙鳞币消耗</a></li>
+				                  <li><a tabindex="-1" href="${ctx}/manage/count/expeditioncoin?id=1#/dashboard/file/expeditioncoin.json">燃烧远征龙鳞币(货币)(总)</a></li>
+				                  <li><a href="${ctx}/manage/count/expeditioncoin?id=2#/dashboard/file/expeditioncoinGet.json">燃烧远征龙鳞币获得</a></li>
+				                  <li><a href="${ctx}/manage/count/expeditioncoin?id=3#/dashboard/file/expeditioncoinCost.json">燃烧远征龙鳞币消耗</a></li>
 				                </ul>
 			               </li>
-			               
-							<shiro:hasAnyRoles name="admin">
+			               </shiro:hasAnyRoles>
+							<shiro:hasAnyRoles name="admin,16">
 								  <li class="dropdown-submenu">
 					                    <a tabindex="-1" href="#">用户相关日志</a>
 						                <ul class="dropdown-menu">
-						                  <li><a tabindex="-1" href="${ctx}/manage/count/user?id=1">用户相关日志(总)</a></li>
-						                  <li><a href="${ctx}/manage/count/user?id=2">用户登录</a></li>
-						                  <li><a href="${ctx}/manage/count/user?id=3">用户创建</a></li>
-						                  <li><a href="${ctx}/manage/count/user?id=4">在线用户</a></li>
+						                  <li><a tabindex="-1" href="${ctx}/manage/count/user?id=1#/dashboard/file/user.json">用户相关日志(总)</a></li>
+						                  <li><a href="${ctx}/manage/count/user?id=2#/dashboard/file/userLogin.json">用户登录</a></li>
+						                  <li><a href="${ctx}/manage/count/user?id=3#/dashboard/file/userCreate.json">用户创建</a></li>
+						                  <li><a href="${ctx}/manage/count/user?id=4#/dashboard/file/userOnline.json">在线用户</a></li>
 						                </ul>
 					               </li>	
 							</shiro:hasAnyRoles>
-			
+							<li class="divider"></li>
+							<li><a href="#">sample</a></li>
 						</ul></li>			
-				 </shiro:hasAnyRoles>
 
 				</ul>
 				<shiro:user>
@@ -165,7 +174,7 @@
 					</ul>
 				</shiro:user>
 			</div>
-				</shiro:hasAnyRoles>
+		</shiro:hasAnyRoles>
 			
 			<!--/.nav-collapse -->
 

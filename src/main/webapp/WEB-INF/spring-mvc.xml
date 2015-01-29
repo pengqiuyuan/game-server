@@ -53,10 +53,20 @@
 	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
 		<property name="exceptionMappings">  
-			<props>  
+			<props>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
 				<prop key="java.lang.Throwable">error/500</prop>
             </props>  
 		</property>  
-    </bean>
+    </bean> 
+    
+	<!-- 支持 Shiro对Controller的方法级AOP安全控制  begin-->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+    	<property name="securityManager" ref="securityManager"/>
+	</bean>
     
 </beans>

@@ -98,7 +98,7 @@
 	</servlet-mapping>
 
 	<session-config>
-		<session-timeout>20</session-timeout>
+		<session-timeout>120</session-timeout>
 	</session-config>
 
 	<error-page>

@@ -1,6 +1,8 @@
 package com.enlight.game.web.controller.mgr;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -26,147 +28,88 @@ public class CountController extends BaseController{
 	 * 道具日志
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin,9", "9" }, logical = Logical.OR)
 	@RequestMapping(value = "/item", method = RequestMethod.GET)
 	public String item(@RequestParam(value = "id")long id){
 		logger.debug("item coming...");
-		ShiroUser shiroUser = getCurrentUserName();
-		String url = null;
-		if(id == 1){
-			url = "redirect:/kibana/index.html#/dashboard/file/item.json"; 
-		}else if(id == 2){
-			url = "redirect:/kibana/index.html#/dashboard/file/itemGet.json"; 
-		}else if(id == 3){
-			url = "redirect:/kibana/index.html#/dashboard/file/itemCost.json"; 
-		}
-		return url;
+		return "/kibana/index";
 	}	
 	
 	/**
 	 * 体力日志
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "10" }, logical = Logical.OR)
 	@RequestMapping(value = "/ap", method = RequestMethod.GET)
 	public String ap(@RequestParam(value = "id")long id){
 		logger.debug("ap coming...");
-		String url = null;
-		if(id == 1){
-			url = "redirect:/kibana/index.html#/dashboard/file/ap.json"; 
-		}else if(id == 2){
-			url = "redirect:/kibana/index.html#/dashboard/file/apGet.json"; 
-		}else if(id == 3){
-			url = "redirect:/kibana/index.html#/dashboard/file/apCost.json"; 
-		}
-		return url;
+		return "/kibana/index";
 	}	
 	
 	/**
 	 * 真实充值币日志
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "11" }, logical = Logical.OR)
 	@RequestMapping(value = "/money", method = RequestMethod.GET)
 	public String money(@RequestParam(value = "id")long id){
 		logger.debug("money coming...");
-		String url = null;
-		if(id == 1){
-			url = "redirect:/kibana/index.html#/dashboard/file/money.json"; 
-		}else if(id == 2){
-			url = "redirect:/kibana/index.html#/dashboard/file/moneyGet.json"; 
-		}else if(id == 3){
-			url = "redirect:/kibana/index.html#/dashboard/file/moneyCost.json"; 
-		}
-		return url;
+		return "/kibana/index";
 	}	
 	
 	/**
 	 * 虚拟充值币日志
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "12" }, logical = Logical.OR)
 	@RequestMapping(value = "/dummy", method = RequestMethod.GET)
 	public String dummy(@RequestParam(value="id")long id){
 		logger.debug("dummy coming...");
-		String url = null;
-		if(id == 1){
-			url = "redirect:/kibana/index.html#/dashboard/file/dummy.json"; 
-		}else if(id == 2){
-			url = "redirect:/kibana/index.html#/dashboard/file/dummyGet.json"; 
-		}else if(id == 3){
-			url = "redirect:/kibana/index.html#/dashboard/file/dummyCost.json"; 
-		}
-		return url;
+		return "/kibana/index";
 	}	
 	
 	/**
 	 * 游戏币日志
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "13" }, logical = Logical.OR)
 	@RequestMapping(value = "/coin", method = RequestMethod.GET)
 	public String coin(@RequestParam(value="id")long id){
 		logger.debug("coin coming...");
-		String url = null;
-		if(id == 1){
-			url = "redirect:/kibana/index.html#/dashboard/file/coin.json"; 
-		}else if(id == 2){
-			url = "redirect:/kibana/index.html#/dashboard/file/coinGet.json"; 
-		}else if(id == 3){
-			url = "redirect:/kibana/index.html#/dashboard/file/coinCost.json"; 
-		}
-		return url;
+		return "/kibana/index";
 	}	
 	
 	/**
 	 * 竞技场徽章(货币)日志
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "14" }, logical = Logical.OR)
 	@RequestMapping(value = "/arenacoin", method = RequestMethod.GET)
 	public String arenacoin(@RequestParam(value="id")long id){
 		logger.debug("arenacoin coming...");
-		String url = null;
-		if(id == 1){
-			url = "redirect:/kibana/index.html#/dashboard/file/arenacoin.json"; 
-		}else if(id == 2){
-			url = "redirect:/kibana/index.html#/dashboard/file/arenacoinGet.json"; 
-		}else if(id == 3){
-			url = "redirect:/kibana/index.html#/dashboard/file/arenacoinCost.json"; 
-		}
-		return url;
+		return "/kibana/index";
 	}	
 	
 	/**
 	 * 燃烧远征龙鳞币(货币)日志
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "15" }, logical = Logical.OR)
 	@RequestMapping(value = "/expeditioncoin", method = RequestMethod.GET)
 	public String expeditioncoin(@RequestParam(value="id")long id){
 		logger.debug("expeditioncoin coming...");
-		String url = null;
-		if(id == 1){
-			url = "redirect:/kibana/index.html#/dashboard/file/expeditioncoin.json"; 
-		}else if(id == 2){
-			url = "redirect:/kibana/index.html#/dashboard/file/expeditioncoinGet.json"; 
-		}else if(id == 3){
-			url = "redirect:/kibana/index.html#/dashboard/file/expeditioncoinCost.json"; 
-		}
-		return url;
+		return "/kibana/index";
 	}	
 	
 	/**
 	 * 用户日志
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "16" }, logical = Logical.OR)
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public String user(@RequestParam(value="id")long id){
 		logger.debug("user coming...");
-		String url = null;
-		if(id == 1){
-			url = "redirect:/kibana/index.html#/dashboard/file/user.json"; 
-		}else if(id == 2){
-			url = "redirect:/kibana/index.html#/dashboard/file/userLogin.json"; 
-		}else if(id == 3){
-			url = "redirect:/kibana/index.html#/dashboard/file/userCreate.json"; 
-		}else if(id == 4){
-			url = "redirect:/kibana/index.html#/dashboard/file/userOnline.json"; 
-		}
-		return url;
+		return "/kibana/index";
 	}	
 	
 	

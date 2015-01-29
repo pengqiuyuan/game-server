@@ -162,8 +162,7 @@ function (angular, $, kbn, _, config, moment, Modernizr) {
               } else {
                 // Do not issue refresh if no indices match. This should be removed when panels
                 // properly understand when no indices are present
-                alertSrv.set('No results','There were no results because no indices were found that match your'+
-                  ' selected time span','info',5000);
+                //alertSrv.set('No results','There were no results because no indices were found that match your'+' selected time span','info',5000);
                 return false;
               }
             }
