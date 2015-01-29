@@ -28,7 +28,7 @@ public class CountController extends BaseController{
 	 * 道具日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin,9", "9" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "9" }, logical = Logical.OR)
 	@RequestMapping(value = "/item", method = RequestMethod.GET)
 	public String item(@RequestParam(value = "id")long id){
 		logger.debug("item coming...");
