@@ -47,12 +47,14 @@ function (angular, app, _) {
       dashboard.refresh();
     };
 
-    $scope.add = function(query) {
+    $scope.add = function(query,field) {
       query = query || '*';
+      field = field || '@timestamp';
       filterSrv.set({
         editing   : true,
         type      : 'querystring',
         query     : query,
+        field     : field,
         mandate   : 'must'
       },undefined,true);
     };
