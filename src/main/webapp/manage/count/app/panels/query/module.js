@@ -31,8 +31,8 @@ define([
     $scope.add_cond = false;
     $scope.defaultValue = {
       sem        : fields.list[0],
-      comp_list  : ['不等于', '等于'],
-      select_comp: '等于',
+      comp_list  : ['ne', 'eq'],
+      select_comp: 'eq',
       input      : ''
     };
 
@@ -75,9 +75,9 @@ define([
     var createQuery = function() {
       var queryString = "_type:" + $scope.typesSel.join(',');
       _.each($scope.panel.values, function(value) {
-        if( value.select_comp == '等于' ) {
+        if( value.select_comp == 'eq' ) {
           queryString += ' AND '+value.sem+':"'+value.input+'" ';
-        } else if( value.select_comp == '不等于' ) {
+        } else if( value.select_comp == 'ne' ) {
           queryString += ' AND NOT '+value.sem+':"'+value.input+'" ';
         } else {
           queryString += ' AND '+value.sem+':'+value.select_comp+value.input;
@@ -94,7 +94,7 @@ define([
         if(_.intersection(types, ['long','float','integer','double']).length > 0) {
           item.comp_list =  ['<', '>', '='];
         } else {
-          item.comp_list =  ['等于', '不等于'];
+          item.comp_list =  ['eq', 'ne'];
         }
       });
     };

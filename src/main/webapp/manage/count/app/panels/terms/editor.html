@@ -10,11 +10,8 @@
         <select class="input-medium" ng-model="panel.tstat" ng-options="f for f in ['count', 'total_count', 'min', 'max', 'total', 'mean']"></select>
       </div>
       <div class="editor-option">
-        <label class="small">选择查看字段</label>
-<!--         <input type="text" class="input-small" bs-typeahead="fields.list" ng-model="panel.field" ng-change="set_refresh(true)"> -->
-	        <select class="input-small" ng-options="y for y in fields.list" bs-typeahead="fields.list" ng-model="panel.field" ng-change="set_refresh(true)">
-	              <option>--</option>
-	        </select>
+        <label class="small">Field</label>
+        <input type="text" class="input-small" bs-typeahead="fields.list" ng-model="panel.field" ng-change="set_refresh(true)">
       </div>
       <div class="editor-option" ng-show="panel.tmode == 'terms_stats'">
         <label class="small">Value field</label>
