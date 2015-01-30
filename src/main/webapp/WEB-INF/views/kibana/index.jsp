@@ -1,6 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib prefix="sitemesh" uri="http://www.opensymphony.com/sitemesh/decorator" %>  
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="css/animate.min.css">
     <link rel="stylesheet" href="css/normalize.min.css">
     <!--<link rel="stylesheet" ng-href="css/bootstrap.{{dashboard.current.style||'dark'}}.min.css">-->
-    <link rel="stylesheet" ng-href="css/bootstrap.{{dashboard.current.style||'dark'}}.min.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/jquery-ui.css">
@@ -41,17 +40,17 @@
       <button type="button" class="close" ng-click="dashAlerts.clear(alert)" style="padding-right:50px">&times;</button>
       <strong>{{alert.title}}</strong> <span ng-bind-html='alert.text'></span> <div style="padding-right:10px" class='pull-right small'> {{$index + 1}} alert(s) </div>
     </div>
-    <div ng-cloak class="navbar navbar-static-top" ng-show="dashboard.current.nav.length">
+    <div ng-cloak class="navbar navbar-static-top" ng-show="dashboard.current.nav.length && dashboard.current.role==${user}">
       <div class="navbar-inner">
         <div class="container-fluid" style="padding-top: 70px">
-          <span class="brand"><img src="img/small.png" bs-tooltip="'Kibana '+(kbnVersion=='@REV@'?'master':kbnVersion)" data-placement="bottom"> {{dashboard.current.title}}</span>
+          <span class="brand"><img src="img/small.png" bs-tooltip="'Kibana '+(kbnVersion=='@REV@'?'master':kbnVersion)" data-placement="bottom">{{dashboard.current.title}}</span>
 
           <ul class="nav pull-right" ng-controller='dashLoader' ng-init="init()" ng-include="'app/partials/dashLoader.html'">
             </ul>
         </div>
       </div>
     </div>
+    <div id="view" ng-cloak ng-view ng-show="dashboard.current.role==${user}"></div>
 
-    <div ng-cloak ng-view></div>
   </body>
 </html>
