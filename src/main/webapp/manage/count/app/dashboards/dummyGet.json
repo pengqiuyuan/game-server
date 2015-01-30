@@ -1,5 +1,6 @@
 {
   "title": "虚拟充值币获取",
+  "role": "12",
   "services": {
     "query": {
       "list": {

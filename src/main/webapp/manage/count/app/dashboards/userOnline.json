@@ -1,5 +1,6 @@
 {
   "title": "在线用户",
+  "role": "16",
   "services": {
     "query": {
       "list": {

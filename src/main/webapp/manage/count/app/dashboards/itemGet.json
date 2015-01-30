@@ -1,5 +1,6 @@
 {
   "title": "道具获取",
+  "role": "9",
   "services": {
     "query": {
       "list": {

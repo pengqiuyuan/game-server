@@ -1,5 +1,6 @@
 {
   "title": "真实充值币获取与消耗",
+  "role": "11",
   "services": {
     "query": {
       "list": {

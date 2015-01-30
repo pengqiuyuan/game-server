@@ -1,5 +1,6 @@
 {
   "title": "体力消耗",
+  "role": "10",
   "services": {
     "query": {
       "list": {

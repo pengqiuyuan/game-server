@@ -1,5 +1,6 @@
 {
   "title": "用户登录",
+  "role": "16",
   "services": {
     "query": {
       "list": {

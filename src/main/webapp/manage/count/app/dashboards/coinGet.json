@@ -1,5 +1,6 @@
 {
   "title": "游戏币获取",
+  "role": "13",
   "services": {
     "query": {
       "list": {

@@ -1,5 +1,6 @@
 {
   "title": "体力获取",
+  "role": "10",
   "services": {
     "query": {
       "list": {

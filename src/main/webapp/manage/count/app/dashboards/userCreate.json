@@ -1,5 +1,6 @@
 {
   "title": "用户创建",
+  "role": "16",
   "services": {
     "query": {
       "list": {
