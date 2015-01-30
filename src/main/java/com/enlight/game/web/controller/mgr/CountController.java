@@ -6,10 +6,12 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 
 
@@ -30,8 +32,9 @@ public class CountController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "9" }, logical = Logical.OR)
 	@RequestMapping(value = "/item", method = RequestMethod.GET)
-	public String item(@RequestParam(value = "id")long id){
-		logger.debug("item coming...");
+	public String item(@RequestParam(value = "id")String id,Model model){
+		logger.debug("item coming..."+id);
+		model.addAttribute("user", EnumFunction.ENUM_ITEM);
 		return "/kibana/index";
 	}	
 	
@@ -41,8 +44,9 @@ public class CountController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "10" }, logical = Logical.OR)
 	@RequestMapping(value = "/ap", method = RequestMethod.GET)
-	public String ap(@RequestParam(value = "id")long id){
+	public String ap(@RequestParam(value = "id")long id,Model model){
 		logger.debug("ap coming...");
+		model.addAttribute("user", EnumFunction.ENUM_AP);
 		return "/kibana/index";
 	}	
 	
@@ -52,8 +56,9 @@ public class CountController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "11" }, logical = Logical.OR)
 	@RequestMapping(value = "/money", method = RequestMethod.GET)
-	public String money(@RequestParam(value = "id")long id){
+	public String money(@RequestParam(value = "id")long id,Model model){
 		logger.debug("money coming...");
+		model.addAttribute("user", EnumFunction.ENUM_MONEY);
 		return "/kibana/index";
 	}	
 	
@@ -63,8 +68,9 @@ public class CountController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "12" }, logical = Logical.OR)
 	@RequestMapping(value = "/dummy", method = RequestMethod.GET)
-	public String dummy(@RequestParam(value="id")long id){
+	public String dummy(@RequestParam(value="id")long id,Model model){
 		logger.debug("dummy coming...");
+		model.addAttribute("user", EnumFunction.ENUM_DUMMY);
 		return "/kibana/index";
 	}	
 	
@@ -74,8 +80,9 @@ public class CountController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "13" }, logical = Logical.OR)
 	@RequestMapping(value = "/coin", method = RequestMethod.GET)
-	public String coin(@RequestParam(value="id")long id){
+	public String coin(@RequestParam(value="id")long id,Model model){
 		logger.debug("coin coming...");
+		model.addAttribute("user", EnumFunction.ENUM_COIN);
 		return "/kibana/index";
 	}	
 	
@@ -85,8 +92,9 @@ public class CountController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "14" }, logical = Logical.OR)
 	@RequestMapping(value = "/arenacoin", method = RequestMethod.GET)
-	public String arenacoin(@RequestParam(value="id")long id){
+	public String arenacoin(@RequestParam(value="id")long id,Model model){
 		logger.debug("arenacoin coming...");
+		model.addAttribute("user", EnumFunction.ENUM_ARENACOIN);
 		return "/kibana/index";
 	}	
 	
@@ -96,8 +104,9 @@ public class CountController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "15" }, logical = Logical.OR)
 	@RequestMapping(value = "/expeditioncoin", method = RequestMethod.GET)
-	public String expeditioncoin(@RequestParam(value="id")long id){
+	public String expeditioncoin(@RequestParam(value="id")long id,Model model){
 		logger.debug("expeditioncoin coming...");
+		model.addAttribute("user", EnumFunction.ENUM_EXPEDITIONCOIN);
 		return "/kibana/index";
 	}	
 	
@@ -107,8 +116,9 @@ public class CountController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "16" }, logical = Logical.OR)
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public String user(@RequestParam(value="id")long id){
+	public String user(@RequestParam(value="id")long id,Model model){
 		logger.debug("user coming...");
+		model.addAttribute("user", EnumFunction.ENUM_USER);
 		return "/kibana/index";
 	}	
 	
