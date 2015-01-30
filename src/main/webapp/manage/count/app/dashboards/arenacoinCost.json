@@ -11,7 +11,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "_type:arenacoin.log AND 日志分类关键字:arenacoin_cost"
+          "query": "日志分类关键字:arenacoin_cost"
         }
       },
       "ids": [
