@@ -5,7 +5,7 @@
     "query": {
       "list": {
         "0": {
-          "query": "日志分类关键字:create",
+          "query": "create",
           "alias": "",
           "color": "#7EB26D",
           "id": 0,
@@ -136,6 +136,7 @@
           "overflow": "min-height",
           "fields": [
             "_type",
+            "@timestamp",
             "日期",
             "游戏ID",
             "国家ID",
@@ -309,7 +310,7 @@
       "type": "query",
       "collapse": false,
       "notice": false,
-      "enable": true,
+      "enable": false,
       "values": [
         {
           "sem": "_type",

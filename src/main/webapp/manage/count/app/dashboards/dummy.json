@@ -11,7 +11,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "日志分类关键字:dummy_get"
+          "query": "dummy_get"
         },
         "1": {
           "id": 1,
@@ -20,7 +20,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "日志分类关键字:dummy_cost"
+          "query": "dummy_cost"
         }
       },
       "ids": [
@@ -147,6 +147,7 @@
           "overflow": "min-height",
           "fields": [
             "_type",
+            "@timestamp",
             "日期",
             "游戏ID",
             "国家ID",
@@ -302,7 +303,7 @@
       "type": "query",
       "collapse": false,
       "notice": false,
-      "enable": true,
+      "enable": false,
       "values": [
         {
           "sem": "_type",

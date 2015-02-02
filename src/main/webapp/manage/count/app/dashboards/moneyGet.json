@@ -11,7 +11,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "日志分类关键字:money_get"
+          "query": "money_get"
         }
       },
       "ids": [
@@ -287,7 +287,7 @@
       "type": "query",
       "collapse": false,
       "notice": false,
-      "enable": true,
+      "enable": false,
       "values": [
         {
           "sem": "_type",

@@ -5,7 +5,7 @@
     "query": {
       "list": {
         "0": {
-          "query": "日志分类关键字:arenacoin_get",
+          "query": "arenacoin_get",
           "alias": "",
           "color": "#7EB26D",
           "id": 0,
@@ -20,7 +20,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "日志分类关键字:arenacoin_cost"
+          "query": "arenacoin_cost"
         }
       },
       "ids": [
@@ -147,6 +147,7 @@
           "overflow": "min-height",
           "fields": [
             "_type",
+            "@timestamp",
             "日期",
             "游戏ID",
             "国家ID",
@@ -303,7 +304,7 @@
       "type": "query",
       "collapse": false,
       "notice": false,
-      "enable": true,
+      "enable": false,
       "values": [
         {
           "sem": "_type",
