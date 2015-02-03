@@ -85,7 +85,7 @@ public class RoleFunctionService {
 	public void update(RoleFunction roleFunction){
 		RoleFunction function = roleFunctionDao.findOne(roleFunction.getId());
 		function.setStatus(roleFunction.getStatus());
-		function.setUpDate(new Date());
+		function.setUpdDate(new Date());
 		function.setRole(roleFunction.getRole());
 		function.setGameId(roleFunction.getGameId());
 		function.setFunction(roleFunction.getFunction());
@@ -98,7 +98,7 @@ public class RoleFunctionService {
 		RoleFunction function = new RoleFunction();
 		function.setStatus(roleFunction.getStatus());
 		function.setCrDate(new Date());
-		function.setUpDate(new Date());
+		function.setUpdDate(new Date());
 		function.setRole(roleFunction.getRole());
 		function.setGameId(roleFunction.getGameId());
 		function.setFunction(roleFunction.getFunction());

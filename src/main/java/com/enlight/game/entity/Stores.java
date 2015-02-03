@@ -70,8 +70,8 @@ public class Stores {
 	@Column(name = "cr_date")
 	private Date createDate;
 	
-	@Column(name = "up_date")
-	private Date upDate;
+	@Column(name = "upd_date")
+	private Date updDate;
 
 	
 	@OneToMany(cascade = CascadeType.ALL,  
@@ -131,13 +131,12 @@ public class Stores {
 		this.createDate = createDate;
 	}
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	public Date getUpDate() {
-		return upDate;
+	public Date getUpdDate() {
+		return updDate;
 	}
-	public void setUpDate(Date upDate) {
-		this.upDate = upDate;
+	public void setUpdDate(Date updDate) {
+		this.updDate = updDate;
 	}
-
 	public int getSort() {
 		return sort;
 	}

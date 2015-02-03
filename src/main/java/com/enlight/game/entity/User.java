@@ -70,7 +70,7 @@ public class User extends IdEntity{
 	/**
 	 * 更新时间
 	 */
-	private Date upDate;
+	private Date updDate;
 	/**
 	 * 状态
 	 */
@@ -168,13 +168,14 @@ public class User extends IdEntity{
 	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	public Date getUpDate() {
-		return upDate;
+	public Date getUpdDate() {
+		return updDate;
 	}
 
-	public void setUpDate(Date upDate) {
-		this.upDate = upDate;
+	public void setUpdDate(Date updDate) {
+		this.updDate = updDate;
 	}
+
 
 	public String getStatus() {
 		return status;

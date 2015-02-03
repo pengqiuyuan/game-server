@@ -15,5 +15,5 @@ public interface EnumFunctionDao extends PagingAndSortingRepository<EnumFunction
 	@Query("from EnumFunction enumFunction where enumFunction.status=1")
 	List<EnumFunction> findList();
 	
-	EnumFunction findByEnumRole(String enumRole);
+	EnumFunction findByEnumRole(Integer enumRole);
 }

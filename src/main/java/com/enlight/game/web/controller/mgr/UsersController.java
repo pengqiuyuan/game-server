@@ -239,7 +239,7 @@ public class UsersController extends BaseController{
 						}
 						UserRole userRole = new UserRole();
 						userRole.setCrDate(new Date());
-						userRole.setUpDate(new Date());
+						userRole.setUpdDate(new Date());
 						userRole.setStatus(UserRole.STATUS_VALIDE);
 						userRole.setUserId(accountService.register(user).getId());
 						userRole.setFunctions(functions);
@@ -415,69 +415,49 @@ public class UsersController extends BaseController{
 			@RequestParam(value="userId") Long userId,
 			@RequestParam(value="role") String role) throws AppBizException{
 		List<UserRole> userRoles = userRoleService.findByUserIdAndStoreId(userId, gameId);
-		if(userRoles!=null){
+		Map<String,Object> map = new HashMap<String, Object>();
+		if(userRoles!=null && !userRoles.equals("") && userRoles.size()!=0){//此用户有某个项目的权限组 update
 			String functions = new String();
 			List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(gameId, role);
 			for (RoleFunction roleFunction : roleFunctions) {
-				functions = roleFunction.getFunction()+","+functions;
+				functions = functions+","+roleFunction.getFunction();
 			}
 			userRoles.get(0).setFunctions(functions);
 			userRoles.get(0).setRole(role);
 			userRoleService.save(userRoles.get(0));
-		}
-		List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(gameId, role);
-		Map<String,Object> map = new HashMap<String, Object>();
-		map.put("roleFunctions", roleFunctions);
-		map.put("message", "权限组已更新对应功能");
-		return map;
-	}
-	
-	/**
-	 * 根据项目、权限组 更新\查找对应功能
-	 * @param
-	 * @return
-	 * @throws AppBizException
-	 */
-	@RequestMapping(value="/insertFunctions",method=RequestMethod.GET)	
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public Map<String, Object> insertFunctions(
-			@RequestParam(value="gameId") Long gameId,
-			@RequestParam(value="userId") Long userId,
-			@RequestParam(value="role") String role) throws AppBizException{
+			map.put("roleFunctions", roleFunctions);
+		}else if(userRoles==null || userRoles.size()==0){//此用户没有某个项目的权限组 insert
+			String functions = new String();
+			List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(gameId, role);
+			for (RoleFunction roleFunction : roleFunctions) {
+				functions = functions+","+roleFunction.getFunction();
+			}
+			UserRole userRole = new UserRole();
+			userRole.setCrDate(new Date());
+			userRole.setUpdDate(new Date());
+			userRole.setStatus(UserRole.STATUS_VALIDE);
+			userRole.setUserId(userId);
+			//userRole.setServerZone(serverZones);
+			userRole.setFunctions(functions);
+			userRole.setStoreId(gameId);
+			userRole.setRole(role);
+			userRoleService.save(userRole);
 
-		String functions = new String();
-		List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(gameId, role);
-		for (RoleFunction roleFunction : roleFunctions) {
-			functions = roleFunction.getFunction()+","+functions;
-		}
-		UserRole userRole = new UserRole();
-		userRole.setCrDate(new Date());
-		userRole.setUpDate(new Date());
-		userRole.setStatus(UserRole.STATUS_VALIDE);
-		userRole.setUserId(userId);
-		//userRole.setServerZone(serverZones);
-		userRole.setFunctions(functions);
-		userRole.setStoreId(gameId);
-		userRole.setRole(role);
-		userRoleService.save(userRole);
+			User user = accountService.getUser(userId);
+			String storeId = null;
+			storeId = user.getStoreId();
+			if(storeId!=null){
+				storeId = storeId+","+gameId;
+			}else{
+				storeId=gameId.toString();
+			}
 
-		User user = accountService.getUser(userId);
-		String storeId = null;
-		storeId = user.getStoreId();
-		if(storeId!=null){
-			storeId = storeId+","+gameId;
-		}else{
-			storeId=gameId.toString();
+			user.setStoreId(storeId);
+			accountService.updateUser(user);
+			
+			List<RoleFunction> roleFuncts = roleFunctionService.findByGameIdAndRole(gameId, role);
+			map.put("roleFunctions", roleFuncts);
 		}
-
-		user.setStoreId(storeId);
-		accountService.updateUser(user);
-		
-		List<RoleFunction> roleFuncts = roleFunctionService.findByGameIdAndRole(gameId, role);
-		Map<String,Object> map = new HashMap<String, Object>();
-		map.put("roleFunctions", roleFuncts);
-		map.put("message", "权限组添加成功");
 		return map;
 	}
 	
@@ -546,10 +526,12 @@ public class UsersController extends BaseController{
 		if(stos!=null && stos.size()!=0){
 			List<RoleFunction> functions = roleFunctionService.findByGameId(stos.get(0).getId());
 			map.put("stos", stos.get(0));
+			map.put("storesLength", stos.size());
 			map.put("rolefuncs", functions);
 
 		}else{
 			map.put("stos", null);
+			map.put("storesLength", null);
 			map.put("rolefuncs", null);
 		}
 		return map;

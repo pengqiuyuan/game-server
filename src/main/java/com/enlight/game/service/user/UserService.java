@@ -71,7 +71,7 @@ public class UserService {
 	 */
 	public void add(User user){
 		user.setRegisterDate(new Date());
-		user.setUpDate(new Date());
+		user.setUpdDate(new Date());
 		userDao.save(user);
 	}
 	/**
@@ -85,7 +85,7 @@ public class UserService {
 		user1.setName(user.getName());
 		user1.setRoles(user.getRoles());
 		user1.setStatus(user.getStatus());
-		user1.setUpDate(user.getUpDate());
+		user1.setUpdDate(user.getUpdDate());
 		user1.setServerZone(user.getServerZone());
 		userDao.save(user1);
 	}

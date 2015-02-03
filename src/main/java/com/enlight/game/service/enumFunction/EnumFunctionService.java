@@ -25,7 +25,7 @@ public class EnumFunctionService {
 		return enumFunctionDao.findList();
 	}
 	
-	public EnumFunction findByEnumRole(String enumRole){
+	public EnumFunction findByEnumRole(Integer enumRole){
 		return enumFunctionDao.findByEnumRole(enumRole);
 	} 
 }

@@ -76,7 +76,7 @@
 						</td>
 					    <td>${item.function}、${item.functionName}</td>
 						<td><fmt:formatDate value="${item.crDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
-						<td><fmt:formatDate value="${item.upDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
+						<td><fmt:formatDate value="${item.updDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
 					</tr>
 				</c:forEach>
 			</tbody>

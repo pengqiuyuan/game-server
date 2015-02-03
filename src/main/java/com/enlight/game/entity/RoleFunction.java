@@ -39,7 +39,7 @@ public class RoleFunction extends BaseEntry{
 	/**
 	 * 功能选项 （1）
 	 */
-	private String function;
+	private Integer function;
 	
 	/**
 	 * 功能名称
@@ -62,11 +62,11 @@ public class RoleFunction extends BaseEntry{
 		this.role = role;
 	}
 
-	public String getFunction() {
+	public Integer getFunction() {
 		return function;
 	}
 
-	public void setFunction(String function) {
+	public void setFunction(Integer function) {
 		this.function = function;
 	}
 

@@ -23,7 +23,7 @@ public class BaseEntry {
 	
 	private Date crDate;
 	
-	private Date upDate;
+	private Date updDate;
 	
 	private String status;
 
@@ -47,14 +47,12 @@ public class BaseEntry {
 	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	public Date getUpDate() {
-		return upDate;
+	public Date getUpdDate() {
+		return updDate;
 	}
 
-	
-
-	public void setUpDate(Date upDate) {
-		this.upDate = upDate;
+	public void setUpdDate(Date updDate) {
+		this.updDate = updDate;
 	}
 
 	public String getStatus() {

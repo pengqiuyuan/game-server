@@ -35,7 +35,7 @@
 				</c:forEach>				
 			</p>
 			<p><span>创建时间：</span><fmt:formatDate value="${roleFunction.crDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></p>
-			<p><span>创建时间：</span><fmt:formatDate value="${roleFunction.upDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></p>
+			<p><span>创建时间：</span><fmt:formatDate value="${roleFunction.updDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></p>
 		</div>
 		
 	

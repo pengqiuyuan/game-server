@@ -131,7 +131,7 @@ public class RoleFunctionController extends BaseController{
 		if(flag){
 			for (int i = 0; i < functions.length; i++) {
 				logger.debug("权限号：function..." + roleFunction.getFunction());
-				roleFunction.setFunction(functions[i]);
+				roleFunction.setFunction(Integer.valueOf(functions[i]));
 	        	roleFunction.setStatus(RoleFunction.STATUS_VALIDE);
 				roleFunctionService.save(roleFunction);
 			}
@@ -242,9 +242,18 @@ public class RoleFunctionController extends BaseController{
 	    }		
         for (RoleFunction roleFunctionDel : roleFuncs) {
         	roleFunctionService.delById(roleFunctionDel.getId());
+    		List<String> func = roleFunctionService.findByGameIdAndRoleFunctions(roleFunctionDel.getGameId(), roleFunctionDel.getRole());
+    		if(func!=null && func.size()!=0){
+    			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(roleFunctionDel.getGameId(), roleFunctionDel.getRole());
+    			for (UserRole userRole : userRoles) {
+    				userRole.setFunctions(StringUtils.join(func,","));
+    				userRoleService.save(userRole);
+    			}
+    		}
+    		
 		}
         for (String roleFunctionAdd : funs) {
-        	roleFunction.setFunction(roleFunctionAdd);
+        	roleFunction.setFunction(Integer.valueOf(roleFunctionAdd));
         	roleFunction.setStatus(RoleFunction.STATUS_VALIDE);
         	roleFunctionService.save(roleFunction);
 		}
