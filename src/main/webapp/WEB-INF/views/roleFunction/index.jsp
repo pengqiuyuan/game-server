@@ -3,6 +3,7 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="huake" uri="/huake"%>
 
 <%@ page session="false"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -29,7 +30,7 @@
 					<label>名称：</label> 
 						 <select name="search_LIKE_gameName">		
 							<c:forEach items="${stores}" var="item" >
-								<option value="${item.name}"  ${param.search_EQ_gameId == item.id ? 'selected' : '' }>
+								<option value="${item.name}"  ${param.search_LIKE_gameName == item.name ? 'selected' : '' }>
 									${item.name }
 								</option>
 							</c:forEach>
@@ -44,6 +45,7 @@
 					<th title="编号" width="120px">编号</th>
 					<th title="项目名称">项目名称</th>
 					<th title="代表权限">代表权限</th>
+					<th title="分类">分类</th>
 					<th title="功能名称">功能名称</th>
 					<th title="创建时间" width="240px">创建时间</th>
 					<th title="修改时间" width="240px">修改时间</th>
@@ -74,7 +76,8 @@
 						<a href="<%=request.getContextPath()%>/manage/roleFunction/detail?id=${item.id}"
 							data-fancybox-type="iframe" rel="fancy" title="权限详细" class="showInfo" >${item.role }</a>
 						</td>
-					    <td>${item.function}、${item.functionName}</td>
+					    <td><huake:getEnumCategoryTag id="${item.id}"></huake:getEnumCategoryTag></td>
+					    <td>${item.function},${item.functionName}</td>
 						<td><fmt:formatDate value="${item.crDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
 						<td><fmt:formatDate value="${item.updDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
 					</tr>

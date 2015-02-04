@@ -11,6 +11,9 @@
 color:Red; 
 margin-left:10px;  
 } 
+input[type="radio"], input[type="checkbox"] {
+margin: 0px 0 0;
+}
 </style> 
 </head>
 
@@ -46,37 +49,21 @@ margin-left:10px;
 		</div>
 		
 		<div class="control-group">
-			<label class="control-label" for="functions">功能选择：</label>
-			<div class="controls">
-					<c:forEach items="${enumFusHas}" var="item" varStatus="i">
-						   <input type="checkbox" name="functions" value="${item.enumRole}" checked="checked" class="box" />
-				           	<span>${item.enumRole}、${item.enumName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				         <c:if test="${(i.index+1)%5 == 0}">
-						<br/>
-						<br/>
-						</c:if>
-					</c:forEach>
-					<br />
-					<br/>
-				    <c:forEach items="${enumFusNohas}" var="item" varStatus="i">
-						   <input type="checkbox" name="functions" value="${item.enumRole}" ${roleFunction.function == item.enumRole ? "checked":"" } class="box" />
-				           	<span>${item.enumRole}、${item.enumName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				         <c:if test="${(i.index+1)%5 == 0}">
-						<br/>
-						<br/>
-						</c:if>
-					</c:forEach>
-			</div>
-		</div>
-<%-- 		<div class="control-group">
-				<label for="tag_status" class="control-label">状态:</label>
+			<c:forEach items="${cateAndFunctions}" var="item" varStatus="i">
+				<label class="control-label">${item.categoryName}<input type="checkbox" id="${item.id}" onclick="selectAll(${item.id});" class="box" />：</label>
 				<div class="controls">
-					<select path="status" name="status">
-						<option value="1"  ${roleFunction.status == "1" ? "selected":"" }>有效</option>
-						<option value="0"  ${roleFunction.status == "0" ? "selected":"" }>无效</option>
-					</select>
+					       <c:forEach items="${item.enumFunctions}" var="ite" varStatus="j">
+								   <input type="checkbox" name="functions" id="${item.id}" value="${ite.enumRole}" <c:forEach var="itvalue" items="${enumFusHas}"><c:if test="${itvalue.enumRole == ite.enumRole }">checked="checked" </c:if></c:forEach> class="box" />
+						           	<span>${ite.enumRole}、${ite.enumName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						         <c:if test="${(j.index+1)%2 == 0}">
+								<br/>
+								<br/>
+								</c:if>
+							</c:forEach>
 				</div>
-	   </div> --%>
+			</c:forEach>
+		</div>
+		
 	   <div class="form-actions">
   			<button type="submit" class="btn btn-primary" id="submit">保存</button>
 			<a href="<%=request.getContextPath()%>/manage/roleFunction/index?search_EQ_gameId=${roleFunction.gameId}" class="btn btn-primary">返回</a>
@@ -84,7 +71,13 @@ margin-left:10px;
 	   </div>
 	</form>
 	<script type="text/javascript">
-
+	function selectAll(id){  
+	    if ($("#"+id).attr("checked")) {
+	        $("input[id='"+id+"']").attr("checked", true);  
+	    } else {  
+	    	$("input[id='"+id+"']").attr("checked", false);  
+	    }  
+	}	
 $(function(){
 	
 /* 	jQuery.validator.addMethod("rules", function(value, element) { 

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
@@ -26,12 +28,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
+import com.enlight.game.entity.EnumCategory;
 import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
+import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
 import com.enlight.game.service.roleFunction.RoleFunctionService;
 import com.enlight.game.service.store.StoreService;
@@ -82,6 +86,9 @@ public class RoleFunctionController extends BaseController{
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private EnumCategoryService enumCategoryService;
+	
 	/**
 	 * 游戏功能权限分配管理首页
 	 */
@@ -94,6 +101,15 @@ public class RoleFunctionController extends BaseController{
 		logger.info("userId"+userId+"游戏功能权限分配管理首页");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Page<RoleFunction> roleFunctions = roleFunctionService.findRoleFunctionByCondition(userId,searchParams, pageNumber, pageSize, sortType);
+
+/*		Set<EnumCategory> enumCategories = new HashSet<EnumCategory>();
+		for (RoleFunction roleFunction : roleFunctions) {
+			EnumFunction enumFunction  = enumFunctionService.findByEnumRole(roleFunction.getFunction());
+			enumFunction.getCategoryId();
+			EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
+			enumCategories.add(enumCategory);
+		}*/
+		
 		model.addAttribute("roleFunctions", roleFunctions);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
@@ -111,9 +127,10 @@ public class RoleFunctionController extends BaseController{
 	public String addGameRole(Model model){
 		Long uid = getCurrentUserId();
 		List<Stores> stores = storeService.findList();
-		List<EnumFunction> enumFunctions = enumFunctionService.findAll();
+		//List<EnumFunction> enumFunctions = enumFunctionService.findAll();
+		List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
 		model.addAttribute("stores", stores);
-		model.addAttribute("enumFunctions", enumFunctions);
+		model.addAttribute("cateAndFunctions", cateAndFunctions);
 		return "/roleFunction/add";
 	}
 	
@@ -212,8 +229,11 @@ public class RoleFunctionController extends BaseController{
 					}
 			}
 		}
+		
+		List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
+		
+		model.addAttribute("cateAndFunctions", cateAndFunctions);
 		model.addAttribute("stores", storeService.findList());
-		model.addAttribute("enumFusNohas", enumFusNohas);
 		model.addAttribute("enumFusHas", enumFusHas);
 		model.addAttribute("roleFunction", roleFunction);
 		return "/roleFunction/edit";

@@ -62,7 +62,12 @@ public class EnumFunction extends BaseEntry{
 	 * 项目id
 	 */
 	private Integer gameId;
-
+	
+	/**
+	 * 功能分类编号 GM平台功能10000、 礼品卡平台功能10001、统计中心10002
+	 */
+	private int categoryId;
+	
 	public Integer getEnumRole() {
 		return enumRole;
 	}
@@ -94,6 +99,12 @@ public class EnumFunction extends BaseEntry{
 	public void setGameId(Integer gameId) {
 		this.gameId = gameId;
 	}
-	
-	
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
 }

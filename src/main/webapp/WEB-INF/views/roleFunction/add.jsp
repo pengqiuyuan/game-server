@@ -11,6 +11,9 @@
 color:Red; 
 margin-left:10px;  
 } 
+input[type="radio"], input[type="checkbox"] {
+margin: 0px 0 0;
+}
 </style> 
 </head>
 
@@ -23,7 +26,7 @@ margin-left:10px;
 	</c:if>
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/roleFunction/save">
 		<div class="control-group">
-			<label class="control-label" for="gameId">项目名称</label>
+			<label class="control-label" for="gameId">项目名称：</label>
 			<div class="controls">
 				<select id="gameId" name="gameId">	
 					<c:forEach items="${stores}" var="item" >
@@ -43,17 +46,19 @@ margin-left:10px;
 		</div>
 		
 		<div class="control-group">
-			<label class="control-label" for="functions">功能选择：</label>
-			<div class="controls">
-				    <c:forEach items="${enumFunctions}" var="item" varStatus="i">
-						   <input type="checkbox" name="functions" value="${item.enumRole}" class="box" />
-				           	<span>${item.enumRole}、${item.enumName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				         <c:if test="${(i.index+1)%5 == 0}">
-						<br/>
-						<br/>
-						</c:if>
-					</c:forEach>
-			</div>
+			<c:forEach items="${cateAndFunctions}" var="item" varStatus="i">
+				<label class="control-label">${item.categoryName}<input type="checkbox" id="${item.id}" onclick="selectAll(${item.id});" class="box" />：</label>
+				<div class="controls">
+					       <c:forEach items="${item.enumFunctions}" var="ite" varStatus="j">
+								   <input type="checkbox" id="${item.id}" name="functions" value="${ite.enumRole}" class="box" />
+						           	<span>${ite.enumRole}、${ite.enumName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						         <c:if test="${(j.index+1)%2 == 0}">
+								<br/>
+								<br/>
+								</c:if>
+							</c:forEach>
+				</div>
+			</c:forEach>
 		</div>
 		
 <!-- 		<div class="control-group">
@@ -72,6 +77,14 @@ margin-left:10px;
 	   </div>
 	</form>
 	<script type="text/javascript">
+	
+	function selectAll(id){  
+	    if ($("#"+id).attr("checked")) {
+	        $("input[id='"+id+"']").attr("checked", true);  
+	    } else {  
+	    	$("input[id='"+id+"']").attr("checked", false);  
+	    }  
+	}	
 
 $(function(){
 	
@@ -98,7 +111,6 @@ $(function(){
 			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 		});
 	});
-	
 	
 	$("#inputForm").validate({
 		rules:{
