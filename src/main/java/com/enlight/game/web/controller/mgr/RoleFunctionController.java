@@ -251,26 +251,29 @@ public class RoleFunctionController extends BaseController{
 		Collections.addAll(funs, request.getParameterValues("functions"));
 		//删除的功能
         List<RoleFunction> roleFuncs = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
-		
-        for (int j = roleFunctions.size() - 1; j >= 0; j--) {
-			for(int i=functions.size() - 1; i >=0; i--){
-				if((roleFunctions.get(j).getFunction()).equals(functions.get(i))){
-					funs.remove(functions.get(i));
-					roleFuncs.remove(roleFunctions.get(j));
+		for (RoleFunction role : roleFunctions) {
+			for (String str : functions) {
+				if(role.getFunction().toString().equals(str)){
+					funs.remove(str);
+					roleFuncs.remove(role);
 				}
 			}
-	    }		
+		}      
         for (RoleFunction roleFunctionDel : roleFuncs) {
         	roleFunctionService.delById(roleFunctionDel.getId());
-    		List<String> func = roleFunctionService.findByGameIdAndRoleFunctions(roleFunctionDel.getGameId(), roleFunctionDel.getRole());
-    		if(func!=null && func.size()!=0){
     			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(roleFunctionDel.getGameId(), roleFunctionDel.getRole());
     			for (UserRole userRole : userRoles) {
-    				userRole.setFunctions(StringUtils.join(func,","));
+    				List<String> functs =  userRole.getRoleList();
+    				List<String> f =  new ArrayList<String>();
+    				for (String str: functs) {
+    					f.add(str);
+						if(roleFunctionDel.getFunction().toString().equals(str)){
+							f.remove(str);
+						}
+					}
+    				userRole.setFunctions(StringUtils.join(f,","));
     				userRoleService.save(userRole);
     			}
-    		}
-    		
 		}
         for (String roleFunctionAdd : funs) {
         	roleFunction.setFunction(Integer.valueOf(roleFunctionAdd));

@@ -11,7 +11,7 @@ import com.enlight.game.entity.UserRole;
 public interface UserRoleDao extends PagingAndSortingRepository<UserRole, Long>,JpaSpecificationExecutor<UserRole>{
 	
 	@Modifying
-	@Query("from UserRole userRole where userRole.userId =?1 and userRole.status='1' order by userRole.updDate DESC")
+	@Query("from UserRole userRole where userRole.userId =?1 and userRole.status='1' order by userRole.storeId ASC")
 	List<UserRole> findByUserId(Long userId);
 	
 	@Modifying
