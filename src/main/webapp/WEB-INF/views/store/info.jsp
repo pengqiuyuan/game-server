@@ -23,8 +23,6 @@
 		</div>
 		<div>
 			<div id="store" >
-			<p><span>地址：</span>${store.addr }</p>
-			<p><span>电话：</span>${store.tel }</p>
 			<p><span>创建时间：</span><fmt:formatDate value="${store.createDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></p>
 		</div>
 		

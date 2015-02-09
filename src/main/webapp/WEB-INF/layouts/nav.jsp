@@ -10,11 +10,26 @@
 				data-target=".nav-collapse"> <span class="icon-bar"></span> <span
 				class="icon-bar"></span> <span class="icon-bar"></span>
 			</a>
-
-             <div class="nav-collapse" style="padding-top: 10px;font-size: 18px;font-weight: bold;color:black;float: left;width: 200px;">
+            <shiro:hasAnyRoles name='admin,10000,10001,10002'>
+			<div class="nav-collapse">
+					<shiro:lacksRole name="admin">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+<!-- 						style="background-color: #5bc0de;text-shadow: 0 0px 0 #fff;" -->
+							<a href="#" id="storeIdY" class="dropdown-toggle"  data-toggle="dropdown" onclick='changeTag(<shiro:principal property="storeId"/>,<shiro:principal property="categoryId"/>,1);'>
+							<shiro:principal property="storeName"/>
+							<b class="caret"></b></a>
+							<ul class="dropdown-menu nav-list" id="storeIdN" style="min-width: 100%;">
+						    </ul>
+                        </li>                   
+					</ul>
+					</shiro:lacksRole>
+			</div>
+			</shiro:hasAnyRoles>
+<!--              <div class="nav-collapse" style="padding-top: 10px;font-size: 18px;font-weight: bold;color:black;float: left;width: 200px;">
                                                   光线游戏内容管理平台
-            </div>
-            <shiro:hasAnyRoles name='admin,1,2,3,4,5,6,7,8'>
+            </div> -->
+            <shiro:hasAnyRoles name='admin,10000,10001,10002'>
 			<div class="nav-collapse">
 				<ul class="nav navbar-nav">
 					<shiro:hasAnyRoles name="admin,10000">
@@ -22,30 +37,39 @@
 							data-toggle="dropdown">系统管理 <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="${ctx}/manage/user/index">用户管理</a></li>
-								
-								<shiro:hasAnyRoles name="admin">
+								<shiro:hasAnyRoles name="admin,1">
 								<li><a href="#">运营大区设置</a></li>
-								<li><a href="${ctx}/manage/store/index">游戏设置</a></li>
-								<li><a href="#">服务器信息设置</a></li>
-								<li><a href="#">渠道管理</a></li>
-								<li><a href="${ctx}/manage/roleFunction/index">权限管理</a></li>
-								<li><a href="${ctx}/manage/log/index">日志管理</a></li>
 								</shiro:hasAnyRoles>
+								<shiro:hasAnyRoles name="admin,4">
+								<li><a href="${ctx}/manage/store/index">游戏设置</a></li>
+								</shiro:hasAnyRoles>
+								<shiro:hasAnyRoles name="admin,7">
+								<li><a href="#">服务器信息设置</a></li>
+								</shiro:hasAnyRoles>
+								<shiro:hasAnyRoles name="admin,10">
+								<li><a href="#">渠道管理</a></li>
+								</shiro:hasAnyRoles>
+								<shiro:hasAnyRoles name="admin,13">
+								<li><a href="${ctx}/manage/roleFunction/index">权限管理</a></li>
+								</shiro:hasAnyRoles>
+							    <shiro:hasAnyRoles name="admin">
+							    <li><a href="${ctx}/manage/log/index">日志管理</a></li>
+							    </shiro:hasAnyRoles>
+							    <shiro:hasAnyRoles name="admin,16">
+							    <li><a href="#">上传文档</a></li>
+							    </shiro:hasAnyRoles>
 								<li class="divider"></li>
 								<li><a href="#">sample</a></li>
 							</ul>
 						</li>
 					</shiro:hasAnyRoles>
 					
-					<shiro:hasAnyRoles name="amdin,10002">
+					<shiro:hasAnyRoles name="admin,10002">
 						<li class="dropdown"><a href="#" class="dropdown-toggle"
 							data-toggle="dropdown">礼品卡功能管理 <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-							    <shiro:hasAnyRoles name='admin,1'>
+							    <shiro:hasAnyRoles name='admin,18'>
 									<li><a href="#">查看礼品卡</a></li>
-								</shiro:hasAnyRoles>
-								<shiro:hasAnyRoles name='admin,2'>
-									<li><a href="#">审核礼品卡</a></li>
 								</shiro:hasAnyRoles>
 								<li class="divider"></li>
 								<li><a href="#">sample</a></li>
@@ -171,17 +195,6 @@
 								<li><a href="${ctx}/logout">安全退出</a></li>
 							</ul></li>
 					</ul>
-					<shiro:lacksRole name="admin">
-					<ul class="nav navbar-nav navbar-right">
-						<li class="dropdown">
-							<a href="#" id="storeIdY" class="dropdown-toggle" data-toggle="dropdown" onclick='changeTag(<shiro:principal property="storeId"/>,<shiro:principal property="categoryId"/>,1);'>
-							<shiro:principal property="storeName"/>
-							<b class="caret"></b></a>
-							<ul class="dropdown-menu nav-list" id="storeIdN" style="min-width: 100%;">
-						    </ul>
-                        </li>                   
-					</ul>
-					</shiro:lacksRole>
 				</shiro:user>
 			</div>
 		</shiro:hasAnyRoles>
@@ -207,7 +220,7 @@
 				    th.append("<li><a href='#' onclick='changeTag("+itemData.storeId+","+categoryId+",0);'>"+itemData.storeName+"</a></li>"); 
 				}); 
 				if(sta!="1"){
-					window.location.reload();
+					window.location.href='<%=request.getContextPath()%>/manage/index';
 				}
 			}
 		});		

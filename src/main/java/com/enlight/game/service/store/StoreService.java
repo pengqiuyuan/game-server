@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +23,7 @@ import com.enlight.game.entity.User;
 import com.enlight.game.repository.StoreDao;
 import com.enlight.game.repository.UserDao;
 import com.enlight.game.service.account.AccountService;
-import com.google.common.collect.ImmutableList;
+import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 
 
 @Component
@@ -74,33 +74,12 @@ public class StoreService {
 	}
 
 	/**
-	 * api分页
-	 * 
-	 * @param searchParams
-	 * @param pageNumber
-	 * @param pageSize
-	 * @param sortType
-	 * @return
-	 */
-	public Page<Stores> findByApiCondition(Map<String, Object> searchParams,
-			int pageNumber, int pageSize, String sortType) {
-		PageRequest pageRequest = buildPageRequest(pageNumber, pageSize,
-				sortType);
-		Specification<Stores> spec = buildApiSpecification(null, searchParams);
-
-		return storeDao.findAll(spec, pageRequest);
-	}
-
-	/**
 	 * 新增
 	 * 
 	 * @param store
 	 */
 	public void save(Stores store) {
 		store.setStatus(Stores.STATUS_VALIDE);
-
-		Stores stores = storeDao.findByMax();
-		store.setSort(stores.getSort() + 1);
 		storeDao.save(store);
 	}
 
@@ -132,10 +111,7 @@ public class StoreService {
 	 */
 	public void update(Stores store) {
 		Stores store1 = storeDao.findOne(store.getId());
-		store1.setAddr(store.getAddr());
 		store1.setName(store.getName());
-		store1.setTel(store.getTel());
-		store1.setThumb(store.getThumb());
 		storeDao.save(store1);
 	}
 
@@ -170,21 +146,6 @@ public class StoreService {
 		return storeDao.findAll(spec);
 	}
 
-
-	/**
-	 * 更改排序字段
-	 * 
-	 * @param ids
-	 * @param orders
-	 */
-	public void sort(int[] ids, int[] orders) {
-		for (int i = 0; i < ids.length; i++) {
-			Stores stores = storeDao.findOne(Long.valueOf(ids[i]));
-			stores.setSort(orders[i]);
-			storeDao.save(stores);
-		}
-	}
-
 	/**
 	 * 创建分页请求.
 	 */
@@ -192,7 +153,7 @@ public class StoreService {
 			String sortType) {
 		Sort sort = null;
 		if ("auto".equals(sortType)) {
-			sort = new Sort(Direction.DESC, "sort");
+			sort = new Sort(Direction.DESC, "createDate");
 		} else if ("createDate".equals(sortType)) {
 			sort = new Sort(Direction.DESC, "createDate");
 		}
@@ -203,34 +164,16 @@ public class StoreService {
 	/**
 	 * 创建动态查询条件组合.
 	 */
-	private Specification<Stores> buildApiSpecification(Long userId,
-			Map<String, Object> searchParams) {
-		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-
-		filters.put("status", new SearchFilter("status", Operator.EQ,
-				Stores.STATUS_VALIDE));
-
-		Specification<Stores> spec = DynamicSpecifications.bySearchFilter(
-				filters.values(), Stores.class);
-		return spec;
-	}
-
-	/**
-	 * 创建动态查询条件组合.
-	 */
 	private Specification<Stores> buildSpecification(Long userId,
 			Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-
+		ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		User user = accountService.getUser(userId);
-		if (!user.getRoles().equals(User.USER_ROLE_ADMIN) && !user.getRoles().equals(User.USER_ROLE_BUSINESS)) {
-			List<String> storeIds  = ImmutableList.copyOf(StringUtils.split(user.getStoreId(), ","));
-			for (String id : storeIds) {
-				filters.put("id",new SearchFilter("id", Operator.EQ, Long.parseLong(id)));
-			}
+		if (!user.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			filters.put("id",new SearchFilter("id", Operator.EQ, u.storeId));
+			filters.put("status", new SearchFilter("status", Operator.EQ,Stores.STATUS_VALIDE));
 		}
 		filters.put("status", new SearchFilter("status", Operator.EQ,Stores.STATUS_VALIDE));
-
 		Specification<Stores> spec = DynamicSpecifications.bySearchFilter(filters.values(), Stores.class);
 		return spec;
 	}

@@ -44,11 +44,7 @@
 				<tr>
 					<th title="编号" width="120px">编号</th>
 					<th title="名称">名称</th>
-
-					<th title="addr">地址</th>
-					<th title="tel">电话</th>
 					<th title="创建时间" width="240px">创建时间</th>
-					<th title="排序" >排序</th>
 					
 					
 				</tr>
@@ -57,7 +53,7 @@
 
 				<c:forEach items="${stores.content}" var="item" varStatus="s">
 				
-					<tr id="${item.id}" value="${item.sort}" >
+					<tr id="${item.id}">
 					
 						<td id="iDictionary" value="${item.id}">
 							<div class="btn-group">
@@ -88,14 +84,8 @@
 							href="<%=request.getContextPath()%>/manage/store/detail?id=${item.id}"
 							data-fancybox-type="iframe" rel="fancy" title="游戏详细" class="showInfo" >${item.name }</a>
 						</td>
-
-						<td>
-						${item.addr}
-						</td>
-					<td>${item.tel}</td>
 						<td><fmt:formatDate value="${item.createDate}"
 								pattern="yyyy/MM/dd  HH:mm:ss" /></td>
-						<td id="seq" >${item.sort}</td>
 					
 						
 					</tr>
@@ -115,57 +105,7 @@
 	</div>
 		<script type="text/javascript">
 		$(document).ready(function(){
-			
-			
-			var $list=$("#tbody");
-			var old_order=[];
-			var ids=[];
-			 $list.children().each(function() {
-				 
-        		 old_order.push($(this).attr("value"));   
-			 }); 
-            $("#table tbody").sortable({  
-               helper: fixHelper,    
-			    cursor: 'move',
-                axis:"y",  
-                start:function(e, ui){  
-                   ui.helper.css({"background":"#ccc"});    
-					return ui;
-               },  
-               stop:function(e, ui){
-					return ui;  
-                },
-                update:function(){
-					 $list.children().each(function(index) {
-					
-						 $(this).find("#seq").text(old_order[index]);  
-						 ids.push($(this).find("#iDictionary").attr("value"));
-					 });
-					  $.ajax({   
-			                type: "get",   
-			                url: "<%=request.getContextPath()%>/manage/store/updateSort", 
-			                contentType: "application/json;charset=UTF-8",
-			                data:"ids="+ids.toString()+"&order="+old_order.toString(),
-			                success: function(msg) { 
-			                	alert("操作成功");
-			                }
-			           });   
-					ids=[];
-				}
-           
-            }).disableSelection();  
-		
-			var fixHelper = function(e, ui) {  
-       		 ui.children().each(function() {  
-           		 $(this).width($(this).width());     
-      		  });  
-       		 return ui;  
-   		 };  
-			
-			
-			
-			
-			
+	
 			$('.showInfo').fancybox({
 				autoDimensions:false,
 				width:800,
@@ -189,16 +129,7 @@
 					});
 			     }
 			});
-			
-		
-			
-			
 		});
-	
-	
-	
-		
-		
 		</script> 	
 </body>
 </html>

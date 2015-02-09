@@ -174,24 +174,7 @@ public class StoresController extends BaseController{
 		logService.log(getCurrentUserName(), message, Log.TYPE_STORE);
 		return "redirect:/manage/store/index";
 	}
-
 	
-	
-
-	
-	/**
-	 * 修改排序 * @param oid 用户id
-	 * @throws Exception 
-	 */
-	@RequestMapping(value = "updateSort")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> updateSort(@RequestParam(value = "ids")int[] ids,@RequestParam(value = "order")int[] order) throws Exception{
-		 Map<String,Object> map = new HashMap<String, Object>();
-		 storeService.sort(ids,order);
-		map.put("success", "true");
-		return map;
-	}
 	/**
 	 * 删除操作	 
 	 * @param oid 用户id

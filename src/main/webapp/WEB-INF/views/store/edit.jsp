@@ -56,15 +56,6 @@ margin-left:10px;
 				<a id="searchCoordinate" class="btn" target="_blank" href="http://api.map.baidu.com/lbsapi/getpoint/index.html">尝试查询经纬度</a>
 	</div>
 </div> --%>
-
-<div
-	class="control-group">
-	<label class="control-label" for="tel">电话：</label>
-	<div class="controls">
-		<input type="text" name="tel" value="${store.tel }"   class="input-large"  />
-	</div>
-</div>
-
 					
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>

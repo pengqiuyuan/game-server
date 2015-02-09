@@ -17,14 +17,9 @@ public interface StoreDao extends PagingAndSortingRepository<Stores, Long>, JpaS
 	
 	
 	@Modifying
-	@Query(" from Stores store where store.status=1 order by sort desc")
+	@Query(" from Stores store where store.status=1 order by id desc")
 	List<Stores> findList();
-
-	Stores findBySort(int sort);
-
-    @Query(" from Stores store where sort =(select max(store1.sort) from Stores store1) ")
-	Stores findByMax();
-    
+ 
 	@Query(" from Stores store where store.status=1 and store.id in (?1)")
 	List<Stores> findInIds(String ids);
 	
