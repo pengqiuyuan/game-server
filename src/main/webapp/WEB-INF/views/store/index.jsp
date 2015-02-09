@@ -12,13 +12,13 @@
 
 
 
-<title>项目管理</title>
+<title>游戏设置</title>
 </head>
 <body>
    
 	<div >
 		<div class="page-header">
-			<h2>项目管理</h2>
+			<h2>游戏设置</h2>
 		</div>
 		<div>
 		 <c:if test="${not empty message}">
@@ -86,7 +86,7 @@
 					
 						<a
 							href="<%=request.getContextPath()%>/manage/store/detail?id=${item.id}"
-							data-fancybox-type="iframe" rel="fancy" title="部门详细" class="showInfo" >${item.name }</a>
+							data-fancybox-type="iframe" rel="fancy" title="游戏详细" class="showInfo" >${item.name }</a>
 						</td>
 
 						<td>

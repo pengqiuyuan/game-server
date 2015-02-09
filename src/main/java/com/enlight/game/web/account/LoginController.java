@@ -5,7 +5,11 @@
  *******************************************************************************/
 package com.enlight.game.web.account;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +23,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.enlight.game.base.AppBizException;
+import com.enlight.game.entity.EnumCategory;
+import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.account.AccountService;
+import com.enlight.game.service.enumCategory.EnumCategoryService;
+import com.enlight.game.service.enumFunction.EnumFunctionService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.userRole.UserRoleService;
 
@@ -45,6 +53,12 @@ public class LoginController {
 	@Autowired
 	private StoreService storeService;
 	
+	@Autowired
+	private EnumCategoryService enumCategoryService;
+	
+	@Autowired
+	private EnumFunctionService enumFunctionService;
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public String login() {
 		return "account/login";
@@ -59,20 +73,39 @@ public class LoginController {
 	@RequestMapping(value="/findStores",method=RequestMethod.GET)	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<UserRole> findStores(@RequestParam(value="loginName") String loginName) throws AppBizException{
+	public Map<String, Object> findStores(@RequestParam(value="loginName") String loginName) throws AppBizException{
 		User user = accountService.findUserByLoginName(loginName);
-		try {
-			List<UserRole> userRoles = userRoleService.findByUserId(user.getId());
-			if(!userRoles.isEmpty()){
-				for (UserRole userRole : userRoles) {
-					userRole.setStoreName(storeService.findById(userRole.getStoreId()).getName());
+		//默认选择第一个gameid的权限组
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(user == null){
+			//用户不存在
+			map.put("enumCategories", null); 
+			map.put("storeId", null);
+		}else{
+			try {
+				List<UserRole> userRoles = userRoleService.findByUserId(user.getId());
+				Set<EnumCategory> enumCategories = new HashSet<EnumCategory>();
+				if(!userRoles.isEmpty() && userRoles.size()!=0){
+					List<String> list = userRoles.get(0).getRoleList();
+					for (String f : list) {
+						EnumFunction enumFunction  = enumFunctionService.findByEnumRole(Integer.valueOf(f));
+						EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
+						enumCategories.add(enumCategory);
+					}
+					map.put("enumCategories", enumCategories);
+					map.put("storeId", userRoles.get(0).getStoreId());//登陆默认取第一个项目的权限组
+				}else{
+					map.put("enumCategories", null); //admin用户
+					map.put("storeId", null);
 				}
+				return map;
+			} catch (Exception e) {
+				// TODO: handle exception
+				return null;
 			}
-			return userRoles;
-		} catch (Exception e) {
-			// TODO: handle exception
-			return null;
 		}
+		return map;
+
 
 	}
 

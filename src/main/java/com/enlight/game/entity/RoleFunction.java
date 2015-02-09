@@ -2,6 +2,7 @@ package com.enlight.game.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 权限组合表，有一个游戏项目超神学院（1）  对应一个权限（1） 对应多个选择功能（1,2,3） 
@@ -44,6 +45,7 @@ public class RoleFunction extends BaseEntry{
 	/**
 	 * 功能名称
 	 */
+	@Transient
 	private String functionName;
 
 	public Long getGameId() {
@@ -78,6 +80,7 @@ public class RoleFunction extends BaseEntry{
 		this.gameName = gameName;
 	}
 
+	@Transient
 	public String getFunctionName() {
 		return functionName;
 	}

@@ -41,7 +41,8 @@
 			</div>
 		</div>	
 		
-		<div class="control-group" id="stId">
+		<input type="hidden" id="storeId" name="storeId"> 
+		<div class="control-group" id="cateId">
 
 		</div>
 		
@@ -64,7 +65,7 @@
 			
 			$("#username").change(function(e){
 				var loginName =  $("#username").val();
-				$("#stId").empty();
+				$("#cateId").empty();
 				e.preventDefault();
 				$.ajax({
 					url: '<%=request.getContextPath()%>/login/findStores?loginName=' + loginName, 
@@ -73,12 +74,12 @@
 					dataType: 'text',
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
-						if(parsedJson==undefined || parsedJson=="" || parsedJson==null){  
-
-						}else if(parsedJson !=null){
-							 $("#stId").append("<label class='control-label' for='storeId'>项目选择：</label><div class='controls'><select name='storeId' id='storeId'></select></div>");
-							 jQuery.each(parsedJson, function(index, itemData) {
-							 $("#storeId").append("<option value='"+itemData.storeId+"'>"+itemData.storeName+"</option>"); 
+						if(parsedJson.enumCategories ==undefined || parsedJson.enumCategories =="" || parsedJson.enumCategories==null){  
+						}else if(parsedJson.enumCategories !=null){
+							 $("#storeId").val(parsedJson.storeId);
+							 $("#cateId").append("<label class='control-label' for='categoryId'>平台选择：</label><div class='controls'><select name='categoryId' id='categoryId'></select></div>");
+							 jQuery.each(parsedJson.enumCategories, function(index, itemData) {
+							 $("#categoryId").append("<option value='"+itemData.id+"'>"+itemData.categoryName+"</option>"); 
 							 });
 						}
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错

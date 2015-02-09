@@ -6,6 +6,7 @@
 package com.enlight.game.service.account;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletRequest;
@@ -23,20 +24,28 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.web.subject.WebSubject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.modules.utils.Encodes;
 
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
+import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.userRole.UserRoleService;
 import com.google.common.base.Objects;
 
 public class ShiroDbRealm extends AuthorizingRealm {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ShiroDbRealm.class);
 
 	protected AccountService accountService;
 	
 	@Autowired
 	protected UserRoleService userRoleService;  
+	
+	@Autowired
+	private StoreService storeService;
 	/**
 	 * 认证回调函数,登录时调用.
 	 */
@@ -45,16 +54,51 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user = accountService.findUserByLoginName(token.getUsername());
 		ServletRequest request = ((WebSubject)SecurityUtils.getSubject()).getServletRequest();
-		String storeId = request.getParameter("storeId");;
-		if (user != null) {
-			if(isNomal(user))
-			{
-			byte[] salt = Encodes.decodeHex(user.getSalt());
-			return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId),
-					user.getPassword(), ByteSource.Util.bytes(salt), getName());
+		String passw= request.getParameter("password");
+		
+		String storeName = null;
+		if(request.getParameter("password") != null){
+			logger.debug("正常登陆...");
+			String storeId = request.getParameter("storeId");
+			String categoryId = request.getParameter("categoryId");
+			if(storeId!="" && storeId!=null){
+				storeName = storeService.findById(Integer.valueOf(storeId)).getName();
+			}else{
+				storeName = null;
 			}
-			return null;
-		} else {
+			if (user != null) {
+				if(isNomal(user))
+				{
+				byte[] salt = Encodes.decodeHex(user.getSalt());
+				return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId,categoryId,storeName,passw),
+						user.getPassword(), ByteSource.Util.bytes(salt), getName());
+				}
+				return null;
+			} else {
+				return null;
+			}
+		}else if(request.getParameter("password") == null){
+			logger.debug("切换登陆...");
+			String storeId = (String) request.getAttribute("storeId");
+			String categoryId = (String) request.getAttribute("categoryId");
+			String password = (String) request.getAttribute("password");
+			if(storeId!="" && storeId!=null){
+				storeName = storeService.findById(Integer.valueOf(storeId)).getName();
+			}else{
+				storeName = null;
+			}
+			if (user != null) {
+				if(isNomal(user))
+				{
+				byte[] salt = Encodes.decodeHex(user.getSalt());
+				return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId,categoryId,storeName,password),
+						user.getPassword(), ByteSource.Util.bytes(salt), getName());
+				}
+				return null;
+			} else {
+				return null;
+			}
+		}else{
 			return null;
 		}
 	}
@@ -111,13 +155,20 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		public Long id;
 		public String loginName;
 		public String name;
+		//登录时默认的项目id
 		public String storeId;
+		public String categoryId;
+		public String storeName;
+		public String passw;
 		
-		public ShiroUser(Long id, String loginName, String name,String storeId) {
+		public ShiroUser(Long id, String loginName, String name,String storeId,String categoryId,String storeName,String passw) {
 			this.id = id;
 			this.loginName = loginName;
 			this.name = name;
 			this.storeId = storeId;
+			this.categoryId = categoryId;
+			this.storeName = storeName;
+			this.passw = passw;
 		}
 
 		public String getName() {
@@ -136,7 +187,23 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		public String getStoreId() {
 			return storeId;
 		}
+		
+		public void setStoreId(String storeId) {
+			this.storeId = storeId;
+		}
 
+		public String getCategoryId() {
+			return categoryId;
+		}
+
+		public String getStoreName() {
+			return storeName;
+		}
+		
+
+		public String getPassw() {
+			return passw;
+		}
 
 		/**
 		 * 重载hashCode,只计算loginName;

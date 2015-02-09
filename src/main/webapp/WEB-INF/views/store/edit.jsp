@@ -5,7 +5,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-	<title>项目修改</title>
+	<title>游戏修改</title>
 <style type="text/css"> 
 .error{ 
 color:Red; 
@@ -17,7 +17,7 @@ margin-left:10px;
 <body>
 
 	<div class="page-header">
-   		<h2>项目修改</h2>
+   		<h2>游戏修改</h2>
  	</div>
  	 <c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
@@ -26,7 +26,7 @@ margin-left:10px;
     <input type="hidden" name="id" value="${store.id }">
 			<div
 	class="control-group">
-	<label class="control-label" for="name">部门名称：</label>
+	<label class="control-label" for="name">游戏名称：</label>
 	<div class="controls">
 		<input type="text" name="name" class="input-large " value="${store.name }"   />
 	</div>

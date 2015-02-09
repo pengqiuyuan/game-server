@@ -60,7 +60,6 @@ public class GetEnumCategoryTag extends TagSupport {
 			Set<EnumCategory> enumCategories = new HashSet<EnumCategory>();
 			for (RoleFunction r : roleFunctions) {
 				EnumFunction enumFunction  = enumFunctionService.findByEnumRole(r.getFunction());
-				enumFunction.getCategoryId();
 				EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
 				enumCategories.add(enumCategory);
 			}

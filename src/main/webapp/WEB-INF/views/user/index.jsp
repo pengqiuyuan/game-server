@@ -124,13 +124,13 @@
 		<tags:pagination page="${users}" paginationSize="5"/>
 		
 		
-		
-		<div class="form-actions">
-			<a href="<%=request.getContextPath()%>/manage/user/add"
-				class="btn btn-primary">新增用户</a>
-				
-		</div>
-	
+		<shiro:hasAnyRoles name="admin">
+			<div class="form-actions">
+				<a href="<%=request.getContextPath()%>/manage/user/add"
+					class="btn btn-primary">新增用户</a>
+			</div>
+		</shiro:hasAnyRoles>
+
 	</div>
 		<script type="text/javascript">
 		$(document).ready(function(){

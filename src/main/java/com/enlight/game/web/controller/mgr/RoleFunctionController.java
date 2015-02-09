@@ -101,7 +101,12 @@ public class RoleFunctionController extends BaseController{
 		logger.info("userId"+userId+"游戏功能权限分配管理首页");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Page<RoleFunction> roleFunctions = roleFunctionService.findRoleFunctionByCondition(userId,searchParams, pageNumber, pageSize, sortType);
-
+		for (RoleFunction roleFunction : roleFunctions) {
+		  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleFunction.getFunction());
+		  	if(enumFunction!=null){
+		  		roleFunction.setFunctionName(enumFunction.getEnumName());
+		  	}
+		}
 /*		Set<EnumCategory> enumCategories = new HashSet<EnumCategory>();
 		for (RoleFunction roleFunction : roleFunctions) {
 			EnumFunction enumFunction  = enumFunctionService.findByEnumRole(roleFunction.getFunction());

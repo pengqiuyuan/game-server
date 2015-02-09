@@ -9,7 +9,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-<title>部门信息</title>
+<title>游戏信息</title>
 <style type="text/css">
 	p span{width: 100px; display: inline-block; font-weight: bold;}
 	#customer{float: left; }
@@ -19,7 +19,7 @@
 </head>
 <body>
 		<div class="page-header">
-			<h2>部门名称：${store.name }</h2>
+			<h2>游戏名称：${store.name }</h2>
 		</div>
 		<div>
 			<div id="store" >
