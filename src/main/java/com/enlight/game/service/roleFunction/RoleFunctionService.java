@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.SecurityUtils;
 import org.hibernate.id.IdentityGenerator.GetGeneratedKeysDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.entity.User;
 import com.enlight.game.repository.RoleFunctionDao;
 import com.enlight.game.service.account.AccountService;
+import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
 import com.enlight.game.service.store.StoreService;
 
@@ -136,6 +138,8 @@ public class RoleFunctionService {
 			sort = new Sort(Direction.DESC, "gameName");
 		} else if ("id".equals(sortType)) {
 			sort = new Sort(Direction.DESC, "id");
+		} else if ("role".equals(sortType)){
+			sort = new Sort(Direction.DESC, "role");
 		}
 
 		return new PageRequest(pageNumber - 1, pagzSize, sort);
@@ -148,13 +152,12 @@ public class RoleFunctionService {
 	private Specification<RoleFunction> buildSpecification(Long userId,
 			Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-
 		User user = accountService.getUser(userId);
+		ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		if (!user.getRoles().equals(User.USER_ROLE_ADMIN) && !user.getRoles().equals(User.USER_ROLE_BUSINESS)) {
-			filters.put("gameId",new SearchFilter("gameId", Operator.EQ, user.getStoreId()));
+			filters.put("gameId",new SearchFilter("gameId", Operator.EQ, u.storeId));
+			filters.put("status", new SearchFilter("status", Operator.EQ,RoleFunction.STATUS_VALIDE));
 		}
-		filters.put("status", new SearchFilter("status", Operator.EQ,RoleFunction.STATUS_VALIDE));
-
 		Specification<RoleFunction> spec = DynamicSpecifications.bySearchFilter(filters.values(), RoleFunction.class);
 		return spec;
 	}

@@ -89,9 +89,7 @@ public class IndexController {
 						userRole.setStoreName(storeService.findById(userRole.getStoreId()).getName());
 					}
 				}
-/*				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-				UserRole userRole = userRoleService.findByUserIdAndStoreId(user.getId(),Long.parseLong(storeId)).get(0);
-				info.setRoles(userRole.getRoleList());*/
+
 			}
 			return userRs;
 		} catch (Exception e) {

@@ -61,6 +61,7 @@ public class RoleFunctionController extends BaseController{
 	static{
 		sortTypes.put("auto","自动");
 		sortTypes.put("id", "Id");
+		sortTypes.put("role", "权限");
 	}
 	
 	public static Map<String, String> getSortTypes() {
@@ -107,14 +108,6 @@ public class RoleFunctionController extends BaseController{
 		  		roleFunction.setFunctionName(enumFunction.getEnumName());
 		  	}
 		}
-/*		Set<EnumCategory> enumCategories = new HashSet<EnumCategory>();
-		for (RoleFunction roleFunction : roleFunctions) {
-			EnumFunction enumFunction  = enumFunctionService.findByEnumRole(roleFunction.getFunction());
-			enumFunction.getCategoryId();
-			EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
-			enumCategories.add(enumCategory);
-		}*/
-		
 		model.addAttribute("roleFunctions", roleFunctions);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
@@ -297,6 +290,12 @@ public class RoleFunctionController extends BaseController{
 	public String show(@RequestParam(value = "id")long id,Model model){
 		RoleFunction roleFunction = roleFunctionService.findById(id);
 		List<RoleFunction> roleFuncs = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
+		for (RoleFunction roleF : roleFuncs) {
+		  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleF.getFunction());
+		  	if(enumFunction!=null){
+		  		roleF.setFunctionName(enumFunction.getEnumName());
+		  	}
+		}
 		model.addAttribute("roleFunction", roleFunction);
 		model.addAttribute("roleFuncs", roleFuncs);
 		return "/roleFunction/info";

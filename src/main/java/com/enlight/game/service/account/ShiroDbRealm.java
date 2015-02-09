@@ -6,6 +6,7 @@
 package com.enlight.game.service.account;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -118,12 +119,15 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
 		User user = accountService.findUserByLoginName(shiroUser.loginName);
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		if(user.getRoles().length() == 0 
-				&& user.getStoreId()!=null 
-				&& user.getStoreId()!="" 
-				&&user.getStoreId().length()!=0){
+		if(user.getRoles().length() == 0 && user.getStoreId()!=null && user.getStoreId()!="" &&user.getStoreId().length()!=0){
 			UserRole userRole = userRoleService.findByUserIdAndStoreId(user.getId(),Long.parseLong(shiroUser.getStoreId())).get(0);
-			info.addRoles(userRole.getRoleList());
+			List<String> list = userRole.getRoleList();
+			List<String> f =  new ArrayList<String>();
+			for (String str: list) {
+				f.add(str);
+			}
+			f.add(shiroUser.categoryId);
+			info.addRoles(f);
 		}else if(user.getRoles().equals(User.USER_ROLE_ADMIN)){
 			info.addRoles(user.getRoleList());
 		}else{
