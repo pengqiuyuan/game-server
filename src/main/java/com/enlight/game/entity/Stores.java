@@ -38,7 +38,6 @@ public class Stores {
 	public static final String STATUS_INVALIDE = "0";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "store_id", updatable = false)
 	private Long id;
 	

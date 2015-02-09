@@ -23,41 +23,31 @@
 		<div>
 		 <c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
-	</c:if>
+		</c:if>
 				<form id="queryForm" class="well form-inline"  method="get"
 					action="${ctx}/manage/store/index">
 					<label>名称：</label> <input name="search_LIKE_name"
 						type="text" value="${param.search_LIKE_name}" /> 
-			      		
-			
-					
 						 <input type="submit" class="btn"
 						value="查 找" />
 				<tags:sort />
 				</form>
-			
-			
 		</div>
-		<div style="height: 30px;color: red;font-family: 14px"><span>提示：拖拽可改变部门排序</span></div>
 		<table class="table table-striped table-bordered table-condensed" id="table">
 			<thead>
 				<tr>
 					<th title="编号" width="120px">编号</th>
 					<th title="名称">名称</th>
 					<th title="创建时间" width="240px">创建时间</th>
-					
-					
 				</tr>
 			</thead>
 			<tbody id="tbody">
 
 				<c:forEach items="${stores.content}" var="item" varStatus="s">
-				
 					<tr id="${item.id}">
-					
 						<td id="iDictionary" value="${item.id}">
 							<div class="btn-group">
-								<a class="btn" href="#">#${s.index+1}</a> <a
+								<a class="btn" href="#">#${item.id}</a> <a
 									class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 									<span class="caret"></span>
 								</a>
@@ -66,20 +56,14 @@
 										href="<%=request.getContextPath()%>/manage/store/edit?id=${item.id}"><i
 											class="icon-edit"></i>修改</a></li>
 											<shiro:hasAnyRoles name="admin">
-									<c:if test="${item.id == 0 ? false : true}">
-									<li><a href="javascript:void(0);" rel="${item.id}"
-										class="del"><i class="icon-th"></i>删除 </a></li>
-										</c:if>
-								</shiro:hasAnyRoles>
-							
-									
-						
+												<c:if test="${item.id == 0 ? false : true}">
+												<li><a href="javascript:void(0);" rel="${item.id}" class="del"><i class="icon-th"></i>删除 </a></li>
+												</c:if>
+											</shiro:hasAnyRoles>
 								</ul>
 							</div>
 						</td>
-						
 						<td>
-					
 						<a
 							href="<%=request.getContextPath()%>/manage/store/detail?id=${item.id}"
 							data-fancybox-type="iframe" rel="fancy" title="游戏详细" class="showInfo" >${item.name }</a>

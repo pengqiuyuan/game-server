@@ -23,4 +23,6 @@ public interface StoreDao extends PagingAndSortingRepository<Stores, Long>, JpaS
 	@Query(" from Stores store where store.status=1 and store.id in (?1)")
 	List<Stores> findInIds(String ids);
 	
+	Stores findByName(String name);
+	
 }

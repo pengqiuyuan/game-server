@@ -24,38 +24,22 @@ margin-left:10px;
 	</c:if>
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/store/update"  enctype="multipart/form-data" >
     <input type="hidden" name="id" value="${store.id }">
+			
 			<div
-	class="control-group">
-	<label class="control-label" for="name">游戏名称：</label>
-	<div class="controls">
-		<input type="text" name="name" class="input-large " value="${store.name }"   />
-	</div>
-</div>
+				class="control-group">
+				<label class="control-label" for="name">游戏Id：</label>
+				<div class="controls">
+					<input type="text" name="id" class="input-large " value="${store.id }"  readonly="readonly" />
+				</div>
+			</div>		
+			<div
+				class="control-group">
+				<label class="control-label" for="name">游戏名称：</label>
+				<div class="controls">
+					<input type="text" name="name" class="input-large " value="${store.name }"   />
+				</div>
+			</div>
 
-<%-- <div class="control-group">
-	<label class="control-label" for="addr">缩略图：</label>
-	<div class="controls">
-		<input class='input-file' name='fileInput_thum' id='fileInput' type='file'>
-		<div class="gallery-set-thumbail">
-		 	<input type="hidden" name="thumb" value="${store.thumb}">
-		 			 <p class="text-success">建议640*360，JPEG/PNG格式.</p>
-		 	
-			<img src="${store.thumb}" />
-		</div>
-	</div>
-
-		
-	</div> 
-	
-
-<div
-	class="control-group">
-	<label class="control-label" for="addr">地址：</label>
-	<div class="controls">
-		<input type="text" name="addr" value="${store.addr }"   class="input-large"  />
-				<a id="searchCoordinate" class="btn" target="_blank" href="http://api.map.baidu.com/lbsapi/getpoint/index.html">尝试查询经纬度</a>
-	</div>
-</div> --%>
 					
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>

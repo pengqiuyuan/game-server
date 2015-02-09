@@ -54,6 +54,9 @@ public class StoreService {
 		return storeDao.findOne(id);
 	}
 
+	public Stores findByName(String name){
+		return storeDao.findByName(name);
+	}
 	/**
 	 * 分页查询
 	 * 
@@ -153,7 +156,7 @@ public class StoreService {
 			String sortType) {
 		Sort sort = null;
 		if ("auto".equals(sortType)) {
-			sort = new Sort(Direction.DESC, "createDate");
+			sort = new Sort(Direction.ASC, "id");
 		} else if ("createDate".equals(sortType)) {
 			sort = new Sort(Direction.DESC, "createDate");
 		}

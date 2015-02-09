@@ -231,6 +231,19 @@ public class StoresController extends BaseController{
 		return "/store/info";
 	}
 	
+	/**
+	 * Ajax请求校验name是否唯一。
+	 */
+	@RequestMapping(value = "/checkName")
+	@ResponseBody
+	public String checkLoginName(@RequestParam("name") String name) {
+		if (storeService.findByName(name) == null) {
+			return "true";
+		} else {
+			return "false";
+		}
+	}
+	
 	
 	
 	/**
