@@ -154,10 +154,11 @@ public class RoleFunctionService {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		User user = accountService.getUser(userId);
 		ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-		if (!user.getRoles().equals(User.USER_ROLE_ADMIN) && !user.getRoles().equals(User.USER_ROLE_BUSINESS)) {
+		if (!user.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			filters.put("gameId",new SearchFilter("gameId", Operator.EQ, u.storeId));
 			filters.put("status", new SearchFilter("status", Operator.EQ,RoleFunction.STATUS_VALIDE));
 		}
+		filters.put("status", new SearchFilter("status", Operator.EQ,RoleFunction.STATUS_VALIDE));
 		Specification<RoleFunction> spec = DynamicSpecifications.bySearchFilter(filters.values(), RoleFunction.class);
 		return spec;
 	}

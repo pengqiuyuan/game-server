@@ -143,7 +143,6 @@ public class UsersController extends BaseController{
 	@RequestMapping(value = "edit", method = RequestMethod.GET)
 	public String edit(@RequestParam(value = "id")long id,Model model){
 		User user = userService.findById(id);
-		Long userId = getCurrentUserId();
 		//model.addAttribute("stores",storeService.findListByUid(userId));
 		List<UserRole> userRoles = userRoleService.findByUserId(id);
 		
@@ -211,7 +210,6 @@ public class UsersController extends BaseController{
 	 */
 	@RequestMapping(value = "add", method = RequestMethod.GET)
 	public String addUser(Model model){
-		Long userId = getCurrentUserId();
 		model.addAttribute("stores",storeService.findList());
 		model.addAttribute("serverZones",serverZoneService.findAll());
 		return "/user/add";

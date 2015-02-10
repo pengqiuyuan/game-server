@@ -52,14 +52,14 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
-									<li><a
-										href="<%=request.getContextPath()%>/manage/store/edit?id=${item.id}"><i
-											class="icon-edit"></i>修改</a></li>
-											<shiro:hasAnyRoles name="admin">
-												<c:if test="${item.id == 0 ? false : true}">
-												<li><a href="javascript:void(0);" rel="${item.id}" class="del"><i class="icon-th"></i>删除 </a></li>
-												</c:if>
-											</shiro:hasAnyRoles>
+									<shiro:hasAnyRoles name="admin,6">
+										<li><a href="<%=request.getContextPath()%>/manage/store/edit?id=${item.id}"><i class="icon-edit"></i>修改</a></li>
+									</shiro:hasAnyRoles>
+									<shiro:hasAnyRoles name="admin">
+										<c:if test="${item.id == 0 ? false : true}">
+											<li><a href="javascript:void(0);" rel="${item.id}" class="del"><i class="icon-th"></i>删除 </a></li>
+										</c:if>
+									</shiro:hasAnyRoles>
 									<li class="divider"></li>
 								</ul>
 							</div>
@@ -81,7 +81,7 @@
 		
 		<tags:pagination page="${stores}" paginationSize="5"/>
 		
-	<shiro:hasAnyRoles name="admin">
+	<shiro:hasAnyRoles name="admin,5">
 		<div class="form-actions">
 			<a href="<%=request.getContextPath()%>/manage/store/add"
 				class="btn btn-primary">新增项目</a>	

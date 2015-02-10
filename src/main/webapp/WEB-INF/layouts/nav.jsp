@@ -44,7 +44,7 @@
 								<li><a href="${ctx}/manage/store/index">游戏项目管理</a></li>
 								</shiro:hasAnyRoles>
 								<shiro:hasAnyRoles name="admin,7">
-								<li><a href="#">服务器信息设置</a></li>
+								<li><a href="${ctx}/manage/server/index">服务器信息设置</a></li>
 								</shiro:hasAnyRoles>
 								<shiro:hasAnyRoles name="admin,10">
 								<li><a href="#">渠道管理</a></li>
