@@ -25,7 +25,7 @@ margin-left:10px;
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/store/save"   enctype="multipart/form-data" >
 			<div
 				class="control-group">
-				<label class="control-label" for="name">游戏Id：</label>
+				<label class="control-label" for="id">游戏Id：</label>
 				<div class="controls">
 					<input type="text" name="id" class="input-large " value="${store.id}" />
 				</div>
@@ -47,15 +47,23 @@ margin-left:10px;
 $(function(){
 	$("#inputForm").validate({
 		rules:{
+			id:{
+				required:true,
+				number:true,
+				remote: '<%=request.getContextPath()%>/manage/store/checkId'
+			},
 			name:{
-				remote: '<%=request.getContextPath()%>/manage/store/checkName',
 				required:true,
 				minlength:1,
 				maxlength:3
 			}
 		},messages:{
+			id:{
+				number: "请输入合法的数字",
+				remote: "ID已存在",
+				required:"必须填写"
+			},
 			name:{
-				remote: "名称已存在",
 				required:"必须填写",
 				minlength:"游戏名称长度1-3位"
 			}

@@ -190,7 +190,7 @@ public class StoresController extends BaseController{
 			throw new Exception("不能删除主项目！");
 		}
 		Stores store = storeService.findById(id);
-		storeService.del(store);
+		storeService.delById(id);
 		//功能表
 		roleFunctionService.delByStoreId(id);
 		
@@ -210,8 +210,6 @@ public class StoresController extends BaseController{
 		}
 		//权限
 		userRoleService.delByStoreId(id);
-		
-		
 		
 		String message = "删除:" +store.getName();
 		logService.log(getCurrentUserName(), message, Log.TYPE_STORE);
@@ -244,7 +242,18 @@ public class StoresController extends BaseController{
 		}
 	}
 	
-	
+	/**
+	 * Ajax请求校验ID是否唯一。
+	 */
+	@RequestMapping(value = "/checkId")
+	@ResponseBody
+	public String checkId(@RequestParam("id") String id) {
+		if (storeService.findById(Long.valueOf(id))== null) {
+			return "true";
+		} else {
+			return "false";
+		}
+	}
 	
 	/**
 	 * 取出Shiro中的当前用户Id.

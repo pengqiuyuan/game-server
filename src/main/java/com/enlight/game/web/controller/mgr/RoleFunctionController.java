@@ -174,7 +174,7 @@ public class RoleFunctionController extends BaseController{
 	public Map<String,Object> del(@RequestParam(value="id")long id,Model model){
 		RoleFunction function = roleFunctionService.findById(id);
 		roleFunctionService.delById(id);
-		List<String> functions = roleFunctionService.findByGameIdAndRoleFunctions(function.getGameId(), function.getRole());
+		List<Integer> functions = roleFunctionService.findByGameIdAndRoleFunctions(function.getGameId(), function.getRole());
 		if(functions!=null && functions.size()!=0){
 			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(function.getGameId(), function.getRole());
 			for (UserRole userRole : userRoles) {

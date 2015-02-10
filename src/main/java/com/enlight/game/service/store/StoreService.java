@@ -57,6 +57,10 @@ public class StoreService {
 	public Stores findByName(String name){
 		return storeDao.findByName(name);
 	}
+	
+	public void delById(Long StoreId){
+		storeDao.delete(StoreId);
+	}
 	/**
 	 * 分页查询
 	 * 
@@ -99,11 +103,6 @@ public class StoreService {
 			user.setStatus(User.STATUS_INVALIDE);
 			userDao.save(user);
 		}
-		/**
-		 * 删除门店下的所有商品（伪）
-		 */
-		//productService.delByStoreId(store1.getId());
-
 		storeDao.save(store1);
 	}
 

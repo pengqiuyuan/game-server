@@ -73,7 +73,7 @@
 					
 						<td>
 							<div class="btn-group">
-								<a class="btn" href="#">#${s.index+1}</a> <a
+								<a class="btn" href="#">${item.id}</a> <a
 									class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 									<span class="caret"></span>
 								</a>

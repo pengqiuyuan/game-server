@@ -19,7 +19,7 @@ public interface RoleFunctionDao extends PagingAndSortingRepository<RoleFunction
 	
 	@Modifying
 	@Query("select roleFunction.function from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.role=?2 and roleFunction.status='1' order by roleFunction.function asc")
-	List<String> findByGameIdAndRoleOnlyFunc(Long gameId,String role);
+	List<Integer> findByGameIdAndRoleOnlyFunc(Long gameId,String role);
 	
 	/**
 	 * 去重

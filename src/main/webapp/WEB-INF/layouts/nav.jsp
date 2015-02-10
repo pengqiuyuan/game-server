@@ -38,10 +38,10 @@
 							<ul class="dropdown-menu">
 								<li><a href="${ctx}/manage/user/index">用户管理</a></li>
 								<shiro:hasAnyRoles name="admin,1">
-								<li><a href="#">运营大区设置</a></li>
+								<li><a href="${ctx}/manage/serverZone/index">运营大区设置</a></li>
 								</shiro:hasAnyRoles>
 								<shiro:hasAnyRoles name="admin,4">
-								<li><a href="${ctx}/manage/store/index">游戏设置</a></li>
+								<li><a href="${ctx}/manage/store/index">游戏项目管理</a></li>
 								</shiro:hasAnyRoles>
 								<shiro:hasAnyRoles name="admin,7">
 								<li><a href="#">服务器信息设置</a></li>
@@ -209,6 +209,7 @@
 	function changeTag(id,categoryId,sta){
 		var th = $("#storeIdN");
 		th.empty();
+		th.append("<li class='divider'></li>");
 		$.ajax({                                               
 			url: '<%=request.getContextPath()%>/manage/findStores?storeId='+id+'&categoryId='+categoryId,
 			type: 'GET',

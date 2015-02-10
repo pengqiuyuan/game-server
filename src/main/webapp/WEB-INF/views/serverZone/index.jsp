@@ -12,22 +12,21 @@
 
 
 
-<title>游戏设置</title>
+<title>运营大区设置</title>
 </head>
 <body>
    
 	<div >
 		<div class="page-header">
-			<h2>游戏设置</h2>
+			<h2>运营大区设置</h2>
 		</div>
 		<div>
 		 <c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 		</c:if>
-				<form id="queryForm" class="well form-inline"  method="get"
-					action="${ctx}/manage/store/index">
-					<label>名称：</label> <input name="search_LIKE_name"
-						type="text" value="${param.search_LIKE_name}" /> 
+				<form id="queryForm" class="well form-inline"  method="get" action="${ctx}/manage/serverZone/index">
+					<label>名称：</label> <input name="search_LIKE_serverName"
+						type="text" value="${param.search_LIKE_serverName}" /> 
 						 <input type="submit" class="btn"
 						value="查 找" />
 				<tags:sort />
@@ -42,8 +41,7 @@
 				</tr>
 			</thead>
 			<tbody id="tbody">
-
-				<c:forEach items="${stores.content}" var="item" varStatus="s">
+				<c:forEach items="${serverZones.content}" var="item" varStatus="s">
 					<tr id="${item.id}">
 						<td id="iDictionary" value="${item.id}">
 							<div class="btn-group">
@@ -52,24 +50,24 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
-									<li><a
-										href="<%=request.getContextPath()%>/manage/store/edit?id=${item.id}"><i
-											class="icon-edit"></i>修改</a></li>
+									<shiro:hasAnyRoles name="admin,3">
+									<li><a href="<%=request.getContextPath()%>/manage/serverZone/edit?id=${item.id}"><i class="icon-edit"></i>修改</a></li>
+									</shiro:hasAnyRoles>
 											<shiro:hasAnyRoles name="admin">
 												<c:if test="${item.id == 0 ? false : true}">
 												<li><a href="javascript:void(0);" rel="${item.id}" class="del"><i class="icon-th"></i>删除 </a></li>
 												</c:if>
-											</shiro:hasAnyRoles>
+									</shiro:hasAnyRoles>
 									<li class="divider"></li>
 								</ul>
 							</div>
 						</td>
 						<td>
 						<a
-							href="<%=request.getContextPath()%>/manage/store/detail?id=${item.id}"
-							data-fancybox-type="iframe" rel="fancy" title="游戏详细" class="showInfo" >${item.name }</a>
+							href="<%=request.getContextPath()%>/manage/serverZone/detail?id=${item.id}"
+							data-fancybox-type="iframe" rel="fancy" title="游戏详细" class="showInfo" >${item.serverName }</a>
 						</td>
-						<td><fmt:formatDate value="${item.createDate}"
+						<td><fmt:formatDate value="${item.crDate}"
 								pattern="yyyy/MM/dd  HH:mm:ss" /></td>
 					
 						
@@ -79,12 +77,11 @@
 		</table>
 
 		
-		<tags:pagination page="${stores}" paginationSize="5"/>
+		<tags:pagination page="${serverZones}" paginationSize="5"/>
 		
-	<shiro:hasAnyRoles name="admin">
+	<shiro:hasAnyRoles name="admin,2">
 		<div class="form-actions">
-			<a href="<%=request.getContextPath()%>/manage/store/add"
-				class="btn btn-primary">新增项目</a>	
+			<a href="<%=request.getContextPath()%>/manage/serverZone/add" class="btn btn-primary">新增运营大区</a>	
 		</div>
 	</shiro:hasAnyRoles>
 	</div>
@@ -102,7 +99,7 @@
 			    {
 				var id = $(this).attr("rel");
 					$.ajax({
-						url: '<%=request.getContextPath()%>/manage/store/del?id=' + id, 
+						url: '<%=request.getContextPath()%>/manage/serverZone/del?id=' + id, 
 						type: 'DELETE',
 						contentType: "application/json;charset=UTF-8",
 						dataType: 'json',

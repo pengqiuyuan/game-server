@@ -237,9 +237,9 @@ public class UsersController extends BaseController{
 			if (request.getParameterValues("storeId") != null && request.getParameterValues("role") != null) {
 				if (request.getParameterValues("storeId") != null && request.getParameterValues("role").length > 0) {
 					for (int i = 0; i < request.getParameterValues("storeId").length; i++) {
-						List<String> funcs = roleFunctionService.findByGameIdAndRoleFunctions(Long.parseLong(request.getParameterValues("storeId")[i]), request.getParameterValues("role")[i]);
+						List<Integer> funcs = roleFunctionService.findByGameIdAndRoleFunctions(Long.parseLong(request.getParameterValues("storeId")[i]), request.getParameterValues("role")[i]);
 						String functions = "";
-						for (String string : funcs) {
+						for (Integer string : funcs) {
 							functions = functions + ","+string;
 						}
 						UserRole userRole = new UserRole();
@@ -526,16 +526,10 @@ public class UsersController extends BaseController{
 		return map;
 	}
 	
-	/**
-	 * 更新界面 通过 获取userId 更新用户的storeId
-	 * @param 
-	 * @return
-	 * @throws AppBizException
-	 */
-	@RequestMapping(value="/findStoreId",method=RequestMethod.GET)	
+	@RequestMapping(value="/findSt",method=RequestMethod.GET)	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, Object> findStoreId(@RequestParam(value="userId",required=true) Long userId) throws AppBizException{
+	public Map<String, Object> findSt(@RequestParam(value="userId",required=true) Long userId) throws AppBizException{
 		List<Stores> stores = storeService.findList();
 		List<Stores> stos = storeService.findList();
 		List<UserRole> userRoles = userRoleService.findByUserId(userId);
@@ -549,7 +543,7 @@ public class UsersController extends BaseController{
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		if(stos!=null && stos.size()!=0){
 			List<RoleFunction> functions = roleFunctionService.findByGameId(stos.get(0).getId());
-			map.put("stos", stos.get(0));
+			map.put("stos", stos);
 			map.put("storesLength", stos.size());
 			map.put("rolefuncs", functions);
 

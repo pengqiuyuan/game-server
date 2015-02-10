@@ -14,4 +14,6 @@ public interface ServerZoneDao extends PagingAndSortingRepository<ServerZone, Lo
 	@Modifying
 	@Query("from ServerZone serverZone where serverZone.status='1'")
 	List<ServerZone> findAll();
+	
+	ServerZone findByServerName(String serverName);
 }
