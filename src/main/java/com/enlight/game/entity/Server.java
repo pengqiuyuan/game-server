@@ -24,7 +24,7 @@ public class Server extends BaseEntry{
 	
 	private String ip;
 	
-	private Integer port;
+	private String port;
 
 	private String storeId;
 	
@@ -50,14 +50,14 @@ public class Server extends BaseEntry{
 		this.ip = ip;
 	}
 
-	public Integer getPort() {
+	public String getPort() {
 		return port;
 	}
 
-	public void setPort(Integer port) {
+	public void setPort(String port) {
 		this.port = port;
 	}
-	
+
 	public String getStoreId() {
 		return storeId;
 	}
