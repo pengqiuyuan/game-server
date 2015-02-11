@@ -19,7 +19,7 @@
 							<a href="#" id="storeIdY" class="dropdown-toggle"  data-toggle="dropdown" onclick='changeTag(<shiro:principal property="storeId"/>,<shiro:principal property="categoryId"/>,1);'>
 							<shiro:principal property="storeName"/>
 							<b class="caret"></b></a>
-							<ul class="dropdown-menu nav-list" id="storeIdN" style="min-width: 100%;">
+							<ul class="dropdown-menu" id="storeIdN">
 						    </ul>
                         </li>                   
 					</ul>
@@ -95,7 +95,7 @@
 				    <shiro:hasAnyRoles name="admin,10001">
 					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">统计日志展示<b class="caret"></b></a>
 							<ul class="dropdown-menu">					
-								<shiro:hasAnyRoles name="admin,9">
+								<shiro:hasAnyRoles name="admin,22">
 								<li class="dropdown-submenu">
 				                    <a tabindex="-1" href="#">道具日志</a>
 					                <ul class="dropdown-menu">
@@ -105,7 +105,7 @@
 					                </ul>
 				               </li>
 				               </shiro:hasAnyRoles>
-				               <shiro:hasAnyRoles name="admin,10">
+				               <shiro:hasAnyRoles name="admin,21">
 				               <li class="dropdown-submenu">
 				                    <a tabindex="-1" href="#">体力日志</a>
 					                <ul class="dropdown-menu">
@@ -115,7 +115,7 @@
 					                </ul>
 				               </li>
 								</shiro:hasAnyRoles>
-								<shiro:hasAnyRoles name="admin,11">
+								<shiro:hasAnyRoles name="admin,23">
 										<li class="dropdown-submenu">
 						                    <a tabindex="-1" href="#">真实充值币日志</a>
 							                <ul class="dropdown-menu">
@@ -125,7 +125,7 @@
 							                </ul>
 						               </li>
 								</shiro:hasAnyRoles>
-								<shiro:hasAnyRoles name="admin,12">
+								<shiro:hasAnyRoles name="admin,24">
 								<li class="dropdown-submenu">
 				                    <a tabindex="-1" href="#">虚拟充值币日志</a>
 					                <ul class="dropdown-menu">
@@ -135,7 +135,7 @@
 					                </ul>
 				               </li>
 				               </shiro:hasAnyRoles>
-				               <shiro:hasAnyRoles name="admin,13">
+				               <shiro:hasAnyRoles name="admin,25">
 				               <li class="dropdown-submenu">
 				                    <a tabindex="-1" href="#">游戏币日志</a>
 					                <ul class="dropdown-menu">
@@ -145,7 +145,7 @@
 					                </ul>
 				               </li>
 				               </shiro:hasAnyRoles>
-				               <shiro:hasAnyRoles name="admin,14">
+				               <shiro:hasAnyRoles name="admin,26">
 				               <li class="dropdown-submenu">
 				                    <a tabindex="-1" href="#">竞技场徽章(货币)日志</a>
 					                <ul class="dropdown-menu">
@@ -155,7 +155,7 @@
 					                </ul>
 				               </li>
 				               </shiro:hasAnyRoles>
-				               <shiro:hasAnyRoles name="admin,15">
+				               <shiro:hasAnyRoles name="admin,27">
 				               <li class="dropdown-submenu">
 				                    <a tabindex="-1" href="#">燃烧远征龙鳞币(货币)日志</a>
 					                <ul class="dropdown-menu">
@@ -165,7 +165,7 @@
 					                </ul>
 				               </li>
 				               </shiro:hasAnyRoles>
-								<shiro:hasAnyRoles name="admin,16">
+								<shiro:hasAnyRoles name="admin,28">
 									  <li class="dropdown-submenu">
 						                    <a tabindex="-1" href="#">用户相关日志</a>
 							                <ul class="dropdown-menu">
@@ -211,18 +211,36 @@
 		th.empty();
 		th.append("<li class='divider'></li>");
 		$.ajax({                                               
-			url: '<%=request.getContextPath()%>/manage/findStores?storeId='+id+'&categoryId='+categoryId,
+			url: '<%=request.getContextPath()%>/manage/findStores?storeId='+id+'&categoryId='+categoryId+'&sta='+sta,
 			type: 'GET',
 			contentType: "application/json;charset=UTF-8",		
 			dataType: 'text',
 			success: function(data){
  				var parsedJson = $.parseJSON(data);
 				jQuery.each(parsedJson, function(index, itemData) {
-				    th.append("<li><a href='#' onclick='changeTag("+itemData.storeId+","+categoryId+",0);'>"+itemData.storeName+"</a></li>"); 
+				    th.append("<li class='dropdown-submenu' id='"+itemData.storeId+"'><a href='#' onMouseOver='change2("+itemData.storeId+");'>"+itemData.storeName+"</a></li>"); 
 				}); 
 				if(sta!="1"){
 					window.location.href='<%=request.getContextPath()%>/manage/index';
 				}
+			}
+		});		
+	}
+	
+	function change2(id){
+		var th = $("#"+id);
+		th.find("ul").remove();
+		th.append("<ul class='dropdown-menu' id='category"+id+"'></ul>");
+		$.ajax({                                               
+			url: '<%=request.getContextPath()%>/manage/findCategorys?storeId='+id,
+			type: 'GET',
+			contentType: "application/json;charset=UTF-8",		
+			dataType: 'text',
+			success: function(data){
+ 				var parsedJson = $.parseJSON(data);
+				jQuery.each(parsedJson, function(index, itemData) {
+					$("#category"+id).append("<li><a href='#' onclick='changeTag("+id+","+itemData.id+",0);'>"+itemData.categoryName+"</a></li>"); 
+				}); 
 			}
 		});		
 	}

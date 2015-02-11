@@ -2,7 +2,9 @@ package com.enlight.game.web.controller.mgr;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
@@ -20,10 +22,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.enlight.game.base.AppBizException;
+import com.enlight.game.entity.EnumCategory;
+import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
+import com.enlight.game.service.enumCategory.EnumCategoryService;
+import com.enlight.game.service.enumFunction.EnumFunctionService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.userRole.UserRoleService;
 
@@ -49,6 +55,12 @@ public class IndexController {
 	@Autowired
 	private StoreService storeService;
 	
+	@Autowired
+	private EnumCategoryService enumCategoryService;
+	
+	@Autowired
+	private EnumFunctionService enumFunctionService;
+	
      /**
       * 首页跳转
       * @return
@@ -62,10 +74,10 @@ public class IndexController {
 	@RequestMapping(value="/findStores",method=RequestMethod.GET)	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<UserRole> findStores(@RequestParam(value="storeId") String storeId,@RequestParam(value="categoryId") String categoryId,ServletRequest request) throws AppBizException, UnknownHostException{
+	public List<UserRole> findStores(@RequestParam(value="storeId") String storeId,@RequestParam(value="categoryId") String categoryId,@RequestParam(value="sta") String sta,ServletRequest request) throws AppBizException, UnknownHostException{
 		ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		User user = accountService.findUserByLoginName(u.name);
-		if(!u.storeId.equals(storeId)){
+		if(sta.equals("0")){
 			logger.debug("当前用户切换项目改变时执行....");
 			SecurityUtils.getSubject().logout();
 			request.setAttribute("categoryId",categoryId);
@@ -81,11 +93,8 @@ public class IndexController {
 			List<UserRole> userRs= userRoleService.findByUserId(user.getId());
 			if(!userRoles.isEmpty() && userRoles.size()!=0){
 				for (UserRole userRole : userRoles) {
-					if(userRole.getStoreId() == Long.parseLong(storeId)){
-						userRs.remove(userRole);
-					}else{
-						userRole.setStoreName(storeService.findById(userRole.getStoreId()).getName());
-					}
+					userRole.setStoreName(storeService.findById(userRole.getStoreId()).getName());
+
 				}
 
 			}
@@ -94,6 +103,29 @@ public class IndexController {
 			// TODO: handle exception
 			return null;
 		}
-
+	}
+	
+	
+	@RequestMapping(value="/findCategorys",method=RequestMethod.GET)	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Set<EnumCategory> findCategorys(@RequestParam(value="storeId") String storeId) throws AppBizException{
+		Set<EnumCategory> enumCategories = new HashSet<EnumCategory>();
+		try {
+			ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+			User user = accountService.findUserByLoginName(u.name);
+			List<UserRole> userRoles = userRoleService.findByUserIdAndStoreId(user.getId(), Long.valueOf(storeId));
+			if(!userRoles.isEmpty() && userRoles.size()!=0){
+				List<String> list = userRoles.get(0).getRoleList();
+				for (String f : list) {
+					EnumFunction enumFunction  = enumFunctionService.findByEnumRole(Integer.valueOf(f));
+					EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
+					enumCategories.add(enumCategory);
+				}
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return enumCategories;
 	}
 }

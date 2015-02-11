@@ -30,7 +30,7 @@ public class CountController extends BaseController{
 	 * 道具日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin", "9" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "22" }, logical = Logical.OR)
 	@RequestMapping(value = "/item", method = RequestMethod.GET)
 	public String item(@RequestParam(value = "id")String id,Model model){
 		logger.debug("item coming..."+id);
@@ -42,7 +42,7 @@ public class CountController extends BaseController{
 	 * 体力日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin", "10" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "21" }, logical = Logical.OR)
 	@RequestMapping(value = "/ap", method = RequestMethod.GET)
 	public String ap(@RequestParam(value = "id")long id,Model model){
 		logger.debug("ap coming...");
@@ -54,7 +54,7 @@ public class CountController extends BaseController{
 	 * 真实充值币日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin", "11" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "23" }, logical = Logical.OR)
 	@RequestMapping(value = "/money", method = RequestMethod.GET)
 	public String money(@RequestParam(value = "id")long id,Model model){
 		logger.debug("money coming...");
@@ -66,7 +66,7 @@ public class CountController extends BaseController{
 	 * 虚拟充值币日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin", "12" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "24" }, logical = Logical.OR)
 	@RequestMapping(value = "/dummy", method = RequestMethod.GET)
 	public String dummy(@RequestParam(value="id")long id,Model model){
 		logger.debug("dummy coming...");
@@ -78,7 +78,7 @@ public class CountController extends BaseController{
 	 * 游戏币日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin", "13" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "25" }, logical = Logical.OR)
 	@RequestMapping(value = "/coin", method = RequestMethod.GET)
 	public String coin(@RequestParam(value="id")long id,Model model){
 		logger.debug("coin coming...");
@@ -90,7 +90,7 @@ public class CountController extends BaseController{
 	 * 竞技场徽章(货币)日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin", "14" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "26" }, logical = Logical.OR)
 	@RequestMapping(value = "/arenacoin", method = RequestMethod.GET)
 	public String arenacoin(@RequestParam(value="id")long id,Model model){
 		logger.debug("arenacoin coming...");
@@ -102,7 +102,7 @@ public class CountController extends BaseController{
 	 * 燃烧远征龙鳞币(货币)日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin", "15" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "27" }, logical = Logical.OR)
 	@RequestMapping(value = "/expeditioncoin", method = RequestMethod.GET)
 	public String expeditioncoin(@RequestParam(value="id")long id,Model model){
 		logger.debug("expeditioncoin coming...");
@@ -114,7 +114,7 @@ public class CountController extends BaseController{
 	 * 用户日志
 	 * @return
 	 */
-	@RequiresRoles(value = { "admin", "16" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "28" }, logical = Logical.OR)
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public String user(@RequestParam(value="id")long id,Model model){
 		logger.debug("user coming...");
