@@ -37,6 +37,7 @@ import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.log.LogService;
 import com.enlight.game.service.roleFunction.RoleFunctionService;
+import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.user.UserService;
 import com.enlight.game.service.userRole.UserRoleService;
@@ -102,6 +103,8 @@ public class StoresController extends BaseController{
 	@Autowired
 	private RoleFunctionService roleFunctionService;
 	
+	@Autowired
+	private ServerService serverService;
 	/**
 	 *  门店管理首页
 
@@ -181,7 +184,7 @@ public class StoresController extends BaseController{
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> delStores(@RequestParam(value = "id")long id) throws Exception{
+	public Map<String,Object> delStores(@RequestParam(value = "id")Long id) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
 		if(id == 0)
 		{
@@ -208,6 +211,9 @@ public class StoresController extends BaseController{
 		}
 		//权限
 		userRoleService.delByStoreId(id);
+		
+		//删除游戏对应的服务器
+		serverService.deleteByStoreId(id.toString());
 		
 		String message = "删除:" +store.getName();
 		logService.log(getCurrentUserName(), message, Log.TYPE_STORE);

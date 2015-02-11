@@ -33,6 +33,8 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
+import com.enlight.game.service.platForm.PlatFormService;
+import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.user.UserService;
 import com.google.common.collect.Maps;
@@ -74,7 +76,11 @@ public class ServerZoneController extends BaseController{
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private PlatFormService platFormService;
 	
+	@Autowired
+	private ServerService serverService;
 	
 	/**
 	 *  用户管理首页
@@ -164,6 +170,11 @@ public class ServerZoneController extends BaseController{
 	public Map<String,Object> delServerZone(@RequestParam(value = "id")Long id) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
 		 serverZoneService.delById(id);
+		 //删除大区下的渠道
+		 platFormService.delByServerZoneId(id.toString());
+		 //删除大区下的服务器
+		 serverService.deleteByServerZoneId(id.toString());
+		 
 		 List<User> users = accountService.getAllUser();
 		 for (User user : users) {
 			 List<String> list = user.getServerZoneList();
@@ -174,7 +185,6 @@ public class ServerZoneController extends BaseController{
 					 lis.add(string); 
 				 }
 			 }
-			 System.out.println("11111   " + StringUtils.join(lis,","));
 			 user.setServerZone(StringUtils.join(lis,","));
 			 userService.update(user);
 		}

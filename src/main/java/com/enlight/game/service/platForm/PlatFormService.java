@@ -54,6 +54,10 @@ public class PlatFormService {
 	public void delById(Long id){
 		platFormDao.delete(id);
 	}
+	
+	public void delByServerZoneId(String serverZoneId){
+		platFormDao.deleteByServerZoneId(serverZoneId);
+	}
 	/**
 	 * 分页查询
 	 * 

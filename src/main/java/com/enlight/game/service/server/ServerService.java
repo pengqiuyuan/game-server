@@ -61,6 +61,13 @@ public class ServerService {
 		serverDao.delete(id);
 	}
 	
+	public void deleteByStoreId(String storeId){
+		serverDao.deleteByStoreId(storeId);
+	}
+	public void deleteByServerZoneId(String serverZoneId){
+		serverDao.deleteByServerZoneId(serverZoneId);
+	}
+	
 	/**
 	 * 分页查询
 	 * 
