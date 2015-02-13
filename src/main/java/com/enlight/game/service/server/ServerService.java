@@ -2,6 +2,7 @@ package com.enlight.game.service.server;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -37,6 +38,10 @@ public class ServerService {
 	
 	public Server findByServerId(String serverId){
 		return serverDao.findByServerId(serverId);
+	}
+	
+	public Set<Server> findByServerZoneId(String serverZoneId){
+		return serverDao.findByServerZoneId(serverZoneId);
 	}
 	
 	public void save(Server server){

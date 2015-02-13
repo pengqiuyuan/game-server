@@ -1,5 +1,7 @@
 package com.enlight.game.repository;
 
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +20,6 @@ public interface ServerDao extends PagingAndSortingRepository<Server, Long>,JpaS
 	@Modifying
 	@Query("delete from Server server where server.serverZoneId=?1")
 	void deleteByServerZoneId(String serverZoneId);
+	
+	Set<Server> findByServerZoneId(String serverZoneId);
 }
