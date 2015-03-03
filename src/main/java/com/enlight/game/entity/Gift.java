@@ -43,13 +43,15 @@ public class Gift {
 	 */
 	public static final String CATEGORY_ORDINART = "0";
 	
+	private Long giftId;
+	
 	private Long userId;
 	
 	private Long serverZoneId;
 	
 	private Long gameId;
 	
-	private List<GiftServer> giftServers;
+	private String[] servers;
 	
 	/**
 	 * guid
@@ -72,11 +74,15 @@ public class Gift {
 	
 	private Set<GiftItem> giftItems;
 	
-	private Date beginDate;
+	/**
+	 * 时间戳
+	 */
+	private Long beginDate;
 	
-	private Date endDate;
-	
+	private Long endDate;
+
 	private String status;
+	
 
 	public Long getUserId() {
 		return userId;
@@ -100,14 +106,6 @@ public class Gift {
 
 	public void setGameId(Long gameId) {
 		this.gameId = gameId;
-	}
-
-	public List<GiftServer> getGiftServers() {
-		return giftServers;
-	}
-
-	public void setGiftServers(List<GiftServer> giftServers) {
-		this.giftServers = giftServers;
 	}
 
 	public List<String> getPlayerId() {
@@ -182,24 +180,6 @@ public class Gift {
 		this.giftItems = giftItems;
 	}
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	public Date getBeginDate() {
-		return beginDate;
-	}
-
-	public void setBeginDate(Date beginDate) {
-		this.beginDate = beginDate;
-	}
-
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -207,5 +187,38 @@ public class Gift {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
+	public String[] getServers() {
+		return servers;
+	}
+
+	public void setServers(String[] servers) {
+		this.servers = servers;
+	}
+
+	public Long getGiftId() {
+		return giftId;
+	}
+
+	public void setGiftId(Long giftId) {
+		this.giftId = giftId;
+	}
+
+	public Long getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(Long beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public Long getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Long endDate) {
+		this.endDate = endDate;
+	}
+
+
 }

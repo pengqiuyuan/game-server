@@ -149,16 +149,16 @@ line-height: 30px;
 						</div>
 						
 						<div class="control-group">
-							<label class="control-label" for=beginDate>活动时间：</label>
+							<label class="control-label" for=beginD>活动时间：</label>
 							<div class="controls">
-								<input type="text" name="beginDate" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="beginDate"  placeholder="礼品卡生效时间"/>
+								<input type="text" name="beginD" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="beginD"  placeholder="礼品卡生效时间"/>
 							</div>
 						</div>
 						
 						<div class="control-group">
-							<label class="control-label" for="endDate">结束时间：</label>
+							<label class="control-label" for="endD">结束时间：</label>
 							<div class="controls">
-								<input type="text" name="endDate" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="endDate" placeholder="礼品卡过期时间"/>
+								<input type="text" name="endD" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="endD" placeholder="礼品卡过期时间"/>
 								<div id="time"  class="alert alert-danger" style="display: none;width: 20%; margin-top: 10px;"><button data-dismiss="alert" class="close">×</button>结束时间不能小于开始时间</div>
 							</div>
 						</div>
@@ -213,8 +213,8 @@ line-height: 30px;
 		});
 		
 		$(".btn").click(function(){
-			var doingDate=$("#beginDate").val();
-	        var endDoingDate=$("#endDate").val();
+			var doingDate=$("#beginD").val();
+	        var endDoingDate=$("#endD").val();
 	        var startTime = new Date(doingDate).getTime();
 	        var endTime = new Date(endDoingDate).getTime();
 	         if(!endDoingDate.length==0){

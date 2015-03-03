@@ -1,10 +1,8 @@
 package com.enlight.game.service.user;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +18,6 @@ import org.springside.modules.persistence.SearchFilter.Operator;
 import com.enlight.game.entity.User;
 import com.enlight.game.repository.UserDao;
 import com.enlight.game.service.account.AccountService;
-import com.google.common.collect.ImmutableList;
 
 
 @Component

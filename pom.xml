@@ -74,7 +74,20 @@
 
 	<!-- 依赖项定义 -->
 	<dependencies>
-		<!-- connection pool -->
+	
+		<dependency>
+		    <groupId>net.sf.json-lib</groupId>
+		    <artifactId>json-lib</artifactId>
+		    <version>0.8</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-jdbc</artifactId>
@@ -596,43 +609,6 @@
 						</excludes>
 					</instrumentation>
 				</configuration>
-			</plugin>
-
-			<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�? -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.3.1</version>
-				<executions>
-					<execution>
-						<id>enforce-banned-dependencies</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireMavenVersion>
-									<version>3.0.3</version>
-								</requireMavenVersion>
-								<requireJavaVersion>
-									<version>1.6</version>
-								</requireJavaVersion>
-								<bannedDependencies>
-									<searchTransitive>true</searchTransitive>
-									<excludes>
-										<exclude>commons-logging</exclude>
-										<exclude>aspectj:aspectj*</exclude>
-										<exclude>org.springframework</exclude>
-									</excludes>
-									<includes>
-										<include>org.springframework:*:4.0.*</include>
-									</includes>
-								</bannedDependencies>
-							</rules>
-							<fail>true</fail>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 
 			<!-- jetty插件, 设定context path与spring profile -->

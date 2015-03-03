@@ -58,7 +58,7 @@ import com.google.common.collect.Maps;
 @RequestMapping(value="/manage/user")
 public class UsersController extends BaseController{
 	
-	private static final String PAGE_SIZE = "15";
+	private static final String PAGE_SIZE = "2";
 
 	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
@@ -133,7 +133,6 @@ public class UsersController extends BaseController{
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		return "/user/index";
 	}
-	
 	
 	/**
 	 * 操作员编辑页	 

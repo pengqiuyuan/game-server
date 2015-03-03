@@ -64,5 +64,19 @@
 		</attribute>
 	</tag>
 	
+						<tag>
+		<description>
+			数据字典格式标签
+		</description>
+		<name>getDateTag</name>
+		<tag-class>com.enlight.game.tags.GetDateTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
 	
 </taglib>
