@@ -69,7 +69,13 @@
 							data-toggle="dropdown">礼品卡功能管理 <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 							    <shiro:hasAnyRoles name='admin,18'>
-									<li><a href="#">查看礼品卡</a></li>
+									<li><a href="${ctx}/manage/gift/index">查看礼品卡</a></li>
+								</shiro:hasAnyRoles>
+								<shiro:hasAnyRoles name='admin,29'>
+									<li><a href="${ctx}/manage/gift/add">新增礼品卡</a></li>
+								</shiro:hasAnyRoles>
+								<shiro:hasAnyRoles name='admin,29'>
+									<li><a href="${ctx}/manage/giftProps/index">礼品卡增加道具</a></li>
 								</shiro:hasAnyRoles>
 								<li class="divider"></li>
 								<li><a href="#">sample</a></li>

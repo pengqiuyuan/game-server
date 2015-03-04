@@ -39,12 +39,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.Gift;
 import com.enlight.game.entity.GiftItem;
+import com.enlight.game.entity.GiftProps;
 import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
+import com.enlight.game.service.giftProps.GiftPropsService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
@@ -110,6 +112,9 @@ public class GiftController extends BaseController{
 	
 	@Autowired
 	private StoreService storeService;
+	
+	@Autowired
+	private GiftPropsService giftPropsService;
 	
 	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
 	
@@ -397,6 +402,13 @@ public class GiftController extends BaseController{
 	public Set<Server> findServers(@RequestParam(value="serverZoneId") String serverZoneId) throws AppBizException{
 		Set<Server> servers = serverService.findByServerZoneId(serverZoneId);
 		return servers;
+	}
+	
+	@RequestMapping(value="/findGiftProps",method=RequestMethod.GET)	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<GiftProps> findGiftProps(@RequestParam(value="gameId") String gameId) throws AppBizException{
+		return giftPropsService.findByGameId(gameId);
 	}
 	
 	public ShiroUser getCurrentUser() {

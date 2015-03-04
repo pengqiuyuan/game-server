@@ -118,37 +118,6 @@ line-height: 30px;
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="coin">金币：</label>
-							<div class="controls">
-								<input type="text" name="coin" class="input-large " value="" placeholder="最小可为空，最大不超过7位数"/>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="diamond">钻石：</label>
-							<div class="controls">
-								<input type="text" name="diamond" class="input-large " value="" placeholder="最小可为空，最大不超过7位数"/>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="arenacoin">竞技币：</label>
-							<div class="controls">
-								<input type="text" name="arenacoin" class="input-large " value="" placeholder="最小可为空，最大不超过7位数"/>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="expeditioncoin">龙鳞币：</label>
-							<div class="controls">
-								<input type="text" name="expeditioncoin" class="input-large " value="" placeholder="最小可为空，最大不超过7位数"/>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="tradecoin">工会币：</label>
-							<div class="controls">
-								<input type="text" name="tradecoin" class="input-large " value="" placeholder="最小可为空，最大不超过7位数"/>
-							</div>
-						</div>
-						
-						<div class="control-group">
 							<label class="control-label" for=beginD>活动时间：</label>
 							<div class="controls">
 								<input type="text" name="beginD" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="beginD"  placeholder="礼品卡生效时间"/>
@@ -162,6 +131,9 @@ line-height: 30px;
 								<div id="time"  class="alert alert-danger" style="display: none;width: 20%; margin-top: 10px;"><button data-dismiss="alert" class="close">×</button>结束时间不能小于开始时间</div>
 							</div>
 						</div>
+						<div id="item">
+						</div>
+						
 						<div class="page-header">
 							<span id="addfield" class="btn btn-info">新加道具及数量</span>
 						</div>			
@@ -178,15 +150,17 @@ line-height: 30px;
 			</div>
 	</form>
 <script type="text/javascript">
-    var i = 0;
 	$("#addfield").click(function(){
-		i++;
-		if(i<=4){
-		    $("#field").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='fieldValue'  style='height: 30px;' class='input-large' value='' placeholder='道具数量，如:20' /></div></div>" );
-		    $("#field").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='controls'><input type='text' name='fieldId' style='height: 30px;' class='input-large' value='' placeholder='道具Id，如:10'/></div></div>" );
-		    iFrameHeight();  
-		}
+			$("#field").prepend("<div id='field_div'></div>");
+		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='fieldValue'  style='height: 20px;' class='input-large' value='' placeholder='道具数量，如:20' /></div></div>" );
+		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='controls'><input type='text' name='fieldId' style='height: 20px;' class='input-large' value='' placeholder='道具Id，如:10'/>&nbsp;<span id='delElememt' class='del btn btn-danger'>删除道具</span></div></div>" );
+	
+		 	$("#delElememt").click(function(){
+			  		$(this).parent().parent().parent().remove();
+			}); 
 	});
+	    
+	
 	function selectAll(){  
         $("input[id='server']").attr("checked", true);  
 	}	
@@ -212,6 +186,23 @@ line-height: 30px;
 			});
 		});
 		
+		$("#gameId").change(function(e){
+			var gameId = $("#gameId").val();
+			$("#item").empty();
+			$.ajax({                                               
+				url: '<%=request.getContextPath()%>/manage/gift/findGiftProps?gameId='+gameId, 
+				type: 'GET',
+				contentType: "application/json;charset=UTF-8",		
+				dataType: 'text',
+				success: function(data){
+					var parsedJson = $.parseJSON(data);
+					jQuery.each(parsedJson, function(index, itemData) {
+					$("#item").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><div class='control-group'><label class='control-label' for='name'>"+itemData.itemName+"：</label><div class='controls'><input type='text' name='fieldValue' class='input-large' value='' placeholder='道具数量，如:10'/> <input type='hidden' name='fieldId' class='input-large' value='"+itemData.itemId+"'/></div></div></c:forEach>"); 
+					});
+				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+			});
+		});
+		
 		$(".btn").click(function(){
 			var doingDate=$("#beginD").val();
 	        var endDoingDate=$("#endD").val();
@@ -231,6 +222,26 @@ line-height: 30px;
 	        }
 			
 		});
+		
+		$("#inputForm").validate({
+			rules:{
+				fieldValue:{
+					maxlength:7,
+					number:true
+				},
+				fieldId:{
+					number:true
+				}
+			},messages:{
+				fieldValue:{
+					maxlength:"长度1-7位",
+					number:"必须是数字"
+				},
+				fieldId:{
+					number:"必须是数字"
+				}
+			}
+		});	
 		
 	})
 

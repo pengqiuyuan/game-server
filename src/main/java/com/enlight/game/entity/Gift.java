@@ -1,10 +1,8 @@
 package com.enlight.game.entity;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 /**
@@ -61,16 +59,6 @@ public class Gift {
 	private String category;
 	
 	private String number;
-	
-	private String coin;
-	
-	private String diamond;
-	
-	private String arenacoin;
-	
-	private String expeditioncoin;
-	
-	private String tradecoin;
 	
 	private Set<GiftItem> giftItems;
 	
@@ -130,46 +118,6 @@ public class Gift {
 
 	public void setNumber(String number) {
 		this.number = number;
-	}
-
-	public String getCoin() {
-		return coin;
-	}
-
-	public void setCoin(String coin) {
-		this.coin = coin;
-	}
-
-	public String getDiamond() {
-		return diamond;
-	}
-
-	public void setDiamond(String diamond) {
-		this.diamond = diamond;
-	}
-
-	public String getArenacoin() {
-		return arenacoin;
-	}
-
-	public void setArenacoin(String arenacoin) {
-		this.arenacoin = arenacoin;
-	}
-
-	public String getExpeditioncoin() {
-		return expeditioncoin;
-	}
-
-	public void setExpeditioncoin(String expeditioncoin) {
-		this.expeditioncoin = expeditioncoin;
-	}
-
-	public String getTradecoin() {
-		return tradecoin;
-	}
-
-	public void setTradecoin(String tradecoin) {
-		this.tradecoin = tradecoin;
 	}
 
 	public Set<GiftItem> getGiftItems() {
