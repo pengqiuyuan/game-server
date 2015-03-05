@@ -8,6 +8,8 @@
 <html>
 <head>
 	<title>新增礼品卡</title>
+ 	<link href="${ctx}/static/typeahead/examples.css" type="text/css" rel="stylesheet" />
+    <script src="${ctx}/static/typeahead/typeahead.js" type="text/javascript"></script>
 <style type="text/css"> 
 .error{ 
 color:Red; 
@@ -97,15 +99,15 @@ line-height: 30px;
 								<label class="control-label" for="category">礼品卡类型：</label>
 								<div class="controls">
 									<label class="radio">
-									  <input type="radio" name="category" id="category" value="1" checked>
+									  <input type="radio" name="category" id="category" class="category" value="1" checked>
 									  <span class="help-block" style="margin-top: -5px;width: 90%;">礼品卡类型1：同批绑定单服单次使用，使用后作废（即生成的礼品码在所选择的的服务器中只能有一个服务器使用，一个玩家在一个服务器中使用后，此卡就作废）</span>
 									</label>
 									<label class="radio">
-									  <input type="radio" name="category" id="category" value="2">
+									  <input type="radio" name="category" id="category" class="category" value="2">
 									  <span class="help-block" style="margin-top: -5px;width: 90%;">礼品卡类型2：同批支持多服单次使用，使用后作废（即生成的礼品码在所选择的的服务器均可使用，这张卡在每个服只可使用一次，一经使用，其他玩家无法使用这张卡，使用这个卡的玩家可以再其他服继续使用这张卡）</span>
 									</label>
 									<label class="radio">
-									  <input type="radio" name="category" id="category" value="3">
+									  <input type="radio" name="category" id="category" class="category" value="3">
 									  <span class="help-block" style="margin-top: -5px;width: 90%;">礼品卡类型3：同批支持多服单次使用，使用后在本服无法再次使用，可在其他服再次使用（此种类型礼品卡只生成一个礼品码，此礼品码在所选择的的服务器均可使用，但是每个玩家GUID在每个服只能使用一次这个礼品卡）</span>
 									</label>
 								</div>
@@ -113,7 +115,7 @@ line-height: 30px;
 						<div class="control-group">
 							<label class="control-label" for="number">生成数量：</label>
 							<div class="controls">
-								<input type="text" name="number" class="input-large " value=""/>
+								<input type="text" id="number" name="number" class="input-large " value=""/>
 								<span class="help-block">类型3礼品卡时，生成数量为1不可选</span>
 							</div>
 						</div>
@@ -152,12 +154,19 @@ line-height: 30px;
 <script type="text/javascript">
 	$("#addfield").click(function(){
 			$("#field").prepend("<div id='field_div'></div>");
-		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='fieldValue'  style='height: 20px;' class='input-large' value='' placeholder='道具数量，如:20' /></div></div>" );
-		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='controls'><input type='text' name='fieldId' style='height: 20px;' class='input-large' value='' placeholder='道具Id，如:10'/>&nbsp;<span id='delElememt' class='del btn btn-danger'>删除道具</span></div></div>" );
+		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='fieldValue'  style='height: 20px;' class='input-large tt-query' value='' placeholder='道具数量，如:20' /></div></div>" );
+		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='typeahead-wrapper controls'><input type='text' name='fieldId' style='height: 20px;' class='states' value='' placeholder='道具Id，如:10'/>&nbsp;<span id='delElememt' class='del btn btn-danger' style='margin-bottom: -6px;'>删除道具</span></div></div>" );
 	
 		 	$("#delElememt").click(function(){
 			  		$(this).parent().parent().parent().remove();
 			}); 
+
+		    $('.states').typeahead({
+		        valueKey: 'tagName',
+		        minLength: 1,
+		        limit:5,
+		        remote: '<%=request.getContextPath()%>/manage/tag/findItemNameAndId?query=%QUERY'
+		      });
 	});
 	    
 	
@@ -223,27 +232,32 @@ line-height: 30px;
 			
 		});
 		
+		$(".category").change(function(){
+			if($(this).val()==3){
+				$("#number").val("1");
+				$("#number").attr("readonly",true);
+			}else{
+				$("#number").attr("readonly",false);
+				$("#number").val("");
+			}
+		});
+		
 		$("#inputForm").validate({
 			rules:{
 				fieldValue:{
 					maxlength:7,
-					number:true
-				},
-				fieldId:{
 					number:true
 				}
 			},messages:{
 				fieldValue:{
 					maxlength:"长度1-7位",
 					number:"必须是数字"
-				},
-				fieldId:{
-					number:"必须是数字"
 				}
 			}
 		});	
 		
 	})
+	
 
 </script> 
 </body>

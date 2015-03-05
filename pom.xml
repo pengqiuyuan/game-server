@@ -75,6 +75,28 @@
 	<!-- 依赖项定义 -->
 	<dependencies>
 	
+	    <dependency>
+        	<groupId>org.apache.poi</groupId>
+        	<artifactId>poi</artifactId>
+        	<version>3.8</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.apache.poi</groupId>
+        	<artifactId>poi-scratchpad</artifactId>
+        	<version>3.8</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.apache.poi</groupId>
+        	<artifactId>poi-contrib</artifactId>
+        	<version>3.6</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
+        </dependency>
+	
 		<dependency>
 		    <groupId>net.sf.json-lib</groupId>
 		    <artifactId>json-lib</artifactId>

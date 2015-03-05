@@ -301,7 +301,7 @@ public class GiftController extends BaseController{
 		if(fieldIds != null && fieldIds.length>0 && fieldValues != null && fieldValues.length>0){
 			for (int i = 0; i < fieldIds.length; i++) {
 				GiftItem giftItem = new GiftItem();
-				giftItem.setId(Long.valueOf(fieldIds[i]));
+				giftItem.setId(Long.valueOf(fieldIds[i].split(":")[0]));
 				giftItem.setNumber(Integer.valueOf(fieldValues[i]));
 				giftItems.add(giftItem);
 			}

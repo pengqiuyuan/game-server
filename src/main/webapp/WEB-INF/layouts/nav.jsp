@@ -56,7 +56,7 @@
 							    <li><a href="${ctx}/manage/log/index">日志管理</a></li>
 							    </shiro:hasAnyRoles>
 							    <shiro:hasAnyRoles name="admin,16">
-							    <li><a href="#">上传文档</a></li>
+							    <li><a href="${ctx}/manage/tag/uploadExcel">上传文档</a></li>
 							    </shiro:hasAnyRoles>
 								<li class="divider"></li>
 								<li><a href="#">sample</a></li>

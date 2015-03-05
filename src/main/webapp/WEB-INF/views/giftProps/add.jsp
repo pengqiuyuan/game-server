@@ -52,8 +52,8 @@ margin-left:10px;
 	$("#addfield").click(function(){
 		i++;
 		if(i<=4){
-		    $("#field").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='controls'><input type='text' name='fieldValue'  style='height: 30px;' class='input-large' value='' placeholder='道具Id，如:10' /></div></div>" );
-		    $("#field").prepend( "<div class='control-group'><label class='control-label' for='name'>道具名称：</label><div class='controls'><input type='text' name='fieldId' style='height: 30px;' class='input-large' value='' placeholder='道具名称，如:金币'/></div></div>" );
+		    $("#field").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='controls'><input type='text' name='fieldValue'  style='height: 20px;' class='input-large' value='' placeholder='道具Id，如:10' /></div></div>" );
+		    $("#field").prepend( "<div class='control-group'><label class='control-label' for='name'>道具名称：</label><div class='controls'><input type='text' name='fieldId' style='height: 20px;' class='input-large' value='' placeholder='道具名称，如:金币'/></div></div>" );
 		    iFrameHeight();  
 		}
 	});
