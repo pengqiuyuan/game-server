@@ -41,13 +41,13 @@ public class Gift {
 	 */
 	public static final String CATEGORY_ORDINART = "0";
 	
-	private Long giftId;
+	private String giftId;
 	
-	private Long userId;
+	private String userId;
 	
-	private Long serverZoneId;
+	private String serverZoneId;
 	
-	private Long gameId;
+	private String gameId;
 	
 	private String[] servers;
 	
@@ -72,29 +72,7 @@ public class Gift {
 	private String status;
 	
 
-	public Long getUserId() {
-		return userId;
-	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public Long getServerZoneId() {
-		return serverZoneId;
-	}
-
-	public void setServerZoneId(Long serverZoneId) {
-		this.serverZoneId = serverZoneId;
-	}
-
-	public Long getGameId() {
-		return gameId;
-	}
-
-	public void setGameId(Long gameId) {
-		this.gameId = gameId;
-	}
 
 	public List<String> getPlayerId() {
 		return playerId;
@@ -144,14 +122,6 @@ public class Gift {
 		this.servers = servers;
 	}
 
-	public Long getGiftId() {
-		return giftId;
-	}
-
-	public void setGiftId(Long giftId) {
-		this.giftId = giftId;
-	}
-
 	public Long getBeginDate() {
 		return beginDate;
 	}
@@ -168,5 +138,36 @@ public class Gift {
 		this.endDate = endDate;
 	}
 
+	public String getGiftId() {
+		return giftId;
+	}
+
+	public void setGiftId(String giftId) {
+		this.giftId = giftId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getServerZoneId() {
+		return serverZoneId;
+	}
+
+	public void setServerZoneId(String serverZoneId) {
+		this.serverZoneId = serverZoneId;
+	}
+
+	public String getGameId() {
+		return gameId;
+	}
+
+	public void setGameId(String gameId) {
+		this.gameId = gameId;
+	}
 
 }

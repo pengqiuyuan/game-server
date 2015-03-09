@@ -1,9 +1,7 @@
 package com.enlight.game.web.controller.mgr;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,12 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -174,81 +169,86 @@ public class GiftController extends BaseController{
 			String category = Gift.CATEGORY_ORDINART;
 			String gameId = user.getStoreId();
 			try {
-				//String gs = HttpClientUts.doGet(list_url+"?category="+category+"&gameId="+gameId+"&userId="+user.id, "utf-8");
-				String gs = 				"[\n" +
+				String gs = HttpClientUts.doGet(list_url+"?category="+category+"&gameId=3"+"&userId="+user.id, "utf-8");
+/*				String gs = 				"[\n" +
 		                "    {\n" +
 		                "        \"giftId\": \"1\",\n" +
-		                "        \"userId\": \"2\",\n" +
+		                "        \"userId\": \"1\",\n" +
 		                "        \"gameId\": \"3\",\n" +
 		                "        \"number\": \"4\",\n" +
-		                "        \"coin\": \"5\",\n" +
-		                "        \"diamond\": \"6\",\n" +
-		                "        \"arenacoin\": \"7\",\n" +
-		                "        \"expeditioncoin\": \"8\",\n" +
-		                "        \"tradecoin\": \"9\",\n" +
 		                "        \"beginDate\": \"1422837771000\",\n" +
 		                "        \"endDate\": \"1422837771000\",\n" +
 		                "        \"status\": \"0\",\n" +
 		                "        \"giftItems\": [\n" +
 		                "            {\n" +
-		                "                \"id\": \"11\",\n" +
+		                "                \"id\": \"1\",\n" +
 		                "                \"number\": \"1111\"\n" +
 		                "            },\n" +
 		                "            {\n" +
-		                "                \"id\": \"12\",\n" +
+		                "                \"id\": \"2\",\n" +
+		                "                \"number\": \"1212\"\n" +
+		                "            },\n" +
+		                "            {\n" +
+		                "                \"id\": \"3\",\n" +
+		                "                \"number\": \"1212\"\n" +
+		                "            },\n" +
+		                "            {\n" +
+		                "                \"id\": \"4\",\n" +
+		                "                \"number\": \"1212\"\n" +
+		                "            },\n" +
+		                "            {\n" +
+		                "                \"id\": \"5\",\n" +
 		                "                \"number\": \"1212\"\n" +
 		                "            }\n" +
 		                "        ]\n" +
 		                "    },\n" +
 		                "    {\n" +
 		                "        \"giftId\": \"1\",\n" +
-		                "        \"userId\": \"2\",\n" +
-		                "        \"gameId\": \"3\",\n" +
+		                "        \"userId\": \"1\",\n" +
+		                "        \"gameId\": \"2\",\n" +
 		                "        \"number\": \"4\",\n" +
-		                "        \"coin\": \"5\",\n" +
-		                "        \"diamond\": \"6\",\n" +
-		                "        \"arenacoin\": \"7\",\n" +
-		                "        \"expeditioncoin\": \"8\",\n" +
-		                "        \"tradecoin\": \"9\",\n" +
 		                "        \"beginDate\": \"1422837771000\",\n" +
 		                "        \"endDate\": \"1422837771000\",\n" +
 		                "        \"status\": \"0\",\n" +
 		                "        \"giftItems\": [\n" +
 		                "            {\n" +
-		                "                \"id\": \"11\",\n" +
-		                "                \"number\": \"1111\"\n" +
+		                "                \"id\": \"3\",\n" +
+		                "                \"number\": \"1212\"\n" +
 		                "            },\n" +
 		                "            {\n" +
-		                "                \"id\": \"12\",\n" +
+		                "                \"id\": \"4\",\n" +
+		                "                \"number\": \"1212\"\n" +
+		                "            },\n" +
+		                "            {\n" +
+		                "                \"id\": \"5\",\n" +
 		                "                \"number\": \"1212\"\n" +
 		                "            }\n" +
 		                "        ]\n" +
 		                "    },\n" +
 		                "    {\n" +
 		                "        \"giftId\": \"1\",\n" +
-		                "        \"userId\": \"2\",\n" +
-		                "        \"gameId\": \"3\",\n" +
+		                "        \"userId\": \"1\",\n" +
+		                "        \"gameId\": \"1\",\n" +
 		                "        \"number\": \"4\",\n" +
-		                "        \"coin\": \"5\",\n" +
-		                "        \"diamond\": \"6\",\n" +
-		                "        \"arenacoin\": \"7\",\n" +
-		                "        \"expeditioncoin\": \"8\",\n" +
-		                "        \"tradecoin\": \"9\",\n" +
 		                "        \"beginDate\": \"1422837771000\",\n" +
 		                "        \"endDate\": \"1422837771000\",\n" +
 		                "        \"status\": \"0\",\n" +
 		                "        \"giftItems\": [\n" +
 		                "            {\n" +
-		                "                \"id\": \"11\",\n" +
+		                "                \"id\": \"1\",\n" +
 		                "                \"number\": \"1111\"\n" +
 		                "            },\n" +
 		                "            {\n" +
-		                "                \"id\": \"12\",\n" +
+		                "                \"id\": \"2\",\n" +
+		                "                \"number\": \"1212\"\n" +
+		                "            },\n" +
+		                "            {\n" +
+		                "                \"id\": \"5\",\n" +
 		                "                \"number\": \"1212\"\n" +
 		                "            }\n" +
 		                "        ]\n" +
 		                "    }\n" +
-		                "]";
+		                "]";*/
 
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
 		        List<Gift> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Gift>>() {}); 
@@ -301,15 +301,15 @@ public class GiftController extends BaseController{
 		if(fieldIds != null && fieldIds.length>0 && fieldValues != null && fieldValues.length>0){
 			for (int i = 0; i < fieldIds.length; i++) {
 				GiftItem giftItem = new GiftItem();
-				giftItem.setId(Long.valueOf(fieldIds[i].split(":")[0]));
-				giftItem.setNumber(Integer.valueOf(fieldValues[i]));
+				giftItem.setId(fieldIds[i].split(":")[0]);
+				giftItem.setNumber(fieldValues[i]);
 				giftItems.add(giftItem);
 			}
 		}
 		
-		gift.setUserId(user.id);
+		gift.setUserId(user.id.toString());
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			gift.setGameId(Long.valueOf(user.getStoreId()));
+			gift.setGameId(user.getStoreId());
 		}
 		gift.setServers(servers);
 		gift.setPlayerId(ImmutableList.copyOf(StringUtils.split(playerIds, ",")));
@@ -326,9 +326,8 @@ public class GiftController extends BaseController{
 		gift.setBeginDate(daBegin.getTime());
 		gift.setEndDate(daEnd.getTime());
 		
-		JSONObject params = new JSONObject();
-		params.put("gift", gift);
-		//HttpClientUts.doPost(save_url, params);
+		System.out.println("1111111  "  + JSONObject.fromObject(gift));
+		HttpClientUts.doPost("http://10.0.10.105:40000/api/gameserver/v1/gift/add", JSONObject.fromObject(gift));
 		
         map.put("gift", gift);
 		return map;
@@ -381,7 +380,11 @@ public class GiftController extends BaseController{
 	 */
 	@RequestMapping(value = "/review", method = RequestMethod.GET , produces = "application/json;charset=UTF-8")
 	public String review(@RequestParam(value="giftId") String giftId,@RequestParam(value="status") String status,RedirectAttributes redirectAttributes){
-		
+		if(status=="1"){
+			status = Gift.STATUS_PASS;
+		}else if(status=="2"){
+			status = Gift.STATUS_REFUSAL;
+		}
 		try {
 			HttpClientUts.doGet(review_url+"?giftId="+giftId+"&status="+status, "utf-8");
 		} catch (Exception e) {

@@ -24,9 +24,11 @@ import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.GiftProps;
 import com.enlight.game.entity.Stores;
+import com.enlight.game.entity.Tag;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.giftProps.GiftPropsService;
 import com.enlight.game.service.store.StoreService;
+import com.enlight.game.service.tag.TagService;
 import com.google.common.collect.Maps;
 
 @Controller("giftPropsController")
@@ -63,6 +65,9 @@ public class GiftPropsController extends BaseController{
 	@Autowired
 	private StoreService storeService;
 	
+	@Autowired
+	private TagService tagService;
+	
 	@RequestMapping(value = "index",method=RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
@@ -87,7 +92,12 @@ public class GiftPropsController extends BaseController{
 	 */
 	@RequestMapping(value = "/add" ,method=RequestMethod.GET)
 	public String add(Model model){
+		List<Tag> tags = tagService.findByCategory(Tag.CATEGORY_ITEM);
+		if(tags.size() == 0||tags == null){
+			model.addAttribute("message","道具表为空,请先导入道具Excel");
+		}
 		List<Stores> stores = storeService.findList();
+		model.addAttribute("tagsSize", tags.size());
 		model.addAttribute("stores", stores);
 		return "/giftProps/add";
 	}
@@ -98,13 +108,12 @@ public class GiftPropsController extends BaseController{
 	@RequestMapping(value = "/save",method=RequestMethod.POST)
 	public String save(ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		String gameId = request.getParameter("gameId");
-		String[] fieldIds = request.getParameterValues("fieldId");
 		String[] fieldValues = request.getParameterValues("fieldValue");
-		if(fieldIds != null && fieldIds.length>0 && fieldValues != null && fieldValues.length>0){
-			for (int i = 0; i < fieldIds.length; i++) {
+		if(fieldValues != null && fieldValues.length>0){
+			for (int i = 0; i < fieldValues.length; i++) {
 				GiftProps giftProp = new GiftProps();
-				giftProp.setItemId(Long.valueOf(fieldIds[i]));
-				giftProp.setItemName(fieldValues[i]);
+				giftProp.setItemId(Long.valueOf(fieldValues[i].split(":")[0]));
+				giftProp.setItemName(fieldValues[i].split(":")[1].trim());
 				giftProp.setGameId(gameId);
 				giftProp.setStatus(GiftProps.STATUS_VALIDE);
 				giftProp.setCrDate(new Date());
@@ -127,6 +136,20 @@ public class GiftPropsController extends BaseController{
 	public String del(@RequestParam(value = "id")Long id) throws Exception{
 		 giftPropsService.del(id);
 		 return "redirect:/manage/giftProps/index";
+	}
+	
+	/**
+	 * Ajax请求校验loginName是否唯一。
+	 */
+	@RequestMapping(value = "/checkTagId")
+	@ResponseBody
+	public String checkLoginName(@RequestParam("fieldValue") String fieldValue) {
+		List<Tag> tags = tagService.findByTagIdAndCategory(Long.valueOf(fieldValue.split(":")[0]),Tag.CATEGORY_ITEM);
+		if (tags.size()!=0) {
+			return "true";
+		} else {
+			return "false";
+		}
 	}
 
 }

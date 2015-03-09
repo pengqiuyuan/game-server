@@ -11,5 +11,7 @@ import com.enlight.game.entity.GiftProps;
 public interface GiftPropsDao extends PagingAndSortingRepository<GiftProps, Long> , JpaSpecificationExecutor<GiftProps>{
 	
 	List<GiftProps> findByGameId(String gameId);
+	
+	GiftProps findByItemId(Long itemId);
 
 }

@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
@@ -26,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.Tag;
+import com.enlight.game.service.giftProps.GiftPropsService;
 import com.enlight.game.service.tag.TagService;
 
 
@@ -37,6 +37,9 @@ public class TagController {
 	
 	@Autowired
 	private TagService tagService;
+	
+	@Autowired
+	private GiftPropsService giftPropsService;
 	
 	
 	@RequestMapping(value="/uploadExcel",method=RequestMethod.GET)
@@ -75,6 +78,7 @@ public class TagController {
 						if(!tag.getTagName().equals(ta.getTagName())){
 							ta.setTagName(tag.getTagName());
 							tagService.update(ta);
+							giftPropsService.update(ta); //更新项目道具
 							tagsUpdate.add(ta);
 						}
 					}
@@ -103,9 +107,9 @@ public class TagController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<Tag> findItemNameAndId(@RequestParam(value="query",required=true) String query) throws AppBizException{
 		query = '%' + query + '%' ;
-		List<Tag> ts = tagService.findByQuery(query);
+		List<Tag> ts = tagService.findByQuery(query,Tag.CATEGORY_ITEM);
 		for (Tag tag : ts) {
-			tag.setTagName(tag.getId() + ":  " + tag.getTagName());
+			tag.setTagName(tag.getTagId() + ":  " + tag.getTagName());
 		}
 		return ts;
 	}

@@ -2,25 +2,24 @@ package com.enlight.game.entity;
 
 public class GiftItem {
 	
-	private Long id;
+	private String id;
 	
-	private Integer number;
+	private String number;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public Integer getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
-	
 	
 }

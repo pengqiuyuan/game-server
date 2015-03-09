@@ -58,7 +58,7 @@ import com.google.common.collect.Maps;
 @RequestMapping(value="/manage/user")
 public class UsersController extends BaseController{
 	
-	private static final String PAGE_SIZE = "2";
+	private static final String PAGE_SIZE = "10";
 
 	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();

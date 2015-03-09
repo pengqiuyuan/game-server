@@ -9,7 +9,6 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-<script type="text/javascript" src="${ctx}/static/js/jquery-ui-1.8.21.custom.min.js"></script>
 <title>礼品卡列表</title>
 </head>
 <body>
@@ -30,26 +29,20 @@
 					<th class="check-header hidden-xs">
                       <label><input id="checkAll" name="checkAll" type="checkbox"><span></span></label>
                     </th>
-					<th title="名称">名称</th>
-					<th title="ID">ID</th>
+					<th title="礼品卡Id">礼品卡Id</th>
 					<th title="生成人">生成人</th>
-					<th title="金币">金币</th>
-					<th title="钻石">钻石</th>
-					<th title="竞技币">竞技币</th>
-					<th title="龙鳞币">龙鳞币</th>
-					<th title="工会币">工会币</th>
 					<th title="开始日期">开始日期</th>
 					<th title="结束日期">结束日期</th>
-					<th title="道具">道具</th>
 					<th title="数量">数量</th>
 					<th title="状态">状态</th>
 					<th title="操作">操作</th>
+					<th title="道具">道具</th>
 				</tr>
 			</thead>
 			<tbody id="tbody">
 				<c:forEach items="${gifts.content}" var="item" varStatus="s">
 					<tr id="${item.giftId}">
-						<td></td>
+						<td><label><input  type="checkbox"><span></span></label></td>
 						<td id="iDictionary" value="${item.giftId}">
 							<div class="btn-group">
 								<a class="btn" href="#">#${item.giftId}</a> <a
@@ -66,20 +59,39 @@
 								</ul>
 							</div>
 						</td>
-						
-						<td>${item.userId}</td>
-						<td>${item.giftId}</td>
-						<td>${item.coin}</td>
+						<td><huake:GetUserNameTag id="${item.userId}"></huake:GetUserNameTag></td>
+<%-- 						<td>${item.coin}</td>
 						<td>${item.diamond}</td>
 						<td>${item.arenacoin}</td>
 						<td>${item.expeditioncoin}</td>
-						<td>${item.tradecoin}</td>
+						<td>${item.tradecoin}</td> --%>
 						<td><huake:getDateTag id="${item.beginDate}"></huake:getDateTag></td>
 						<td><huake:getDateTag id="${item.endDate}"></huake:getDateTag></td>
 						<td>${item.number}</td>
-						<td>${item.number}</td>
-						<td>${item.status}</td>
-						<td></td>	
+						<td>
+							<c:if test="${item.status == 0}"><span>审核中</span></c:if>
+							<c:if test="${item.status == 1}"><span>已通过</span></c:if>
+							<c:if test="${item.status == 2}"><span>被拒绝</span></c:if>
+						</td>
+						<td>
+							<div class="action-buttons">
+								<c:if test="${item.status == 0}">
+									<a class="table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=1" style="text-decoration:none"><i class="icon-download-alt"></i>同意</a>
+							    	<a class="table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=2" style="text-decoration:none"><i class="icon-download-alt"></i>拒绝</a>
+								</c:if>
+								<c:if test="${item.status == 1}">
+									<a class="table-actions" href="${ctx}/manage/gift/export?giftId=${item.giftId}" style="text-decoration:none"><i class="icon-download-alt"></i>导出礼品码</a>
+								</c:if>
+								<c:if test="${item.status == 2}">
+									<a class="table-actions" href="${ctx}/manage/gift/export?giftId=${item.giftId}" style="text-decoration:none"><i class="icon-download-alt"></i>导出礼品码</a>
+								</c:if>
+							</div>
+						</td>	
+						<td>
+							<c:forEach items="${item.giftItems}" var="item" varStatus="i">
+								<span><huake:GetItemNameTag id="${item.id}"></huake:GetItemNameTag>*${item.number}</span>&nbsp;&nbsp;
+							</c:forEach>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -101,7 +113,7 @@
 			    {
 				var id = $(this).attr("rel");
 					$.ajax({
-						url: '<%=request.getContextPath()%>/manage/store/del?id=' + id, 
+						url: '<%=request.getContextPath()%>/manage/gift/del?id=' + id, 
 						type: 'DELETE',
 						contentType: "application/json;charset=UTF-8",
 						dataType: 'json',

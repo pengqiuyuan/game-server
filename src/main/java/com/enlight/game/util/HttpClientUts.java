@@ -78,6 +78,7 @@ public class HttpClientUts {
 	     * 方法。 4:处理响应状态码。 5:若响应正常，处理 HTTP 响应内容。 6:释放连接。
 	     */
 	    /* 1 生成 HttpClinet 对象并设置参数 */
+		System.out.println("111  "  + url);
 	    HttpClient httpClient = new HttpClient();
 	    // 设置 Http 连接超时为5秒
 	    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
@@ -103,7 +104,7 @@ public class HttpClientUts {
 	      // 读取 HTTP 响应内容，这里简单打印网页内容
 	      byte[] responseBody = getMethod.getResponseBody();// 读取为字节数组
 	      response = new String(responseBody, charset);
-/*	      System.out.println("----------response:" + response);*/
+	      System.out.println("----------response:" + response);
 	      // 读取为 InputStream，在网页内容数据量大时候推荐使用
 	      // InputStream response = getMethod.getResponseBodyAsStream();
 	    } catch (HttpException e) {

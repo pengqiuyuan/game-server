@@ -44,8 +44,8 @@ public class TagService {
 		return  tagDao.findByCategory(category);
 	}
 	
-	public List<Tag> findByQuery(String query){
-		return tagDao.findByQuery(query);
+	public List<Tag> findByQuery(String query,String category){
+		return tagDao.findByQuery(query,category);
 	}
 	
 	public List<Tag> placeExcelParseDB(HSSFWorkbook wb, InputStream is) {

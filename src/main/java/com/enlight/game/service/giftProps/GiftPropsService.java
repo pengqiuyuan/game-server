@@ -1,6 +1,7 @@
 package com.enlight.game.service.giftProps;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.persistence.SearchFilter.Operator;
 
 import com.enlight.game.entity.GiftProps;
+import com.enlight.game.entity.Tag;
 import com.enlight.game.entity.User;
 import com.enlight.game.repository.GiftPropsDao;
 import com.enlight.game.service.account.AccountService;
@@ -43,6 +45,13 @@ public class GiftPropsService {
 	
 	public List<GiftProps> findByGameId(String gameId){
 		return giftPropsDao.findByGameId(gameId);
+	}
+	
+	public void update(Tag tag){
+		GiftProps p = giftPropsDao.findByItemId(tag.getTagId());
+		p.setUpdDate(new Date());
+		p.setItemName(tag.getTagName());
+		giftPropsDao.save(p);
 	}
 	
 	/**
