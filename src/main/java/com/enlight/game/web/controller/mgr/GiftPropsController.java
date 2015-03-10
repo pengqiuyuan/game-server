@@ -1,5 +1,6 @@
 package com.enlight.game.web.controller.mgr;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ import org.springside.modules.web.Servlets;
 import com.enlight.game.entity.GiftProps;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.Tag;
+import com.enlight.game.entity.User;
+import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.giftProps.GiftPropsService;
 import com.enlight.game.service.store.StoreService;
@@ -68,6 +71,9 @@ public class GiftPropsController extends BaseController{
 	@Autowired
 	private TagService tagService;
 	
+	@Autowired
+	private AccountService accountService;
+	
 	@RequestMapping(value = "index",method=RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
@@ -81,8 +87,19 @@ public class GiftPropsController extends BaseController{
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
-		List<Stores> stores = storeService.findList();
-		model.addAttribute("stores", stores);
+
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			model.addAttribute("stores", stores);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
+		}
+		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		return "/giftProps/index";
 	}
@@ -150,6 +167,11 @@ public class GiftPropsController extends BaseController{
 		} else {
 			return "false";
 		}
+	}
+	
+	public ShiroUser getCurrentUser() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user;
 	}
 
 }

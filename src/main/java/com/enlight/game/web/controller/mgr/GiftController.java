@@ -2,6 +2,7 @@ package com.enlight.game.web.controller.mgr;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,6 +36,7 @@ import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.Gift;
 import com.enlight.game.entity.GiftItem;
 import com.enlight.game.entity.GiftProps;
+import com.enlight.game.entity.GiftSearch;
 import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
@@ -57,6 +59,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springside.modules.web.Servlets;
 
 @Controller("giftController")
 @RequestMapping("/manage/gift")
@@ -64,7 +67,7 @@ public class GiftController extends BaseController{
 	
 	private static final Logger logger = LoggerFactory.getLogger(GiftController.class);
 	
-	private static final String PAGE_SIZE = "2";
+	private static final String PAGE_SIZE = "20";
 	
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 
@@ -94,6 +97,9 @@ public class GiftController extends BaseController{
 	
 	@Value("#{envProps.review_url}")
 	private String review_url;
+	
+	@Value("#{envProps.search_url}")
+	private String search_url;
 
 	
 	@Autowired
@@ -111,6 +117,7 @@ public class GiftController extends BaseController{
 	@Autowired
 	private GiftPropsService giftPropsService;
 	
+	
 	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
@@ -120,151 +127,175 @@ public class GiftController extends BaseController{
 			ServletRequest request){
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		String store = (String) searchParams.get("LIKE_store");
+		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			String category = Gift.CATEGORY_ADMIN;
-			String gameId = null;
-			try {
-				//String gs = HttpClientUts.doGet(list_url+"?category="+category+"&gameId="+gameId+"&userId="+user.id, "utf-8");
-				String gs = 
-				
-				"[\n" +
-                "    {\n" +
-                "        \"giftId\": \"1\",\n" +
-                "        \"userId\": \"2\",\n" +
-                "        \"gameId\": \"3\",\n" +
-                "        \"number\": \"4\",\n" +
-                "        \"coin\": \"5\",\n" +
-                "        \"diamond\": \"6\",\n" +
-                "        \"arenacoin\": \"7\",\n" +
-                "        \"expeditioncoin\": \"8\",\n" +
-                "        \"tradecoin\": \"9\",\n" +
-                "        \"begindate\": \"2015-01-28 17:38:58\",\n" +
-                "        \"enddate\": \"2015-01-28 17:38:59\",\n" +
-                "        \"status\": \"0\",\n" +
-                "        \"giftItems\": [\n" +
-                "            {\n" +
-                "                \"id\": \"11\",\n" +
-                "                \"number\": \"1111\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"id\": \"12\",\n" +
-                "                \"number\": \"1212\"\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    }\n" +
-                "]";
-
-				
-				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<Gift> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Gift>>() {});  
-		        PageImpl<Gift> gifts = new PageImpl<Gift>(beanList, pageRequest, beanList.size());
-				
-		        model.addAttribute("gifts", gifts);
-				model.addAttribute("sortType", sortType);
-				model.addAttribute("sortTypes", sortTypes);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			model.addAttribute("stores", stores);
 		}else{
-			String category = Gift.CATEGORY_ORDINART;
-			String gameId = user.getStoreId();
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
+		}
+		
+		if (store!=null&&store!="") {
 			try {
-				String gs = HttpClientUts.doGet(list_url+"?category="+category+"&gameId=3"+"&userId="+user.id, "utf-8");
-/*				String gs = 				"[\n" +
-		                "    {\n" +
-		                "        \"giftId\": \"1\",\n" +
-		                "        \"userId\": \"1\",\n" +
-		                "        \"gameId\": \"3\",\n" +
-		                "        \"number\": \"4\",\n" +
-		                "        \"beginDate\": \"1422837771000\",\n" +
-		                "        \"endDate\": \"1422837771000\",\n" +
-		                "        \"status\": \"0\",\n" +
-		                "        \"giftItems\": [\n" +
-		                "            {\n" +
-		                "                \"id\": \"1\",\n" +
-		                "                \"number\": \"1111\"\n" +
-		                "            },\n" +
-		                "            {\n" +
-		                "                \"id\": \"2\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            },\n" +
-		                "            {\n" +
-		                "                \"id\": \"3\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            },\n" +
-		                "            {\n" +
-		                "                \"id\": \"4\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            },\n" +
-		                "            {\n" +
-		                "                \"id\": \"5\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            }\n" +
-		                "        ]\n" +
-		                "    },\n" +
-		                "    {\n" +
-		                "        \"giftId\": \"1\",\n" +
-		                "        \"userId\": \"1\",\n" +
-		                "        \"gameId\": \"2\",\n" +
-		                "        \"number\": \"4\",\n" +
-		                "        \"beginDate\": \"1422837771000\",\n" +
-		                "        \"endDate\": \"1422837771000\",\n" +
-		                "        \"status\": \"0\",\n" +
-		                "        \"giftItems\": [\n" +
-		                "            {\n" +
-		                "                \"id\": \"3\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            },\n" +
-		                "            {\n" +
-		                "                \"id\": \"4\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            },\n" +
-		                "            {\n" +
-		                "                \"id\": \"5\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            }\n" +
-		                "        ]\n" +
-		                "    },\n" +
-		                "    {\n" +
-		                "        \"giftId\": \"1\",\n" +
-		                "        \"userId\": \"1\",\n" +
-		                "        \"gameId\": \"1\",\n" +
-		                "        \"number\": \"4\",\n" +
-		                "        \"beginDate\": \"1422837771000\",\n" +
-		                "        \"endDate\": \"1422837771000\",\n" +
-		                "        \"status\": \"0\",\n" +
-		                "        \"giftItems\": [\n" +
-		                "            {\n" +
-		                "                \"id\": \"1\",\n" +
-		                "                \"number\": \"1111\"\n" +
-		                "            },\n" +
-		                "            {\n" +
-		                "                \"id\": \"2\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            },\n" +
-		                "            {\n" +
-		                "                \"id\": \"5\",\n" +
-		                "                \"number\": \"1212\"\n" +
-		                "            }\n" +
-		                "        ]\n" +
-		                "    }\n" +
-		                "]";*/
-
+				String category = u.getRoles().equals(User.USER_ROLE_ADMIN)?Gift.CATEGORY_ADMIN:Gift.CATEGORY_ORDINART;
+				String gs = HttpClientUts.doGet(list_url+"?category="+category+"&gameId="+store+"&userId="+user.id, "utf-8");
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
 		        List<Gift> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Gift>>() {}); 
 		        //分页显示部分 pageNumber第几页 pageSize每页条数
 		        List<Gift> List = beanList.subList((pageNumber-1)*pageSize, pageNumber*pageSize>beanList.size()? beanList.size():pageNumber*pageSize);
 		        PageImpl<Gift> gifts = new PageImpl<Gift>(List, pageRequest, beanList.size());
-		        
 		        model.addAttribute("gifts", gifts);
 				model.addAttribute("sortType", sortType);
 				model.addAttribute("sortTypes", sortTypes);
+				model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			} catch (Exception e) {
 				e.printStackTrace();
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+		        PageImpl<Gift> gifts = new PageImpl<Gift>(new ArrayList<Gift>(), pageRequest, 0);
+		        model.addAttribute("gifts", gifts);
+				model.addAttribute("sortType", sortType);
+				model.addAttribute("sortTypes", sortTypes);
+				model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+				model.addAttribute("message","发生网络异常!与游戏服务器断开连接");
 			}
+		}else{
+			PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+	        PageImpl<Gift> gifts = new PageImpl<Gift>(new ArrayList<Gift>(), pageRequest, 0);
+	        model.addAttribute("gifts", gifts);
+			model.addAttribute("sortType", sortType);
+			model.addAttribute("sortTypes", sortTypes);
+			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		}
-		
 		return "/gift/index";
+	}
+	
+	/**
+	 * 查询礼品卡
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param sortType
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String search(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
+			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
+			@RequestParam(value = "sortType", defaultValue = "auto")String sortType, Model model,
+			ServletRequest request){
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		String status = (String) searchParams.get("LIKE_status");
+		String query = (String) searchParams.get("LIKE_query");
+		String store = (String) searchParams.get("LIKE_store");
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			model.addAttribute("stores", stores);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
+		}
+		try {
+			if(store!=null&&store!=""
+					&&status!=null&&status!=""
+					&&query!=null&&query!=""
+					&&status.equals("0")){//GUID
+				String gs = HttpClientUts.doGet(search_url+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+				List<GiftSearch> beanList = binder.getMapper().readValue(gs, new TypeReference<List<GiftSearch>>() {}); 
+				List<GiftSearch> List = beanList.subList((pageNumber-1)*pageSize, pageNumber*pageSize>beanList.size()? beanList.size():pageNumber*pageSize);
+		        PageImpl<GiftSearch> giftSearchs = new PageImpl<GiftSearch>(List, pageRequest, beanList.size());
+		        model.addAttribute("giftSearchs", giftSearchs);
+				model.addAttribute("sortType", sortType);
+				model.addAttribute("sortTypes", sortTypes);
+				model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+			}else if(store!=null&&store!=""
+					&&status!=null&&status!=""
+					&&query!=null&&query!=""
+					&&status.equals("1")){//礼品码
+				String gs = HttpClientUts.doGet(search_url+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
+				//String gs="{\"status\":\"1\"}";
+				//gs ="[" +gs +"]";
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+				List<GiftSearch> beanList = binder.getMapper().readValue(gs, new TypeReference<List<GiftSearch>>() {}); 
+				if(beanList.size()!=0){
+					for (GiftSearch giftSearch : beanList) {
+						if(giftSearch.getStatus().equals(GiftSearch.STATUS_1)){
+							model.addAttribute("message", "此礼品码未使用");
+					        PageImpl<GiftSearch> giftSearchs = new PageImpl<GiftSearch>(new ArrayList<GiftSearch>(), pageRequest, 0);
+					        model.addAttribute("giftSearchs", giftSearchs);
+							model.addAttribute("sortType", sortType);
+							model.addAttribute("sortTypes", sortTypes);
+							model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+						}else if(giftSearch.getStatus().equals(GiftSearch.STATUS_2)){
+							model.addAttribute("message", "此礼品码已使用");
+							List<GiftSearch> List = beanList.subList((pageNumber-1)*pageSize, pageNumber*pageSize>beanList.size()? beanList.size():pageNumber*pageSize);
+					        PageImpl<GiftSearch> giftSearchs = new PageImpl<GiftSearch>(List, pageRequest, beanList.size());
+					        model.addAttribute("giftSearchs", giftSearchs);
+							model.addAttribute("sortType", sortType);
+							model.addAttribute("sortTypes", sortTypes);
+							model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+						}
+					}
+				}else if(beanList.size() == 0){
+					model.addAttribute("message", "此礼品码不存在");
+					List<GiftSearch> List = beanList.subList((pageNumber-1)*pageSize, pageNumber*pageSize>beanList.size()? beanList.size():pageNumber*pageSize);
+			        PageImpl<GiftSearch> giftSearchs = new PageImpl<GiftSearch>(List, pageRequest, beanList.size());
+			        model.addAttribute("giftSearchs", giftSearchs);
+					model.addAttribute("sortType", sortType);
+					model.addAttribute("sortTypes", sortTypes);
+					model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+				}
+
+			}else if(store!=null&&store!=""
+					&&status!=null&&status!=""
+					&&query!=null&&query!=""
+					&&status.equals("2")){//礼品卡Id
+				String gs = HttpClientUts.doGet(search_url+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
+				JSONObject jsonObject = JSONObject.fromString(gs);
+				String num = jsonObject.getString("number");
+				
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+		        PageImpl<GiftSearch> giftSearchs = new PageImpl<GiftSearch>(new ArrayList<GiftSearch>(), pageRequest, 0);
+		        model.addAttribute("giftSearchs", giftSearchs);
+				model.addAttribute("sortType", sortType);
+				model.addAttribute("sortTypes", sortTypes);
+				model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+				if(num.equals("-1")){
+					model.addAttribute("message", "此礼品卡不存在!");
+				}else{
+					model.addAttribute("message", "此礼品卡已使用礼品码数量为："+num);
+				}
+
+			}else{
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+		        PageImpl<GiftSearch> giftSearchs = new PageImpl<GiftSearch>(new ArrayList<GiftSearch>(), pageRequest, 0);
+		        model.addAttribute("giftSearchs", giftSearchs);
+				model.addAttribute("sortType", sortType);
+				model.addAttribute("sortTypes", sortTypes);
+				model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+	        PageImpl<GiftSearch> giftSearchs = new PageImpl<GiftSearch>(new ArrayList<GiftSearch>(), pageRequest, 0);
+	        model.addAttribute("giftSearchs", giftSearchs);
+			model.addAttribute("sortType", sortType);
+			model.addAttribute("sortTypes", sortTypes);
+			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+			model.addAttribute("message","发生异常!");
+		}
+		return "/gift/search";
 	}
 	
 	/**
@@ -274,21 +305,26 @@ public class GiftController extends BaseController{
 	@RequestMapping(value = "/add" ,method=RequestMethod.GET)
 	public String add(Model model){
 		List<ServerZone> serverZones = serverZoneService.findAll();
-		List<Stores> stores =  storeService.findList();
 		logger.debug("新增礼品卡..");
 		model.addAttribute("serverZones", serverZones);
-		model.addAttribute("stores", stores);
+		
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			model.addAttribute("stores", stores);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
+		}
+		
 		return "/gift/add";
 	}
 	
-	@RequestMapping(value = "/save", method = RequestMethod.POST , produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	@ResponseStatus(value = HttpStatus.OK)
-	public Map<String,Object> save(Gift gift,ServletRequest request,RedirectAttributes redirectAttributes,Model model) throws ParseException{
-		//platFormService.save(platForm);
-		//redirectAttributes.addFlashAttribute("message", "新增成功");
-		//return "redirect:/manage/platForm/index";
-		Map<String,Object> map = new HashMap<String, Object>();
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public String save(Gift gift,ServletRequest request,RedirectAttributes redirectAttributes,Model model) throws ParseException{
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
 		
@@ -326,11 +362,9 @@ public class GiftController extends BaseController{
 		gift.setBeginDate(daBegin.getTime());
 		gift.setEndDate(daEnd.getTime());
 		
-		System.out.println("1111111  "  + JSONObject.fromObject(gift));
-		HttpClientUts.doPost("http://10.0.10.105:40000/api/gameserver/v1/gift/add", JSONObject.fromObject(gift));
-		
-        map.put("gift", gift);
-		return map;
+		HttpClientUts.doPost(save_url, JSONObject.fromObject(gift));
+		System.out.println("1111111111  " + JSONObject.fromObject(gift));
+		return "redirect:/manage/gift/index?search_LIKE_store="+gift.getGameId();
 	}
 	
 	/**
@@ -339,18 +373,19 @@ public class GiftController extends BaseController{
 	 * @param redirectAttributes
 	 * @return
 	 */
-	@RequestMapping(value = "/del", method = RequestMethod.GET , produces = "application/json;charset=UTF-8")
-	public String del(ServletRequest request,RedirectAttributes redirectAttributes){
-		String[] giftIds = request.getParameterValues("id");
-		JSONObject params = new JSONObject();
-		params.put("giftIds", giftIds);
-		HttpClientUts.doPost(del_url, params);
-/*		if(){
-			redirectAttributes.addFlashAttribute("message", "新增权限成功");
-		}else{
-			redirectAttributes.addFlashAttribute("message", "删除礼品卡失败");
-		}*/
-		return "redirect:/manage/gift/index";
+	@RequestMapping(value = "del", method = RequestMethod.DELETE)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Map<String,Object> del(ServletRequest request,RedirectAttributes redirectAttributes){
+		 Map<String,Object> map = new HashMap<String, Object>();
+	    String[] giftIds = StringUtils.split(request.getParameter("id"), ",");
+	    GIds g = new GIds();
+		g.setGiftIds(giftIds);
+		System.out.println(JSONObject.fromObject(g));
+		JSONObject res = HttpClientUts.doPost(del_url, JSONObject.fromObject(g));
+		System.out.println(res);
+		map.put("status", res.get("status"));
+		return map;
 	}
 	
 	/**
@@ -358,8 +393,8 @@ public class GiftController extends BaseController{
 	 * @param giftId
 	 * @param redirectAttributes
 	 */
-	@RequestMapping(value = "/export", method = RequestMethod.GET , produces = "application/json;charset=UTF-8")
-	public void export(@RequestParam(value="giftId") String giftId,RedirectAttributes redirectAttributes){
+	@RequestMapping(value = "/exportCode", method = RequestMethod.GET , produces = "application/json;charset=UTF-8")
+	public void exportCode(@RequestParam(value="giftId") String giftId,RedirectAttributes redirectAttributes){
 		try {
 			String gfcodes = HttpClientUts.doGet(export_url+"?giftId="+giftId, "utf-8");
 			JsonFlattener parser = new JsonFlattener();
@@ -379,23 +414,23 @@ public class GiftController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "/review", method = RequestMethod.GET , produces = "application/json;charset=UTF-8")
-	public String review(@RequestParam(value="giftId") String giftId,@RequestParam(value="status") String status,RedirectAttributes redirectAttributes){
+	public String review(@RequestParam(value="giftId") String giftId,
+			@RequestParam(value="status") String status,
+			@RequestParam(value="stores") String stores,
+			RedirectAttributes redirectAttributes){
 		if(status=="1"){
 			status = Gift.STATUS_PASS;
 		}else if(status=="2"){
 			status = Gift.STATUS_REFUSAL;
+		}else if(status=="0"){
+			status = Gift.STATUS_CHECKING;
 		}
 		try {
 			HttpClientUts.doGet(review_url+"?giftId="+giftId+"&status="+status, "utf-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		/*if(){
-			redirectAttributes.addFlashAttribute("message", "服务器响应成功);
-		}else{
-			redirectAttributes.addFlashAttribute("message", "服务器响应失败");
-		}*/
-		return "redirect:/manage/gift/index";
+		return "redirect:/manage/gift/index?search_LIKE_store="+stores;
 	}
 	
 	
@@ -430,5 +465,18 @@ public class GiftController extends BaseController{
 		return new PageRequest(pageNumber - 1, pagzSize, sort);
 	}
 
+	//删除礼品码
+	public class GIds {
+		
+		private String[] giftIds;
+
+		public String[] getGiftIds() {
+			return giftIds;
+		}
+
+		public void setGiftIds(String[] giftIds) {
+			this.giftIds = giftIds;
+		}
+	}
 	
 }

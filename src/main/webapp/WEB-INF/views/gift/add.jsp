@@ -48,7 +48,6 @@ line-height: 30px;
 			<div class="container-fluid">
 				<div class="row-fluid">
 					<div class="span2">
-					<shiro:hasAnyRoles name="admin">
 					  <div class="control-group">
 						<label for="gameId">选择游戏项目：</label>
 						<div >
@@ -62,7 +61,6 @@ line-height: 30px;
 							</select>	
 						</div>
 					 </div>
-					</shiro:hasAnyRoles>
 
 		 			 <div class="control-group">
 						<label for="serverZoneId">选择运营大区：</label>
@@ -148,7 +146,7 @@ line-height: 30px;
 			</div>
 			<div class="form-actions">
 			  	<button type="submit" class="btn btn-primary" id="submit">保存</button>
-				<a href="<%=request.getContextPath()%>/manage/serverZone/index" class="btn btn-primary">返回</a>
+				<a href="${ctx}/manage/gift/index" class="btn btn-primary">返回</a>
 			</div>
 	</form>
 <script type="text/javascript">
@@ -244,12 +242,56 @@ line-height: 30px;
 		
 		$("#inputForm").validate({
 			rules:{
+				gameId:{
+					required:true
+				},
+				serverZoneId:{
+					required:true
+				},
+				playerId:{
+					required:true
+				},
+				number:{
+					required:true
+				},
+				beginD:{
+					required:true
+				},
+				endD:{
+					required:true
+				},
+				fieldId:{
+					required:true
+				},
 				fieldValue:{
+					required:true,
 					maxlength:7,
 					number:true
 				}
 			},messages:{
+				gameId:{
+					required:"游戏项目"
+				},
+				serverZoneId:{
+					required:"运营必须填写"
+				},
+				playerId:{
+					required:"玩家GUID必须填写"
+				},
+				number:{
+					required:"生成数量必须填写"
+				},
+				beginD:{
+					required:"开始时间必须填写"
+				},
+				endD:{
+					required:"结束必须填写"
+				},
+				fieldId:{
+					required:"道具Id必须填写"
+				},
 				fieldValue:{
+					required:"道具数量必须填写",
 					maxlength:"长度1-7位",
 					number:"必须是数字"
 				}

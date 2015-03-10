@@ -3,9 +3,12 @@ package com.enlight.game.tags;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
+
+import com.enlight.game.util.TimeZoneUtil;
 
 /**
  * 
@@ -40,7 +43,7 @@ public class GetDateTag extends TagSupport {
 		try {
 			SimpleDateFormat tt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date date =new Date(Long.valueOf(id));
-			pageContext.getOut().write(tt.format(date));
+			pageContext.getOut().write(tt.format(TimeZoneUtil.changeTimeZone(date,TimeZone.getTimeZone("UTC"),TimeZone.getDefault())));
 
 		} catch (IOException e) {
 			e.printStackTrace();

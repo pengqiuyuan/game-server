@@ -21,6 +21,19 @@
 		 <c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 		</c:if>
+				<form id="queryForm" class="well form-inline"  method="get" action="${ctx}/manage/gift/index">
+					<label>选择项目：</label> 
+					<select name="search_LIKE_store">		
+						<option value="">选择项目</option>
+						<c:forEach items="${stores}" var="item" >
+							<option value="${item.id}"  ${param.search_LIKE_store == item.id ? 'selected' : '' }>
+								${item.name}
+							</option>	
+						</c:forEach>
+					</select>
+					<input type="submit" class="btn" value="查 找" />
+				<tags:sort />
+				</form>
 		</div>
 		
 		<table class="table table-striped table-bordered table-condensed" id="table">
@@ -42,7 +55,7 @@
 			<tbody id="tbody">
 				<c:forEach items="${gifts.content}" var="item" varStatus="s">
 					<tr id="${item.giftId}">
-						<td><label><input  type="checkbox"><span></span></label></td>
+						<td><label><input  type="checkbox" class="checkbox" value="${item.giftId}"><span></span></label></td>
 						<td id="iDictionary" value="${item.giftId}">
 							<div class="btn-group">
 								<a class="btn" href="#">#${item.giftId}</a> <a
@@ -76,14 +89,14 @@
 						<td>
 							<div class="action-buttons">
 								<c:if test="${item.status == 0}">
-									<a class="table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=1" style="text-decoration:none"><i class="icon-download-alt"></i>同意</a>
-							    	<a class="table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=2" style="text-decoration:none"><i class="icon-download-alt"></i>拒绝</a>
+									<a class="table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=1&stores=${param.search_LIKE_store}" style="text-decoration:none"><i class="icon-ok"></i>同意</a>
+							    	<a class="table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=2&stores=${param.search_LIKE_store}" style="text-decoration:none"><i class=" icon-remove"></i>拒绝</a>
 								</c:if>
 								<c:if test="${item.status == 1}">
-									<a class="table-actions" href="${ctx}/manage/gift/export?giftId=${item.giftId}" style="text-decoration:none"><i class="icon-download-alt"></i>导出礼品码</a>
+									<a class="table-actions"  href="${ctx}/manage/gift/export?giftId=${item.giftId}" style="text-decoration:none"><i class="icon-download-alt"></i>导出礼品码</a>
 								</c:if>
 								<c:if test="${item.status == 2}">
-									<a class="table-actions" href="${ctx}/manage/gift/export?giftId=${item.giftId}" style="text-decoration:none"><i class="icon-download-alt"></i>导出礼品码</a>
+									<a class="table-actions"  href="${ctx}/manage/gift/export?giftId=${item.giftId}" style="text-decoration:none"><i class="icon-download-alt"></i>导出礼品码</a>
 								</c:if>
 							</div>
 						</td>	
@@ -97,11 +110,48 @@
 			</tbody>
 		</table>
 		<tags:pagination page="${gifts}" paginationSize="5"/>
+		<div class="form-actions">
+			<a onclick="selectAll();" class="btn btn-danger">删除选中礼品码</a>
+			<shiro:hasAnyRoles name='admin,29'>
+			<a href="${ctx}/manage/gift/add" class="btn btn-primary">新增礼品卡</a>
+			</shiro:hasAnyRoles>
+		</div>
 		
 	</div>
 		<script type="text/javascript">
+		$("#checkAll").click(function(){
+	         var bischecked=$('#checkAll').is(':checked');
+	         var f=$('input[class="checkbox"]');
+	         bischecked?f.attr('checked',true):f.attr('checked',false);
+		});
+		
+		function selectAll(){  
+	         var csv = '';           
+	         $('input[class="checkbox"]:checked').each(function() {
+	             csv += $(this).attr("value") + ",";
+	         });         
+			if(confirm("该操作会删除。。。。！"))
+			{
+						$.ajax({
+							url: '<%=request.getContextPath()%>/manage/gift/del?id=' + csv, 
+							type: 'DELETE',
+							contentType: "application/json;charset=UTF-8",
+							dataType: 'json',
+							success: function(data){
+								if(data.status=="success"){
+									window.location.href = window.location.href;
+									alert("删除成功！");
+								}else if(data.status=="false"){
+									window.location.href = window.location.href;
+									alert("删除失败！");
+								}
+							}
+						});
+			}         
+		}	
+		
+		
 		$(document).ready(function(){
-	
 			$('.showInfo').fancybox({
 				autoDimensions:false,
 				width:800,
@@ -118,9 +168,13 @@
 						contentType: "application/json;charset=UTF-8",
 						dataType: 'json',
 						success: function(data){
-							window.location.href = window.location.href;
-						},error:function(xhr){
-							alert('错误了，请重试');
+							if(data.status=="success"){
+								window.location.href = window.location.href;
+								alert("删除成功！");
+							}else if(data.status=="false"){
+								window.location.href = window.location.href;
+								alert("删除失败！");
+							}
 						}
 					});
 			     }

@@ -71,7 +71,9 @@ public class GiftPropsService {
 				sortType);
 		Specification<GiftProps> spec = buildSpecification(userId, searchParams);
 		User user = accountService.getUser(userId);
-		return user.getRoles().equals(User.USER_ROLE_ADMIN)?giftPropsDao.findAll(spec, pageRequest):new PageImpl<GiftProps>(new ArrayList<GiftProps>());
+		return user.getRoles().equals(User.USER_ROLE_ADMIN)
+				?giftPropsDao.findAll(spec, pageRequest)
+						:( searchParams.isEmpty()?new PageImpl<GiftProps>(new ArrayList<GiftProps>()):giftPropsDao.findAll(spec, pageRequest) );
 	}
 	
 	/**
