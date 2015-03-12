@@ -37,6 +37,11 @@
 	<script type="text/javascript" src="${ctx}/static/fancyBox-2.1.5/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
 	<script type="text/javascript" src="${ctx}/static/fancyBox-2.1.5/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
 
+
+
+
+
+
 <style type="text/css">
 	.head_content{margin-left:9%;}
 	.member_bar{margin-right:-25%;}
@@ -44,6 +49,8 @@
 
 </style>
 </head>
+
+
 <body>
 	
 	<%@ include file="/WEB-INF/layouts/nav.jsp"%>
@@ -53,7 +60,7 @@
 				<div class="error-container">
 					<div class="well">
 						<h2 class="grey lighter smaller">
-							<span class="blue bigger-125">404 - 页面不存在</span> 
+							<span class="blue bigger-125">500</span> 没有此功能权限
 						</h2>
 						<hr />
 						<div class="space"></div>
@@ -72,4 +79,3 @@
 	
 </body>
 </html>
-
