@@ -54,8 +54,8 @@
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
 		<property name="exceptionMappings">  
 			<props>
-				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
-				<prop key="java.lang.Throwable">error/500</prop>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/noRole</prop>
+				<prop key="java.lang.Throwable">error/noRole</prop>
             </props>  
 		</property>  
     </bean> 

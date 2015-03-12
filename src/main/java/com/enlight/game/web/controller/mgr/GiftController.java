@@ -1,5 +1,6 @@
 package com.enlight.game.web.controller.mgr;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +103,9 @@ public class GiftController extends BaseController{
 	
 	@Value("#{envProps.search_url}")
 	private String search_url;
+	
+	@Value("#{envProps.searchgift_url}")
+	private String searchgift_url;
 
 	
 	@Autowired
@@ -120,6 +126,7 @@ public class GiftController extends BaseController{
 	
 	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
 	
+	@RequiresRoles(value = { "admin", "18" }, logical = Logical.OR)
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
@@ -183,6 +190,7 @@ public class GiftController extends BaseController{
 	 * @param request
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "20" }, logical = Logical.OR)
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String search(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
@@ -302,6 +310,7 @@ public class GiftController extends BaseController{
 	 * 新增礼品卡
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "17" }, logical = Logical.OR)
 	@RequestMapping(value = "/add" ,method=RequestMethod.GET)
 	public String add(Model model){
 		List<ServerZone> serverZones = serverZoneService.findAll();
@@ -363,7 +372,6 @@ public class GiftController extends BaseController{
 		gift.setEndDate(daEnd.getTime());
 		
 		HttpClientUts.doPost(save_url, JSONObject.fromObject(gift));
-		System.out.println("1111111111  " + JSONObject.fromObject(gift));
 		return "redirect:/manage/gift/index?search_LIKE_store="+gift.getGameId();
 	}
 	
@@ -373,6 +381,7 @@ public class GiftController extends BaseController{
 	 * @param redirectAttributes
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "30" }, logical = Logical.OR)
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
@@ -393,17 +402,45 @@ public class GiftController extends BaseController{
 	 * @param giftId
 	 * @param redirectAttributes
 	 */
-	@RequestMapping(value = "/exportCode", method = RequestMethod.GET , produces = "application/json;charset=UTF-8")
-	public void exportCode(@RequestParam(value="giftId") String giftId,RedirectAttributes redirectAttributes){
+	@RequestMapping(value = "/exportCode", method = RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Map<String,String> exportCode(@RequestParam(value="giftId") String giftId,RedirectAttributes redirectAttributes){
 		try {
 			String gfcodes = HttpClientUts.doGet(export_url+"?giftId="+giftId, "utf-8");
+			String gf = HttpClientUts.doGet(searchgift_url+"?giftId="+giftId, "utf-8");
+			System.out.println("3333  " +gf);
+			Gift gift = binder.fromJson(gf, Gift.class);
 			JsonFlattener parser = new JsonFlattener();
 	        CSVWriter writer = new CSVWriter();
 	        List<Map<String, String>> flatJson = parser.parseJson(gfcodes);
-	        writer.writeAsCSV(flatJson, "D://sample.csv");
+	        
+	        List<Map<String, String>> Json = new ArrayList<Map<String,String>>();
+	        Map<String, String> map = new HashMap<String, String>();
+	        map.put("礼品卡Id", "礼品卡Id="+gift.getGiftId());
+	        map.put("生成礼品卡GM", accountService.getUser(Long.valueOf(gift.getUserId())).getName());
+			SimpleDateFormat tt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date begindate =new Date(Long.valueOf(gift.getBeginDate()));
+			Date enddate =new Date(Long.valueOf(gift.getEndDate()));
+	        map.put("开始日期", tt.format(TimeZoneUtil.changeTimeZone(begindate,TimeZone.getTimeZone("UTC"),TimeZone.getDefault())));
+	        map.put("结束日期", tt.format(TimeZoneUtil.changeTimeZone(enddate,TimeZone.getTimeZone("UTC"),TimeZone.getDefault())));
+	        map.put("数量", gift.getNumber());
+	        if(gift.getStatus().equals(Gift.STATUS_CHECKING)){
+	        	map.put("状态","审核中");
+	        }else if(gift.getStatus().equals(Gift.STATUS_PASS)){
+	        	map.put("状态", "审核通过");
+	        }else if(gift.getStatus().equals(Gift.STATUS_REFUSAL)){
+	        	map.put("状态", "审核不通过");
+	        }
+	        Json.add(map);
+	        Json.addAll(flatJson);
+	        javax.swing.filechooser.FileSystemView fsv = javax.swing.filechooser.FileSystemView.getFileSystemView(); 
+	        fsv.getHomeDirectory(); 
+	        writer.writeAsCSV(Json, fsv.getHomeDirectory()+"\\"+giftId+".csv");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return SUCCESS_RESULT;
 	}
 	
 	/**
@@ -413,6 +450,7 @@ public class GiftController extends BaseController{
 	 * @param redirectAttributes
 	 * @return
 	 */
+	@RequiresRoles(value = { "admin", "19" }, logical = Logical.OR)
 	@RequestMapping(value = "/review", method = RequestMethod.GET , produces = "application/json;charset=UTF-8")
 	public String review(@RequestParam(value="giftId") String giftId,
 			@RequestParam(value="status") String status,

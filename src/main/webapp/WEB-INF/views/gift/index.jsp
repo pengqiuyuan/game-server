@@ -12,8 +12,7 @@
 <title>礼品卡列表</title>
 </head>
 <body>
-   
-	<div >
+	<div>
 		<div class="page-header">
 			<h2>礼品卡列表</h2>
 		</div>
@@ -63,7 +62,7 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
-									<shiro:hasAnyRoles name="admin">
+									<shiro:hasAnyRoles name="admin,30">
 										<c:if test="${item.giftId == 0 ? false : true}">
 											<li><a href="javascript:void(0);" rel="${item.giftId}" class="del"><i class="icon-th"></i>删除 </a></li>
 										</c:if>
@@ -86,17 +85,20 @@
 							<c:if test="${item.status == 1}"><span>已通过</span></c:if>
 							<c:if test="${item.status == 2}"><span>被拒绝</span></c:if>
 						</td>
+
 						<td>
 							<div class="action-buttons">
+								<shiro:hasAnyRoles name="admin,19">
 								<c:if test="${item.status == 0}">
-									<a class="table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=1&stores=${param.search_LIKE_store}" style="text-decoration:none"><i class="icon-ok"></i>同意</a>
-							    	<a class="table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=2&stores=${param.search_LIKE_store}" style="text-decoration:none"><i class=" icon-remove"></i>拒绝</a>
+									<a class="btn table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=1&stores=${param.search_LIKE_store}" ><i class="icon-ok"></i>同意</a>
+							    	<a class="btn table-actions" href="${ctx}/manage/gift/review?giftId=${item.giftId}&status=2&stores=${param.search_LIKE_store}" ><i class=" icon-remove"></i>拒绝</a>
 								</c:if>
+								</shiro:hasAnyRoles>
 								<c:if test="${item.status == 1}">
-									<a class="table-actions"  href="${ctx}/manage/gift/export?giftId=${item.giftId}" style="text-decoration:none"><i class="icon-download-alt"></i>导出礼品码</a>
+									<a class="exportCode btn table-actions" id="exportCode${item.giftId}" rel="${item.giftId}" ><i class="icon-download-alt"></i>导出礼品码</a>
 								</c:if>
 								<c:if test="${item.status == 2}">
-									<a class="table-actions"  href="${ctx}/manage/gift/export?giftId=${item.giftId}" style="text-decoration:none"><i class="icon-download-alt"></i>导出礼品码</a>
+									<a class="exportCode btn table-actions" id="exportCode${item.giftId}" rel="${item.giftId}" ><i class="icon-download-alt"></i>导出礼品码</a>
 								</c:if>
 							</div>
 						</td>	
@@ -111,8 +113,10 @@
 		</table>
 		<tags:pagination page="${gifts}" paginationSize="5"/>
 		<div class="form-actions">
-			<a onclick="selectAll();" class="btn btn-danger">删除选中礼品码</a>
-			<shiro:hasAnyRoles name='admin,29'>
+			<shiro:hasAnyRoles name="admin,30">
+				<a onclick="selectAll();" class="btn btn-danger">删除选中礼品码</a>
+			</shiro:hasAnyRoles>
+			<shiro:hasAnyRoles name='admin,17'>
 			<a href="${ctx}/manage/gift/add" class="btn btn-primary">新增礼品卡</a>
 			</shiro:hasAnyRoles>
 		</div>
@@ -123,6 +127,42 @@
 	         var bischecked=$('#checkAll').is(':checked');
 	         var f=$('input[class="checkbox"]');
 	         bischecked?f.attr('checked',true):f.attr('checked',false);
+		});
+		var i=0;
+		$(".exportCode").click(function(){
+			i++;
+			giftId = $(this).attr("rel");
+			if(i==1){
+				if(confirm("是否导出礼品码到桌面?"))
+				{
+					$.ajax({
+						url: '<%=request.getContextPath()%>/manage/gift/exportCode?giftId=' + giftId, 
+						type: 'GET',
+						contentType: "application/json;charset=UTF-8",
+						dataType: 'json',
+					    beforeSend: function () {
+					        // 禁用按钮防止重复提交
+					        $("#exportCode"+giftId).html("<i class='icon-download-alt'></i>导出中,请耐心稍等...");
+					        $(".exportCode").attr({ disabled: "disabled"});
+					    },
+						success: function(data){
+							$("#message").remove();
+							$("#queryForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>礼品码导出成功！</div>");
+						},
+					    complete: function () {
+					        $(".exportCode").removeAttr("disabled");
+					        $(".exportCode").html("<i class='icon-download-alt'></i>导出礼品码");
+					        i=0;
+					    },
+					    error: function (data) {
+					        console.info("error: " + data.responseText);
+							$("#message").remove();
+							$("#queryForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>礼品码导出失败！"+data.responseText+"</div>");
+					    }
+					});
+				}
+			}
+
 		});
 		
 		function selectAll(){  

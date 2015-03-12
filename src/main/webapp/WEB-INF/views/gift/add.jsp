@@ -144,10 +144,13 @@ line-height: 30px;
 				</div>
 				
 			</div>
-			<div class="form-actions">
-			  	<button type="submit" class="btn btn-primary" id="submit">保存</button>
-				<a href="${ctx}/manage/gift/index" class="btn btn-primary">返回</a>
-			</div>
+			<shiro:hasAnyRoles name="admin,17">
+				<div class="form-actions">
+				  	<button type="submit" class="btn btn-primary" id="submit">保存</button>
+					<a href="${ctx}/manage/gift/index" class="btn btn-primary">返回</a>
+				</div>
+			</shiro:hasAnyRoles>
+
 	</form>
 <script type="text/javascript">
 	$("#addfield").click(function(){

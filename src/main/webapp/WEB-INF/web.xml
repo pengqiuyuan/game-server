@@ -102,6 +102,10 @@
 	</session-config>
 
 	<error-page>
+		<exception-type>org.apache.shiro.authz.UnauthorizedException</exception-type>
+		<location>/WEB-INF/views/error/noRole.jsp</location>
+	</error-page>
+	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
 		<location>/WEB-INF/views/error/500.jsp</location>
 	</error-page>
