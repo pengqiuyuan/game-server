@@ -32,6 +32,7 @@ import org.springside.modules.web.Servlets;
 import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.Log;
+import com.enlight.game.entity.RoleAndEnum;
 import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
@@ -41,6 +42,7 @@ import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
 import com.enlight.game.service.log.LogService;
+import com.enlight.game.service.roleAndEnum.RoleAndEnumService;
 import com.enlight.game.service.roleFunction.RoleFunctionService;
 import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
@@ -108,6 +110,9 @@ public class UsersController extends BaseController{
 	
 	@Autowired
 	private EnumFunctionService enumFunctionService;
+	
+	@Autowired
+	private RoleAndEnumService roleAndEnumService;
 	
 	/**
 	 *  用户管理首页
@@ -401,11 +406,21 @@ public class UsersController extends BaseController{
 			@RequestParam(value="gameId") Long gameId,
 			@RequestParam(value="role") String role) throws AppBizException{
 		List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(gameId, role);
-		for (RoleFunction roleFunction : roleFunctions) {
+/*		for (RoleFunction roleFunction : roleFunctions) {
 		  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleFunction.getFunction());
 		  	if(enumFunction!=null){
 		  		roleFunction.setFunctionName(enumFunction.getEnumName());
 		  	}
+		}*/
+		for (RoleFunction roleFunction : roleFunctions) {
+			List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
+			for (RoleAndEnum roleAndEnum : roleAndEnums) {
+				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
+			  	if(enumFunction!=null){
+			  		roleAndEnum.setEnumName(enumFunction.getEnumName());
+			  	}
+			}
+			roleFunction.setRoleAndEnums(roleAndEnums);
 		}
 		return roleFunctions;
 	}
@@ -429,12 +444,15 @@ public class UsersController extends BaseController{
 			String functions = new String();
 			List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(gameId, role);
 			for (RoleFunction roleFunction : roleFunctions) {
-				functions = functions+","+roleFunction.getFunction();
-				
-			  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleFunction.getFunction());
-			  	if(enumFunction!=null){
-			  		roleFunction.setFunctionName(enumFunction.getEnumName());
-			  	}
+				List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
+				for (RoleAndEnum roleAndEnum : roleAndEnums) {
+					functions = functions+","+roleAndEnum.getEnumRole();
+					EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
+				  	if(enumFunction!=null){
+				  		roleAndEnum.setEnumName(enumFunction.getEnumName());
+				  	}
+				}
+				roleFunction.setRoleAndEnums(roleAndEnums);
 			}
 			userRoles.get(0).setFunctions(functions);
 			userRoles.get(0).setRole(role);
@@ -445,7 +463,10 @@ public class UsersController extends BaseController{
 			String functions = new String();
 			List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(gameId, role);
 			for (RoleFunction roleFunction : roleFunctions) {
-				functions = functions+","+roleFunction.getFunction();
+				List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
+				for (RoleAndEnum roleAndEnum : roleAndEnums) {
+					functions = functions+","+roleAndEnum.getEnumRole();
+				}
 			}
 			UserRole userRole = new UserRole();
 			userRole.setCrDate(new Date());
@@ -472,10 +493,14 @@ public class UsersController extends BaseController{
 			
 			List<RoleFunction> roleFuncts = roleFunctionService.findByGameIdAndRole(gameId, role);
 			for (RoleFunction roleFunction : roleFuncts) {
-			  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleFunction.getFunction());
-			  	if(enumFunction!=null){
-			  		roleFunction.setFunctionName(enumFunction.getEnumName());
-			  	}
+				List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
+				for (RoleAndEnum roleAndEnum : roleAndEnums) {
+					EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
+				  	if(enumFunction!=null){
+				  		roleAndEnum.setEnumName(enumFunction.getEnumName());
+				  	}
+				}
+				roleFunction.setRoleAndEnums(roleAndEnums);
 			}
 			map.put("roleFunctions", roleFuncts);
 		}

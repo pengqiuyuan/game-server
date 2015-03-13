@@ -9,7 +9,6 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-	<script type="text/javascript" src="${ctx}/static/js/jquery-ui-1.8.21.custom.min.js"></script>
 
 
 
@@ -28,7 +27,8 @@
 				<form id="queryForm" class="well form-inline"  method="get"
 					action="${ctx}/manage/roleFunction/index">
 					<label>名称：</label> 
-						 <select name="search_LIKE_gameName">		
+						 <select name="search_LIKE_gameName">	
+						    <option value="">选择项目</option>	
 							<c:forEach items="${stores}" var="item" >
 								<option value="${item.name}"  ${param.search_LIKE_gameName == item.name ? 'selected' : '' }>
 									${item.name }
@@ -46,7 +46,6 @@
 					<th title="项目名称">项目名称</th>
 					<th title="代表权限">代表权限</th>
 					<th title="分类">分类</th>
-					<th title="功能名称">功能名称</th>
 					<th title="创建时间" width="240px">创建时间</th>
 					<th title="修改时间" width="240px">修改时间</th>
 				</tr>
@@ -65,7 +64,7 @@
 											class="icon-edit"></i>修改</a></li>
 								<shiro:hasAnyRoles name="admin">
 									<li><a href="javascript:void(0);" rel="${item.id}"
-										class="del"><i class="icon-th"></i>删除单个功能 </a></li>
+										class="del"><i class="icon-th"></i>删除当前权限 </a></li>
 								</shiro:hasAnyRoles>
 									
 								</ul>
@@ -77,9 +76,10 @@
 							data-fancybox-type="iframe" rel="fancy" title="权限详细" class="showInfo" >${item.role }</a>
 						</td>
 					    <td><huake:getEnumCategoryTag id="${item.id}"></huake:getEnumCategoryTag></td>
-					    <td>${item.function},${item.functionName}</td>
-						<td><fmt:formatDate value="${item.crDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
+					    <td><fmt:formatDate value="${item.crDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
 						<td><fmt:formatDate value="${item.updDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></td>
+
+
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -95,6 +95,7 @@
 		<script type="text/javascript">
 		$(document).ready(function(){
 			$('.showInfo').fancybox({
+				mouseWheel:false,
 				autoDimensions:false,
 				width:800,
 				height:500

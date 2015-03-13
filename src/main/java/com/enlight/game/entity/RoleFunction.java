@@ -1,5 +1,7 @@
 package com.enlight.game.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -37,16 +39,15 @@ public class RoleFunction extends BaseEntry{
 	 */
 	private String role; 
 	
-	/**
-	 * 功能选项 （1）
-	 */
-	private Integer function;
 	
 	/**
 	 * 功能名称
 	 */
 	@Transient
 	private String functionName;
+	
+	@Transient
+	private List<RoleAndEnum> roleAndEnums;
 
 	public Long getGameId() {
 		return gameId;
@@ -64,13 +65,6 @@ public class RoleFunction extends BaseEntry{
 		this.role = role;
 	}
 
-	public Integer getFunction() {
-		return function;
-	}
-
-	public void setFunction(Integer function) {
-		this.function = function;
-	}
 
 	public String getGameName() {
 		return gameName;
@@ -88,4 +82,14 @@ public class RoleFunction extends BaseEntry{
 	public void setFunctionName(String functionName) {
 		this.functionName = functionName;
 	}
+
+	@Transient
+	public List<RoleAndEnum> getRoleAndEnums() {
+		return roleAndEnums;
+	}
+
+	public void setRoleAndEnums(List<RoleAndEnum> roleAndEnums) {
+		this.roleAndEnums = roleAndEnums;
+	}
+	
 }

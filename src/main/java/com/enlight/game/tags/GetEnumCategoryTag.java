@@ -14,9 +14,11 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.enlight.game.entity.EnumCategory;
 import com.enlight.game.entity.EnumFunction;
+import com.enlight.game.entity.RoleAndEnum;
 import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.roleAndEnum.RoleAndEnumService;
 import com.enlight.game.service.roleFunction.RoleFunctionService;
 
 public class GetEnumCategoryTag extends TagSupport {
@@ -50,16 +52,15 @@ public class GetEnumCategoryTag extends TagSupport {
 	public int doEndTag() throws JspTagException {
 		try {
 			WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(pageContext.getServletContext());//获取SPRING的上下文
-			RoleFunctionService roleFunctionService = (RoleFunctionService) ctx.getBean("roleFunctionService");
             EnumFunctionService enumFunctionService = (EnumFunctionService) ctx.getBean("enumFunctionService");
             EnumCategoryService enumCategoryService = (EnumCategoryService) ctx.getBean("enumCategoryService");
+            RoleAndEnumService   roleAndEnumService = (RoleAndEnumService) ctx.getBean("roleAndEnumService");
             
-			RoleFunction roleFunction = roleFunctionService.findById(Long.parseLong(id));
-			List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
-			
 			Set<EnumCategory> enumCategories = new HashSet<EnumCategory>();
-			for (RoleFunction r : roleFunctions) {
-				EnumFunction enumFunction  = enumFunctionService.findByEnumRole(r.getFunction());
+			
+			List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(Long.parseLong(id));
+			for (RoleAndEnum roleAndEnum : roleAndEnums) {
+				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
 				EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
 				enumCategories.add(enumCategory);
 			}

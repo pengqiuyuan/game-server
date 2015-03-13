@@ -145,7 +145,9 @@ margin-left:10px;
 				success: function(data){
 	 				var parsedJson = $.parseJSON(data);
 					 jQuery.each(parsedJson, function(index, itemData) {
-					 th.append("<input type='checkbox' onclick='return false' name='functions' value='"+itemData.function+"' checked='checked' class='box' /><span>"+itemData.function+"、"+itemData.functionName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
+						 jQuery.each(itemData.roleAndEnums, function(i, its) {
+					     	th.append("<input type='checkbox' onclick='return false' name='functions' value='"+its.enumRole+"' checked='checked' class='box' /><span>"+its.enumRole+"、"+its.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
+						 }); 
 					 }); 
 				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 			});

@@ -14,12 +14,9 @@ import com.enlight.game.entity.RoleFunction;
 public interface RoleFunctionDao extends PagingAndSortingRepository<RoleFunction, Long>,JpaSpecificationExecutor<RoleFunction>{
 	
 	@Modifying
-	@Query("from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.role=?2 and roleFunction.status='1' order by roleFunction.function asc")
+	@Query("from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.role=?2 and roleFunction.status='1'")
 	List<RoleFunction> findByGameIdAndRole(Long gameId,String role);
 	
-	@Modifying
-	@Query("select roleFunction.function from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.role=?2 and roleFunction.status='1' order by roleFunction.function asc")
-	List<Integer> findByGameIdAndRoleOnlyFunc(Long gameId,String role);
 	
 	/**
 	 * 去重
@@ -27,7 +24,7 @@ public interface RoleFunctionDao extends PagingAndSortingRepository<RoleFunction
 	 * @return
 	 */
 	@Modifying
-	@Query("select distinct roleFunction.role from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.status='1' order by roleFunction.function asc")
+	@Query("select distinct roleFunction.role from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.status='1'")
 	List<RoleFunction> findByGameId(Long gameId);
 	
 	/**
@@ -36,7 +33,7 @@ public interface RoleFunctionDao extends PagingAndSortingRepository<RoleFunction
 	 * @return
 	 */
 	@Modifying
-	@Query("select distinct roleFunction.role from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.status='1' order by roleFunction.role asc")
+	@Query("select distinct roleFunction.role from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.status='1'")
 	List<String> findByGameIdStr(Long gameId);
 	
 	@Modifying

@@ -28,6 +28,7 @@ import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.EnumCategory;
 import com.enlight.game.entity.EnumFunction;
+import com.enlight.game.entity.RoleAndEnum;
 import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
@@ -35,6 +36,7 @@ import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.roleAndEnum.RoleAndEnumService;
 import com.enlight.game.service.roleFunction.RoleFunctionService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.user.UserService;
@@ -88,6 +90,9 @@ public class RoleFunctionController extends BaseController{
 	@Autowired
 	private EnumCategoryService enumCategoryService;
 	
+	@Autowired
+	private RoleAndEnumService roleAndEnumService;
+	
 	/**
 	 * 游戏功能权限分配管理首页
 	 */
@@ -101,11 +106,17 @@ public class RoleFunctionController extends BaseController{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Page<RoleFunction> roleFunctions = roleFunctionService.findRoleFunctionByCondition(userId,searchParams, pageNumber, pageSize, sortType);
 		for (RoleFunction roleFunction : roleFunctions) {
-		  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleFunction.getFunction());
-		  	if(enumFunction!=null){
-		  		roleFunction.setFunctionName(enumFunction.getEnumName());
-		  	}
+			List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
+			for (RoleAndEnum roleAndEnum : roleAndEnums) {
+				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
+			  	if(enumFunction!=null){
+			  		roleAndEnum.setEnumName(enumFunction.getEnumName());
+			  	}
+			}
+			roleFunction.setRoleAndEnums(roleAndEnums);
 		}
+
+		
 		model.addAttribute("roleFunctions", roleFunctions);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
@@ -134,21 +145,24 @@ public class RoleFunctionController extends BaseController{
 	 */
 	@RequestMapping(value = "/save",method=RequestMethod.POST)
 	public String saveGameRole(RoleFunction roleFunction,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		logger.debug("save function 功能号..." + roleFunction.getFunction());
 		logger.debug("save role 权限号..." + roleFunction.getRole());
 		logger.debug("save gameid 项目号..." + roleFunction.getGameId());
 		
+    	roleFunction.setStatus(RoleFunction.STATUS_VALIDE);
+		
 		String[] functions = request.getParameterValues("functions");
 		boolean flag = roleFunctionService.isOnly(roleFunction.getGameId(), roleFunction.getRole());
+		
+		RoleFunction r =  roleFunctionService.save(roleFunction);
 		if(flag){
 			for (int i = 0; i < functions.length; i++) {
-				logger.debug("权限号：function..." + roleFunction.getFunction());
-				roleFunction.setFunction(Integer.valueOf(functions[i]));
-	        	roleFunction.setStatus(RoleFunction.STATUS_VALIDE);
-				roleFunctionService.save(roleFunction);
+				RoleAndEnum roleAndEnum = new RoleAndEnum();
+				roleAndEnum.setRoleRunctionId(r.getId());
+				roleAndEnum.setEnumRole(Integer.valueOf(functions[i]));
+				roleAndEnumService.save(roleAndEnum);
 			}
 			redirectAttributes.addFlashAttribute("message", "新增权限成功");
-			return "redirect:/manage/roleFunction/index?search_EQ_gameId="+roleFunction.getGameId();
+			return "redirect:/manage/roleFunction/index?search_LIKE_gameName="+storeService.findById(roleFunction.getGameId()).getName();
 		}else{
 			List<Stores> stores = storeService.findList();
 			List<EnumFunction> enumFunctions = enumFunctionService.findAll();
@@ -170,32 +184,26 @@ public class RoleFunctionController extends BaseController{
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String,Object> del(@RequestParam(value="id")long id,Model model){
 		RoleFunction function = roleFunctionService.findById(id);
+		
 		roleFunctionService.delById(id);
-		List<Integer> functions = roleFunctionService.findByGameIdAndRoleFunctions(function.getGameId(), function.getRole());
-		if(functions!=null && functions.size()!=0){
-			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(function.getGameId(), function.getRole());
-			for (UserRole userRole : userRoles) {
-				userRole.setFunctions(StringUtils.join(functions,","));
-				userRoleService.save(userRole);
-			}
-		}else{
-			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(function.getGameId(), function.getRole());
-			for (UserRole userRole : userRoles) {
-				User user =userService.findById(userRole.getUserId());
-				List<String> stIds = user.getStoreIds();
-				List<String> storeIds = new ArrayList<String>(stIds);
-				for (String s : stIds) {
-					if(Long.parseLong(s) == function.getGameId()){
-						storeIds.remove(s);
-					}
+		roleAndEnumService.deleteByRoleRunctionId(id);
+		
+		List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(function.getGameId(), function.getRole());
+		for (UserRole userRole : userRoles) {
+			userRoleService.delById(userRole.getId());
+			
+			User user =userService.findById(userRole.getUserId());
+			List<String> storeIds =  user.getStoreIds();
+			List<String> rest = new ArrayList<String>(storeIds);
+			for (String storeId : storeIds) {
+				if(Long.parseLong(storeId) == userRole.getStoreId()){
+					rest.remove(storeId);
 				}
-				user.setStoreId(StringUtils.join(storeIds,","));
-				userService.update(user);
 			}
-			userRoleService.delByStoreIdAndRole(function.getGameId(), function.getRole());
+			user.setStoreId(StringUtils.join(rest,","));
+			userService.update(user);
 		}
-
-
+		
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("success", "true");
 		return map;
@@ -210,19 +218,12 @@ public class RoleFunctionController extends BaseController{
 	@RequestMapping(value="edit",method=RequestMethod.GET)
 	public String edit(@RequestParam(value="id")long id,Model model){
 		RoleFunction roleFunction = roleFunctionService.findById(id);
-		
-		List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
-		List<EnumFunction> enumFunctions = enumFunctionService.findAll();
-		
-		List<EnumFunction> enumFusNohas = enumFunctionService.findAll();
+
+		List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
 		List<EnumFunction> enumFusHas = new ArrayList<EnumFunction>();
-		for (int i = enumFunctions.size() - 1; i >= 0; i--) {
-			for (int j = roleFunctions.size() - 1; j >= 0; j--) {
-					if(enumFunctions.get(i).getEnumRole().equals(roleFunctions.get(j).getFunction())){
-						enumFusHas.add(enumFunctions.get(i));
-						enumFusNohas.remove(enumFunctions.get(i));
-					}
-			}
+		for (RoleAndEnum roleAndEnum : roleAndEnums) {
+			EnumFunction enumFunction = enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
+			enumFusHas.add(enumFunction);
 		}
 		
 		List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
@@ -240,29 +241,33 @@ public class RoleFunctionController extends BaseController{
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
 	public String updateFunction(RoleFunction roleFunction,ServletRequest request,RedirectAttributes redirectAttributes){
 		List<String> functions = Arrays.asList(request.getParameterValues("functions"));
-		List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
+		//List<RoleFunction> roleFunctions = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
+		List<RoleAndEnum> roleFunctions = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
 		//新增的功能
 		List<String> funs =  new ArrayList<String>();
 		Collections.addAll(funs, request.getParameterValues("functions"));
 		//删除的功能
-        List<RoleFunction> roleFuncs = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
-		for (RoleFunction role : roleFunctions) {
+        //List<RoleFunction> roleFuncs     = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
+		List<RoleAndEnum> roleFuncs = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
+		for (RoleAndEnum role : roleFunctions) {
 			for (String str : functions) {
-				if(role.getFunction().toString().equals(str)){
+				if(role.getEnumRole().toString().equals(str)){
 					funs.remove(str);
 					roleFuncs.remove(role);
 				}
 			}
 		}      
-        for (RoleFunction roleFunctionDel : roleFuncs) {
-        	roleFunctionService.delById(roleFunctionDel.getId());
-    			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(roleFunctionDel.getGameId(), roleFunctionDel.getRole());
+        for (RoleAndEnum roleFunctionDel : roleFuncs) {
+        	//roleFunctionService.delById(roleFunctionDel.getId());
+        	roleAndEnumService.delById(roleFunctionDel.getId());
+        	RoleFunction r = roleFunctionService.findById(roleFunctionDel.getRoleRunctionId());
+    			List<UserRole> userRoles = userRoleService.findByStoreIdAndRole(r.getGameId(), r.getRole());
     			for (UserRole userRole : userRoles) {
     				List<String> functs =  userRole.getRoleList();
     				List<String> f =  new ArrayList<String>();
     				for (String str: functs) {
     					f.add(str);
-						if(roleFunctionDel.getFunction().toString().equals(str)){
+						if(roleFunctionDel.getEnumRole().toString().equals(str)){
 							f.remove(str);
 						}
 					}
@@ -271,12 +276,16 @@ public class RoleFunctionController extends BaseController{
     			}
 		}
         for (String roleFunctionAdd : funs) {
-        	roleFunction.setFunction(Integer.valueOf(roleFunctionAdd));
+/*        	roleFunction.setFunction(Integer.valueOf(roleFunctionAdd));
         	roleFunction.setStatus(RoleFunction.STATUS_VALIDE);
-        	roleFunctionService.save(roleFunction);
+        	roleFunctionService.save(roleFunction);*/
+			RoleAndEnum roleAndEnum = new RoleAndEnum();
+			roleAndEnum.setRoleRunctionId(roleFunction.getId());
+			roleAndEnum.setEnumRole(Integer.valueOf(roleFunctionAdd));
+			roleAndEnumService.save(roleAndEnum);
 		}
 		redirectAttributes.addFlashAttribute("message", "更新权限成功");
-		return "redirect:/manage/roleFunction/index?search_EQ_gameId="+roleFunction.getGameId();
+		return "redirect:/manage/roleFunction/index?search_LIKE_gameName="+storeService.findById(roleFunction.getGameId()).getName();
 	}
 	
 	/**
@@ -286,11 +295,12 @@ public class RoleFunctionController extends BaseController{
 	@RequestMapping(value = "detail", method = RequestMethod.GET)
 	public String show(@RequestParam(value = "id")long id,Model model){
 		RoleFunction roleFunction = roleFunctionService.findById(id);
-		List<RoleFunction> roleFuncs = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
-		for (RoleFunction roleF : roleFuncs) {
-		  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleF.getFunction());
+		//List<RoleFunction> roleFuncs = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
+		List<RoleAndEnum> roleFuncs = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
+		for (RoleAndEnum roleF : roleFuncs) {
+		  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleF.getEnumRole());
 		  	if(enumFunction!=null){
-		  		roleF.setFunctionName(enumFunction.getEnumName());
+		  		roleF.setEnumName(enumFunction.getEnumName());
 		  	}
 		}
 		model.addAttribute("roleFunction", roleFunction);

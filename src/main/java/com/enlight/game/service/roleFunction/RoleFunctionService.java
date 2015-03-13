@@ -24,6 +24,7 @@ import com.enlight.game.repository.RoleFunctionDao;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.roleAndEnum.RoleAndEnumService;
 import com.enlight.game.service.store.StoreService;
 
 /**
@@ -47,6 +48,9 @@ public class RoleFunctionService {
 	@Autowired
 	private EnumFunctionService enumFunctionService;
 	
+	@Autowired
+	private RoleAndEnumService roleAndEnumService;
+	
 	public RoleFunction findById(long id){
 		return roleFunctionDao.findOne(id);
 	}
@@ -56,7 +60,9 @@ public class RoleFunctionService {
 	}
 	
 	public List<Integer> findByGameIdAndRoleFunctions(Long gameId,String role){
-		return roleFunctionDao.findByGameIdAndRoleOnlyFunc(gameId, role);
+		List<RoleFunction> roleFunctions =  roleFunctionDao.findByGameIdAndRole(gameId, role);
+		List<Integer> i = roleAndEnumService.findByRole(roleFunctions.get(0).getId());
+		return i;
 	}
 	
 	public void delById(long id){
@@ -90,23 +96,23 @@ public class RoleFunctionService {
 		function.setUpdDate(new Date());
 		function.setRole(roleFunction.getRole());
 		function.setGameId(roleFunction.getGameId());
-		function.setFunction(roleFunction.getFunction());
+		//function.setFunction(roleFunction.getFunction());
 		function.setGameName(storeService.findById(roleFunction.getGameId()).getName());
-		function.setFunctionName(enumFunctionService.findByEnumRole(roleFunction.getFunction()).getEnumName());
+		//function.setFunctionName(enumFunctionService.findByEnumRole(roleFunction.getFunction()).getEnumName());
 		roleFunctionDao.save(function);
 	}
 	
-	public void save(RoleFunction roleFunction){
+	public RoleFunction save(RoleFunction roleFunction){
 		RoleFunction function = new RoleFunction();
 		function.setStatus(roleFunction.getStatus());
 		function.setCrDate(new Date());
 		function.setUpdDate(new Date());
 		function.setRole(roleFunction.getRole());
 		function.setGameId(roleFunction.getGameId());
-		function.setFunction(roleFunction.getFunction());
+		//function.setFunction(roleFunction.getFunction());
 		function.setGameName(storeService.findById(roleFunction.getGameId()).getName());
-		function.setFunctionName(enumFunctionService.findByEnumRole(roleFunction.getFunction()).getEnumName());
-		roleFunctionDao.save(function);
+		//function.setFunctionName(enumFunctionService.findByEnumRole(roleFunction.getFunction()).getEnumName());
+		return roleFunctionDao.save(function);
 	}
 	
 	/**

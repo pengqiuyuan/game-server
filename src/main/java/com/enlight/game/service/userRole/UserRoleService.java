@@ -57,4 +57,9 @@ public class UserRoleService {
 	public void delByStoreId(Long storeId){
 		userRoleDao.delByStoreId(storeId);
 	}
+	
+	public void delById(Long id){
+		userRoleDao.delete(id);
+	}
+	
 }
