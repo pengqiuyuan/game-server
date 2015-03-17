@@ -1,0 +1,61 @@
+2015-03-16 16:49:26,552-[TS] INFO main org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+  2015-03-16 16:49:26,642-[TS] INFO main org.hibernate.Version - HHH000412: Hibernate Core {4.3.1.Final}
+  2015-03-16 16:49:26,646-[TS] INFO main org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+  2015-03-16 16:49:26,648-[TS] INFO main org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+  2015-03-16 16:49:26,994-[TS] INFO main org.hibernate.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+  2015-03-16 16:49:27,057-[TS] INFO main org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  2015-03-16 16:49:27,255-[TS] INFO main org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+  2015-03-16 16:49:27,311-[TS] INFO main org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.0.3.Final
+  2015-03-16 16:52:44,270-[TS] INFO main org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+  2015-03-16 16:52:44,359-[TS] INFO main org.hibernate.Version - HHH000412: Hibernate Core {4.3.1.Final}
+  2015-03-16 16:52:44,363-[TS] INFO main org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+  2015-03-16 16:52:44,365-[TS] INFO main org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+  2015-03-16 16:52:44,699-[TS] INFO main org.hibernate.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+  2015-03-16 16:52:44,763-[TS] INFO main org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  2015-03-16 16:52:44,960-[TS] INFO main org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+  2015-03-16 16:52:45,014-[TS] INFO main org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.0.3.Final
+  2015-03-16 17:17:08,422-[TS] INFO main org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+  2015-03-16 17:17:08,509-[TS] INFO main org.hibernate.Version - HHH000412: Hibernate Core {4.3.1.Final}
+  2015-03-16 17:17:08,514-[TS] INFO main org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+  2015-03-16 17:17:08,517-[TS] INFO main org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+  2015-03-16 17:17:08,849-[TS] INFO main org.hibernate.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+  2015-03-16 17:17:08,913-[TS] INFO main org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  2015-03-16 17:17:09,117-[TS] INFO main org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+  2015-03-16 17:17:09,177-[TS] INFO main org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.0.3.Final
+  2015-03-16 17:20:00,833-[TS] INFO main org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+  2015-03-16 17:20:00,921-[TS] INFO main org.hibernate.Version - HHH000412: Hibernate Core {4.3.1.Final}
+  2015-03-16 17:20:00,925-[TS] INFO main org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+  2015-03-16 17:20:00,928-[TS] INFO main org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+  2015-03-16 17:20:01,260-[TS] INFO main org.hibernate.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+  2015-03-16 17:20:01,324-[TS] INFO main org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  2015-03-16 17:20:01,524-[TS] INFO main org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+  2015-03-16 17:20:01,579-[TS] INFO main org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.0.3.Final
+  2015-03-16 17:29:00,662-[TS] INFO main org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+  2015-03-16 17:29:00,750-[TS] INFO main org.hibernate.Version - HHH000412: Hibernate Core {4.3.1.Final}
+  2015-03-16 17:29:00,754-[TS] INFO main org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+  2015-03-16 17:29:00,757-[TS] INFO main org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+  2015-03-16 17:29:01,084-[TS] INFO main org.hibernate.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+  2015-03-16 17:29:01,147-[TS] INFO main org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  2015-03-16 17:29:01,347-[TS] INFO main org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+  2015-03-16 17:29:01,405-[TS] INFO main org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.0.3.Final
+  2015-03-16 17:41:27,163-[TS] INFO main org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+  2015-03-16 17:41:27,251-[TS] INFO main org.hibernate.Version - HHH000412: Hibernate Core {4.3.1.Final}
+  2015-03-16 17:41:27,255-[TS] INFO main org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+  2015-03-16 17:41:27,258-[TS] INFO main org.hibernate.cfg.Environment - HHH000021: Bytecode provider name : javassist
+  2015-03-16 17:41:27,593-[TS] INFO main org.hibernate.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+  2015-03-16 17:41:27,658-[TS] INFO main org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  2015-03-16 17:41:27,856-[TS] INFO main org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory - HHH000397: Using ASTQueryTranslatorFactory
+  2015-03-16 17:41:27,910-[TS] INFO main org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 5.0.3.Final
+  

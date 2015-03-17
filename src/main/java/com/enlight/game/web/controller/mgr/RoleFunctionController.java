@@ -96,7 +96,7 @@ public class RoleFunctionController extends BaseController{
 	/**
 	 * 游戏功能权限分配管理首页
 	 */
-	@RequestMapping(value = "index",method=RequestMethod.GET)
+	@RequestMapping(value = "/index",method=RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
 			@RequestParam(value = "sortType", defaultValue = "auto")String sortType, Model model,
@@ -108,6 +108,7 @@ public class RoleFunctionController extends BaseController{
 		for (RoleFunction roleFunction : roleFunctions) {
 			List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
 			for (RoleAndEnum roleAndEnum : roleAndEnums) {
+System.out.println("11111");
 				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
 			  	if(enumFunction!=null){
 			  		roleAndEnum.setEnumName(enumFunction.getEnumName());
@@ -121,9 +122,11 @@ public class RoleFunctionController extends BaseController{
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		List<Stores> stores = storeService.findList();
+		System.out.println("222222");
 		model.addAttribute("stores", stores);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+		System.out.println("3333");
 		return "/roleFunction/index";
 	}
 	
