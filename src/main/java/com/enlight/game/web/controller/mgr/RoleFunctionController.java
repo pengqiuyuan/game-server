@@ -14,6 +14,7 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -92,6 +93,7 @@ public class RoleFunctionController extends BaseController{
 	
 	@Autowired
 	private RoleAndEnumService roleAndEnumService;
+	
 	
 	/**
 	 * 游戏功能权限分配管理首页

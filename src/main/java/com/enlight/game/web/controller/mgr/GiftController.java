@@ -106,6 +106,12 @@ public class GiftController extends BaseController{
 	
 	@Value("#{envProps.searchgift_url}")
 	private String searchgift_url;
+	
+	@Value("#{envProps.excelpath}")
+	private String excelpath;
+	
+	@Value("#{envProps.excelUrl}")
+	private String excelUrl;
 
 	
 	@Autowired
@@ -406,10 +412,10 @@ public class GiftController extends BaseController{
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String,String> exportCode(@RequestParam(value="giftId") String giftId,RedirectAttributes redirectAttributes){
+		Map<String, String> m = new HashMap<String, String>();
 		try {
 			String gfcodes = HttpClientUts.doGet(export_url+"?giftId="+giftId, "utf-8");
 			String gf = HttpClientUts.doGet(searchgift_url+"?giftId="+giftId, "utf-8");
-			System.out.println("3333  " +gf);
 			Gift gift = binder.fromJson(gf, Gift.class);
 			JsonFlattener parser = new JsonFlattener();
 	        CSVWriter writer = new CSVWriter();
@@ -434,13 +440,19 @@ public class GiftController extends BaseController{
 	        }
 	        Json.add(map);
 	        Json.addAll(flatJson);
-	        javax.swing.filechooser.FileSystemView fsv = javax.swing.filechooser.FileSystemView.getFileSystemView(); 
-	        fsv.getHomeDirectory(); 
-	        writer.writeAsCSV(Json, fsv.getHomeDirectory()+"\\"+giftId+".csv");
+	        //javax.swing.filechooser.FileSystemView fsv = javax.swing.filechooser.FileSystemView.getFileSystemView(); 
+	        
+	        File saveFile = new File(excelpath);
+			if (!saveFile.exists()) {
+				saveFile.mkdirs();
+			}
+	        writer.writeAsCSV(Json, excelpath+"/"+giftId+".csv");
+	        m.put("execlUrl",excelUrl);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return SUCCESS_RESULT;
+		return m;
 	}
 	
 	/**

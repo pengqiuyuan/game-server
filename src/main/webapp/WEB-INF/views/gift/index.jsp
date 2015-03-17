@@ -133,7 +133,7 @@
 			i++;
 			giftId = $(this).attr("rel");
 			if(i==1){
-				if(confirm("是否导出礼品码到桌面?"))
+				if(confirm("是否导出礼品码?"))
 				{
 					$.ajax({
 						url: '<%=request.getContextPath()%>/manage/gift/exportCode?giftId=' + giftId, 
@@ -147,7 +147,8 @@
 					    },
 						success: function(data){
 							$("#message").remove();
-							$("#queryForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>礼品码导出成功！</div>");
+							$("#queryForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>礼品码下载成功！</div>");
+							window.open(data.execlUrl+'/' + giftId +'.csv');
 						},
 					    complete: function () {
 					        $(".exportCode").removeAttr("disabled");
