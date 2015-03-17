@@ -39,11 +39,12 @@ public class RoleAndEnumService {
 	
 	public void save(RoleAndEnum roleAndEnum){
 		RoleAndEnum r = new RoleAndEnum();
-		r.setCrDate(new Date());
+		r.setCrDate(roleAndEnum.getCrDate());
 		r.setUpdDate(new Date());
 		r.setStatus(RoleAndEnum.STATUS_VALIDE);
 		r.setRoleRunctionId(roleAndEnum.getRoleRunctionId());
 		r.setEnumRole(roleAndEnum.getEnumRole());
+		r.setEnumName(roleAndEnum.getEnumName());
 		roleAndEnumDao.save(r);
 	}
 }

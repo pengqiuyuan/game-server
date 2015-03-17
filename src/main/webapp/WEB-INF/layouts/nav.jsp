@@ -218,7 +218,6 @@
 	function changeTag(id,categoryId,sta){
 		var th = $("#storeIdN");
 		th.empty();
-		th.append("<li class='divider'></li>");
 		$.ajax({                                               
 			url: '<%=request.getContextPath()%>/manage/findStores?storeId='+id+'&categoryId='+categoryId+'&sta='+sta,
 			type: 'GET',
@@ -226,6 +225,7 @@
 			dataType: 'text',
 			success: function(data){
  				var parsedJson = $.parseJSON(data);
+				th.append("<li class='divider'></li>");
 				jQuery.each(parsedJson, function(index, itemData) {
 				    th.append("<li class='dropdown-submenu' id='"+itemData.storeId+"'><a href='#' onMouseOver='change2("+itemData.storeId+");'>"+itemData.storeName+"</a></li>"); 
 				}); 
@@ -239,13 +239,13 @@
 	function change2(id){
 		var th = $("#"+id);
 		th.find("ul").remove();
-		th.append("<ul class='dropdown-menu' id='category"+id+"'></ul>");
 		$.ajax({                                               
 			url: '<%=request.getContextPath()%>/manage/findCategorys?storeId='+id,
 			type: 'GET',
 			contentType: "application/json;charset=UTF-8",		
 			dataType: 'text',
 			success: function(data){
+				th.append("<ul class='dropdown-menu' id='category"+id+"'></ul>");
  				var parsedJson = $.parseJSON(data);
 				jQuery.each(parsedJson, function(index, itemData) {
 					$("#category"+id).append("<li><a href='#' onclick='changeTag("+id+","+itemData.id+",0);'>"+itemData.categoryName+"</a></li>"); 

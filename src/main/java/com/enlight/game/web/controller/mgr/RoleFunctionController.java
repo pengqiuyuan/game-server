@@ -107,26 +107,15 @@ public class RoleFunctionController extends BaseController{
 		Page<RoleFunction> roleFunctions = roleFunctionService.findRoleFunctionByCondition(userId,searchParams, pageNumber, pageSize, sortType);
 		for (RoleFunction roleFunction : roleFunctions) {
 			List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
-			for (RoleAndEnum roleAndEnum : roleAndEnums) {
-System.out.println("11111");
-				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
-			  	if(enumFunction!=null){
-			  		roleAndEnum.setEnumName(enumFunction.getEnumName());
-			  	}
-			}
 			roleFunction.setRoleAndEnums(roleAndEnums);
 		}
-
-		
 		model.addAttribute("roleFunctions", roleFunctions);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		List<Stores> stores = storeService.findList();
-		System.out.println("222222");
 		model.addAttribute("stores", stores);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		System.out.println("3333");
 		return "/roleFunction/index";
 	}
 	
@@ -162,6 +151,11 @@ System.out.println("11111");
 				RoleAndEnum roleAndEnum = new RoleAndEnum();
 				roleAndEnum.setRoleRunctionId(r.getId());
 				roleAndEnum.setEnumRole(Integer.valueOf(functions[i]));
+				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(Integer.valueOf(functions[i]));
+			  	if(enumFunction!=null){
+			  		roleAndEnum.setEnumName(enumFunction.getEnumName());
+			  	}
+			  	
 				roleAndEnumService.save(roleAndEnum);
 			}
 			redirectAttributes.addFlashAttribute("message", "新增权限成功");
@@ -279,12 +273,13 @@ System.out.println("11111");
     			}
 		}
         for (String roleFunctionAdd : funs) {
-/*        	roleFunction.setFunction(Integer.valueOf(roleFunctionAdd));
-        	roleFunction.setStatus(RoleFunction.STATUS_VALIDE);
-        	roleFunctionService.save(roleFunction);*/
 			RoleAndEnum roleAndEnum = new RoleAndEnum();
 			roleAndEnum.setRoleRunctionId(roleFunction.getId());
 			roleAndEnum.setEnumRole(Integer.valueOf(roleFunctionAdd));
+			EnumFunction enumFunction =  enumFunctionService.findByEnumRole(Integer.valueOf(roleFunctionAdd));
+		  	if(enumFunction!=null){
+		  		roleAndEnum.setEnumName(enumFunction.getEnumName());
+		  	}
 			roleAndEnumService.save(roleAndEnum);
 		}
 		redirectAttributes.addFlashAttribute("message", "更新权限成功");
@@ -298,14 +293,7 @@ System.out.println("11111");
 	@RequestMapping(value = "detail", method = RequestMethod.GET)
 	public String show(@RequestParam(value = "id")long id,Model model){
 		RoleFunction roleFunction = roleFunctionService.findById(id);
-		//List<RoleFunction> roleFuncs = roleFunctionService.findByGameIdAndRole(roleFunction.getGameId(), roleFunction.getRole());
 		List<RoleAndEnum> roleFuncs = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
-		for (RoleAndEnum roleF : roleFuncs) {
-		  	EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleF.getEnumRole());
-		  	if(enumFunction!=null){
-		  		roleF.setEnumName(enumFunction.getEnumName());
-		  	}
-		}
 		model.addAttribute("roleFunction", roleFunction);
 		model.addAttribute("roleFuncs", roleFuncs);
 		return "/roleFunction/info";

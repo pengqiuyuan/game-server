@@ -30,7 +30,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.enlight.game.base.AppBizException;
-import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.Log;
 import com.enlight.game.entity.RoleAndEnum;
 import com.enlight.game.entity.RoleFunction;
@@ -414,12 +413,6 @@ public class UsersController extends BaseController{
 		}*/
 		for (RoleFunction roleFunction : roleFunctions) {
 			List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
-			for (RoleAndEnum roleAndEnum : roleAndEnums) {
-				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
-			  	if(enumFunction!=null){
-			  		roleAndEnum.setEnumName(enumFunction.getEnumName());
-			  	}
-			}
 			roleFunction.setRoleAndEnums(roleAndEnums);
 		}
 		return roleFunctions;
@@ -447,10 +440,6 @@ public class UsersController extends BaseController{
 				List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
 				for (RoleAndEnum roleAndEnum : roleAndEnums) {
 					functions = functions+","+roleAndEnum.getEnumRole();
-					EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
-				  	if(enumFunction!=null){
-				  		roleAndEnum.setEnumName(enumFunction.getEnumName());
-				  	}
 				}
 				roleFunction.setRoleAndEnums(roleAndEnums);
 			}
@@ -494,12 +483,6 @@ public class UsersController extends BaseController{
 			List<RoleFunction> roleFuncts = roleFunctionService.findByGameIdAndRole(gameId, role);
 			for (RoleFunction roleFunction : roleFuncts) {
 				List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(roleFunction.getId());
-				for (RoleAndEnum roleAndEnum : roleAndEnums) {
-					EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
-				  	if(enumFunction!=null){
-				  		roleAndEnum.setEnumName(enumFunction.getEnumName());
-				  	}
-				}
 				roleFunction.setRoleAndEnums(roleAndEnums);
 			}
 			map.put("roleFunctions", roleFuncts);

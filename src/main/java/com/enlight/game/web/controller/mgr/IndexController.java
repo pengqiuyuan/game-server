@@ -76,7 +76,6 @@ public class IndexController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<UserRole> findStores(@RequestParam(value="storeId") String storeId,@RequestParam(value="categoryId") String categoryId,@RequestParam(value="sta") String sta,ServletRequest request) throws AppBizException, UnknownHostException{
 		ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-		User user = accountService.findUserByLoginName(u.name);
 		if(sta.equals("0")){
 			logger.debug("当前用户切换项目改变时执行....");
 			SecurityUtils.getSubject().logout();
@@ -89,16 +88,14 @@ public class IndexController {
 			SecurityUtils.getSubject().login(token); // 登录  
 		}
 		try {
-			List<UserRole> userRoles = userRoleService.findByUserId(user.getId());
-			List<UserRole> userRs= userRoleService.findByUserId(user.getId());
+			List<UserRole> userRoles = userRoleService.findByUserId(u.id);
 			if(!userRoles.isEmpty() && userRoles.size()!=0){
 				for (UserRole userRole : userRoles) {
 					userRole.setStoreName(storeService.findById(userRole.getStoreId()).getName());
 
 				}
-
 			}
-			return userRs;
+			return userRoles;
 		} catch (Exception e) {
 			// TODO: handle exception
 			return null;
@@ -113,8 +110,7 @@ public class IndexController {
 		Set<EnumCategory> enumCategories = new HashSet<EnumCategory>();
 		try {
 			ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-			User user = accountService.findUserByLoginName(u.name);
-			List<UserRole> userRoles = userRoleService.findByUserIdAndStoreId(user.getId(), Long.valueOf(storeId));
+			List<UserRole> userRoles = userRoleService.findByUserIdAndStoreId(u.id, Long.valueOf(storeId));
 			if(!userRoles.isEmpty() && userRoles.size()!=0){
 				List<String> list = userRoles.get(0).getRoleList();
 				for (String f : list) {

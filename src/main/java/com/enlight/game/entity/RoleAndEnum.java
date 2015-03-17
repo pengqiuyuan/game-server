@@ -30,7 +30,6 @@ public class RoleAndEnum extends BaseEntry{
 	/**
 	 * 功能名称（1 服务器搜索与查看，2 服务器配置与开关，6 新增邮件）
 	 */
-	@Transient
 	private String enumName;
 
 	public Long getRoleRunctionId() {
@@ -49,12 +48,10 @@ public class RoleAndEnum extends BaseEntry{
 		this.enumRole = enumRole;
 	}
 
-	@Transient
 	public String getEnumName() {
 		return enumName;
 	}
 
-	@Transient
 	public void setEnumName(String enumName) {
 		this.enumName = enumName;
 	}
