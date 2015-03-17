@@ -1,4 +1,4 @@
 game-server
 ===========
 
-ELK2
+ELK
