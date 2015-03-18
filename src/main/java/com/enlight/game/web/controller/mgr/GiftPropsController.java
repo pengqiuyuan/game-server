@@ -150,9 +150,9 @@ public class GiftPropsController extends BaseController{
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public String del(@RequestParam(value = "id")Long id) throws Exception{
+	public Map<String, String> del(@RequestParam(value = "id")Long id) throws Exception{
 		 giftPropsService.del(id);
-		 return "redirect:/manage/giftProps/index";
+		 return SUCCESS_RESULT;
 	}
 	
 	/**
@@ -161,8 +161,12 @@ public class GiftPropsController extends BaseController{
 	@RequestMapping(value = "/checkTagId")
 	@ResponseBody
 	public String checkLoginName(@RequestParam("fieldValue") String fieldValue) {
+		List<Tag> tagsName = new ArrayList<Tag>();
 		List<Tag> tags = tagService.findByTagIdAndCategory(Long.valueOf(fieldValue.split(":")[0]),Tag.CATEGORY_ITEM);
-		if (tags.size()!=0) {
+		if(fieldValue.split(":").length>1){
+			tagsName = tagService.findByTagNameAndCategory(fieldValue.split(":")[1].trim(),Tag.CATEGORY_ITEM);
+		}
+		if (tags.size()!=0 && tagsName.size()!=0) {
 			return "true";
 		} else {
 			return "false";

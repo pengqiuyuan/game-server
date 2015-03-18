@@ -346,14 +346,25 @@ public class GiftController extends BaseController{
 		String[] servers = request.getParameterValues("server");
 		String playerIds = request.getParameter("playerId");
 		
-		String[] fieldIds = request.getParameterValues("fieldId");
-		String[] fieldValues = request.getParameterValues("fieldValue");
+		String[] fieldIds = request.getParameterValues("fieldValue");
+		String[] fieldValues = request.getParameterValues("fieldNumber");
 		Set<GiftItem> giftItems = new HashSet<GiftItem>();
 		if(fieldIds != null && fieldIds.length>0 && fieldValues != null && fieldValues.length>0){
 			for (int i = 0; i < fieldIds.length; i++) {
 				GiftItem giftItem = new GiftItem();
 				giftItem.setId(fieldIds[i].split(":")[0]);
 				giftItem.setNumber(fieldValues[i]);
+				giftItems.add(giftItem);
+			}
+		}
+		
+		String[] fIds = request.getParameterValues("fId");
+		String[] fValues = request.getParameterValues("fValue");
+		if(fIds != null && fIds.length>0 && fValues != null && fValues.length>0){
+			for (int i = 0; i < fIds.length; i++) {
+				GiftItem giftItem = new GiftItem();
+				giftItem.setId(fIds[i].split(":")[0]);
+				giftItem.setNumber(fValues[i]);
 				giftItems.add(giftItem);
 			}
 		}

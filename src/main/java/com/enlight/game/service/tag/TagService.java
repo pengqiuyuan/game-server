@@ -28,6 +28,10 @@ public class TagService {
 		return tagDao.findByTagIdAndCategory(tagId,category);
 	}
 	
+	public List<Tag> findByTagNameAndCategory(String tagName,String category){
+		return tagDao.findByTagNameAndCategory(tagName, category);
+	}
+	
 	public void save(Tag tag){
 		tagDao.save(tag);
 	}

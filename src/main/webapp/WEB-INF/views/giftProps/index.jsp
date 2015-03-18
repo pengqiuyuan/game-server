@@ -8,7 +8,6 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-	<script type="text/javascript" src="${ctx}/static/js/jquery-ui-1.8.21.custom.min.js"></script>
 <title>礼品卡道具管理</title>
 </head>
 <body>

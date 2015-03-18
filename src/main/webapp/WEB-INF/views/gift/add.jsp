@@ -13,7 +13,6 @@
 <style type="text/css"> 
 .error{ 
 color:Red; 
-margin-left:10px;  
 } 
 .checkbox.inline+.checkbox.inline {
 margin-left: 0px;
@@ -155,8 +154,8 @@ line-height: 30px;
 <script type="text/javascript">
 	$("#addfield").click(function(){
 			$("#field").prepend("<div id='field_div'></div>");
-		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='fieldValue'  style='height: 20px;' class='input-large tt-query' value='' placeholder='道具数量，如:20' /></div></div>" );
-		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='typeahead-wrapper controls'><input type='text' name='fieldId' style='height: 20px;' class='states' value='' placeholder='道具Id，如:10'/>&nbsp;<span id='delElememt' class='del btn btn-danger' style='margin-bottom: -6px;'>删除道具</span></div></div>" );
+		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='fieldNumber'  style='height: 20px;' class='input-large tt-query' value='' placeholder='道具数量，如:20' /></div></div>" );
+		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='typeahead-wrapper controls'><input type='text' name='fieldValue' style='height: 20px;' class='states' value='' placeholder='道具Id，如:10:金币'/>&nbsp;<span id='delElememt' class='del btn btn-danger' style='margin-bottom: -6px;'>删除道具</span></div></div>" );
 	
 		 	$("#delElememt").click(function(){
 			  		$(this).parent().parent().parent().remove();
@@ -207,7 +206,7 @@ line-height: 30px;
 				success: function(data){
 					var parsedJson = $.parseJSON(data);
 					jQuery.each(parsedJson, function(index, itemData) {
-					$("#item").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><div class='control-group'><label class='control-label' for='name'>"+itemData.itemName+"：</label><div class='controls'><input type='text' name='fieldValue' class='input-large' value='' placeholder='道具数量，如:10'/> <input type='hidden' name='fieldId' class='input-large' value='"+itemData.itemId+"'/></div></div></c:forEach>"); 
+					$("#item").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><div class='control-group'><label class='control-label' for='name'>"+itemData.itemName+"：</label><div class='controls'><input type='text' name='fValue' class='input-large' value='' placeholder='道具数量，如:10'/> <input type='hidden' name='fId' class='input-large' value='"+itemData.itemId+"'/></div></div></c:forEach>"); 
 					});
 				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 			});
@@ -243,6 +242,12 @@ line-height: 30px;
 			}
 		});
 		
+		
+		jQuery.validator.addMethod("phone", function(value, element) { 
+			var tel = /^\d+:/;
+			return this.optional(element) || (tel.test(value)); 
+
+			}, "格式错误(如 1:金币)");
 		$("#inputForm").validate({
 			rules:{
 				gameId:{
@@ -263,10 +268,20 @@ line-height: 30px;
 				endD:{
 					required:true
 				},
-				fieldId:{
+				fId:{
 					required:true
 				},
+				fValue:{
+					required:true,
+					maxlength:7,
+					number:true
+				},
 				fieldValue:{
+					required:true,
+					phone:true,
+					remote: '<%=request.getContextPath()%>/manage/giftProps/checkTagId'
+				},
+				fieldNumber:{
 					required:true,
 					maxlength:7,
 					number:true
@@ -290,10 +305,19 @@ line-height: 30px;
 				endD:{
 					required:"结束必须填写"
 				},
-				fieldId:{
+				fId:{
 					required:"道具Id必须填写"
 				},
+				fValue:{
+					required:"道具数量必须填写",
+					maxlength:"长度1-7位",
+					number:"必须是数字"
+				},
 				fieldValue:{
+					required:"项目必须填写",
+					remote: "道具Excel不存在此道具Id"
+				},
+				fieldNumber:{
 					required:"道具数量必须填写",
 					maxlength:"长度1-7位",
 					number:"必须是数字"
