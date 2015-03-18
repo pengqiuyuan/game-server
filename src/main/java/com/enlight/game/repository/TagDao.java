@@ -20,7 +20,7 @@ public interface TagDao extends PagingAndSortingRepository<Tag, Long>,JpaSpecifi
 	List<Tag> findByCategory(String category);
 	
 	@Modifying
-	@Query("from Tag tag where tag.tagName like ?1 and tag.category=?2 or tag.tagId like ?1 and tag.category=?2")
+	@Query("from Tag tag where tag.tagName like ?1 and tag.category=?2 or tag.tagId like ?1 and tag.category=?2 order by tag.tagId asc")
 	List<Tag> findByQuery(String query , String category);
 
 }
