@@ -498,8 +498,9 @@ public class GiftController extends BaseController{
 	@RequestMapping(value="/findServers",method=RequestMethod.GET)	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Set<Server> findServers(@RequestParam(value="serverZoneId") String serverZoneId) throws AppBizException{
-		Set<Server> servers = serverService.findByServerZoneId(serverZoneId);
+	public Set<Server> findServers(@RequestParam(value="serverZoneId") String serverZoneId
+			,@RequestParam(value="gameId") String gameId) throws AppBizException{
+		Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,gameId);
 		return servers;
 	}
 	

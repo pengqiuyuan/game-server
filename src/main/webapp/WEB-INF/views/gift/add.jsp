@@ -40,9 +40,6 @@ line-height: 30px;
 	<div class="page-header">
    		<h2>新增礼品卡</h2>
  	</div>
- 	 <c:if test="${not empty message}">
-		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
-	</c:if>
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/gift/save"   enctype="multipart/form-data" >
 			<div class="container-fluid">
 				<div class="row-fluid">
@@ -133,7 +130,7 @@ line-height: 30px;
 						<div id="item">
 						</div>
 						
-						<div class="page-header">
+						<div class="page-header" id="addmess">
 							<span id="addfield" class="btn btn-info">新加道具及数量</span>
 						</div>			
 						<div id="field">
@@ -152,21 +149,55 @@ line-height: 30px;
 
 	</form>
 <script type="text/javascript">
+	var i = 0;
 	$("#addfield").click(function(){
-			$("#field").prepend("<div id='field_div'></div>");
-		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='fieldNumber'  style='height: 20px;' class='input-large tt-query' value='' placeholder='道具数量，如:20' /></div></div>" );
-		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='typeahead-wrapper controls'><input type='text' name='fieldValue' style='height: 20px;' class='states' value='' placeholder='道具Id，如:10:金币'/>&nbsp;<span id='delElememt' class='del btn btn-danger' style='margin-bottom: -6px;'>删除道具</span></div></div>" );
-	
-		 	$("#delElememt").click(function(){
-			  		$(this).parent().parent().parent().remove();
-			}); 
+		var gameId = $("#gameId").val();
+		if(gameId!=""){
+			if($(this).attr("disabled")!="disabled"){
+				$("#message").remove();
+				i++;
+				$("#field").prepend("<div id='field_div'></div>");
+			    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='fieldNumber' id='fieldNumber"+i+"'  style='height: 20px;' class='input-large tt-query' value='' placeholder='道具数量，如:20' /></div></div>" );
+			    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='typeahead-wrapper controls'><input type='text' name='fieldValue' id='fieldValue"+i+"' style='height: 20px;' class='states' value='' placeholder='道具Id，如:10:金币'/>&nbsp;<span id='delElememt' class='del btn btn-danger' style='margin-bottom: -6px;'>删除道具</span></div></div>" );
+			 	$("#delElememt").click(function(){
+				  		$(this).parent().parent().parent().remove();
+				}); 
+			    $('.states').typeahead({
+			        valueKey: 'tagName',
+			        minLength: 1,
+			        limit:10,
+			        remote: '<%=request.getContextPath()%>/manage/tag/findItemNameAndId?query=%QUERY&gameId='+gameId
+			    });
+			    
+				$('#fieldValue'+i).blur(function(){
+					var fieldValue = $('#fieldValue'+i).val();
+					var tel = /^\d+:/;
+					$('#checkvalue'+i).remove();
+					if(tel.test(fieldValue)){
+	 					$.ajax({                                               
+							url: '<%=request.getContextPath()%>/manage/giftProps/checkTagId?gameId='+gameId+'&fieldValue='+fieldValue,
+							type: 'GET',
+							contentType: "application/json;charset=UTF-8",		
+							dataType: 'text',
+							success: function(data){
+								console.log(data);
+								if(data=="true"){
+									$('#submit').removeAttr("disabled");
+								}else if(data=="false"){
+									$('#fieldValue'+i).after("<span id='checkvalue"+i+"' class='error'>道具Excel不存在此道具</span>");
+									$('#submit').attr("disabled","disabled");
+								}
+							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+						});
+					}
+				});
+			    
+			}
+		}else{
+			$("#message").remove();
+			$("#inputForm").prev().prepend("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>请选择游戏项目</div>")
+		}
 
-		    $('.states').typeahead({
-		        valueKey: 'tagName',
-		        minLength: 1,
-		        limit:5,
-		        remote: '<%=request.getContextPath()%>/manage/tag/findItemNameAndId?query=%QUERY'
-		      });
 	});
 	    
 	
@@ -180,36 +211,87 @@ line-height: 30px;
 	$(function(){
 		$("#serverZoneId").change(function(e){
 			var serverZoneId = $("#serverZoneId").val();
-			$("#serverDiv").empty();
-			$.ajax({                                               
-				url: '<%=request.getContextPath()%>/manage/gift/findServers?serverZoneId='+serverZoneId, 
-				type: 'GET',
-				contentType: "application/json;charset=UTF-8",		
-				dataType: 'text',
-				success: function(data){
-					var parsedJson = $.parseJSON(data);
-					jQuery.each(parsedJson, function(index, itemData) {
-					$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='server' name='server' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
-					});
-				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
-			});
+			if($("#gameId").val()!=""){
+				var gameId = $("#gameId").val();
+				$("#serverDiv").empty();
+				$.ajax({                                               
+					url: '<%=request.getContextPath()%>/manage/gift/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
+					type: 'GET',
+					contentType: "application/json;charset=UTF-8",		
+					dataType: 'text',
+					success: function(data){
+						var parsedJson = $.parseJSON(data);
+						jQuery.each(parsedJson, function(index, itemData) {
+						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline span3'><input type='checkbox' id='server' name='server' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
+						});
+					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+				});
+			}
 		});
 		
 		$("#gameId").change(function(e){
+			
 			var gameId = $("#gameId").val();
-			$("#item").empty();
-			$.ajax({                                               
-				url: '<%=request.getContextPath()%>/manage/gift/findGiftProps?gameId='+gameId, 
-				type: 'GET',
-				contentType: "application/json;charset=UTF-8",		
-				dataType: 'text',
-				success: function(data){
-					var parsedJson = $.parseJSON(data);
-					jQuery.each(parsedJson, function(index, itemData) {
-					$("#item").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><div class='control-group'><label class='control-label' for='name'>"+itemData.itemName+"：</label><div class='controls'><input type='text' name='fValue' class='input-large' value='' placeholder='道具数量，如:10'/> <input type='hidden' name='fId' class='input-large' value='"+itemData.itemId+"'/></div></div></c:forEach>"); 
-					});
-				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
-			});
+			
+			if($("#gameId").val()!=""){
+				$("#submit").removeAttr("disabled");
+				$("#item").empty();
+				$("#field").empty();
+				$.ajax({                                               
+					url: '<%=request.getContextPath()%>/manage/gift/findGiftProps?gameId='+gameId, 
+					type: 'GET',
+					contentType: "application/json;charset=UTF-8",		
+					dataType: 'text',
+					success: function(data){
+						var parsedJson = $.parseJSON(data);
+						jQuery.each(parsedJson, function(index, itemData) {
+						$("#item").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><div class='control-group'><label class='control-label' for='name'>"+itemData.itemName+"：</label><div class='controls'><input type='text' name='fValue' class='input-large' value='' placeholder='道具数量，如:10'/> <input type='hidden' name='fId' class='input-large' value='"+itemData.itemId+"'/></div></div></c:forEach>"); 
+						});
+					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+				});
+				
+				$.ajax({                                               
+					url: '<%=request.getContextPath()%>/manage/giftProps/checkTagByGameId?gameId='+gameId, 
+					type: 'GET',
+					contentType: "application/json;charset=UTF-8",		
+					dataType: 'text',
+					success: function(data){
+						if(data != "0"){
+							$("#message").remove();
+							$("#addfield").removeAttr("disabled");
+						}else if(data=="0"){
+							$("#message").remove();
+							$("#addfield").attr("disabled","disabled");
+							$("#addmess").next().prepend("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>此项目没有道具，请先导入道具Excel.</div>")
+						}
+					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+				});
+				
+			}else{
+				$("#message").remove();
+				$("#addfield").removeAttr("disabled");	
+			}
+
+			if($("#serverZoneId").val()!="" && $("#gameId").val()!=""){
+				var serverZoneId = $("#serverZoneId").val();
+				$("#serverDiv").empty();
+				$.ajax({                                               
+					url: '<%=request.getContextPath()%>/manage/gift/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
+					type: 'GET',
+					contentType: "application/json;charset=UTF-8",		
+					dataType: 'text',
+					success: function(data){
+						var parsedJson = $.parseJSON(data);
+						jQuery.each(parsedJson, function(index, itemData) {
+						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline span3'><input type='checkbox' id='server' name='server' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
+						});
+					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+				});
+			}
+			
+
+			
+			
 		});
 		
 		$(".btn").click(function(){
@@ -241,7 +323,6 @@ line-height: 30px;
 				$("#number").val("");
 			}
 		});
-		
 		
 		jQuery.validator.addMethod("phone", function(value, element) { 
 			var tel = /^\d+:/;
@@ -278,8 +359,7 @@ line-height: 30px;
 				},
 				fieldValue:{
 					required:true,
-					phone:true,
-					remote: '<%=request.getContextPath()%>/manage/giftProps/checkTagId'
+					phone:true
 				},
 				fieldNumber:{
 					required:true,
@@ -314,8 +394,7 @@ line-height: 30px;
 					number:"必须是数字"
 				},
 				fieldValue:{
-					required:"项目必须填写",
-					remote: "道具Excel不存在此道具Id"
+					required:"项目必须填写"
 				},
 				fieldNumber:{
 					required:"道具数量必须填写",
@@ -323,7 +402,7 @@ line-height: 30px;
 					number:"必须是数字"
 				}
 			}
-		});	
+		});			
 		
 	})
 	

@@ -14,12 +14,28 @@
    		<h2>导入Excel</h2>
  	</div>
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/tag/uploadingExcel" method="post" enctype="multipart/form-data">
+		
+		 <div class="control-group">
+				<label class="control-label" for="gameId">选择项目：</label>
+				<div class="controls">
+					<select name="gameId" id="gameId">	
+					    <option value="">请选择项目</option>	
+						<c:forEach items="${stores}" var="item" >
+								<option value="${item.id }"  >
+								${item.name }
+								</option>
+						</c:forEach>
+					</select>	
+				</div>
+		</div>
 		<div class="control-group">
-		        <label class="control-label" for="category">Excel类型：</label>
+			<label class="control-label" for="category">Excel类型：</label>
+			<div class="controls">
 				<select id="category" name="category">	
 				        <option value="">请选择类型</option>
 						<option value="1">道具Excel</option>
 				</select>	
+			</div>	
 		</div>
 		<div class="control-group">
 				<label for=fileInput class="control-label">导入Excel文件:</label>

@@ -38,7 +38,7 @@ public class GetItemNameTag extends TagSupport {
 		try {
 			WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(pageContext.getServletContext());//获取SPRING的上下文
 			TagService tagService = (TagService) ctx.getBean("tagService");
-			List<Tag> tags = tagService.findByTagIdAndCategory(Long.valueOf(id),Tag.CATEGORY_ITEM);
+			List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreId(Long.valueOf(id.split(",")[0]), Tag.CATEGORY_ITEM, id.split(",")[1]);
 			if(tags.size()!=0){
 				for (Tag tag : tags) {
 					pageContext.getOut().write(tag.getTagName());

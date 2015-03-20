@@ -104,7 +104,7 @@
 						</td>	
 						<td>
 							<c:forEach items="${item.giftItems}" var="item" varStatus="i">
-								<span><huake:GetItemNameTag id="${item.id}"></huake:GetItemNameTag>*${item.number}</span>&nbsp;&nbsp;
+								<span><huake:GetItemNameTag id="${item.id},${param.search_LIKE_store}"></huake:GetItemNameTag>*${item.number}</span>&nbsp;&nbsp;
 							</c:forEach>
 						</td>
 					</tr>

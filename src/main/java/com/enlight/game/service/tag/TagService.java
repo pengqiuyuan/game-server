@@ -24,12 +24,12 @@ public class TagService {
 	@Autowired
 	private TagDao tagDao;
 	
-	public List<Tag> findByTagIdAndCategory(Long tagId,String category){
-		return tagDao.findByTagIdAndCategory(tagId,category);
+	public List<Tag> findByTagIdAndCategoryAndStoreId(Long tagId,String category,String storeId){
+		return tagDao.findByTagIdAndCategoryAndStoreId(tagId,category,storeId);
 	}
 	
-	public List<Tag> findByTagNameAndCategory(String tagName,String category){
-		return tagDao.findByTagNameAndCategory(tagName, category);
+	public List<Tag> findByTagNameAndCategoryAndStoreId(String tagName,String category,String storeId){
+		return tagDao.findByTagNameAndCategoryAndStoreId(tagName, category,storeId);
 	}
 	
 	public void save(Tag tag){
@@ -41,15 +41,16 @@ public class TagService {
 		t.setCategory(tag.getCategory());
 		t.setTagId(tag.getTagId());
 		t.setTagName(tag.getTagName());
+		t.setStoreId(tag.getStoreId());
 		tagDao.save(t);
 	}
 	
-	public List<Tag> findByCategory(String category){
-		return  tagDao.findByCategory(category);
+	public List<Tag> findByCategoryAndStoreId(String category,String storeId){
+		return  tagDao.findByCategoryAndStoreId(category,storeId);
 	}
 	
-	public List<Tag> findByQuery(String query,String category){
-		return tagDao.findByQuery(query,category);
+	public List<Tag> findByQuery(String query,String category,String gameId){
+		return tagDao.findByQuery(query,category,gameId);
 	}
 	
 	public List<Tag> placeExcelParseDB(HSSFWorkbook wb, InputStream is) {

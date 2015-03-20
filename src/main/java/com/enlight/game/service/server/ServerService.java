@@ -40,8 +40,8 @@ public class ServerService {
 		return serverDao.findByServerId(serverId);
 	}
 	
-	public Set<Server> findByServerZoneId(String serverZoneId){
-		return serverDao.findByServerZoneId(serverZoneId);
+	public Set<Server> findByServerZoneIdAndStoreId(String serverZoneId,String gameId){
+		return serverDao.findByServerZoneIdAndStoreId(serverZoneId,gameId);
 	}
 	
 	public void save(Server server){
