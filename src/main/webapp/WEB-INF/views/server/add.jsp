@@ -9,7 +9,6 @@
 <style type="text/css"> 
 .error{ 
 color:Red; 
-margin-left:10px;  
 } 
 </style> 
 </head>
@@ -53,14 +52,14 @@ margin-left:10px;
 				class="control-group">
 				<label class="control-label" for="serverId">服务器ID：</label>
 				<div class="controls">
-					<input type="text" name="serverId" class="input-large " />
+					<input type="text" name="serverId" class="input-large " placeholder="server_id不能超过7位"/>
 				</div>
 			</div>	
 			<div
 				class="control-group">
 				<label class="control-label" for="ip">服务器IP：</label>
 				<div class="controls">
-					<input type="text" name="ip" class="input-large " />
+					<input type="text" name="ip" class="input-large " placeholder="如：10.0.10.5" />
 				</div>
 			</div>	
 			<div
