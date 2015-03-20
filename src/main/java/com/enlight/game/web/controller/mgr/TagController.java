@@ -11,7 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
+
+
+
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.Tag;
+import com.enlight.game.entity.User;
+import com.enlight.game.service.account.AccountService;
+import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.giftProps.GiftPropsService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.tag.TagService;
@@ -50,12 +58,25 @@ public class TagController {
 	@Autowired
 	private StoreService storeService;
 	
+	@Autowired
+	private AccountService accountService;
+	
 	
 	@RequestMapping(value="/uploadExcel",method=RequestMethod.GET)
 	public ModelAndView addExcel(Model model) {
 		ModelAndView mav=new ModelAndView();
-		List<Stores> stores =  storeService.findList();
-		model.addAttribute("stores", stores);
+		
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);	
+			model.addAttribute("stores", stores);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
+		}
 		mav.setViewName("/tag/addExcel");
 		return mav;
 	}
@@ -129,6 +150,11 @@ public class TagController {
 			tag.setTagName(tag.getTagId() + ":  " + tag.getTagName());
 		}
 		return ts;
+	}
+	
+	public ShiroUser getCurrentUser() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user;
 	}
 	
 }

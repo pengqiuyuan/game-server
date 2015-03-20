@@ -161,10 +161,28 @@ public class ServerController extends BaseController{
 	@RequestMapping(value="edit",method=RequestMethod.GET)
 	public String edit(@RequestParam(value="id")long id,Model model){
 		Server st = serverService.findById(id);
-		List<Stores> stores = storeService.findList();
-		List<ServerZone> serverZones = serverZoneService.findAll();
-		model.addAttribute("stores", stores);
-		model.addAttribute("serverZones", serverZones);
+
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			List<ServerZone> serverZones = new ArrayList<ServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {
+				ServerZone server = serverZoneService.findById(Long.valueOf(str));
+				serverZones.add(server);
+			}
+			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			List<ServerZone> serverZones = serverZoneService.findAll();
+			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
+		}	
+		
 		model.addAttribute("st", st);
 		return "/server/edit";
 	}

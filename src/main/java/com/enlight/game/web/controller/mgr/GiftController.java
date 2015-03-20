@@ -319,9 +319,7 @@ public class GiftController extends BaseController{
 	@RequiresRoles(value = { "admin", "17" }, logical = Logical.OR)
 	@RequestMapping(value = "/add" ,method=RequestMethod.GET)
 	public String add(Model model){
-		List<ServerZone> serverZones = serverZoneService.findAll();
 		logger.debug("新增礼品卡..");
-		model.addAttribute("serverZones", serverZones);
 		
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
@@ -329,10 +327,21 @@ public class GiftController extends BaseController{
 			List<Stores> stores = new ArrayList<Stores>();
 			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
 			stores.add(sto);
+			
+			List<ServerZone> serverZones = new ArrayList<ServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {
+				ServerZone server = serverZoneService.findById(Long.valueOf(str));
+				serverZones.add(server);
+			}
+			
 			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
 		}else{
 			List<Stores> stores =  storeService.findList();
+			List<ServerZone> serverZones = serverZoneService.findAll();
 			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
 		}
 		
 		return "/gift/add";

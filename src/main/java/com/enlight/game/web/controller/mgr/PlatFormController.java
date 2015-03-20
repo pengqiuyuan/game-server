@@ -1,5 +1,6 @@
 package com.enlight.game.web.controller.mgr;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,8 @@ import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.PlatForm;
 import com.enlight.game.entity.ServerZone;
+import com.enlight.game.entity.User;
+import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -65,12 +68,17 @@ public class PlatFormController extends BaseController{
 	@Autowired
 	private ServerZoneService serverZoneService;
 	
+	@Autowired
+	private AccountService accountService;
+	
 	@RequestMapping(value = "index",method=RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
 			@RequestParam(value = "sortType", defaultValue = "auto")String sortType, Model model,
 			ServletRequest request){
 		Long userId = getCurrentUserId();
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
 		logger.info("userId"+userId+"渠道信息设置");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Page<PlatForm> platForms = platFormService.findPlatFormByCondition(userId,searchParams, pageNumber, pageSize, sortType);
@@ -82,8 +90,18 @@ public class PlatFormController extends BaseController{
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
-		List<ServerZone> serverZones = serverZoneService.findAll();
-		model.addAttribute("serverZones", serverZones);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {	
+			List<ServerZone> serverZones = new ArrayList<ServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {
+				ServerZone server = serverZoneService.findById(Long.valueOf(str));
+				serverZones.add(server);
+			}
+			model.addAttribute("serverZones", serverZones);
+		}else{
+			List<ServerZone> serverZones = serverZoneService.findAll();
+			model.addAttribute("serverZones", serverZones);
+		}
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		return "/platForm/index";
 	}
@@ -93,8 +111,20 @@ public class PlatFormController extends BaseController{
 	 */
 	@RequestMapping(value = "/add" ,method=RequestMethod.GET)
 	public String add(Model model){
-		List<ServerZone> serverZones = serverZoneService.findAll();
-		model.addAttribute("serverZones", serverZones);
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {	
+			List<ServerZone> serverZones = new ArrayList<ServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {
+				ServerZone server = serverZoneService.findById(Long.valueOf(str));
+				serverZones.add(server);
+			}
+			model.addAttribute("serverZones", serverZones);
+		}else{
+			List<ServerZone> serverZones = serverZoneService.findAll();
+			model.addAttribute("serverZones", serverZones);
+		}
 		return "/platForm/add";
 	}
 	
@@ -111,8 +141,20 @@ public class PlatFormController extends BaseController{
 	@RequestMapping(value="edit",method=RequestMethod.GET)
 	public String edit(@RequestParam(value="id")long id,Model model){
 		PlatForm platForm = platFormService.findById(id);
-		List<ServerZone> serverZones = serverZoneService.findAll();
-		model.addAttribute("serverZones", serverZones);
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {	
+			List<ServerZone> serverZones = new ArrayList<ServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {
+				ServerZone server = serverZoneService.findById(Long.valueOf(str));
+				serverZones.add(server);
+			}
+			model.addAttribute("serverZones", serverZones);
+		}else{
+			List<ServerZone> serverZones = serverZoneService.findAll();
+			model.addAttribute("serverZones", serverZones);
+		}
 		model.addAttribute("platForm", platForm);
 		return "/platForm/edit";
 	}
@@ -153,5 +195,10 @@ public class PlatFormController extends BaseController{
 		platForm.setServerZone(serverZone);
 		model.addAttribute("platForm", platForm);
 		return "/platForm/info";
+	}
+	
+	public ShiroUser getCurrentUser() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user;
 	}
 }
