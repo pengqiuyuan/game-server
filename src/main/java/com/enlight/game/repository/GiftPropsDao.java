@@ -12,6 +12,8 @@ public interface GiftPropsDao extends PagingAndSortingRepository<GiftProps, Long
 	
 	List<GiftProps> findByGameId(String gameId);
 	
-	GiftProps findByItemId(Long itemId);
+	GiftProps findByItemIdAndItemNameAndGameId(Long itemId,String itemName,String gameId);
+	
+	GiftProps findByItemIdAndGameId(Long itemId,String gameId);
 
 }

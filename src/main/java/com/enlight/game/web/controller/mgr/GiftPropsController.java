@@ -113,9 +113,19 @@ public class GiftPropsController extends BaseController{
 //		if(tags.size() == 0||tags == null){
 //			model.addAttribute("message","道具表为空,请先导入道具Excel");
 //		}
-		List<Stores> stores = storeService.findList();
+
 //		model.addAttribute("tagsSize", tags.size());
-		model.addAttribute("stores", stores);
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			model.addAttribute("stores", stores);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
+		}
 		return "/giftProps/add";
 	}
 	
@@ -134,7 +144,10 @@ public class GiftPropsController extends BaseController{
 				giftProp.setGameId(gameId);
 				giftProp.setStatus(GiftProps.STATUS_VALIDE);
 				giftProp.setCrDate(new Date());
-				giftPropsService.save(giftProp);
+				GiftProps g =  giftPropsService.findByItemIdAndItemNameAndGameId(giftProp.getItemId(), giftProp.getItemName(), giftProp.getGameId());
+				if(g==null){
+					giftPropsService.save(giftProp);
+				}
 			}
 		}
 		redirectAttributes.addFlashAttribute("message", "新增成功");
