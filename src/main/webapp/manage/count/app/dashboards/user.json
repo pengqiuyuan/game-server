@@ -48,7 +48,7 @@
   },
   "rows": [
     {
-      "title": "测试",
+      "title": "图表",
       "height": "350px",
       "editable": true,
       "collapse": false,
@@ -184,26 +184,6 @@
           },
           "normTimes": true,
           "title": "用户登录与创建"
-        },
-        {
-          "error": false,
-          "span": 12,
-          "editable": true,
-          "type": "bettermap",
-          "loadingEditor": false,
-          "field": "geoip.location",
-          "provider": "GaoDe",
-          "size": 1000,
-          "spyable": true,
-          "tooltip": "_id",
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0,
-              1
-            ]
-          },
-          "title": "用户分布"
         },
         {
           "error": false,

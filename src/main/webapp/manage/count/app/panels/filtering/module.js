@@ -47,7 +47,7 @@ function (angular, app, _) {
       dashboard.refresh();
     };
 
-    $scope.add = function(query,field) {
+    $scope.add = function(query) {
       query = query || '*';
       filterSrv.set({
         editing   : true,
