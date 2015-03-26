@@ -22,10 +22,32 @@
           "enable": true,
           "query": "login"
         }
+        ,
+        "2": {
+          "id": 2,
+          "color": "rgb(239, 132, 60)",
+          "alias": "",
+          "pin": false,
+          "type": "lucene",
+          "enable": true,
+          "query": "online"
+        }
+        ,
+        "3": {
+          "id": 3,
+          "color": "rgb(110, 208, 224)",
+          "alias": "",
+          "pin": false,
+          "type": "lucene",
+          "enable": true,
+          "query": "newbieguide"
+        }
       },
       "ids": [
         0,
-        1
+        1,
+        2,
+        3
       ]
     },
     "filter": {
