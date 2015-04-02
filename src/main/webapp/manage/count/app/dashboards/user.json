@@ -328,7 +328,7 @@
       "type": "query",
       "collapse": false,
       "notice": false,
-      "enable": false,
+      "enable": true,
       "values": [
         {
           "sem": "_type",

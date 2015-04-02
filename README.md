@@ -1,4 +1,0 @@
-game-server
-===========
-
-ELK

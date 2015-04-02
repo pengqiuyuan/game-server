@@ -2,6 +2,7 @@ package com.enlight.game.base;
 
 import java.io.PrintWriter;
 
+
 public class AppBizException extends Exception {
 
 	private static final long serialVersionUID = 1L;
