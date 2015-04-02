@@ -73,8 +73,7 @@
  	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 	
     <!-- import submodule config -->
-
-	          			  
+    <import resource="classpath:/application_es.xml"/>          			  
 		
 	<!-- production环境 -->
  	<beans profile="production">

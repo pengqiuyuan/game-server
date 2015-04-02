@@ -11,16 +11,16 @@ import com.enlight.game.entity.Tag;
 
 public interface TagDao extends PagingAndSortingRepository<Tag, Long>,JpaSpecificationExecutor<Tag>{
 	
-	List<Tag> findByTagIdAndCategory(Long tagId,String category);
+	List<Tag> findByTagIdAndCategoryAndStoreId(Long tagId,String category,String storeId);
 	
-	List<Tag> findByTagNameAndCategory(String tagName,String category);
-	
-	@Modifying
-	@Query("from Tag tag where tag.category=?1")
-	List<Tag> findByCategory(String category);
-	
-	@Modifying
-	@Query("from Tag tag where tag.tagName like ?1 and tag.category=?2 or tag.tagId like ?1 and tag.category=?2")
-	List<Tag> findByQuery(String query , String category);
+	List<Tag> findByTagNameAndCategoryAndStoreId(String tagName,String category,String storeId);
 
+	
+	@Modifying
+	@Query("from Tag tag where tag.category=?1 and tag.storeId=?2")
+	List<Tag> findByCategoryAndStoreId(String category,String storeId);
+	
+	@Modifying
+	@Query("from Tag tag where tag.tagName like ?1 and tag.category=?2 and tag.storeId=?3 or tag.tagId like ?1 and tag.category=?2 and tag.storeId=?3 order by tag.tagId asc")
+	List<Tag> findByQuery(String query , String category ,String storeId);
 }

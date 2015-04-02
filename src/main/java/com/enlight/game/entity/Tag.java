@@ -23,6 +23,8 @@ public class Tag {
 	 * 分类  道具
 	 */
 	private String category;
+	
+	private String storeId;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,5 +60,12 @@ public class Tag {
 		this.category = category;
 	}
 
+	public String getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
+	}
 	
 }

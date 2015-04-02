@@ -182,6 +182,7 @@
 							                  <li><a href="${ctx}/manage/count/user?id=2#/dashboard/file/userLogin.json">用户登录</a></li>
 							                  <li><a href="${ctx}/manage/count/user?id=3#/dashboard/file/userCreate.json">用户创建</a></li>
 							                  <li><a href="${ctx}/manage/count/user?id=4#/dashboard/file/userOnline.json">在线用户</a></li>
+							                  <li><a href="${ctx}/manage/count/user?id=5#/dashboard/file/userNewbieguide.json">新手引导与功能引导</a></li>
 							                </ul>
 						               </li>	
 								</shiro:hasAnyRoles>

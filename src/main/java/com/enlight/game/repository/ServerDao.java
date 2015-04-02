@@ -21,5 +21,5 @@ public interface ServerDao extends PagingAndSortingRepository<Server, Long>,JpaS
 	@Query("delete from Server server where server.serverZoneId=?1")
 	void deleteByServerZoneId(String serverZoneId);
 	
-	Set<Server> findByServerZoneId(String serverZoneId);
+	Set<Server> findByServerZoneIdAndStoreId(String serverZoneId,String storeId);
 }

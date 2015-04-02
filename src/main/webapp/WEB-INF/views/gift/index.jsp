@@ -104,7 +104,7 @@
 						</td>	
 						<td>
 							<c:forEach items="${item.giftItems}" var="item" varStatus="i">
-								<span><huake:GetItemNameTag id="${item.id}"></huake:GetItemNameTag>*${item.number}</span>&nbsp;&nbsp;
+								<span><huake:GetItemNameTag id="${item.id},${param.search_LIKE_store}"></huake:GetItemNameTag>*${item.number}</span>&nbsp;&nbsp;
 							</c:forEach>
 						</td>
 					</tr>
@@ -148,7 +148,7 @@
 						success: function(data){
 							$("#message").remove();
 							$("#queryForm").before("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>礼品码下载成功！</div>");
-							window.open(data.execlUrl+'/' + giftId +'.csv');
+							window.location.href = data.execlUrl+'/' + giftId +'.csv';
 						},
 					    complete: function () {
 					        $(".exportCode").removeAttr("disabled");

@@ -22,10 +22,32 @@
           "enable": true,
           "query": "login"
         }
+        ,
+        "2": {
+          "id": 2,
+          "color": "rgb(239, 132, 60)",
+          "alias": "",
+          "pin": false,
+          "type": "lucene",
+          "enable": true,
+          "query": "online"
+        }
+        ,
+        "3": {
+          "id": 3,
+          "color": "rgb(110, 208, 224)",
+          "alias": "",
+          "pin": false,
+          "type": "lucene",
+          "enable": true,
+          "query": "newbieguide"
+        }
       },
       "ids": [
         0,
-        1
+        1,
+        2,
+        3
       ]
     },
     "filter": {
@@ -48,7 +70,7 @@
   },
   "rows": [
     {
-      "title": "测试",
+      "title": "图表",
       "height": "350px",
       "editable": true,
       "collapse": false,
@@ -187,26 +209,6 @@
         },
         {
           "error": false,
-          "span": 12,
-          "editable": true,
-          "type": "bettermap",
-          "loadingEditor": false,
-          "field": "geoip.location",
-          "provider": "GaoDe",
-          "size": 1000,
-          "spyable": true,
-          "tooltip": "_id",
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0,
-              1
-            ]
-          },
-          "title": "用户分布"
-        },
-        {
-          "error": false,
           "span": 4,
           "editable": true,
           "type": "terms",
@@ -326,7 +328,7 @@
       "type": "query",
       "collapse": false,
       "notice": false,
-      "enable": false,
+      "enable": true,
       "values": [
         {
           "sem": "_type",

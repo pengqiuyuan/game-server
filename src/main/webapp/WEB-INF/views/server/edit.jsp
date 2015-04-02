@@ -9,7 +9,6 @@
 <style type="text/css"> 
 .error{ 
 color:Red; 
-margin-left:10px;  
 } 
 </style> 
 </head>
@@ -61,7 +60,7 @@ margin-left:10px;
 				class="control-group">
 				<label class="control-label" for="ip">服务器IP：</label>
 				<div class="controls">
-					<input type="text" name="ip" class="input-large " value="${st.ip}" />
+					<input type="text" name="ip" class="input-large " value="${st.ip}" placeholder="如：10.0.10.5"/>
 				</div>
 			</div>	
 			<div

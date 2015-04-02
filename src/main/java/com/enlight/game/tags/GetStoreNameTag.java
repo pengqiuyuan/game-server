@@ -58,9 +58,8 @@ public class GetStoreNameTag extends TagSupport {
 				Stores stores =  storeService.findById(Long.parseLong(id));
 				if(stores!=null){
 					pageContext.getOut().write(stores.getName()+" ");
-					}else{
+				}else{
 						pageContext.getOut().write("<b>超级管理员</b>");
-
 				}
 			}
 			

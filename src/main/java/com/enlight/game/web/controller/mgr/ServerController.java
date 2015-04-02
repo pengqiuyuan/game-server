@@ -1,5 +1,6 @@
 package com.enlight.game.web.controller.mgr;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ import org.springside.modules.web.Servlets;
 import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
+import com.enlight.game.entity.User;
+import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -65,12 +68,17 @@ public class ServerController extends BaseController{
 	@Autowired
 	private ServerZoneService serverZoneService;
 	
+	@Autowired
+	private AccountService accountService;
+	
 	@RequestMapping(value = "index",method=RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
 			@RequestParam(value = "sortType", defaultValue = "auto")String sortType, Model model,
 			ServletRequest request){
 		Long userId = getCurrentUserId();
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
 		logger.info("userId"+userId+"服务器信息设置");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Page<Server> servers = serverService.findServerByCondition(userId,searchParams, pageNumber, pageSize, sortType);
@@ -84,10 +92,29 @@ public class ServerController extends BaseController{
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
-		List<Stores> stores = storeService.findList();
-		List<ServerZone> serverZones = serverZoneService.findAll();
-		model.addAttribute("stores", stores);
-		model.addAttribute("serverZones", serverZones);
+		
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			
+			List<ServerZone> serverZones = new ArrayList<ServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {
+				ServerZone server = serverZoneService.findById(Long.valueOf(str));
+				serverZones.add(server);
+			}
+			
+			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			List<ServerZone> serverZones = serverZoneService.findAll();
+			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
+		}
+		
+
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		return "/server/index";
 	}
@@ -97,11 +124,26 @@ public class ServerController extends BaseController{
 	 */
 	@RequestMapping(value = "/add" ,method=RequestMethod.GET)
 	public String add(Model model){
-		List<Stores> stores = storeService.findList();
-		//List<EnumFunction> enumFunctions = enumFunctionService.findAll();
-		List<ServerZone> serverZones = serverZoneService.findAll();
-		model.addAttribute("stores", stores);
-		model.addAttribute("serverZones", serverZones);
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			List<ServerZone> serverZones = new ArrayList<ServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {
+				ServerZone server = serverZoneService.findById(Long.valueOf(str));
+				serverZones.add(server);
+			}
+			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			List<ServerZone> serverZones = serverZoneService.findAll();
+			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
+		}	
 		return "/server/add";
 	}
 	
@@ -119,10 +161,28 @@ public class ServerController extends BaseController{
 	@RequestMapping(value="edit",method=RequestMethod.GET)
 	public String edit(@RequestParam(value="id")long id,Model model){
 		Server st = serverService.findById(id);
-		List<Stores> stores = storeService.findList();
-		List<ServerZone> serverZones = serverZoneService.findAll();
-		model.addAttribute("stores", stores);
-		model.addAttribute("serverZones", serverZones);
+
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			List<ServerZone> serverZones = new ArrayList<ServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {
+				ServerZone server = serverZoneService.findById(Long.valueOf(str));
+				serverZones.add(server);
+			}
+			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			List<ServerZone> serverZones = serverZoneService.findAll();
+			model.addAttribute("stores", stores);
+			model.addAttribute("serverZones", serverZones);
+		}	
+		
 		model.addAttribute("st", st);
 		return "/server/edit";
 	}
@@ -183,5 +243,10 @@ public class ServerController extends BaseController{
 	public Long getCurrentUserId() {
 		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		return user.id;
+	}
+	
+	public ShiroUser getCurrentUser() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user;
 	}
 }

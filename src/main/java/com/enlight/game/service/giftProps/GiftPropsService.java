@@ -47,11 +47,17 @@ public class GiftPropsService {
 		return giftPropsDao.findByGameId(gameId);
 	}
 	
+	public GiftProps findByItemIdAndItemNameAndGameId(long itemId,String itemName,String gameId){
+		return giftPropsDao.findByItemIdAndItemNameAndGameId(itemId, itemName, gameId);
+	}
+	
 	public void update(Tag tag){
-		GiftProps p = giftPropsDao.findByItemId(tag.getTagId());
-		p.setUpdDate(new Date());
-		p.setItemName(tag.getTagName());
-		giftPropsDao.save(p);
+		GiftProps p = giftPropsDao.findByItemIdAndGameId(tag.getTagId(),tag.getStoreId());
+		if(p!=null){
+			p.setUpdDate(new Date());
+			p.setItemName(tag.getTagName());
+			giftPropsDao.save(p);
+		}
 	}
 	
 	/**

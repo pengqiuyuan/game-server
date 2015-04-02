@@ -11,7 +11,6 @@
 <style type="text/css"> 
 .error{ 
 color:Red; 
-margin-left:10px;  
 } 
 </style> 
 </head>
@@ -122,9 +121,10 @@ margin-left:10px;
 	$("#addfield").click(function(){
 		i++;
 		if(i<=$("#storeslength").val()){
-		     $("#field").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
-		     $("#field").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode' name='role'  class='role-select'></select></div></div>" );
-		     $("#field").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	</div></div>" );
+			 $("#field").prepend("<div id='item'></div>");
+		     $("#item").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
+		     $("#item").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode' name='role'  class='role-select'></select></div></div>" );
+		     $("#item").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	&nbsp;<span id='delElememt"+i+"' class='del btn btn-danger'>删除权限组</span></div></div>" );
 	  		$('select[name="storeId"]').each(function(){
 	  			if($(this).val()!=0){
 				    $("#field").children(":first").children().children("#storeId").find("option[value='"+$(this).val()+"']").remove();	
@@ -151,6 +151,10 @@ margin-left:10px;
 					 }); 
 				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 			});
+		}); 
+	     
+ 	 	$("#delElememt"+i).click(function(){
+		  	$(this).parent().parent().parent().remove();
 		}); 
 		
 		$("#storeId").change(function(e){
@@ -205,6 +209,10 @@ $(function(){
 				equalTo: "#pwdCipher"
 			},serverName:{
 				required:true
+			},storeId:{
+				required:true
+			},role:{
+				required:true
 			}
 		},messages:{
 			name:{
@@ -225,6 +233,10 @@ $(function(){
 				maxlength:"密码长度5-15位",
 				equalTo: "两次输入密码不一致，请重新输入"
 			},serverName:{
+				required:"必须填写"
+			},storeId:{
+				required:"必须填写"
+			},role:{
 				required:"必须填写"
 			}
 		}

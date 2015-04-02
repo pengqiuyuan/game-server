@@ -109,13 +109,23 @@ public class GiftPropsController extends BaseController{
 	 */
 	@RequestMapping(value = "/add" ,method=RequestMethod.GET)
 	public String add(Model model){
-		List<Tag> tags = tagService.findByCategory(Tag.CATEGORY_ITEM);
-		if(tags.size() == 0||tags == null){
-			model.addAttribute("message","道具表为空,请先导入道具Excel");
+//		List<Tag> tags = tagService.findByCategory(Tag.CATEGORY_ITEM);
+//		if(tags.size() == 0||tags == null){
+//			model.addAttribute("message","道具表为空,请先导入道具Excel");
+//		}
+
+//		model.addAttribute("tagsSize", tags.size());
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);
+			model.addAttribute("stores", stores);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
 		}
-		List<Stores> stores = storeService.findList();
-		model.addAttribute("tagsSize", tags.size());
-		model.addAttribute("stores", stores);
 		return "/giftProps/add";
 	}
 	
@@ -134,7 +144,10 @@ public class GiftPropsController extends BaseController{
 				giftProp.setGameId(gameId);
 				giftProp.setStatus(GiftProps.STATUS_VALIDE);
 				giftProp.setCrDate(new Date());
-				giftPropsService.save(giftProp);
+				GiftProps g =  giftPropsService.findByItemIdAndItemNameAndGameId(giftProp.getItemId(), giftProp.getItemName(), giftProp.getGameId());
+				if(g==null){
+					giftPropsService.save(giftProp);
+				}
 			}
 		}
 		redirectAttributes.addFlashAttribute("message", "新增成功");
@@ -160,17 +173,29 @@ public class GiftPropsController extends BaseController{
 	 */
 	@RequestMapping(value = "/checkTagId")
 	@ResponseBody
-	public String checkLoginName(@RequestParam("fieldValue") String fieldValue) {
+	public String checkLoginName(@RequestParam("fieldValue") String fieldValue
+			,@RequestParam(value="gameId")String gameId) {
 		List<Tag> tagsName = new ArrayList<Tag>();
-		List<Tag> tags = tagService.findByTagIdAndCategory(Long.valueOf(fieldValue.split(":")[0]),Tag.CATEGORY_ITEM);
+		List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreId(Long.valueOf(fieldValue.split(":")[0]),Tag.CATEGORY_ITEM,gameId);
 		if(fieldValue.split(":").length>1){
-			tagsName = tagService.findByTagNameAndCategory(fieldValue.split(":")[1].trim(),Tag.CATEGORY_ITEM);
+			tagsName = tagService.findByTagNameAndCategoryAndStoreId(fieldValue.split(":")[1].trim(),Tag.CATEGORY_ITEM,gameId);
 		}
 		if (tags.size()!=0 && tagsName.size()!=0) {
 			return "true";
 		} else {
 			return "false";
 		}
+	}
+	
+	/**
+	 * Ajax请求校验项目是否有道具
+	 */
+	@RequestMapping(value = "/checkTagByGameId")
+	@ResponseBody
+	public String checkTagByGameId(@RequestParam(value="gameId")String gameId) {
+		List<Tag> tags = tagService.findByCategoryAndStoreId(Tag.CATEGORY_ITEM, gameId);
+		return tags.size()+"";
+
 	}
 	
 	public ShiroUser getCurrentUser() {

@@ -14,7 +14,6 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -34,6 +33,7 @@ import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
+import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
@@ -94,6 +94,8 @@ public class RoleFunctionController extends BaseController{
 	@Autowired
 	private RoleAndEnumService roleAndEnumService;
 	
+	@Autowired
+	private AccountService accountService;
 	
 	/**
 	 * 游戏功能权限分配管理首页
@@ -104,6 +106,8 @@ public class RoleFunctionController extends BaseController{
 			@RequestParam(value = "sortType", defaultValue = "auto")String sortType, Model model,
 			ServletRequest request){
 		Long userId = getCurrentUserId();
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
 		logger.info("userId"+userId+"游戏功能权限分配管理首页");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Page<RoleFunction> roleFunctions = roleFunctionService.findRoleFunctionByCondition(userId,searchParams, pageNumber, pageSize, sortType);
@@ -114,8 +118,17 @@ public class RoleFunctionController extends BaseController{
 		model.addAttribute("roleFunctions", roleFunctions);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
-		List<Stores> stores = storeService.findList();
-		model.addAttribute("stores", stores);
+
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);	
+			model.addAttribute("stores", stores);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
+		}
+		
 		// 将搜索条件编码成字符串，用于排序，分页的URL
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		return "/roleFunction/index";
@@ -126,10 +139,19 @@ public class RoleFunctionController extends BaseController{
 	 */
 	@RequestMapping(value = "/add" ,method=RequestMethod.GET)
 	public String addGameRole(Model model){
-		List<Stores> stores = storeService.findList();
-		//List<EnumFunction> enumFunctions = enumFunctionService.findAll();
+		
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			List<Stores> stores = new ArrayList<Stores>();
+			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
+			stores.add(sto);	
+			model.addAttribute("stores", stores);
+		}else{
+			List<Stores> stores =  storeService.findList();
+			model.addAttribute("stores", stores);
+		}
 		List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
-		model.addAttribute("stores", stores);
 		model.addAttribute("cateAndFunctions", cateAndFunctions);
 		return "/roleFunction/add";
 	}
@@ -317,5 +339,10 @@ public class RoleFunctionController extends BaseController{
 	public Long getCurrentUserId() {
 		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		return user.id;
+	}
+	
+	public ShiroUser getCurrentUser() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user;
 	}
 }
