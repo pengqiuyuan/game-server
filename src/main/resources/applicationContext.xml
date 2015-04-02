@@ -99,6 +99,7 @@
 			<property name="minEvictableIdleTimeMillis" value="600000" />
 
 		</bean>
+		    <import resource="classpath:/application_es.xml"/>  
 	</beans>
 	
 	<!-- local development环境 -->
@@ -126,6 +127,29 @@
 			
 		</bean>
 	</beans>
-	
+		
+	<!-- unit test环境 -->
+	<beans profile="test">
+	 	<context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/application.properties,
+          			  classpath*:/application.test.properties" />	
+		
+		<!-- Spring Simple连接池 -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+		</bean>
+
+		<!-- 初始化数据表结构 与默认数据-->
+		<!-- 
+		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+			<jdbc:script location="classpath:sql/h2/schema.sql" />
+			<jdbc:script location="classpath:data/h2/import-data.sql" encoding="UTF-8"/>
+		</jdbc:initialize-database>
+		-->
+		    <import resource="classpath:/application_es.xml"/>  
+	</beans>
 
 </beans>
