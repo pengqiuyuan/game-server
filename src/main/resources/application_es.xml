@@ -8,7 +8,7 @@
         http://www.pilato.fr/schema/elasticsearch http://www.pilato.fr/schema/elasticsearch/elasticsearch-0.3.xsd">
         
         <util:map id="esProperties">
-		    <entry key="cluster.name" value="guangxian_game11"/>
+		    <entry key="cluster.name" value="guangxian_game"/>
 		</util:map>
-<elasticsearch:client id="esClient" esNodes="localhost:9300" properties="esProperties" />		
+		<elasticsearch:client id="esClient" esNodes="localhost:9300" properties="esProperties" />		
 </beans>
