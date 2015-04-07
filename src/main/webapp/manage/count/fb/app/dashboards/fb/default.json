@@ -64,7 +64,7 @@
   "editable": false,
   "index": {
     "interval": "none",
-    "pattern": "[logstash-]YYYY.MM.DD",
+    "pattern": "[logstash-fb]YYYY.MM.DD",
     "default": "_all",
     "warm_fields": false
   },

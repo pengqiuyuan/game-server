@@ -1,5 +1,5 @@
 {
-  "title": "Logstash Search",
+  "title": "统计日志展示",
   "services": {
     "query": {
       "list": {
@@ -75,7 +75,7 @@
               0
             ]
           },
-          "title": "Events over time",
+          "title": "单位时间日志事件触发次数",
           "intervals": [
             "auto",
             "1s",
@@ -108,7 +108,7 @@
       "collapsable": true,
       "panels": [
         {
-          "title": "All events",
+          "title": "表格统计",
           "error": false,
           "span": 12,
           "editable": true,
@@ -135,6 +135,7 @@
           "header": true,
           "paging": true,
           "spyable": true,
+          "exportable": true,
           "queries": {
             "mode": "all",
             "ids": [
@@ -154,13 +155,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
+    "pattern": "[logstash-fb]YYYY.MM.DD",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "{{ARGS.style || 'dark'}}",
   "panel_hints": true,
   "pulldowns": [
     {
+      "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -170,6 +172,7 @@
       "remember": 10
     },
     {
+      "title": "过滤条件",
       "type": "filtering",
       "collapse": true,
       "notice": false
