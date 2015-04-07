@@ -1,17 +1,17 @@
 {
-  "title": "燃烧远征龙鳞币(货币)日志",
-  "role": "15",
+  "title": "虚拟充值币获取与消耗",
+  "role": "12",
   "services": {
     "query": {
       "list": {
         "0": {
-          "query": "expeditioncoin_get",
-          "alias": "",
-          "color": "#7EB26D",
           "id": 0,
+          "color": "#7EB26D",
+          "alias": "",
           "pin": false,
           "type": "lucene",
-          "enable": true
+          "enable": true,
+          "query": "dummy_get"
         },
         "1": {
           "id": 1,
@@ -20,7 +20,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "expeditioncoin_cost"
+          "query": "dummy_cost"
         }
       },
       "ids": [
@@ -129,7 +129,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间燃烧远征龙鳞币(货币)日志获取、消耗次数"
+          "title": "单位时间虚拟充值币获取、消耗次数"
         },
         {
           "error": false,
@@ -180,7 +180,7 @@
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "燃烧远征龙鳞币(货币)日志获取与消耗"
+          "title": "虚拟充值币获取与消耗"
         },
         {
           "error": false,
@@ -214,7 +214,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "燃烧远征龙鳞币(货币)日志获取与消耗饼图"
+          "title": "虚拟充值币获取与消耗饼图"
         },
         {
           "error": false,
@@ -248,7 +248,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "燃烧远征龙鳞币(货币)日志柱状图"
+          "title": "虚拟充值币获取与消耗柱状图"
         },
         {
           "error": false,
@@ -282,7 +282,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "燃烧远征龙鳞币(货币)日志获取与消耗数量比"
+          "title": "虚拟充值币获取与消耗百分比表"
         }
       ],
       "notice": false
@@ -292,15 +292,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
-    "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED",
-    "warm_fields": true
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
+    "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-      "title": "搜索",
+        "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -316,15 +315,16 @@
           "input": ""
         }
       ],
-      "generate": false,
+      "generate": true,
       "query": "*",
       "pinned": true,
       "history": [
+
       ],
       "remember": 10
     },
     {
-      "title": "查询过滤",
+    "title":"查询过滤",
       "type": "filtering",
       "collapse": false,
       "notice": true,

@@ -1,17 +1,17 @@
 {
-  "title": "体力消耗",
-  "role": "10",
+  "title": "游戏币获取",
+  "role": "13",
   "services": {
     "query": {
       "list": {
         "0": {
-          "id": 0,
-          "color": "#7EB26D",
+          "query": "coin_get",
           "alias": "",
+          "color": "#7EB26D",
+          "id": 0,
           "pin": false,
           "type": "lucene",
-          "enable": true,
-          "query": "ap_cost"
+          "enable": true
         }
       },
       "ids": [
@@ -65,7 +65,7 @@
             "check": [],
             "threshold": {},
             "ids": [
-              1
+              0
             ]
           },
           "annotate": {
@@ -118,7 +118,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间体力消耗次数"
+          "title": "单位时间游戏币获取次数"
         },
         {
           "error": false,
@@ -136,7 +136,7 @@
           "overflow": "min-height",
           "fields": [
             "_type",
-            "@timestamp"
+            "@timestamp",
             "日期",
             "游戏ID",
             "国家ID",
@@ -161,14 +161,14 @@
           "queries": {
             "mode": "all",
             "ids": [
-              1
+              0
             ]
           },
           "style": {
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "体力消耗"
+          "title": "游戏币获取"
         },
         {
           "error": false,
@@ -195,13 +195,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              1
+              0
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力消耗饼图"
+          "title": "游戏币获取饼图"
         },
         {
           "error": false,
@@ -228,13 +228,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              1
+              0
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力消耗柱状图"
+          "title": "游戏币获取柱状图"
         },
         {
           "error": false,
@@ -261,13 +261,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              1
+              0
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力消耗百分比表"
+          "title": "游戏币获取百分比表"
         }
       ],
       "notice": false
@@ -277,7 +277,7 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",

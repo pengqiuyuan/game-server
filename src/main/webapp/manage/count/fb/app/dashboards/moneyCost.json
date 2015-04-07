@@ -1,17 +1,17 @@
 {
-  "title": "道具获取",
-  "role": "9",
+  "title": "真实充值币消耗",
+  "role": "11",
   "services": {
     "query": {
       "list": {
         "0": {
-          "query": "item_get",
-          "alias": "",
-          "color": "#7EB26D",
           "id": 0,
+          "color": "#7EB26D",
+          "alias": "",
           "pin": false,
           "type": "lucene",
-          "enable": true
+          "enable": true,
+          "query": "money_cost"
         }
       },
       "ids": [
@@ -65,7 +65,7 @@
             "check": [],
             "threshold": {},
             "ids": [
-              0
+              1
             ]
           },
           "annotate": {
@@ -118,7 +118,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间道具获取次数"
+          "title": "单位时间真实充值币消耗次数"
         },
         {
           "error": false,
@@ -161,14 +161,14 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              1
             ]
           },
           "style": {
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "道具获取"
+          "title": "真实充值币消耗"
         },
         {
           "error": false,
@@ -195,13 +195,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取饼图"
+          "title": "真实充值币消耗饼图"
         },
         {
           "error": false,
@@ -228,13 +228,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取柱状图"
+          "title": "真实充值币消耗柱状图"
         },
         {
           "error": false,
@@ -261,13 +261,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取百分比表"
+          "title": "真实充值币消耗百分比表"
         }
       ],
       "notice": false
@@ -277,7 +277,7 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
@@ -304,6 +304,7 @@
       "query": "*",
       "pinned": true,
       "history": [
+
       ],
       "remember": 10
     },

@@ -1,6 +1,6 @@
 {
-  "title": "虚拟充值币获取",
-  "role": "12",
+  "title": "体力消耗",
+  "role": "10",
   "services": {
     "query": {
       "list": {
@@ -11,7 +11,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "dummy_get"
+          "query": "ap_cost"
         }
       },
       "ids": [
@@ -65,7 +65,7 @@
             "check": [],
             "threshold": {},
             "ids": [
-              0
+              1
             ]
           },
           "annotate": {
@@ -118,7 +118,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间虚拟充值币获取次数"
+          "title": "单位时间体力消耗次数"
         },
         {
           "error": false,
@@ -136,7 +136,7 @@
           "overflow": "min-height",
           "fields": [
             "_type",
-            "@timestamp",
+            "@timestamp"
             "日期",
             "游戏ID",
             "国家ID",
@@ -161,14 +161,14 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              1
             ]
           },
           "style": {
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "虚拟充值币获取"
+          "title": "体力消耗"
         },
         {
           "error": false,
@@ -195,13 +195,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟充值币获取饼图"
+          "title": "体力消耗饼图"
         },
         {
           "error": false,
@@ -228,13 +228,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟充值币获取柱状图"
+          "title": "体力消耗柱状图"
         },
         {
           "error": false,
@@ -261,13 +261,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟充值币获取百分比表"
+          "title": "体力消耗百分比表"
         }
       ],
       "notice": false
@@ -277,14 +277,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-      "title":"搜索",
+    "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -300,10 +300,11 @@
           "input": ""
         }
       ],
-      "generate": true,
+      "generate": false,
       "query": "*",
       "pinned": true,
-      "history": [],
+      "history": [
+      ],
       "remember": 10
     },
     {

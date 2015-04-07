@@ -1,17 +1,17 @@
 {
-  "title": "游戏币获取",
-  "role": "13",
+  "title": "虚拟充值币获取",
+  "role": "12",
   "services": {
     "query": {
       "list": {
         "0": {
-          "query": "coin_get",
-          "alias": "",
-          "color": "#7EB26D",
           "id": 0,
+          "color": "#7EB26D",
+          "alias": "",
           "pin": false,
           "type": "lucene",
-          "enable": true
+          "enable": true,
+          "query": "dummy_get"
         }
       },
       "ids": [
@@ -118,7 +118,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间游戏币获取次数"
+          "title": "单位时间虚拟充值币获取次数"
         },
         {
           "error": false,
@@ -168,7 +168,7 @@
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "游戏币获取"
+          "title": "虚拟充值币获取"
         },
         {
           "error": false,
@@ -201,7 +201,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "游戏币获取饼图"
+          "title": "虚拟充值币获取饼图"
         },
         {
           "error": false,
@@ -234,7 +234,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "游戏币获取柱状图"
+          "title": "虚拟充值币获取柱状图"
         },
         {
           "error": false,
@@ -267,7 +267,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "游戏币获取百分比表"
+          "title": "虚拟充值币获取百分比表"
         }
       ],
       "notice": false
@@ -277,14 +277,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-    "title":"搜索",
+      "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -300,11 +300,10 @@
           "input": ""
         }
       ],
-      "generate": false,
+      "generate": true,
       "query": "*",
       "pinned": true,
-      "history": [
-      ],
+      "history": [],
       "remember": 10
     },
     {

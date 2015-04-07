@@ -1,36 +1,26 @@
 {
-  "title": "体力获取与消耗",
-  "role": "10",
+  "title": "真实充值币获取",
+  "role": "11",
   "services": {
     "query": {
       "list": {
         "0": {
-          "query": "ap_get",
-          "alias": "",
-          "color": "#7EB26D",
           "id": 0,
-          "pin": false,
-          "type": "lucene",
-          "enable": true
-        },
-        "1": {
-          "id": 1,
-          "color": "#EAB839",
+          "color": "#7EB26D",
           "alias": "",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "ap_cost"
+          "query": "money_get"
         }
       },
       "ids": [
-        0,
-        1
+        0
       ]
     },
     "filter": {
       "list": {
-        "0": {
+         "0": {
           "type": "time",
           "field": "@timestamp",
           "from": "now-{{ARGS.from || '24h'}}",
@@ -75,8 +65,7 @@
             "check": [],
             "threshold": {},
             "ids": [
-              0,
-              1
+              0
             ]
           },
           "annotate": {
@@ -129,7 +118,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间体力获取、消耗次数"
+          "title": "单位时间真实充值币获取次数"
         },
         {
           "error": false,
@@ -147,7 +136,6 @@
           "overflow": "min-height",
           "fields": [
             "_type",
-            "@timestamp",
             "日期",
             "游戏ID",
             "国家ID",
@@ -172,15 +160,14 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0,
-              1
+              0
             ]
           },
           "style": {
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "体力获取与消耗"
+          "title": "真实充值币获取"
         },
         {
           "error": false,
@@ -207,14 +194,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0,
-              1
+              0
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力获取与消耗饼图"
+          "title": "真实充值币获取饼图"
         },
         {
           "error": false,
@@ -241,14 +227,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0,
-              1
+              0
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力获取与消耗柱状图"
+          "title": "真实充值币获取柱状图"
         },
         {
           "error": false,
@@ -275,14 +260,13 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0,
-              1
+              0
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力获取与消耗百分比表"
+          "title": "真实充值币获取百分比表"
         }
       ],
       "notice": false
@@ -292,14 +276,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-    "title":"搜索",
+      "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -319,6 +303,7 @@
       "query": "*",
       "pinned": true,
       "history": [
+
       ],
       "remember": 10
     },

@@ -1,21 +1,31 @@
 {
-  "title": "道具消耗",
-  "role": "9",
+  "title": "竞技场徽章(货币)日志",
+  "role": "14",
   "services": {
     "query": {
       "list": {
         "0": {
-          "id": 0,
+          "query": "arenacoin_get",
+          "alias": "",
           "color": "#7EB26D",
+          "id": 0,
+          "pin": false,
+          "type": "lucene",
+          "enable": true
+        },
+        "1": {
+          "id": 1,
+          "color": "#EAB839",
           "alias": "",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "item_cost"
+          "query": "arenacoin_cost"
         }
       },
       "ids": [
-        0
+        0,
+        1
       ]
     },
     "filter": {
@@ -65,6 +75,7 @@
             "check": [],
             "threshold": {},
             "ids": [
+              0,
               1
             ]
           },
@@ -118,7 +129,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间道具消耗次数"
+          "title": "单位时间竞技场徽章(货币)日志获取、消耗次数"
         },
         {
           "error": false,
@@ -161,6 +172,7 @@
           "queries": {
             "mode": "all",
             "ids": [
+              0,
               1
             ]
           },
@@ -168,7 +180,7 @@
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "道具消耗"
+          "title": "竞技场徽章(货币)日志获取与消耗"
         },
         {
           "error": false,
@@ -195,13 +207,14 @@
           "queries": {
             "mode": "all",
             "ids": [
+              0,
               1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具消耗饼图"
+          "title": "竞技场徽章(货币)日志获取与消耗饼图"
         },
         {
           "error": false,
@@ -228,13 +241,14 @@
           "queries": {
             "mode": "all",
             "ids": [
+              0,
               1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具消耗柱状图"
+          "title": "竞技场徽章(货币)日志柱状图"
         },
         {
           "error": false,
@@ -261,13 +275,14 @@
           "queries": {
             "mode": "all",
             "ids": [
+              0,
               1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具消耗百分比表"
+          "title": "竞技场徽章(货币)日志获取与消耗数量比"
         }
       ],
       "notice": false
@@ -277,14 +292,15 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
-    "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
+    "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED",
+    "warm_fields": true
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-      "title":"搜索",
+      "title": "搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -308,7 +324,7 @@
       "remember": 10
     },
     {
-    "title":"查询过滤",
+      "title": "查询过滤",
       "type": "filtering",
       "collapse": false,
       "notice": true,

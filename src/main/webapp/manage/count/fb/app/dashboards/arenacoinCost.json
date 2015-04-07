@@ -1,21 +1,21 @@
 {
-  "title": "真实充值币消耗",
-  "role": "11",
+  "title": "竞技场徽章(货币)日志消耗",
+  "role": "14",
   "services": {
     "query": {
       "list": {
-        "0": {
-          "id": 0,
-          "color": "#7EB26D",
+        "1": {
+          "id": 1,
+          "color": "#EAB839",
           "alias": "",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "money_cost"
+          "query": "arenacoin_cost"
         }
       },
       "ids": [
-        0
+        1
       ]
     },
     "filter": {
@@ -118,7 +118,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间真实充值币消耗次数"
+          "title": "单位时间竞技场徽章(货币)日志消耗次数"
         },
         {
           "error": false,
@@ -168,7 +168,7 @@
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "真实充值币消耗"
+          "title": "竞技场徽章(货币)日志消耗"
         },
         {
           "error": false,
@@ -201,7 +201,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "真实充值币消耗饼图"
+          "title": "竞技场徽章(货币)日志消耗饼图"
         },
         {
           "error": false,
@@ -234,7 +234,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "真实充值币消耗柱状图"
+          "title": "竞技场徽章(货币)日志消耗柱状图"
         },
         {
           "error": false,
@@ -267,7 +267,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "真实充值币消耗百分比表"
+          "title": "竞技场徽章(货币)日志消耗数量比"
         }
       ],
       "notice": false
@@ -277,14 +277,15 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
-    "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
+    "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED",
+    "warm_fields": true
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-    "title":"搜索",
+      "title": "搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -304,12 +305,13 @@
       "query": "*",
       "pinned": true,
       "history": [
-
+        "_type:arenacoin.log AND 日志分类关键字:arenacoin_cost",
+        "_type:arenacoin.log AND 日志分类关键字:arenacoin_get"
       ],
       "remember": 10
     },
     {
-    "title":"查询过滤",
+      "title": "查询过滤",
       "type": "filtering",
       "collapse": false,
       "notice": true,

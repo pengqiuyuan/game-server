@@ -1,21 +1,31 @@
 {
-  "title": "体力获取",
-  "role": "10",
+  "title": "道具获取与消耗",
+  "role": "9",
   "services": {
     "query": {
       "list": {
         "0": {
-          "query": "ap_get",
+          "query": "item_get",
           "alias": "",
           "color": "#7EB26D",
           "id": 0,
           "pin": false,
           "type": "lucene",
           "enable": true
+        },
+        "1": {
+          "id": 1,
+          "color": "#EAB839",
+          "alias": "",
+          "pin": false,
+          "type": "lucene",
+          "enable": true,
+          "query": "item_cost"
         }
       },
       "ids": [
-        0
+        0,
+        1
       ]
     },
     "filter": {
@@ -65,7 +75,8 @@
             "check": [],
             "threshold": {},
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "annotate": {
@@ -118,7 +129,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间体力获取次数"
+          "title": "单位时间道具获取、消耗次数"
         },
         {
           "error": false,
@@ -161,14 +172,15 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "style": {
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "体力获取"
+          "title": "道具获取与消耗"
         },
         {
           "error": false,
@@ -195,13 +207,14 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力获取"
+          "title": "道具获取与消耗饼图"
         },
         {
           "error": false,
@@ -228,13 +241,14 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力获取"
+          "title": "道具获取与消耗柱状图"
         },
         {
           "error": false,
@@ -261,13 +275,14 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "体力获取百分比表"
+          "title": "道具获取与消耗百分比表"
         }
       ],
       "notice": false
@@ -277,14 +292,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-    "title":"搜索",
+      "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -308,7 +323,7 @@
       "remember": 10
     },
     {
-    "title":"查询过滤",
+      "title":"过滤查询",
       "type": "filtering",
       "collapse": false,
       "notice": true,

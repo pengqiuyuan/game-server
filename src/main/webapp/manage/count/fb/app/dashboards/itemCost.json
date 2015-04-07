@@ -1,21 +1,21 @@
 {
-  "title": "燃烧远征龙鳞币(货币)日志消耗",
-  "role": "15",
+  "title": "道具消耗",
+  "role": "9",
   "services": {
     "query": {
       "list": {
-        "1": {
-          "id": 1,
-          "color": "#EAB839",
+        "0": {
+          "id": 0,
+          "color": "#7EB26D",
           "alias": "",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "expeditioncoin_cost"
+          "query": "item_cost"
         }
       },
       "ids": [
-        1
+        0
       ]
     },
     "filter": {
@@ -118,7 +118,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间燃烧远征龙鳞币(货币)日志消耗次数"
+          "title": "单位时间道具消耗次数"
         },
         {
           "error": false,
@@ -168,7 +168,7 @@
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "燃烧远征龙鳞币(货币)日志消耗"
+          "title": "道具消耗"
         },
         {
           "error": false,
@@ -201,7 +201,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "燃烧远征龙鳞币(货币)日志消耗饼图"
+          "title": "道具消耗饼图"
         },
         {
           "error": false,
@@ -234,7 +234,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "燃烧远征龙鳞币(货币)日志消耗柱状图"
+          "title": "道具消耗柱状图"
         },
         {
           "error": false,
@@ -267,7 +267,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "燃烧远征龙鳞币(货币)日志消耗数量比"
+          "title": "道具消耗百分比表"
         }
       ],
       "notice": false
@@ -277,15 +277,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-]YYYY.MM.DD",
-    "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED",
-    "warm_fields": true
+    "pattern": "[logstash-fb-]YYYY.MM.DD",
+    "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-      "title": "搜索",
+      "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -309,7 +308,7 @@
       "remember": 10
     },
     {
-      "title": "查询过滤",
+    "title":"查询过滤",
       "type": "filtering",
       "collapse": false,
       "notice": true,

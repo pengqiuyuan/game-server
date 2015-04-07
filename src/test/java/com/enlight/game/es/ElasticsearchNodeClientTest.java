@@ -140,7 +140,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 	@Test
 	public void test7() {
 		SearchResponse sr = client.prepareSearch().setSearchType("count")
-				.setTypes("user.log")
+				.setTypes("fb_user.log")
 			    .setQuery(QueryBuilders.matchAllQuery())
 			    .addAggregation(
 			    		AggregationBuilders
