@@ -71,7 +71,7 @@ public class CountController extends BaseController{
 	public String dummy(@RequestParam(value="id")long id,Model model){
 		logger.debug("dummy coming...");
 		model.addAttribute("user", EnumFunction.ENUM_DUMMY);
-		return "/kibana/index";
+		return "/kibana/fb/dummy/index";
 	}	
 	
 	/**
