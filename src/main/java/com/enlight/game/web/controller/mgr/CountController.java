@@ -16,7 +16,7 @@ import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 
 
 /**
- * 数据统计
+ * 数据统计fb
  * @author dell
  *
  */
@@ -59,7 +59,7 @@ public class CountController extends BaseController{
 	public String money(@RequestParam(value = "id")long id,Model model){
 		logger.debug("money coming...");
 		model.addAttribute("user", EnumFunction.ENUM_MONEY);
-		return "/kibana/fb/moneyindex";
+		return "/kibana/fb/money/index";
 	}	
 	
 	/**
@@ -109,7 +109,7 @@ public class CountController extends BaseController{
 		model.addAttribute("user", EnumFunction.ENUM_EXPEDITIONCOIN);
 		return "/kibana/fb/expeditioncoin/index";
 	}	
-	
+	  
 	/**
 	 * 用户日志
 	 * @return
@@ -121,6 +121,18 @@ public class CountController extends BaseController{
 		model.addAttribute("user", EnumFunction.ENUM_USER);
 		return "/kibana/fb/user/index";
 	}	
+	
+	
+	/**
+	 * 用户留存
+	 */
+	@RequiresRoles(value = { "admin", "28" }, logical = Logical.OR)
+	@RequestMapping(value = "/fb/userRetained", method = RequestMethod.GET)
+	public String userRetained(Model model){
+		logger.debug("user Retained...");
+		model.addAttribute("user", EnumFunction.ENUM_USER);
+		return "/kibana/fb/user/retain";
+	}
 	
 	
 	/**

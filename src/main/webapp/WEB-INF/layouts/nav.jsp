@@ -178,7 +178,12 @@
 									  <li class="dropdown-submenu">
 						                    <a tabindex="-1" href="#">用户相关日志</a>
 							                <ul class="dropdown-menu">
-							                  <li><a tabindex="-1" href="${ctx}/manage/count/fb/user?id=1#/dashboard/file/user.json">用户相关日志(总)</a></li>
+							                  <li class="dropdown-submenu">
+							                  	<a tabindex="-1" href="${ctx}/manage/count/fb/user?id=1#/dashboard/file/user.json">用户相关日志(总)</a>
+							                    <ul class="dropdown-menu">
+								                  <li><a href="${ctx}/manage/count/fb/userRetained">用户留存</a></li>
+								                </ul>
+							                  </li>
 							                  <li><a href="${ctx}/manage/count/fb/user?id=2#/dashboard/file/userLogin.json">用户登录</a></li>
 							                  <li><a href="${ctx}/manage/count/fb/user?id=3#/dashboard/file/userCreate.json">用户创建</a></li>
 							                  <li><a href="${ctx}/manage/count/fb/user?id=4#/dashboard/file/userOnline.json">在线用户</a></li>
