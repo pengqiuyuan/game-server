@@ -43,7 +43,7 @@
 			<label class="control-label" for="serverName">服务器大区：</label>
 			<div class="controls">	
 				<c:forEach items="${serverZones}" var="item" varStatus="i">
-							   <input type="checkbox" name="serverName" value="${item}" checked="checked"  class="box" readonly="readonly"/>
+							   <input type="checkbox" name="serverName" value="${item}" checked="checked"  class="box" disabled="disabled"/>
 					           	<span><huake:getServerZoneNameTag id="${item}"></huake:getServerZoneNameTag></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					         <c:if test="${(i.index+1)%5 == 0}">
 							<br/>
@@ -51,7 +51,7 @@
 							</c:if>
 				</c:forEach>
 				<c:forEach items="${serverZonesNot}" var="item" varStatus="i">
-							   <input type="checkbox" name="serverName" value="${item}" class="box" readonly="readonly"/>
+							   <input type="checkbox" name="serverName" value="${item}" class="box" disabled="disabled"/>
 					           	<span><huake:getServerZoneNameTag id="${item}"></huake:getServerZoneNameTag></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					         <c:if test="${(i.index+1)%5 == 0}">
 							<br/>

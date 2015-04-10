@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
@@ -151,9 +152,30 @@ public class RoleFunctionController extends BaseController{
 			List<Stores> stores =  storeService.findList();
 			model.addAttribute("stores", stores);
 		}
-		List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
+		List<EnumCategory> cateAndFunctions = enumCategoryService.findAllNotCount();
+		for (EnumCategory enumCategory : cateAndFunctions) {
+			Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryId(enumCategory.getId().intValue());
+			enumCategory.setEnumFunctions(enumFunctions);
+		}
 		model.addAttribute("cateAndFunctions", cateAndFunctions);
 		return "/roleFunction/add";
+	}
+	
+	/**
+	 * 新增权限页面 当选择项目，统计日志功能变化
+	 */
+	@RequestMapping(value = "/changGameId")
+	@ResponseBody
+	public EnumCategory changGameId(@RequestParam("storeId") String storeId) {
+		if(!storeId.equals("")){
+			EnumCategory enumCategory = enumCategoryService.find(EnumCategory.ENUM_COUNT);
+			Set<EnumFunction> enumFunctions =  enumFunctionService.findByGameId(Long.valueOf(storeId));
+			enumCategory.setEnumFunctions(enumFunctions);
+			return enumCategory;
+		}else{
+			return null;
+		}
+
 	}
 	
 	/**
@@ -248,6 +270,15 @@ public class RoleFunctionController extends BaseController{
 		}
 		
 		List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
+		for (EnumCategory enumCategory : cateAndFunctions) {
+			if(enumCategory.getId().equals(EnumCategory.ENUM_COUNT)){
+				Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameId(roleFunction.getGameId());
+				enumCategory.setEnumFunctions(enumFuncs);
+			}else{
+				Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryId(enumCategory.getId().intValue());
+				enumCategory.setEnumFunctions(enumFunctions);
+			}
+		}
 		
 		model.addAttribute("cateAndFunctions", cateAndFunctions);
 		model.addAttribute("stores", storeService.findList());

@@ -17,11 +17,16 @@ public class EnumCategoryService {
 	@Autowired
 	private EnumCategoryDao enumCategoryDao;
 	
-	public List<EnumCategory> findAll(){
+	public List<EnumCategory> findAll(){		
 		return enumCategoryDao.findAll();
+	}
+	
+	public List<EnumCategory> findAllNotCount(){
+		return enumCategoryDao.findAllNotCount();
 	}
 	
 	public EnumCategory find(Long id){
 		return enumCategoryDao.findOne(id);
 	}
+	
 }

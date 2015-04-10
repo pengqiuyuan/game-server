@@ -66,7 +66,7 @@ margin: 0px 0 0;
 		
 	   <div class="form-actions">
   			<button type="submit" class="btn btn-primary" id="submit">保存</button>
-			<a href="<%=request.getContextPath()%>/manage/roleFunction/index?search_EQ_gameId=${roleFunction.gameId}" class="btn btn-primary">返回</a>
+			<a href="<%=request.getContextPath()%>/manage/roleFunction/index?search_LIKE_gameName=${roleFunction.gameName}" class="btn btn-primary">返回</a>
 <!-- 			<a href="#" class="btn btn-danger">删除当前权限</a> -->
 	   </div>
 	</form>

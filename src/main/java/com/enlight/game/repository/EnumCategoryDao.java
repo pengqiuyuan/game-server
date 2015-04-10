@@ -14,4 +14,9 @@ public interface EnumCategoryDao extends PagingAndSortingRepository<EnumCategory
 	@Modifying
 	@Query("from EnumCategory enumCategory where enumCategory.status=1")
 	List<EnumCategory> findAll();
+	
+	@Modifying
+	@Query("from EnumCategory enumCategory where enumCategory.status=1 And enumCategory.id !=10002")
+	List<EnumCategory> findAllNotCount();
+	
 }

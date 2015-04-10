@@ -45,7 +45,7 @@ $(function() {
             [6, 44]
         ]
     };
-    $.plot($("#flot-bar-chart"), [barData], barOptions);
+    $.plot($("#flot-bar-chart"), [barData],barOptions);
 
 });
 
@@ -65,9 +65,10 @@ $(function() {
                 }
             }
         },
-        xaxis: {
-            tickDecimals: 0
-        },
+        xaxes: [{
+            mode: 'time'
+        }],
+
         colors: ["#1ab394"],
         grid: {
             color: "#999999",
@@ -77,25 +78,36 @@ $(function() {
             borderWidth:0
         },
         legend: {
-            show: false
+            show: true
         },
         tooltip: true,
         tooltipOpts: {
-            content: "x: %x, y: %y"
+            content: "x: %x, y: %y %"
         }
     };
     var barData = {
         label: "bar",
         data: [
-            [1, 34],
-            [2, 25],
-            [3, 19],
-            [4, 34],
-            [5, 32],
-            [6, 44]
+            [1197241200000, 34],
+            [1197242200000, 25],
+            [1197243200000, 19],
+            [1197244200000, 34],
+            [1197245200000, 32],
+            [1197246200000, 44]
         ]
     };
-    $.plot($("#flot-line-chart"), [barData], barOptions);
+    var barData1 = {
+            label: "bar",
+            data: [
+                [1197247200000, 2],
+                [1197248200000, 5],
+                [1197249200000, 9],
+                [1197261200000, 14],
+                [1197251200000, 2],
+                [1197231200000, 44]
+            ]
+        };
+    $.plot($("#flot-line-chart"), [barData,barData1], barOptions);
 
 });
 //Flot Pie Chart

@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.Log;
+import com.enlight.game.entity.RoleFunction;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
@@ -147,6 +148,10 @@ public class StoresController extends BaseController{
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String updateStores(Stores store,RedirectAttributes redirectAttributes){
 	    storeService.update(store);
+	    List<RoleFunction> roleFunctions =  roleFunctionService.findByGmId(store.getId());
+	    for (RoleFunction roleFunction : roleFunctions) {
+	    	roleFunctionService.update(roleFunction);
+		}
 		redirectAttributes.addFlashAttribute("message", "修改项目成功");
 		String message = "修改:" +store.toString();
 		logService.log(getCurrentUserName(), message, Log.TYPE_STORE);

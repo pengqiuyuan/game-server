@@ -1,6 +1,7 @@
 package com.enlight.game.service.enumFunction;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -27,5 +28,14 @@ public class EnumFunctionService {
 	
 	public EnumFunction findByEnumRole(Integer enumRole){
 		return enumFunctionDao.findByEnumRole(enumRole);
-	} 
+	}
+	
+	public Set<EnumFunction> findByCategoryId(int categoryId){
+		return enumFunctionDao.findByCategoryId(categoryId);
+	}
+	
+	public Set<EnumFunction> findByGameId(Long gameId){
+		return enumFunctionDao.findByGameId(gameId);
+	}
 }
+

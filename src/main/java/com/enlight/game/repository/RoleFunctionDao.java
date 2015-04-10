@@ -40,4 +40,9 @@ public interface RoleFunctionDao extends PagingAndSortingRepository<RoleFunction
 	@Query("delete from RoleFunction roleFunction where roleFunction.gameId=?1")
 	void delByStoreId(Long storeId);
 	
+	
+	@Modifying
+	@Query("from RoleFunction roleFunction where roleFunction.gameId=?1 and roleFunction.status='1'")
+	List<RoleFunction> findByGmId(Long gameId);
+	
 }

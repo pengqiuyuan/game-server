@@ -29,6 +29,7 @@ margin: 0px 0 0;
 			<label class="control-label" for="gameId">项目名称：</label>
 			<div class="controls">
 				<select id="gameId" name="gameId">	
+					<option value="">请选择项目</option>
 					<c:forEach items="${stores}" var="item" >
 						<option value="${item.id }"  >
 							${item.name }
@@ -45,8 +46,9 @@ margin: 0px 0 0;
 			</div>
 		</div>
 		
-		<div class="control-group">
+		<div class="control-group" id="category">
 			<c:forEach items="${cateAndFunctions}" var="item" varStatus="i">
+				<div>
 				<label class="control-label">${item.categoryName}<input type="checkbox" id="${item.id}" onclick="selectAll(${item.id});" class="box" />：</label>
 				<div class="controls">
 					       <c:forEach items="${item.enumFunctions}" var="ite" varStatus="j">
@@ -57,6 +59,7 @@ margin: 0px 0 0;
 								<br/>
 								</c:if>
 							</c:forEach>
+				</div>
 				</div>
 			</c:forEach>
 		</div>
@@ -110,6 +113,31 @@ $(function(){
 				}
 			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 		});
+	});
+		
+	$("#gameId").change(function(e){
+			var gameId = $("#gameId").val();
+			$.ajax({                                               
+				url: '<%=request.getContextPath()%>/manage/roleFunction/changGameId?storeId='+gameId, 
+				type: 'GET',
+				contentType: "application/json;charset=UTF-8",		
+				dataType: 'text',
+				success: function(data){	
+					if(data!="" && data!=null){
+		 				 var parsedJson = $.parseJSON(data);
+		 				 $("#divCategory").remove(); 
+		 				 $("#category").append("<div id='divCategory'><label class='control-label'>"+parsedJson.categoryName+"<input type='checkbox' id='"+parsedJson.id+"' onclick='selectAll("+parsedJson.id+");' class='box' />：</label><div class='controls' id='functions'></div></div>"); 
+						 jQuery.each(parsedJson.enumFunctions, function(index, itemData) {
+							 $("#functions").append("<input type='checkbox' id='"+parsedJson.id+"' name='functions' value='"+itemData.enumRole+"' class='box'/> <span>"+itemData.enumRole+"、"+itemData.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");			
+						 	 if((index+1)%2==0){
+						 		$("#functions").append("<br/><br/>");
+						 	 }
+						 }); 
+					}else{
+		 				 $("#divCategory").remove(); 
+					}
+				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+			});
 	});
 	
 	$("#inputForm").validate({
