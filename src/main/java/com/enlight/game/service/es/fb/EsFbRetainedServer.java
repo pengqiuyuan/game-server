@@ -35,8 +35,8 @@ public class EsFbRetainedServer {
 	
 	public Map<String, Object> searchAllRetained(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
-			SearchResponse response = client.prepareSearch("log_fb_retained")
-			        .setTypes("fb_retained")
+			SearchResponse response = client.prepareSearch("log_fb_user")
+			        .setTypes("fb_user_retained")
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 			        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 			        .setPostFilter(
@@ -52,8 +52,8 @@ public class EsFbRetainedServer {
 	
 	public Map<String, Object> searchServerZoneRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_fb_retained")
-		        .setTypes("fb_retained")
+		SearchResponse response = client.prepareSearch("log_fb_user")
+		        .setTypes("fb_user_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
@@ -69,8 +69,8 @@ public class EsFbRetainedServer {
 	}
 	public Map<String, Object> searchPlatFormRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_fb_retained")
-		        .setTypes("fb_retained")
+		SearchResponse response = client.prepareSearch("log_fb_user")
+		        .setTypes("fb_user_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
@@ -88,8 +88,8 @@ public class EsFbRetainedServer {
 	
 	public Map<String, Object> searchServerRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_fb_retained")
-		        .setTypes("fb_retained")
+		SearchResponse response = client.prepareSearch("log_fb_user")
+		        .setTypes("fb_user_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
