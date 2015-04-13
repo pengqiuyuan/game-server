@@ -29,4 +29,8 @@ public interface ServerDao extends PagingAndSortingRepository<Server, Long>,JpaS
 	List<Server> findAll();
 	
 	Set<Server> findByStoreId(String storeId);
+	
+	@Modifying
+	@Query("select server.serverId from Server server where server.storeId=?1")
+	List<String> findServerId(String storeId);
 }

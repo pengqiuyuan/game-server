@@ -25,4 +25,8 @@ public interface PlatFormDao extends PagingAndSortingRepository<PlatForm, Long>,
 	
 	List<PlatForm> findByServerZoneId(String serverZoneId);
 	
+	@Modifying
+	@Query("select platForm.pfId from PlatForm platForm where platForm.status='1'")
+	List<String> findPlatFormId();
+	
 }

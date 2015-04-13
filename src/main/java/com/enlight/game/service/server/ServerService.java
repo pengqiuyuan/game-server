@@ -82,6 +82,10 @@ public class ServerService {
 		serverDao.deleteByServerZoneId(serverZoneId);
 	}
 	
+	public List<String> findServerId(String storeId){
+		return serverDao.findServerId(storeId);
+	}
+	
 	/**
 	 * 分页查询
 	 * 

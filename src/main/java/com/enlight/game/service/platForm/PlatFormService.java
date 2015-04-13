@@ -75,6 +75,10 @@ public class PlatFormService {
 	public void delByServerZoneId(String serverZoneId){
 		platFormDao.deleteByServerZoneId(serverZoneId);
 	}
+	
+	public List<String> findPlatFormId(){
+		return platFormDao.findPlatFormId();
+	}
 	/**
 	 * 分页查询
 	 * 
