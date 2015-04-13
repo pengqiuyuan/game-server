@@ -29,7 +29,16 @@ public class FbRetainedScheduled {
 	public Client client;
 	
 	//项目名称
-	private static final String fb_game = "fb";
+	private static final String fb_game = "FB";
+	
+	private static final String index = "logstash-fb-*";
+	
+	private static final String type = "fb_user.log";
+	
+	private static final String bulk_index = "log_fb_user";
+	
+	private static final String bulk_type_retained = "fb_user_retained";
+	
 	
 	EsUtil esUtilTest = new EsUtil();
 	
@@ -40,7 +49,7 @@ public class FbRetainedScheduled {
 				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
@@ -52,7 +61,7 @@ public class FbRetainedScheduled {
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("运营大区ID", key))
 		        );
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
@@ -64,7 +73,7 @@ public class FbRetainedScheduled {
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("渠道ID", key))
 		        );
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
@@ -76,7 +85,7 @@ public class FbRetainedScheduled {
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("服务器ID", key))
 		        );
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
 		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
@@ -84,7 +93,7 @@ public class FbRetainedScheduled {
 	
 	public void bulk(UserRetained userRetained) throws IOException{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		bulkRequest.add(client.prepareIndex("log_fb_user", "fb_user_retained")
+		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
 	                        .field("date", userRetained.getDate().split("T")[0])
@@ -104,7 +113,7 @@ public class FbRetainedScheduled {
 	
 	public void bulkall(UserRetained userRetained) throws IOException{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		bulkRequest.add(client.prepareIndex("log_fb_user", "fb_user_retained")
+		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
 	                        .field("date", userRetained.getDate().split("T")[0])
@@ -123,7 +132,6 @@ public class FbRetainedScheduled {
 	
 
 	public void esAll() throws IOException {	
-		String typeName = "fb_user.log";
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
@@ -132,7 +140,7 @@ public class FbRetainedScheduled {
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes(typeName).setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false))
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(35)
@@ -210,7 +218,7 @@ public class FbRetainedScheduled {
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
 			    		.subAggregation(
@@ -306,7 +314,7 @@ public class FbRetainedScheduled {
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
@@ -396,7 +404,7 @@ public class FbRetainedScheduled {
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))

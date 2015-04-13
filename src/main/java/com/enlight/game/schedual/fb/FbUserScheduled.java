@@ -5,8 +5,15 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.admin.indices.exists.types.TypesExistsResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
@@ -18,6 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.enlight.game.entity.ServerZone;
+import com.enlight.game.service.platForm.PlatFormService;
+import com.enlight.game.service.server.ServerService;
+import com.enlight.game.service.serverZone.ServerZoneService;
+import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.EsUtil;
 
 @Transactional(readOnly = true)
@@ -27,7 +39,7 @@ public class FbUserScheduled {
 	public Client client;
 	
 	//项目名称
-	private static final String game = "fb";
+	private static final String game = "FB";
 	
 	private static final String index = "logstash-fb-*";
 	
@@ -41,73 +53,107 @@ public class FbUserScheduled {
 	
 	EsUtil esUtilTest = new EsUtil();
 	
+	@Autowired
+	private ServerZoneService serverZoneService;
+	
+	@Autowired
+	private ServerService serverService;
+	
+	@Autowired
+	private PlatFormService platFormService;
+	
+	@Autowired
+	private StoreService storeService;
 
 	public void esAll() throws IOException, ParseException {	
+		
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
+		//新增用户
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
-		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder).execute().actionGet();
-		
-		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.termFilter("日志分类关键字", "create")));
-		SearchResponse srTotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builderTotal).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder).execute().actionGet();
 		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
 		        .setSource(jsonBuilder()
-			           	 .startObject()
+			           	 .startObject() 
 	                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
 	                        .field("gameId", game)
 	                        .field("userAdd", sr.getHits().totalHits())
 	                        .field("key", "all")
-	                        .field("ts_add","["+ts.toString()+","+sr.getHits().totalHits()+"]")
+	                        .field("ts_add",ts.toString())
 	                        .field("@timestamp", new Date())
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-		        .setSource(jsonBuilder()
-			           	 .startObject()
-	                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-	                        .field("gameId", game)
-	                        .field("userTotal", srTotal.getHits().totalHits())
-	                        .field("key", "all")
-	                        .field("ts_total","["+ts.toString()+","+srTotal.getHits().totalHits()+"]")
-	                        .field("@timestamp", new Date())
-	                    .endObject()
-		                  )
-		        );
+		
+		//累计用户
+		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
+		boolean ty = false;
+		if(responseindex.isExists()){
+			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index).setTypes(bulk_type_total).execute().actionGet(); 
+			if(responsetype.isExists()){
+				ty = true;
+			}
+		}
+		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+					FilterBuilders.andFilter(
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()))
+			        );
+			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setSearchType("count").setQuery(builderTotal).execute().actionGet();
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userTotal", srTotal.getHits().totalHits()+sr.getHits().totalHits())
+		                        .field("key", "all")
+		                        .field("ts_total",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+		}else{
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.termFilter("日志分类关键字", "create")));
+			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal).execute().actionGet();
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userTotal", srTotal.getHits().totalHits())
+		                        .field("key", "all")
+		                        .field("ts_total",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+		}
 		bulkRequest.execute().actionGet();
 	}	
 	
 	public void esServerZone() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
+		BulkRequestBuilder bulkRequest = client.prepareBulk();
+		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
+		//运营大区用户增加
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
-		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 				.addAggregation(
 			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
 			    )
 				.execute().actionGet();
-		
-		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.termFilter("日志分类关键字", "create")));
-		SearchResponse srTotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builderTotal)
-				.addAggregation(
-			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
-			    )
-				.execute().actionGet();
-		
 		Terms genders = sr.getAggregations().get("serverZone");	
-		Terms gendersTotal = srTotal.getAggregations().get("serverZone");
-
-		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
+		List<Long> serverZones = serverZoneService.findServerId();
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
 			        .setSource(jsonBuilder()
@@ -117,57 +163,127 @@ public class FbUserScheduled {
 		                        .field("userAdd", e.getDocCount())
 		                        .field("key", "serverZone")
 		                        .field("value",e.getKey())
-		                        .field("ts_add","["+ts.toString()+","+e.getDocCount()+"]")
+		                        .field("ts_add",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+			serverZones.remove(Long.valueOf(e.getKey()));
+		}
+		for (Long lo : serverZones) {
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userAdd", 0)
+		                        .field("key", "serverZone")
+		                        .field("value",lo.toString())
+		                        .field("ts_add",ts.toString())
 		                        .field("@timestamp", new Date())
 		                    .endObject()
 			                  )
 			        );
 		}
 		
+		//运营大区用户累计
+		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
+		boolean ty = false;
+		if(responseindex.isExists()){
+			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index).setTypes(bulk_type_total).execute().actionGet(); 
+			if(responsetype.isExists()){
+				ty = true;
+			}
+		}
+		Terms gendersTotal = null;
+		List<Long> szs = serverZoneService.findServerId();
+		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+					FilterBuilders.andFilter(
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
+			        		FilterBuilders.termFilter("key", "serverZone"))
+			        );
+			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setSearchType("count").setQuery(builderTotal)
+					.addAggregation(
+				    		AggregationBuilders.terms("serverZone").field("value").size(10)
+				    )
+					.execute().actionGet();
+			gendersTotal = srTotal.getAggregations().get("serverZone");
+		}else{
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.termFilter("日志分类关键字", "create")));
+			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
+					.addAggregation(
+				    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
+				    )
+					.execute().actionGet();
+			gendersTotal = srTotal.getAggregations().get("serverZone");
+		}
+
+		Map<String, Long> map = new HashMap<String, Long>();
 		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
+		}
+		for (Terms.Bucket e : genders.getBuckets()) {
+			if(map.containsKey(e.getKey())){
+				map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
+			}else{
+				map.put(e.getKey(), e.getDocCount());
+			}
+		}
+		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
 		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
 		                        .field("gameId", game)
-		                        .field("userTotal", entry.getDocCount())
+		                        .field("userTotal", entry.getValue().toString())
 		                        .field("key", "serverZone")
 		                        .field("value",entry.getKey())
-		                        .field("ts_total","["+ts.toString()+","+entry.getDocCount()+"]")
+		                        .field("ts_total",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+			szs.remove(entry.getKey());
+		}
+		
+		for (Long lo : szs) {
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userTotal", 0)
+		                        .field("key", "serverZone")
+		                        .field("value",lo.toString())
+		                        .field("ts_total",ts.toString())
 		                        .field("@timestamp", new Date())
 		                    .endObject()
 			                  )
 			        );
 		}
+		
 		bulkRequest.execute().actionGet();		
 	}
 	
 	
 	public void esPlatForm() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
+		BulkRequestBuilder bulkRequest = client.prepareBulk();
+		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
+		//渠道用户增加
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
-		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 				.addAggregation(
-			    		AggregationBuilders.terms("platForm").field("渠道ID").size(10)
+			    		AggregationBuilders.terms("platForm").field("渠道ID").size(300)
 			    )
 				.execute().actionGet();
-		
-		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.termFilter("日志分类关键字", "create")));
-		SearchResponse srTotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builderTotal)
-				.addAggregation(
-			    		AggregationBuilders.terms("platForm").field("渠道ID").size(10)
-			    )
-				.execute().actionGet();
-		
 		Terms genders = sr.getAggregations().get("platForm");	
-		Terms gendersTotal = srTotal.getAggregations().get("platForm");
-
-		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
+		List<String> platForms = platFormService.findPlatFormId();
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
 			        .setSource(jsonBuilder()
@@ -177,23 +293,99 @@ public class FbUserScheduled {
 		                        .field("userAdd", e.getDocCount())
 		                        .field("key", "platForm")
 		                        .field("value",e.getKey())
-		                        .field("ts_add","["+ts.toString()+","+e.getDocCount()+"]")
+		                        .field("ts_add",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+			platForms.remove(e.getKey());
+		}
+		for (String lo : platForms) {
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userAdd", 0)
+		                        .field("key", "platForm")
+		                        .field("value",lo)
+		                        .field("ts_add",ts.toString())
 		                        .field("@timestamp", new Date())
 		                    .endObject()
 			                  )
 			        );
 		}
-		
+		//渠道用户累计
+		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
+		boolean ty = false;
+		if(responseindex.isExists()){
+			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index).setTypes(bulk_type_total).execute().actionGet(); 
+			if(responsetype.isExists()){
+				ty = true;
+			}
+		}
+		Terms gendersTotal = null;
+		List<String> pfs = platFormService.findPlatFormId();
+		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+					FilterBuilders.andFilter(
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
+			        		FilterBuilders.termFilter("key", "platForm"))
+			        );
+			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setSearchType("count").setQuery(builderTotal)
+					.addAggregation(
+				    		AggregationBuilders.terms("platForm").field("value").size(300)
+				    )
+					.execute().actionGet();
+			gendersTotal = srTotal.getAggregations().get("platForm");
+		}else{
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.termFilter("日志分类关键字", "create")));
+			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
+					.addAggregation(
+				    		AggregationBuilders.terms("platForm").field("渠道ID").size(10)
+				    )
+					.execute().actionGet();
+			gendersTotal = srTotal.getAggregations().get("platForm");
+		}
+
+		Map<String, Long> map = new HashMap<String, Long>();
 		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
+		}
+		for (Terms.Bucket e : genders.getBuckets()) {
+			if(map.containsKey(e.getKey())){
+				map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
+			}else{
+				map.put(e.getKey(), e.getDocCount());
+			}
+		}
+		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
 		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
 		                        .field("gameId", game)
-		                        .field("userTotal", entry.getDocCount())
+		                        .field("userTotal", entry.getValue().toString())
 		                        .field("key", "platForm")
 		                        .field("value",entry.getKey())
-		                        .field("ts_total","["+ts.toString()+","+entry.getDocCount()+"]")
+		                        .field("ts_total",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+			pfs.remove(entry.getKey());
+		}
+		
+		for (String lo : pfs) {
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userTotal", 0)
+		                        .field("key", "platForm")
+		                        .field("value",lo.toString())
+		                        .field("ts_total",ts.toString())
 		                        .field("@timestamp", new Date())
 		                    .endObject()
 			                  )
@@ -204,29 +396,21 @@ public class FbUserScheduled {
 	
 	public void esServer() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
+		BulkRequestBuilder bulkRequest = client.prepareBulk();
+		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
+		//服务器用户增加
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
-		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 				.addAggregation(
 			    		AggregationBuilders.terms("server").field("服务器ID").size(10)
 			    )
 				.execute().actionGet();
-		
-		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.termFilter("日志分类关键字", "create")));
-		SearchResponse srTotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builderTotal)
-				.addAggregation(
-			    		AggregationBuilders.terms("server").field("服务器ID").size(10)
-			    )
-				.execute().actionGet();
-		
 		Terms genders = sr.getAggregations().get("server");	
-		Terms gendersTotal = srTotal.getAggregations().get("server");
-
-		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
+		List<String> serverIds = serverService.findServerId(storeService.findByName(game).getId().toString());
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
 			        .setSource(jsonBuilder()
@@ -236,28 +420,106 @@ public class FbUserScheduled {
 		                        .field("userAdd", e.getDocCount())
 		                        .field("key", "server")
 		                        .field("value",e.getKey())
-		                        .field("ts_add","["+ts.toString()+","+e.getDocCount()+"]")
+		                        .field("ts_add",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+			serverIds.remove(e.getKey());
+		}
+		
+		for (String lo : serverIds) {
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userAdd", 0)
+		                        .field("key", "server")
+		                        .field("value",lo)
+		                        .field("ts_add",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+		}
+		//服务器用户累计
+		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
+		boolean ty = false;
+		if(responseindex.isExists()){
+			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index).setTypes(bulk_type_total).execute().actionGet(); 
+			if(responsetype.isExists()){
+				ty = true;
+			}
+		}
+		Terms gendersTotal = null;
+		List<String> sis = serverService.findServerId(storeService.findByName(game).getId().toString());
+		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+					FilterBuilders.andFilter(
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
+			        		FilterBuilders.termFilter("key", "server"))
+			        );
+			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setSearchType("count").setQuery(builderTotal)
+					.addAggregation(
+				    		AggregationBuilders.terms("server").field("value").size(300)
+				    )
+					.execute().actionGet();
+			gendersTotal = srTotal.getAggregations().get("server");
+		}else{
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.termFilter("日志分类关键字", "create")));
+			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
+					.addAggregation(
+				    		AggregationBuilders.terms("server").field("服务器ID").size(10)
+				    )
+					.execute().actionGet();
+			gendersTotal = srTotal.getAggregations().get("server");
+		}
+
+		Map<String, Long> map = new HashMap<String, Long>();
+		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
+		}
+		for (Terms.Bucket e : genders.getBuckets()) {
+			if(map.containsKey(e.getKey())){
+				map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
+			}else{
+				map.put(e.getKey(), e.getDocCount());
+			}
+		}
+		for(Entry<String,Long> entry : map.entrySet()){
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userTotal", entry.getValue().toString())
+		                        .field("key", "server")
+		                        .field("value",entry.getKey())
+		                        .field("ts_total",ts.toString())
+		                        .field("@timestamp", new Date())
+		                    .endObject()
+			                  )
+			        );
+			sis.remove(Long.valueOf(entry.getKey()));
+		}
+		
+		for (String lo : sis) {
+			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
+			        .setSource(jsonBuilder()
+				           	 .startObject()
+		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("gameId", game)
+		                        .field("userTotal", 0)
+		                        .field("key", "server")
+		                        .field("value",lo.toString())
+		                        .field("ts_total",ts.toString())
 		                        .field("@timestamp", new Date())
 		                    .endObject()
 			                  )
 			        );
 		}
 		
-		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", entry.getDocCount())
-		                        .field("key", "server")
-		                        .field("value",entry.getKey())
-		                        .field("ts_total","["+ts.toString()+","+entry.getDocCount()+"]")
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-		}
 		bulkRequest.execute().actionGet();		
 		
 	}
