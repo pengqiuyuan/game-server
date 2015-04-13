@@ -349,29 +349,32 @@
 									<shiro:hasAnyRoles name="admin,FB_AP,FB_ITEM,FB_MONEY,FB_DUMMY,FB_COIN,FB_ARENACOIN,FB_EXPEDITIONC,FB_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB离线日志</a>
 											<ul class="dropdown-menu">
-												<shiro:hasAnyRoles name="admin,FB_USER">
-													  <li class="dropdown-submenu">
-															<li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
-															<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd">用户新增</a></li>
-															<li><a href="${ctx}/manage/fbUserActive/fb/userActive">活跃用户</a></li>
-															<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
+												<li class="dropdown-submenu">
+													<shiro:hasAnyRoles name="admin,FB_USER">
+														<li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
+														<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd">用户新增</a></li>
+														<li><a href="${ctx}/manage/fbUserActive/fb/userActive">活跃用户</a></li>
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<li><a href="${ctx}/manage/fbUserPay/fb/userPay">新增付费用户</a></li>
+																	<li><a href="${ctx}/manage/fbUserPay/fb/userDay">当日付费率</a></li>
+																	<li><a href="${ctx}/manage/fbUserPay/fb/userWeek">当周付费率</a></li>
+																	<li><a href="${ctx}/manage/fbUserPay/fb/userMouth">当月付费率</a></li>
+																<li>
+															</ul>
+														</li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,FB_MONEY">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
-																	<shiro:hasAnyRoles name="admin,FB_USER">
-																		  <li class="dropdown-submenu">
-																			<li><a href="${ctx}/manage/fbUserPay/fb/userPay">新增付费用户</a></li>
-																			<li><a href="${ctx}/manage/fbUserPay/fb/userDay">当日付费率</a></li>
-																			<li><a href="${ctx}/manage/fbUserPay/fb/userWeek">当周付费率</a></li>
-																			<li><a href="${ctx}/manage/fbUserPay/fb/userMouth">当月付费率</a></li>
-															              <li>	
-																	</shiro:hasAnyRoles>
-																	<li class="divider"></li>
-																	<li><a href="#">sample</a></li>
+																	<li class="dropdown-submenu">
+																		<li><a href="${ctx}/manage/fbUserPay/fb/userPay">新增付费用户</a></li>
+																	<li>
 																</ul>
-															</li>
-										               <li>	
-												</shiro:hasAnyRoles>
-												<li class="divider"></li>
-												<li><a href="#">sample</a></li>
+														</li>
+													</shiro:hasAnyRoles>
+												<li>	
 											</ul>
 
 										</li>

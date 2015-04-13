@@ -25,7 +25,7 @@ import com.enlight.game.util.EsUtil;
 
 
 @ContextConfiguration(locations = {"/applicationContext.xml"})
-public class EsActive extends SpringTransactionalTestCase{
+public class EsActiveTest extends SpringTransactionalTestCase{
 	@Autowired
 	private Client client;
 	
@@ -66,12 +66,12 @@ public class EsActive extends SpringTransactionalTestCase{
 	
 	//@Test
 	public void test14() throws IOException, ParseException {	//all
-		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log")
+		        .setPostFilter(FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家平台ID")
 			    ).execute().actionGet();
 		Cardinality agg = dayactive.getAggregations().get("agg");
@@ -80,15 +80,15 @@ public class EsActive extends SpringTransactionalTestCase{
 		System.out.println(dayactive);
 	}
 	
-	@Test
+	//@Test
 	public void test17() throws IOException, ParseException {	
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -105,12 +105,12 @@ public class EsActive extends SpringTransactionalTestCase{
 	
 	//@Test 
 	public void test15() throws IOException, ParseException {	//serverzone
-		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log")
+		        .setPostFilter(FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(10).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家平台ID")
 								)
@@ -130,12 +130,12 @@ public class EsActive extends SpringTransactionalTestCase{
 	public void esAll() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		System.out.println("###############  all 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		
@@ -155,12 +155,12 @@ public class EsActive extends SpringTransactionalTestCase{
 		                  )
 		        );
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		
@@ -180,12 +180,12 @@ public class EsActive extends SpringTransactionalTestCase{
 		                  )
 		        );
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		
@@ -211,12 +211,12 @@ public class EsActive extends SpringTransactionalTestCase{
 	public void esServerZone() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		System.out.println("###############  serverzone 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -241,12 +241,12 @@ public class EsActive extends SpringTransactionalTestCase{
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -272,12 +272,12 @@ public class EsActive extends SpringTransactionalTestCase{
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -308,12 +308,12 @@ public class EsActive extends SpringTransactionalTestCase{
 	public void esPlatForm() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		System.out.println("###############  platform 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 						AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -338,12 +338,12 @@ public class EsActive extends SpringTransactionalTestCase{
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 		        		AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -369,12 +369,12 @@ public class EsActive extends SpringTransactionalTestCase{
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 		        		AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -405,12 +405,12 @@ public class EsActive extends SpringTransactionalTestCase{
 	public void esServer() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		System.out.println("###############  server 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -435,12 +435,12 @@ public class EsActive extends SpringTransactionalTestCase{
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 		        		AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -466,12 +466,12 @@ public class EsActive extends SpringTransactionalTestCase{
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
-		        ).addAggregation(
+		        .addAggregation(
 		        		AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -498,7 +498,7 @@ public class EsActive extends SpringTransactionalTestCase{
 		bulkRequest.execute().actionGet();	
 	}	
 	
-	//@Test 
+	@Test 
 	public void test16() throws IOException, ParseException {
 		System.out.println("----------------活跃用户 active 调度开始");
 		esAll();
