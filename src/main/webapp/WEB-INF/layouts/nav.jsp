@@ -369,7 +369,7 @@
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
-																		<li><a href="${ctx}/manage/fbUserPay/fb/userPay">新增付费用户</a></li>
+																		<li><a href="${ctx}/manage/fbUserIncome/fb/userIncome">收入分析</a></li>
 																	<li>
 																</ul>
 														</li>

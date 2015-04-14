@@ -33,7 +33,7 @@ import com.enlight.game.util.EsUtil;
 /**
  * 
  * @author apple
- * 活跃玩家
+ * 收入分析
  */
 @Transactional(readOnly = true)
 public class FbUserIncomeScheduled {

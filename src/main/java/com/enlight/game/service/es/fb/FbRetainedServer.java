@@ -15,6 +15,8 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.FilteredQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +36,15 @@ public class FbRetainedServer {
 	private static final String type = "fb_user_retained";
 	
 	public Map<String, Map<String, Object>> searchAllRetained(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "all"))
+                		);
 			SearchResponse response = client.prepareSearch(index)
 			        .setTypes(type)
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .setPostFilter(
-			                FilterBuilders.andFilter(
-			        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-			                		FilterBuilders.termFilter("key", "all"))
-			        		)
+			        .setQuery(builder)
 			        .addSort("date", SortOrder.DESC)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
@@ -51,16 +53,16 @@ public class FbRetainedServer {
 	}
 	
 	public Map<String, Map<String, Object>> searchServerZoneRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "serverZone"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "serverZone"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -68,35 +70,34 @@ public class FbRetainedServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	public Map<String, Map<String, Object>> searchPlatFormRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "platForm"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "platForm"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
-		
 		return retained(response,dateFrom,dateTo);
 	}
 	
 	public Map<String, Map<String, Object>> searchServerRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "server"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "server"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.DESC)		
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()

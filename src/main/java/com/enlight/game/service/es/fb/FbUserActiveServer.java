@@ -14,6 +14,8 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.FilteredQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +40,15 @@ public class FbUserActiveServer {
 	
 	//all 日活
 	public Map<String, String> searchAllUserDay(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "all"))
+                		);
 			SearchResponse response = client.prepareSearch(index)
 			        .setTypes(type_active_day)
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .setPostFilter(
-			                FilterBuilders.andFilter(
-			        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-			                		FilterBuilders.termFilter("key", "all"))
-			        		)
+			        .setQuery(builder)
 			        .addSort("date", SortOrder.ASC)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
@@ -57,14 +59,15 @@ public class FbUserActiveServer {
 	//all 周活
 	public Map<String, String> searchAllUserWeek(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "all"))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_week)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "all"))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -74,15 +77,15 @@ public class FbUserActiveServer {
 	
 	//all 月活
 	public Map<String, String> searchAllUserMouth(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "all"))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_mouth)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "all"))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -91,16 +94,16 @@ public class FbUserActiveServer {
 	}
 	
 	public Map<String, String> searchServerZoneUserDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "serverZone"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_day)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "serverZone"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -109,16 +112,16 @@ public class FbUserActiveServer {
 	}
 	
 	public Map<String, String> searchServerZoneUserWeek(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "serverZone"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_week)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "serverZone"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -127,16 +130,16 @@ public class FbUserActiveServer {
 	}
 	
 	public Map<String, String> searchServerZoneUserMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "serverZone"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_mouth)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "serverZone"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -145,16 +148,16 @@ public class FbUserActiveServer {
 	}
 	
 	public Map<String, String> searchPlatFormUserDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "platForm"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_day)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "platForm"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -164,16 +167,16 @@ public class FbUserActiveServer {
 	}
 	
 	public Map<String, String> searchPlatFormUserWeek(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "platForm"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_week)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "platForm"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -183,35 +186,34 @@ public class FbUserActiveServer {
 	}
 	
 	public Map<String, String> searchPlatFormUserMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "platForm"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_mouth)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "platForm"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
-		
 		return retained(response,dateFrom,dateTo);
 	}
 	
 	public Map<String, String> searchServerUserDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "server"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_day)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "server"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -221,16 +223,16 @@ public class FbUserActiveServer {
 	}
 	
 	public Map<String, String> searchServerUserWeek(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "server"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_week)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "server"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
@@ -240,16 +242,16 @@ public class FbUserActiveServer {
 	}
 	
 	public Map<String, String> searchServerUserMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "server"),
+                		FilterBuilders.termFilter("value", value))
+                		);
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type_active_mouth)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setPostFilter(
-		                FilterBuilders.andFilter(
-		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-		                		FilterBuilders.termFilter("key", "server"),
-		                		FilterBuilders.termFilter("value", value))
-		        		)
+		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()

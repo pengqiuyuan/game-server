@@ -12,6 +12,7 @@ import java.util.Date;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.FilteredQueryBuilder;
@@ -20,6 +21,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
 import org.elasticsearch.search.aggregations.metrics.sum.Sum;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -516,4 +518,35 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 	    return arr;
 	  }
 	
+	
+	@Test
+	public void ts() throws IOException, ParseException {	
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from("2015-03-14").to("2015-04-13"),
+                		FilterBuilders.termFilter("key", "all"))
+                		);
+			SearchResponse response = client.prepareSearch("log_fb_money")
+			        .setTypes("fb_money_income_sum")
+			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+			        .setQuery(builder)
+			        .addSort("date", SortOrder.ASC)
+			        .setFrom(0).setSize(daysBetween("2015-03-14","2015-04-13")).setExplain(true)
+			        .execute()
+			        .actionGet();	
+			System.out.println(response);
+	}
+	
+	public static int daysBetween(String smdate, String bdate)
+			throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(sdf.parse(smdate));
+		long time1 = cal.getTimeInMillis();
+		cal.setTime(sdf.parse(bdate));
+		long time2 = cal.getTimeInMillis();
+		long between_days = (time2 - time1) / (1000 * 3600 * 24);
+
+		return Integer.parseInt(String.valueOf(between_days));
+	} 
 }
