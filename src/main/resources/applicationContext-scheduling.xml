@@ -8,6 +8,7 @@
  	<bean id="fbPayScheduled" class="com.enlight.game.schedual.fb.FbPayConversionScheduled"/><!-- 用户付费率 -->
  	<bean id="fbUserActiveScheduled" class="com.enlight.game.schedual.fb.FbUserActiveScheduled"/><!-- 用户活跃 -->
  	<bean id="fbUserIncomeScheduled" class="com.enlight.game.schedual.fb.FbUserIncomeScheduled"/><!-- 收入分析 -->
+ 	<bean id="fbPayPenetrationScheduled" class="com.enlight.game.schedual.fb.FbPayPenetrationScheduled"/><!-- 收入分析 arpu arppu-->
  	
 	<bean id="fbRetainedMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
    		 <property name="targetObject">
@@ -49,6 +50,14 @@
        		 <value>schedual</value> 
    		 </property>  
 	</bean>  
+	<bean id="fbPayPenetrationMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="fbPayPenetrationScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>  
 	
 	<bean id="fbRetainedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="fbRetainedMethod" /> 
@@ -75,7 +84,10 @@
      	 <property name="cronExpression" value="0 30 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 <!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
-	
+	<bean id="fbPayPenetrationTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="fbPayPenetrationMethod" /> 
+     	 <property name="cronExpression" value="0 30 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+	</bean>
 	
 	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 	    <property name="triggers">
@@ -85,6 +97,7 @@
 	            <ref bean="fbPayTrigger" />
 	            <ref bean="fbUserActiveTrigger" />
 	            <ref bean="fbUserIncomeTrigger" />
+	            <ref bean="fbPayPenetrationTrigger" />
 	        </list>
 	    </property>
 	</bean> 

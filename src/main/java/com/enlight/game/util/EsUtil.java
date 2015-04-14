@@ -122,4 +122,40 @@ public class EsUtil {
 		return da;
 	}
 	//--------首日 首周 首月付费率 ----------
+	
+	
+
+	public String presentfirstday(){
+        //获取前月的第一天
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+        Calendar   cal_1=Calendar.getInstance();//获取当前日期 
+        cal_1.add(Calendar.MONTH, -1);
+        cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
+        String firstDay = format.format(cal_1.getTime());
+        return firstDay;
+ 
+	}	
+	
+	public String lastmouthfirstday(){
+        //获取当月的第一天
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+        Calendar c = Calendar.getInstance();    
+        c.add(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
+        String first = format.format(c.getTime());
+        return first;
+	}	
+	
+	public String lastmouth(){
+		//获取上月
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM"); 
+        Calendar   cal_1=Calendar.getInstance();//获取当前日期 
+        cal_1.add(Calendar.MONTH, -1);
+        cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天 
+        String fd= ft.format(cal_1.getTime());
+        return fd;
+	}
+	
+	
+	
 }

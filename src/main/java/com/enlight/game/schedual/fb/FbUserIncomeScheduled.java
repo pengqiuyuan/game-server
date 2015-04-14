@@ -75,7 +75,7 @@ public class FbUserIncomeScheduled {
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setQuery(builder)
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
 		        		AggregationBuilders.sum("sum").field("支付金额")
 			    ).execute().actionGet();
@@ -102,7 +102,7 @@ public class FbUserIncomeScheduled {
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setQuery(builder)
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
@@ -135,7 +135,7 @@ public class FbUserIncomeScheduled {
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setQuery(builder)
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
@@ -168,7 +168,7 @@ public class FbUserIncomeScheduled {
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setQuery(builder)
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
