@@ -1,6 +1,7 @@
 package com.enlight.game.service.platForm;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -34,6 +35,14 @@ public class PlatFormService {
 	public PlatForm findById(Long id){
 		return platFormDao.findOne(id);
 	}
+	
+	public List<PlatForm> findAll(){
+		return platFormDao.findAll();
+	}
+	
+	public List<PlatForm> findByServerZoneId(String serverZoneId){
+		return platFormDao.findByServerZoneId(serverZoneId);
+	};
 	
 	public void save(PlatForm platForm){
 		platForm.setCrDate(new Date());

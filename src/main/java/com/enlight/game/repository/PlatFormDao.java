@@ -1,5 +1,7 @@
 package com.enlight.game.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +18,10 @@ public interface PlatFormDao extends PagingAndSortingRepository<PlatForm, Long>,
 	@Modifying
 	@Query("delete from PlatForm platForm where platForm.serverZoneId=?1")
 	void deleteByServerZoneId(String serverZoneId);
+	
+	@Modifying
+	@Query("from PlatForm platForm where platForm.status='1'")
+	List<PlatForm> findAll();
+	
+	List<PlatForm> findByServerZoneId(String serverZoneId);
 }
