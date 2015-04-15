@@ -353,14 +353,15 @@
 													  <li class="dropdown-submenu">
 															<li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
 															<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd">用户新增</a></li>
+															<li><a href="${ctx}/manage/fbUserActive/fb/userActive">活跃用户</a></li>
 															<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
 																<ul class="dropdown-menu">
 																	<shiro:hasAnyRoles name="admin,FB_USER">
 																		  <li class="dropdown-submenu">
 																			<li><a href="${ctx}/manage/fbUserPay/fb/userPay">新增付费用户</a></li>
-																			<li><a href="${ctx}/manage/fbUserPay/fb/userDay">首日付费率</a></li>
-																			<li><a href="${ctx}/manage/fbUserPay/fb/userWeek">首周付费率</a></li>
-																			<li><a href="${ctx}/manage/fbUserPay/fb/userMouth">首月付费率</a></li>
+																			<li><a href="${ctx}/manage/fbUserPay/fb/userDay">当日付费率</a></li>
+																			<li><a href="${ctx}/manage/fbUserPay/fb/userWeek">当周付费率</a></li>
+																			<li><a href="${ctx}/manage/fbUserPay/fb/userMouth">当月付费率</a></li>
 															              <li>	
 																	</shiro:hasAnyRoles>
 																	<li class="divider"></li>

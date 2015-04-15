@@ -23,6 +23,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.EsUtil;
 
@@ -44,6 +45,12 @@ public class FbUserScheduled {
 	private static final String bulk_type_add = "fb_user_add";
 	
 	private static final String bulk_type_total = "fb_user_total";
+	
+	private static final Integer szsize = 10; //运营大区
+	
+	private static final Integer pfsize = 300; //渠道
+	
+	private static final Integer srsize = 300; //服务器
 	
 	EsUtil esUtilTest = new EsUtil();
 	
@@ -147,9 +154,9 @@ public class FbUserScheduled {
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
-			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
+			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
 			    )
-				.setSize(10).execute().actionGet();
+				.setSize(szsize).execute().actionGet();
 		Terms genders = sr.getAggregations().get("serverZone");	
 		
 		for (Terms.Bucket e : genders.getBuckets()) {
@@ -210,9 +217,9 @@ public class FbUserScheduled {
 									FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
 					        ))
 					.addAggregation(
-				    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
+				    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
 				    )
-					.setSize(10).execute().actionGet();
+					.setSize(szsize).execute().actionGet();
 			gendersTotal = srTotal.getAggregations().get("serverZone");
 			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
 				map.put(entry.getKey(), entry.getDocCount());
@@ -250,9 +257,9 @@ public class FbUserScheduled {
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
-			    		AggregationBuilders.terms("platForm").field("渠道ID").size(300)
+			    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
 			    )
-				.setSize(300).execute().actionGet();
+				.setSize(pfsize).execute().actionGet();
 		Terms genders = sr.getAggregations().get("platForm");	
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
@@ -289,9 +296,9 @@ public class FbUserScheduled {
 			        		FilterBuilders.termFilter("key", "platForm"))
 			        ))
 					.addAggregation(
-				    		AggregationBuilders.terms("platForm").field("value").size(300)
+				    		AggregationBuilders.terms("platForm").field("value").size(pfsize)
 				    )
-					.setSize(300).execute().actionGet();
+					.setSize(pfsize).execute().actionGet();
 			for (SearchHit searchHit : srTotal.getHits()) {
 				Map<String, Object> source = searchHit.getSource();
 				long s = Long.valueOf(source.get("userTotal").toString());
@@ -308,9 +315,9 @@ public class FbUserScheduled {
 			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
 			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
 					.addAggregation(
-				    		AggregationBuilders.terms("platForm").field("渠道ID").size(300)
+				    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
 				    )
-					.setSize(300).execute().actionGet();
+					.setSize(pfsize).execute().actionGet();
 			gendersTotal = srTotal.getAggregations().get("platForm");
 			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
 				map.put(entry.getKey(), entry.getDocCount());
@@ -347,9 +354,9 @@ public class FbUserScheduled {
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
-			    		AggregationBuilders.terms("server").field("服务器ID").size(300)
+			    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 			    )
-				.setSize(300).execute().actionGet();
+				.setSize(srsize).execute().actionGet();
 		Terms genders = sr.getAggregations().get("server");	
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
@@ -386,9 +393,9 @@ public class FbUserScheduled {
 			        		FilterBuilders.termFilter("key", "server"))
 			        ))
 					.addAggregation(
-				    		AggregationBuilders.terms("server").field("value").size(300)
+				    		AggregationBuilders.terms("server").field("value").size(srsize)
 				    )
-					.setSize(300).execute().actionGet();
+					.setSize(srsize).execute().actionGet();
 			for (SearchHit searchHit : srTotal.getHits()) {
 				Map<String, Object> source = searchHit.getSource();
 				long s = Long.valueOf(source.get("userTotal").toString());
@@ -405,9 +412,9 @@ public class FbUserScheduled {
 			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
 					.addAggregation(
-				    		AggregationBuilders.terms("server").field("服务器ID").size(300)
+				    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 				    )
-					.setSize(300).execute().actionGet();
+					.setSize(srsize).execute().actionGet();
 			gendersTotal = srTotal.getAggregations().get("server");
 			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
 				map.put(entry.getKey(), entry.getDocCount());

@@ -38,7 +38,7 @@
 								<div>
 									<div class="form-group">
 										<input type="hidden" id="storeId" value="${store.id}">
-										<span class="btn btn-primary btn-xs m-l-sm" type="button">${store.name}：用户留存</span>
+										<span class="btn btn-primary btn-xs m-l-sm" type="button">${store.name}：活跃用户</span>
 									</div>
 								</div>
 							</div>
@@ -403,8 +403,8 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '次日留存率',
-                    subtext: '某日新增的玩家/设备中，在该日后的第N日中，还有进行游戏的玩家/设备比例。例 如：5月3日新增玩家为100人，这100人中有24人在5月10日这一天内还有玩过游戏，5月3日的7日留存 率=24/100=24%'
+                    text: 'DAU',
+                    subtext: '当日有开启过游戏的玩家数。'
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -439,7 +439,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}％'
+                            formatter: '{value}'
                         },
                         splitArea : {show : true}
                     }
@@ -451,8 +451,8 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '七日留存率',
-                    subtext: '某日新增的玩家/设备中，在该日后的第N日中，还有进行游戏的玩家/设备比例。例 如：5月3日新增玩家为100人，这100人中有24人在5月10日这一天内还有玩过游戏，5月3日的7日留存 率=24/100=24%'
+                    text: 'WAU',
+                    subtext: '当日的最近一周（含当日的倒推7日）活跃玩家，将进行过游戏的玩家按照帐户进行排重。'
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -487,7 +487,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}％'
+                            formatter: '{value}'
                         },
                         splitArea : {show : true}
                     }
@@ -499,8 +499,8 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '三十日留存率',
-                    subtext: '某日新增的玩家/设备中，在该日后的第N日中，还有进行游戏的玩家/设备比例。例 如：5月3日新增玩家为100人，这100人中有24人在5月10日这一天内还有玩过游戏，5月3日的7日留存 率=24/100=24%'
+                    text: 'MAU',
+                    subtext: '当日的最近一月（含当日的倒退30日）活跃玩家，将进行过游戏的玩家按照帐户进行排重。'
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -535,7 +535,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}％'
+                            formatter: '{value}'
                         },
                         splitArea : {show : true}
                     }

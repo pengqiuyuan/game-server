@@ -49,6 +49,7 @@ public class FbUserPayServer {
 	
 	private static final String key_mouth = "mouth";
 	
+	
 	private static final String key_day_num = "day_num";
 	
 	private static final String key_week_num = "week_num";

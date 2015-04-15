@@ -33,6 +33,7 @@
 		<pattern>/*manage/fbRetained*</pattern>
 		<pattern>/*manage/fbUserAdd*</pattern>
 		<pattern>/*manage/fbUserPay*</pattern>
+		<pattern>/*manage/fbUserActive*</pattern>
 	</decorator>
 	
 </decorators>

@@ -39,9 +39,15 @@ public class FbRetainedScheduled {
 	
 	private static final String bulk_type_retained = "fb_user_retained";
 	
+	private static final Integer szsize = 10; //运营大区
+	
+	private static final Integer pfsize = 300; //渠道
+	
+	private static final Integer srsize = 300; //服务器
+	
+	private static final Integer num = 35; //35天以内的留存
 	
 	EsUtil esUtilTest = new EsUtil();
-	
 	
 	public Long createCount(String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -86,7 +92,6 @@ public class FbRetainedScheduled {
 		        		FilterBuilders.termFilter("服务器ID", key))
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
-		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
@@ -143,10 +148,9 @@ public class FbRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false))
-			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(35)
+			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(num)
 			    ).execute().actionGet();
 		System.out.println("----------------esAll---------------");
-		System.out.println(sr);
 		
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
@@ -220,18 +224,17 @@ public class FbRetainedScheduled {
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 			    .addAggregation(
-			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
+			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
 			    		.subAggregation(
 			    				AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(10000)
 			    				)
 			    		.subAggregation(
-			    				AggregationBuilders.terms("serverZone").field("运营大区ID").size(10).subAggregation(
+			    				AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 			    						AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(10000)
 			    						)
 			    				)
 			    ).execute().actionGet();
 		System.out.println("-------------esServerZone-------------");
-		System.out.println(sr);
 
 		
 		Terms genders = sr.getAggregations().get("create");	
@@ -316,12 +319,11 @@ public class FbRetainedScheduled {
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 			    .addAggregation(
-			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
+			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
-			    		.subAggregation(AggregationBuilders.terms("platForm").field("渠道ID").size(300).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
+			    		.subAggregation(AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
 			    ).execute().actionGet();
 		System.out.println("------------esPlatForm--------------");
-		System.out.println(sr);
 
 		
 		Terms genders = sr.getAggregations().get("create");	
@@ -406,12 +408,11 @@ public class FbRetainedScheduled {
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
 			    .addAggregation(
-			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
+			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
-			    		.subAggregation(AggregationBuilders.terms("server").field("服务器ID").size(300).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
+			    		.subAggregation(AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
 			    ).execute().actionGet();
 		System.out.println("-----------esServer---------------");
-		System.out.println(sr);
 
 		
 		Terms genders = sr.getAggregations().get("create");	

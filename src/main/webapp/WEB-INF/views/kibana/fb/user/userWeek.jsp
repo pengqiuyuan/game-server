@@ -38,7 +38,7 @@
 								<div>
 									<div class="form-group">
 										<input type="hidden" id="storeId" value="${store.id}">
-										<span class="btn btn-primary btn-xs m-l-sm" type="button">${store.name}：新增用户</span>
+										<span class="btn btn-primary btn-xs m-l-sm" type="button">${store.name}：当周付费用户</span>
 									</div>
 								</div>
 							</div>
