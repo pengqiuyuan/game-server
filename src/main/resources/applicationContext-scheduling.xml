@@ -4,6 +4,8 @@
 	default-lazy-init="true">
 	
  	<bean id="fbRetainedScheduled" class="com.enlight.game.schedual.fb.FbRetainedScheduled"/>
+ 	<bean id="fbUserScheduled" class="com.enlight.game.schedual.fb.FbUserScheduled"/>
+ 	
 	<bean id="fbRetainedMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
    		 <property name="targetObject">
         	<ref bean="fbRetainedScheduled"/>
@@ -11,20 +13,34 @@
     	<property name="targetMethod">  
        		 <value>schedual</value> 
    		 </property>  
-	</bean> 
+	</bean>
+	<bean id="fbUserMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="fbUserScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>  
 	
 	<bean id="fbRetainedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="fbRetainedMethod" /> 
      	 <property name="cronExpression" value="0 30 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 <!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
+	<bean id="fbUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="fbUserMethod" /> 
+     	 <property name="cronExpression" value="0 30 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
 	
 	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-    <property name="triggers">
-        <list>
-            <ref bean="fbRetainedTrigger" />
-        </list>
-    </property>
+	    <property name="triggers">
+	        <list>
+	            <ref bean="fbRetainedTrigger" />
+	            <ref bean="fbUserTrigger" />
+	        </list>
+	    </property>
 	</bean>
 	
 </beans>

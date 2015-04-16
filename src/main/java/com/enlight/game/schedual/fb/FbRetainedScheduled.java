@@ -477,10 +477,12 @@ public class FbRetainedScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
+		System.out.println("----------------用户留存了 retained 调度开始");
 		esAll();
 		esServerZone();
 		esPlatForm();
 		esServer();
+		System.out.println("----------------用户留存了 retained 调度结束");
 	}
 	
 
