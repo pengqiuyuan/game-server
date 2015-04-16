@@ -332,7 +332,7 @@
 		    
 			$("#yesterday").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retained/getDate',
+					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -345,7 +345,7 @@
 			});
 			$("#sevenDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retained/getDate',
+					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -358,7 +358,7 @@
 			});
 			$("#thirtyDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retained/getDate',
+					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -386,7 +386,7 @@
 		    	if($("#serverZone").val()=="all"){
 					if(category=="platForm"){
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/retained/findPlatForm',
+							url: '<%=request.getContextPath()%>/manage/fbRetained/findPlatForm',
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
@@ -404,7 +404,7 @@
 						});
 			    	}else if(category=="server"){
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/retained/findServerByStoreId?storeId='+storeId,
+							url: '<%=request.getContextPath()%>/manage/fbRetained/findServerByStoreId?storeId='+storeId,
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
@@ -426,7 +426,7 @@
 		    	}else{
 					if(category=="platForm"){
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/retained/findPlatFormByServerId?serverId='+serverZoneValue,
+							url: '<%=request.getContextPath()%>/manage/fbRetained/findPlatFormByServerId?serverId='+serverZoneValue,
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
@@ -444,7 +444,7 @@
 						});
 			    	}else if(category=="server"){
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/retained/findServerByStoreIdAndServerZoneId?storeId='+storeId+'&serverZoneId='+serverZoneValue,
+							url: '<%=request.getContextPath()%>/manage/fbRetained/findServerByStoreIdAndServerZoneId?storeId='+storeId+'&serverZoneId='+serverZoneValue,
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',

@@ -30,7 +30,7 @@
      <decorator name="default2" page="default2.jsp">
 		<pattern>/*kibana*</pattern>
 		<pattern>/*manage/count*</pattern>
-		<pattern>/*manage/retained*</pattern>
+		<pattern>/*manage/fbRetained*</pattern>
 	</decorator>
 	
 </decorators>
