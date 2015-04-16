@@ -40,15 +40,17 @@
 		  padding-top: 5px;
 		  text-align: right;
 		}
+		.well {	
+		  margin-left: -150px;
+		  }
     </style>
   </head>
 
   <body>
       <div id="wrapper">
-      		<input type="hidden" id="datenext" value="${datenext}" >
-      		<input type="hidden" id="dateSeven" value="${dateSeven}" >
-      		<input type="hidden" id="datethirty" value="${datethirty}" >
-      		<input type="hidden" id="table" value="${table}" >
+      		<input type="hidden" id="userTotal" value="${userTotal}" >
+      		<input type="hidden" id="userAdd" value="${userAdd}" >
+
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="span10">
                     <h2>Flot图表</h2>
@@ -177,7 +179,7 @@
 			</div>
 			</form>
 			<div class="row-fluid">
-	                     <div class="span12">
+	                     <div class="span6">
 	                        <div class="ibox float-e-margins">
 	                            <div class="ibox-title">
 	                                <h5>新增玩家</h5>
@@ -208,15 +210,53 @@
 	                            <div class="ibox-content">
 	
 	                                <div class="flot-chart">
-	                                    <div class="flot-chart-content" id="flot-line-chart"></div>
+	                                    <div class="flot-chart-content" id="flot-line-chart-add"></div>
 	                                </div>
 	                            </div>
 	                        </div>
 	                    </div>
+	                    
+	                    <div class="span6">
+	                        <div class="ibox float-e-margins">
+	                            <div class="ibox-title">
+	                                <h5>累计玩家</h5>
+	                                <div class="ibox-tools">
+										<span>
+					                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" >
+					                                <i class="fa fa-envelope"></i>
+					                            </a>
+					                            <div class="dropdown-menu dropdown-messages well" >
+													<h4>累计玩家</h4>
+													<font>截至当日，累计的玩家数。</font>
+					                            </div>
+										</span>
+	                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+	                                        <i class="fa fa-wrench"></i>
+	                                    </a>
+	                                    <ul class="dropdown-menu dropdown-user">
+	                                        <li><a href="#">选项1</a>
+	                                        </li>
+	                                        <li><a href="#">选项2</a>
+	                                        </li>
+	                                    </ul>
+	                                    <a class="close-link">
+	                                        <i class="fa fa-times"></i>
+	                                    </a>
+	                                </div>
+	                            </div>
+	                            <div class="ibox-content">
+	
+	                                <div class="flot-chart">
+	                                    <div class="flot-chart-content" id="flot-line-chart-total"></div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    
 	             </div>
 	             
 	             <div class="row-fluid">
-                    <div class="span12">
+                    <div class="span6">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <h5>新增玩家 <small>分类，查找</small></h5>
@@ -247,8 +287,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    	<c:forEach items="${table}" var="it" >
-				  							<tr class="gradeX"><td>${it.value.date}</td><td>${it.value.userNum}</td></tr>
+                                    	<c:forEach items="${tableAdd}" var="it" >
+				  							<tr class="gradeX"><td>${it.value.date}</td><td>${it.value.userAdd}</td></tr>
 										</c:forEach>
                                     </tbody>
                                     <tfoot>
@@ -262,6 +302,54 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="span6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>累计玩家 <small>分类，查找</small></h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="table_data_tables.html#">
+                                        <i class="fa fa-wrench"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-user">
+                                        <li><a href="table_data_tables.html#">选项1</a>
+                                        </li>
+                                        <li><a href="table_data_tables.html#">选项2</a>
+                                        </li>
+                                    </ul>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table table-striped table-bordered table-hover dataTables-example" id="retainTable">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>累计玩家(账户)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    	<c:forEach items="${tableTotal}" var="it" >
+				  							<tr class="gradeX"><td>${it.value.date}</td><td>${it.value.userTotal}</td></tr>
+										</c:forEach>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>累计玩家(账户)</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div> 
 
             </div>
@@ -327,7 +415,7 @@
 		    
 			$("#yesterday").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retained/getDate',
+					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -340,7 +428,7 @@
 			});
 			$("#sevenDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retained/getDate',
+					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -353,7 +441,7 @@
 			});
 			$("#thirtyDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retained/getDate',
+					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -381,7 +469,7 @@
 		    	if($("#serverZone").val()=="all"){
 					if(category=="platForm"){
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/retained/findPlatForm',
+							url: '<%=request.getContextPath()%>/manage/fbRetained/findPlatForm',
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
@@ -399,7 +487,7 @@
 						});
 			    	}else if(category=="server"){
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/retained/findServerByStoreId?storeId='+storeId,
+							url: '<%=request.getContextPath()%>/manage/fbRetained/findServerByStoreId?storeId='+storeId,
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
@@ -421,7 +509,7 @@
 		    	}else{
 					if(category=="platForm"){
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/retained/findPlatFormByServerId?serverId='+serverZoneValue,
+							url: '<%=request.getContextPath()%>/manage/fbRetained/findPlatFormByServerId?serverId='+serverZoneValue,
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
@@ -439,7 +527,7 @@
 						});
 			    	}else if(category=="server"){
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/retained/findServerByStoreIdAndServerZoneId?storeId='+storeId+'&serverZoneId='+serverZoneValue,
+							url: '<%=request.getContextPath()%>/manage/fbRetained/findServerByStoreIdAndServerZoneId?storeId='+storeId+'&serverZoneId='+serverZoneValue,
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
@@ -464,11 +552,9 @@
 		    });
 		    
 			
-            var dateNextDay=$.parseJSON($("#datenext").val())
-            var dateSevenDay=$.parseJSON($("#dateSeven").val())
-            var dateThirtyDay=$.parseJSON($("#datethirty").val())
-
-            var barOptions = {
+            var userAdd=$.parseJSON($("#userAdd").val());
+ 			var userTotal=$.parseJSON($("#userTotal").val());
+            var barOptionsAdd = {
                     series: {
                         lines: {
                             show: true,
@@ -484,7 +570,7 @@
                         }
                     },
                     yaxis: {
-                        axisLabel: "用户留存率(%)"
+                        axisLabel: "新增用户数量(账户)"
                     },
                     xaxes: [{
                         mode: 'time',
@@ -504,28 +590,64 @@
                     },
                     tooltip: true,
                     tooltipOpts: {
-                        content: "日期: %x, %s为: %y %"
+                        content: "日期: %x, %s为: %y"
                     }
                 };
-          		var dateNextDay = {
-                    label: "次日留存率",
+          		var userAdd = {
+                    label: "新增用户",
                     points: {  show: true,radius: 3 },
                     lines: { show: true },
-                    data: dateNextDay
+                    data: userAdd
                 };
-                var dateSevenDay = {
-                    label: "7日留存率",
-                    points: {  show: true,radius: 3 },
-                    lines: { show: true },
-                    data: dateSevenDay
-                };
-                var dateThirtyDay = {
-                        label: "30日留存率",
-                        points: {  show: true ,radius: 3 },
-                        lines: { show: true },
-                        data: dateThirtyDay
+
+          		
+                var barOptionsTotal = {
+                        series: {
+                            lines: {
+                                show: true,
+                                lineWidth: 2,
+                                fill: true,
+                                fillColor: {
+                                    colors: [{
+                                        opacity: 0.0
+                                    }, {
+                                        opacity: 0.0
+                                    }]
+                                }
+                            }
+                        },
+                        yaxis: {
+                            axisLabel: "累计用户数量(账户)"
+                        },
+                        xaxes: [{
+                            mode: 'time',
+                            timeformat: "%m/%d"
+                        }],
+                        colors: ["#1ab394"],
+                        grid: {
+                            color: "#999999",
+                            hoverable: true,
+                            clickable: true,
+                            tickColor: "#D4D4D4",
+                            borderWidth:0
+                        },
+                        legend: {
+                            show: true,            
+                            position: 'sw'
+                        },
+                        tooltip: true,
+                        tooltipOpts: {
+                            content: "日期: %x, %s为: %y"
+                        }
                     };
-                $.plot($("#flot-line-chart"), [dateNextDay,dateSevenDay,dateThirtyDay], barOptions);
+              		var userTotal = {
+                        label: "累计用户",
+                        points: {  show: true,radius: 3 },
+                        lines: { show: true },
+                        data: userTotal
+                    };
+                $.plot($("#flot-line-chart-add"), [userAdd], barOptionsAdd);
+                $.plot($("#flot-line-chart-total"), [userTotal], barOptionsTotal);
                 
                 $(".dataTables-example").dataTable();
 	    

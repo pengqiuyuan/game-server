@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
-public class EsFbRetainedServer {
+public class FbRetainedServer {
 	
 
 	@Autowired
@@ -38,12 +38,12 @@ public class EsFbRetainedServer {
 			SearchResponse response = client.prepareSearch("log_fb_user")
 			        .setTypes("fb_user_retained")
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 			        .setPostFilter(
 			                FilterBuilders.andFilter(
 			        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 			                		FilterBuilders.termFilter("key", "all"))
 			        		)
+			        .addSort("date", SortOrder.DESC)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
 			        .actionGet();		
@@ -55,13 +55,13 @@ public class EsFbRetainedServer {
 		SearchResponse response = client.prepareSearch("log_fb_user")
 		        .setTypes("fb_user_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "serverZone"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();		
@@ -72,13 +72,13 @@ public class EsFbRetainedServer {
 		SearchResponse response = client.prepareSearch("log_fb_user")
 		        .setTypes("fb_user_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "platForm"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -91,13 +91,13 @@ public class EsFbRetainedServer {
 		SearchResponse response = client.prepareSearch("log_fb_user")
 		        .setTypes("fb_user_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "server"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)		
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -111,7 +111,7 @@ public class EsFbRetainedServer {
 			LinkedList<String> datenext = new LinkedList<String>();
 			LinkedList<String> dateSeven = new LinkedList<String>();
 			LinkedList<String> datethirty = new LinkedList<String>();
-			HashMap<String, Retained> map = new HashMap<String, EsFbRetainedServer.Retained>();
+			HashMap<String, Retained> map = new HashMap<String, FbRetainedServer.Retained>();
 			
 			for (SearchHit hit : response.getHits()) {
 				Map<String, Object> source = hit.getSource();

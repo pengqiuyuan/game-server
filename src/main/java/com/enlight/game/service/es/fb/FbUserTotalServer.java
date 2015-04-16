@@ -42,12 +42,12 @@ public class FbUserTotalServer {
 			SearchResponse response = client.prepareSearch(index)
 			        .setTypes(type)
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 			        .setPostFilter(
 			                FilterBuilders.andFilter(
 			        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 			                		FilterBuilders.termFilter("key", "all"))
 			        		)
+			        .addSort("date", SortOrder.DESC)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
 			        .actionGet();		
@@ -59,13 +59,13 @@ public class FbUserTotalServer {
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "serverZone"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();		
@@ -76,13 +76,13 @@ public class FbUserTotalServer {
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "platForm"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -95,13 +95,13 @@ public class FbUserTotalServer {
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "server"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -121,7 +121,7 @@ public class FbUserTotalServer {
 				
 				UserTotal u = new UserTotal();
 				u.setDate(source.get("date").toString());
-				u.setUserTotal(source.get("ts_total").toString());
+				u.setUserTotal(source.get("userTotal").toString());
 				map.put(source.get("date").toString(), u);
 			}
 			
@@ -134,7 +134,7 @@ public class FbUserTotalServer {
 	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
 	        Calendar cal = Calendar.getInstance();    
 	        cal.setTime(sdf.parse(smdate));    
-	        long time1 = cal.getTimeInMillis();                 
+	        long time1 = cal.getTimeInMillis();                 	
 	        cal.setTime(sdf.parse(bdate));    
 	        long time2 = cal.getTimeInMillis();         
 	        long between_days=(time2-time1)/(1000*3600*24);  

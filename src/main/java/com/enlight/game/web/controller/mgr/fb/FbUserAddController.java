@@ -7,8 +7,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
@@ -35,21 +37,19 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
+import com.enlight.game.service.es.fb.FbUserAddServer;
+import com.enlight.game.service.es.fb.FbUserTotalServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.web.controller.mgr.BaseController;
-/**
- * 
- * @author apple
- * fb项目新增用户离线
- */
+
 @Controller("FbUserAddController")
 @RequestMapping("/manage/fbUserAdd")
 public class FbUserAddController extends BaseController{
 	
-	private static final Logger logger = LoggerFactory.getLogger(FbUserAddController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FbRetainedController.class);
 	
 	/**
 	 * 这个controller默认为fb项目的控制层。项目id文档已定
@@ -69,41 +69,81 @@ public class FbUserAddController extends BaseController{
 	private PlatFormService platFormService;
 	
 	@Autowired
+	private FbUserTotalServer fbUserTotalServer;
+	
+	@Autowired
+	private FbUserAddServer fbUserAddServer;
+	
+	@Autowired
 	private AccountService accountService;
 	
 	@Autowired
 	private StoreService storeService;
 	
 	/**
-	 * fb新增用户
+	 * 用户新增
 	 * @throws ParseException 
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
 	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userRetained", method = RequestMethod.GET)
+	@RequestMapping(value = "/fb/userAdd", method = RequestMethod.GET)
 	public String userRetained(Model model,ServletRequest request) throws ElasticsearchException, IOException, ParseException{
-		logger.debug("fb user userAdd...");
-		model.addAttribute("user", EnumFunction.ENUM_USER);
+		logger.debug("user add total...");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
-
 		
-		Map<String, Object> m = new HashMap<String, Object>();
+		Map<String, Object> mTotal = new HashMap<String, Object>();
+		Map<String, Object> mAdd = new HashMap<String, Object>();
 		
+		if(searchParams.isEmpty()){
+			String dateFrom = thirtyDayAgoFrom();
+			String dateTo = nowDate();
+			mTotal = fbUserTotalServer.searchAllUserTotal(dateFrom, dateTo);
+			mAdd = fbUserAddServer.searchAllUserAdd(dateFrom, dateTo);
+			model.addAttribute("dateFrom", dateFrom);
+			model.addAttribute("dateTo", dateTo);
+			logger.debug("查看所有运营大区。。。all" );
+		}else{
+			model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
+			model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
+			if(searchParams.get("EQ_value")!="" && searchParams.get("EQ_value")!=null){
+				if(searchParams.get("EQ_category").toString().equals("platForm")){
+					PlatForm platform =  platFormService.findByPfName(searchParams.get("EQ_value").toString());
+					mTotal = fbUserTotalServer.searchPlatFormUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
+					mAdd = fbUserAddServer.searchPlatFormUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
+					logger.debug("查看渠道。。。"+platform.getPfId());
+				}else if(searchParams.get("EQ_category").toString().equals("server")){
+					Server server = serverService.findByServerId(searchParams.get("EQ_value").toString());
+					mTotal = fbUserTotalServer.searchServerUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
+					mAdd = fbUserAddServer.searchServerUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
+					logger.debug("查看服务器。。。"+server.getServerId());
+				}
+			}else{
+				if(searchParams.get("EQ_serverZone").toString().equals("all")){
+					mTotal = fbUserTotalServer.searchAllUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+					mAdd = fbUserAddServer.searchAllUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+					logger.debug("查看所有运营大区。。。all" );
+				}else{
+					mTotal = fbUserTotalServer.searchServerZoneUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
+					mAdd = fbUserAddServer.searchServerZoneUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
+					logger.debug("查看运营大区。。。" +searchParams.get("EQ_serverZone").toString());
+				}
+			}
+		}	
+		model.addAttribute("userTotal", mTotal.get("userTotal"));
+		model.addAttribute("tableTotal", mTotal.get("table"));
 		
-		model.addAttribute("datenext", m.get("datenext"));
-		model.addAttribute("dateSeven", m.get("dateSeven"));
-		model.addAttribute("datethirty", m.get("datethirty"));
-		model.addAttribute("table", m.get("table"));
+		model.addAttribute("userAdd", mAdd.get("userAdd"));
+		model.addAttribute("tableAdd", mAdd.get("table"));
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);
 
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/user/retain";
+		return "/kibana/fb/user/userAdd";
 	}
 	
 	
@@ -118,6 +158,73 @@ public class FbUserAddController extends BaseController{
 	    Date date=calendar.getTime();
 	    String da = sdf.format(date); 
 		return da;
+	}
+	
+	@RequestMapping(value = "/findServerZone")
+	@ResponseBody
+	public List<ServerZone> findServerZone() {
+		List<ServerZone> serverZones = serverZoneService.findAll();
+		return serverZones;
+	}
+	
+	@RequestMapping(value = "/findPlatForm")
+	@ResponseBody
+	public List<PlatForm> findPlatForm() {
+		List<PlatForm> platForms = platFormService.findAll();
+		return platForms;
+	}
+	
+	@RequestMapping(value = "/findPlatFormByServerId")
+	@ResponseBody
+	public List<PlatForm> findPlatFormByServerId(@RequestParam(value="serverId")String serverId) {
+		List<PlatForm> platForms = platFormService.findByServerZoneId(serverId);
+		return platForms;
+	}
+	
+	@RequestMapping(value = "/findServerByStoreId")
+	@ResponseBody
+	public Set<Server> findServerByStoreId(@RequestParam(value="storeId")String storeId){
+		Set<Server> servers = serverService.findByStoreId(storeId);
+		return servers;
+		
+	}
+	
+	@RequestMapping(value = "/findServerByStoreIdAndServerZoneId")
+	@ResponseBody
+	public Set<Server> findServerByStoreIdAndServerZoneId(@RequestParam(value="storeId")String storeId,@RequestParam(value="serverZoneId")String serverZoneId){
+		Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId, storeId);
+		return servers;
+	}
+	
+	
+	/**
+	 * 服务器获取时间
+	 */
+	@RequestMapping(value="/getDate")
+	@ResponseBody
+	public Map<String, String> getDate(){
+		Map<String,String> dateMap = new HashMap<String, String>();
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
+		Calendar calendar = new GregorianCalendar(); 
+		String nowDate = sdf.format(new Date());
+		
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-1);
+	    String yesterday = sdf.format(calendar.getTime());
+	    
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-7);
+	    String sevenDayAgo = sdf.format(calendar.getTime()); 
+	    
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-30);
+	    String thirtyDayAgo = sdf.format(calendar.getTime()); 
+		
+	    dateMap.put("nowDate",nowDate);
+	    dateMap.put("yesterday",yesterday);
+	    dateMap.put("sevenDayAgo",sevenDayAgo);
+	    dateMap.put("thirtyDayAgo",thirtyDayAgo);
+		return dateMap;
 	}
 	
 	/**

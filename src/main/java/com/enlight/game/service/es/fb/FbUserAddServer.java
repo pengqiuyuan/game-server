@@ -42,12 +42,12 @@ public class FbUserAddServer {
 			SearchResponse response = client.prepareSearch(index)
 			        .setTypes(type)
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 			        .setPostFilter(
 			                FilterBuilders.andFilter(
 			        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 			                		FilterBuilders.termFilter("key", "all"))
 			        		)
+			        .addSort("date", SortOrder.DESC)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
 			        .actionGet();		
@@ -59,13 +59,13 @@ public class FbUserAddServer {
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "serverZone"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();		
@@ -76,13 +76,13 @@ public class FbUserAddServer {
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "platForm"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -95,13 +95,13 @@ public class FbUserAddServer {
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 		                		FilterBuilders.termFilter("key", "server"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
+		        .addSort("date", SortOrder.DESC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -121,7 +121,7 @@ public class FbUserAddServer {
 				
 				UserAdd u = new UserAdd();
 				u.setDate(source.get("date").toString());
-				u.setUserAdd(source.get("ts_add").toString());
+				u.setUserAdd(source.get("userAdd").toString());
 				map.put(source.get("date").toString(), u);
 			}
 			

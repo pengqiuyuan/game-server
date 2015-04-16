@@ -352,6 +352,7 @@
 												<shiro:hasAnyRoles name="admin,FB_USER">
 													  <li class="dropdown-submenu">
 															<li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
+															<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd">用户新增</a></li>
 										               </li>	
 												</shiro:hasAnyRoles>
 												<li class="divider"></li>

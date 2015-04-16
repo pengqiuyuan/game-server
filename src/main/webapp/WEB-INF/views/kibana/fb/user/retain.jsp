@@ -40,6 +40,9 @@
 		  padding-top: 5px;
 		  text-align: right;
 		}
+		.well {	
+		  margin-left: -150px;
+		}
     </style>
   </head>
 
