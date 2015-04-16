@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +35,7 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
-import com.enlight.game.service.es.EsRetainedServer;
+import com.enlight.game.service.es.fb.EsFbRetainedServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -45,7 +43,7 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.web.controller.mgr.BaseController;
 
 @Controller("RetainedController")
-@RequestMapping("/manage/retained")
+@RequestMapping("/manage/fbRetained")
 public class FbRetainedController extends BaseController{
 	
 	private static final Logger logger = LoggerFactory.getLogger(FbRetainedController.class);
@@ -68,7 +66,7 @@ public class FbRetainedController extends BaseController{
 	private PlatFormService platFormService;
 	
 	@Autowired
-	private EsRetainedServer EsRetainedServer;
+	private EsFbRetainedServer EsRetainedServer;
 	
 	@Autowired
 	private AccountService accountService;
@@ -85,7 +83,7 @@ public class FbRetainedController extends BaseController{
 	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userRetained", method = RequestMethod.GET)
 	public String userRetained(Model model,ServletRequest request) throws ElasticsearchException, IOException, ParseException{
-		logger.debug("user Retained...");
+		logger.debug("fb user Retained...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 
@@ -96,7 +94,7 @@ public class FbRetainedController extends BaseController{
 		Map<String, Object> m = new HashMap<String, Object>();
 		
 		if(searchParams.isEmpty()){
-			String dateFrom = eightDayAgoFrom();
+			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
 			m = EsRetainedServer.searchAllRetained(dateFrom, dateTo);
 			model.addAttribute("dateFrom", dateFrom);
@@ -143,7 +141,7 @@ public class FbRetainedController extends BaseController{
 		return nowDate;
 	}
 	
-	public String eightDayAgoFrom(){
+	public String thirtyDayAgoFrom(){
 	    calendar.setTime(new Date()); 
 	    calendar.add(calendar.DATE,-30);
 	    Date date=calendar.getTime();

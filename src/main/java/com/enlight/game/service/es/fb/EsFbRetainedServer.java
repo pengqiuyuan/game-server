@@ -1,4 +1,4 @@
-package com.enlight.game.service.es;
+package com.enlight.game.service.es.fb;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
-public class EsRetainedServer {
+public class EsFbRetainedServer {
 	
 
 	@Autowired
@@ -35,7 +35,7 @@ public class EsRetainedServer {
 	
 	public Map<String, Object> searchAllRetained(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
-			SearchResponse response = client.prepareSearch("log_retained")
+			SearchResponse response = client.prepareSearch("log_fb_retained")
 			        .setTypes("fb_retained")
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 			        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
@@ -52,7 +52,7 @@ public class EsRetainedServer {
 	
 	public Map<String, Object> searchServerZoneRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_retained")
+		SearchResponse response = client.prepareSearch("log_fb_retained")
 		        .setTypes("fb_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
@@ -69,7 +69,7 @@ public class EsRetainedServer {
 	}
 	public Map<String, Object> searchPlatFormRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_retained")
+		SearchResponse response = client.prepareSearch("log_fb_retained")
 		        .setTypes("fb_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
@@ -88,7 +88,7 @@ public class EsRetainedServer {
 	
 	public Map<String, Object> searchServerRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_retained")
+		SearchResponse response = client.prepareSearch("log_fb_retained")
 		        .setTypes("fb_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
@@ -111,7 +111,7 @@ public class EsRetainedServer {
 			LinkedList<String> datenext = new LinkedList<String>();
 			LinkedList<String> dateSeven = new LinkedList<String>();
 			LinkedList<String> datethirty = new LinkedList<String>();
-			HashMap<String, Retained> map = new HashMap<String, EsRetainedServer.Retained>();
+			HashMap<String, Retained> map = new HashMap<String, EsFbRetainedServer.Retained>();
 			
 			for (SearchHit hit : response.getHits()) {
 				Map<String, Object> source = hit.getSource();

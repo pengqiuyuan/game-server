@@ -312,7 +312,7 @@
 											                  <li class="dropdown-submenu">
 											                  	<a tabindex="-1" href="${ctx}/manage/count/fbUser#/dashboard/file/fb_user.json">用户相关日志(总)</a>
 											                    <ul class="dropdown-menu">
-												                  <li><a href="${ctx}/manage/retained/fb/fbUserRetained">用户留存</a></li>
+												                  <li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
 												                </ul>
 											                  </li>
 											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userLogin.json">用户登录</a></li>
@@ -351,7 +351,7 @@
 											<ul class="dropdown-menu">
 												<shiro:hasAnyRoles name="admin,FB_USER">
 													  <li class="dropdown-submenu">
-															<li><a href="${ctx}/manage/retained/fb/userRetained">用户留存</a></li>
+															<li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
 										               </li>	
 												</shiro:hasAnyRoles>
 												<li class="divider"></li>

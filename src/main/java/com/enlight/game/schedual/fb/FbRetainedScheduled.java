@@ -28,7 +28,11 @@ public class FbRetainedScheduled {
 	@Autowired
 	public Client client;
 	
+	//项目名称
+	private static final String fb_game = "fb";
+	
 	EsUtil esUtilTest = new EsUtil();
+	
 	
 	public Long createCount(String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -37,7 +41,6 @@ public class FbRetainedScheduled {
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
 		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
-		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
@@ -47,10 +50,9 @@ public class FbRetainedScheduled {
 		        FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
-		        		FilterBuilders.termFilter("服务器ID", key))
+		        		FilterBuilders.termFilter("运营大区ID", key))
 		        );
 		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
-		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
@@ -63,7 +65,6 @@ public class FbRetainedScheduled {
 		        		FilterBuilders.termFilter("渠道ID", key))
 		        );
 		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
-		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
@@ -83,7 +84,7 @@ public class FbRetainedScheduled {
 	
 	public void bulk(UserRetained userRetained) throws IOException{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		bulkRequest.add(client.prepareIndex("log_retained", "fb_retained")
+		bulkRequest.add(client.prepareIndex("log_fb_retained", "fb_retained")
 		        .setSource(jsonBuilder()
 			           	 .startObject()
 	                        .field("date", userRetained.getDate().split("T")[0])
@@ -97,11 +98,12 @@ public class FbRetainedScheduled {
 	                    .endObject()
 		                  )
 		        ).execute().actionGet();
+		System.out.println("####################");
 	}
 	
 	public void bulkall(UserRetained userRetained) throws IOException{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		bulkRequest.add(client.prepareIndex("log_retained", "fb_retained")
+		bulkRequest.add(client.prepareIndex("log_fb_retained", "fb_retained")
 		        .setSource(jsonBuilder()
 			           	 .startObject()
 	                        .field("date", userRetained.getDate().split("T")[0])
@@ -114,6 +116,7 @@ public class FbRetainedScheduled {
 	                    .endObject()
 		                  )
 		        ).execute().actionGet();
+		System.out.println("####################");
 	}
 	
 
@@ -132,6 +135,7 @@ public class FbRetainedScheduled {
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false))
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(35)
 			    ).execute().actionGet();
+		System.out.println("----------------esAll---------------");
 		System.out.println(sr);
 		
 		Terms genders = sr.getAggregations().get("create");	
@@ -145,7 +149,7 @@ public class FbRetainedScheduled {
 			    RetentionTwo = (double)aggcount*100/createCount(esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 			    UserRetained userRetained = new UserRetained();
 			    userRetained.setDate(esUtilTest.twoDayAgoFrom());
-			    userRetained.setGameId("fb");
+			    userRetained.setGameId(fb_game);
 			    userRetained.setKey(UserRetained.KEY_ALL);
 			    userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
 			    userRetained.setRetained(df.format(RetentionTwo));
@@ -160,7 +164,7 @@ public class FbRetainedScheduled {
 				RetentionEight = (double)aggcount*100/createCount(esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
 				UserRetained userRetained = new UserRetained();
 			    userRetained.setDate(esUtilTest.eightDayAgoFrom());
-			    userRetained.setGameId("fb");
+			    userRetained.setGameId(fb_game);
 			    userRetained.setKey(UserRetained.KEY_ALL);
 			    userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
 			    userRetained.setRetained(df.format(RetentionEight));
@@ -175,7 +179,7 @@ public class FbRetainedScheduled {
 			    RetentionThirty = (double)aggcount*100/createCount(esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
 				UserRetained userRetained = new UserRetained();
 			    userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-			    userRetained.setGameId("fb");
+			    userRetained.setGameId(fb_game);
 			    userRetained.setKey(UserRetained.KEY_ALL);
 			    userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
 			    userRetained.setRetained(df.format(RetentionThirty));
@@ -201,11 +205,18 @@ public class FbRetainedScheduled {
 		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
-			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
-			    		.subAggregation(AggregationBuilders.terms("serverZone").field("服务器ID").size(10).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
+			    		.subAggregation(
+			    				AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(10000)
+			    				)
+			    		.subAggregation(
+			    				AggregationBuilders.terms("serverZone").field("运营大区ID").size(10).subAggregation(
+			    						AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(10000)
+			    						)
+			    				)
 			    ).execute().actionGet();
+		System.out.println("-------------esServerZone-------------");
 		System.out.println(sr);
-		System.out.println("--------------------------");
+
 		
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
@@ -221,7 +232,7 @@ public class FbRetainedScheduled {
 				    	RetentionTwo = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    	UserRetained userRetained = new UserRetained();
 				    	userRetained.setDate(esUtilTest.twoDayAgoFrom());
-				    	userRetained.setGameId("fb");
+				    	userRetained.setGameId(fb_game);
 				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
 				    	userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
 				    	userRetained.setRetained(df.format(RetentionTwo));
@@ -238,7 +249,7 @@ public class FbRetainedScheduled {
 					    RetentionEight = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
 				    	UserRetained userRetained = new UserRetained();
 				    	userRetained.setDate(esUtilTest.eightDayAgoFrom());
-				    	userRetained.setGameId("fb");
+				    	userRetained.setGameId(fb_game);
 				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
 				    	userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
 				    	userRetained.setRetained(df.format(RetentionEight));
@@ -255,7 +266,7 @@ public class FbRetainedScheduled {
 				    	RetentionThirty = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
 				    	UserRetained userRetained = new UserRetained();
 				    	userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-				    	userRetained.setGameId("fb");
+				    	userRetained.setGameId(fb_game);
 				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
 				    	userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
 				    	userRetained.setRetained(df.format(RetentionThirty));
@@ -287,8 +298,9 @@ public class FbRetainedScheduled {
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
 			    		.subAggregation(AggregationBuilders.terms("platForm").field("渠道ID").size(300).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
 			    ).execute().actionGet();
+		System.out.println("------------esPlatForm--------------");
 		System.out.println(sr);
-		System.out.println("--------------------------");
+
 		
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
@@ -303,7 +315,7 @@ public class FbRetainedScheduled {
 			    	RetentionTwo = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 			    	UserRetained userRetained = new UserRetained();
 			    	userRetained.setDate(esUtilTest.twoDayAgoFrom());
-			    	userRetained.setGameId("fb");
+			    	userRetained.setGameId(fb_game);
 			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
 			    	userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
 			    	userRetained.setRetained(df.format(RetentionTwo));
@@ -322,7 +334,7 @@ public class FbRetainedScheduled {
 				    RetentionEight = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
 			    	UserRetained userRetained = new UserRetained();
 			    	userRetained.setDate(esUtilTest.eightDayAgoFrom());
-			    	userRetained.setGameId("fb");
+			    	userRetained.setGameId(fb_game);
 			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
 			    	userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
 			    	userRetained.setRetained(df.format(RetentionEight));
@@ -340,7 +352,7 @@ public class FbRetainedScheduled {
 			    	RetentionThirty = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
 			    	UserRetained userRetained = new UserRetained();
 			    	userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-			    	userRetained.setGameId("fb");
+			    	userRetained.setGameId(fb_game);
 			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
 			    	userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
 			    	userRetained.setRetained(df.format(RetentionThirty));
@@ -370,8 +382,9 @@ public class FbRetainedScheduled {
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
 			    		.subAggregation(AggregationBuilders.terms("server").field("服务器ID").size(300).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
 			    ).execute().actionGet();
+		System.out.println("-----------esServer---------------");
 		System.out.println(sr);
-		System.out.println("--------------------------");
+
 		
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
@@ -386,7 +399,7 @@ public class FbRetainedScheduled {
 			    	RetentionTwo = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 			    	UserRetained userRetained = new UserRetained();
 			    	userRetained.setDate(esUtilTest.twoDayAgoFrom());
-			    	userRetained.setGameId("fb");
+			    	userRetained.setGameId(fb_game);
 			    	userRetained.setKey(UserRetained.KEY_SEVSER);
 			    	userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
 			    	userRetained.setRetained(df.format(RetentionTwo));
@@ -405,7 +418,7 @@ public class FbRetainedScheduled {
 				    RetentionEight = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
 			    	UserRetained userRetained = new UserRetained();
 			    	userRetained.setDate(esUtilTest.eightDayAgoFrom());
-			    	userRetained.setGameId("fb");
+			    	userRetained.setGameId(fb_game);
 			    	userRetained.setKey(UserRetained.KEY_SEVSER);
 			    	userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
 			    	userRetained.setRetained(df.format(RetentionEight));
@@ -423,7 +436,7 @@ public class FbRetainedScheduled {
 			    	RetentionThirty = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
 			    	UserRetained userRetained = new UserRetained();
 			    	userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-			    	userRetained.setGameId("fb");
+			    	userRetained.setGameId(fb_game);
 			    	userRetained.setKey(UserRetained.KEY_SEVSER);
 			    	userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
 			    	userRetained.setRetained(df.format(RetentionThirty));
