@@ -26,7 +26,7 @@ import com.enlight.game.entity.analysis.UserRetained;
 import com.enlight.game.service.serverZone.ServerZoneService;
 
 @ContextConfiguration(locations = {"/applicationContext.xml"})
-public class EsPlatFormTest extends SpringTransactionalTestCase{
+public class EsServerZoneTest extends SpringTransactionalTestCase{
 	@Autowired
 	private Client client;
 	
@@ -35,12 +35,17 @@ public class EsPlatFormTest extends SpringTransactionalTestCase{
 	
 	EsUtilTest esUtilTest = new EsUtilTest();
 	
-	public Long createPlatFormCount(String key,String from , String to){
+	//@Test
+	public void test(){
+		System.out.println("22222");
+	}
+	
+	public Long createServerZoneCount(String key,String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
-		        		FilterBuilders.termFilter("渠道ID", key))
+		        		FilterBuilders.termFilter("服务器ID", key))
 		        );
 		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
 		System.out.println(sr);
@@ -65,9 +70,10 @@ public class EsPlatFormTest extends SpringTransactionalTestCase{
 		        ).execute().actionGet();
 	}
 	
-	//platForm
+	
+	//serverZone
 	@Test
-	public void test9() throws IOException {	
+	public void test14() throws IOException {	
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
@@ -82,7 +88,7 @@ public class EsPlatFormTest extends SpringTransactionalTestCase{
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
-			    		.subAggregation(AggregationBuilders.terms("platForm").field("渠道ID").size(300).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
+			    		.subAggregation(AggregationBuilders.terms("serverZone").field("服务器ID").size(10).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
 			    ).execute().actionGet();
 		System.out.println(sr);
 		System.out.println("--------------------------");
@@ -91,65 +97,62 @@ public class EsPlatFormTest extends SpringTransactionalTestCase{
 		for (Terms.Bucket entry : genders.getBuckets()) {
 			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
 			if(dateBucket.equals(esUtilTest.twoDayAgoFrom())){
-				Terms serverZone = entry.getAggregations().get("platForm");
+				Terms serverZone = entry.getAggregations().get("serverZone");
+				
 				for (Terms.Bucket e : serverZone.getBuckets()) {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionTwo ;
-				    
-			    	RetentionTwo = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
-			    	UserRetained userRetained = new UserRetained();
-			    	userRetained.setDate(esUtilTest.twoDayAgoFrom());
-			    	userRetained.setGameId("fb");
-			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
-			    	userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
-			    	userRetained.setRetained(df.format(RetentionTwo));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());
-			    	bulk(userRetained);
-			    	
+
+				    	RetentionTwo = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
+				    	UserRetained userRetained = new UserRetained();
+				    	userRetained.setDate(esUtilTest.twoDayAgoFrom());
+				    	userRetained.setGameId("fb");
+				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
+				    	userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
+				    	userRetained.setRetained(df.format(RetentionTwo));
+				    	userRetained.setValue(e.getKey());
+				    	userRetained.setTs(entry.getKey());
+				    	bulk(userRetained);
 				}
 			}else if(dateBucket.equals(esUtilTest.eightDayAgoFrom())){
-				Terms serverZone = entry.getAggregations().get("platForm");
+				Terms serverZone = entry.getAggregations().get("serverZone");
 				for (Terms.Bucket e : serverZone.getBuckets()) {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionEight ;
-				    
-				    RetentionEight = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
-			    	UserRetained userRetained = new UserRetained();
-			    	userRetained.setDate(esUtilTest.eightDayAgoFrom());
-			    	userRetained.setGameId("fb");
-			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
-			    	userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
-			    	userRetained.setRetained(df.format(RetentionEight));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());
-			    	bulk(userRetained);
+					    RetentionEight = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
+				    	UserRetained userRetained = new UserRetained();
+				    	userRetained.setDate(esUtilTest.eightDayAgoFrom());
+				    	userRetained.setGameId("fb");
+				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
+				    	userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
+				    	userRetained.setRetained(df.format(RetentionEight));
+				    	userRetained.setValue(e.getKey());
+				    	userRetained.setTs(entry.getKey());
+				    	bulk(userRetained);
 				}
 			}else if(dateBucket.equals(esUtilTest.thirtyOneDayAgoFrom())){
-				Terms serverZone = entry.getAggregations().get("platForm");
+				Terms serverZone = entry.getAggregations().get("serverZone");
 				for (Terms.Bucket e : serverZone.getBuckets()) {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionThirty ;
-				    
-			    	RetentionThirty = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
-			    	UserRetained userRetained = new UserRetained();
-			    	userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-			    	userRetained.setGameId("fb");
-			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
-			    	userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
-			    	userRetained.setRetained(df.format(RetentionThirty));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());
-			    	bulk(userRetained);
+				    	RetentionThirty = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
+				    	UserRetained userRetained = new UserRetained();
+				    	userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
+				    	userRetained.setGameId("fb");
+				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
+				    	userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
+				    	userRetained.setRetained(df.format(RetentionThirty));
+				    	userRetained.setValue(e.getKey());
+				    	userRetained.setTs(entry.getKey());
+				    	bulk(userRetained);
 				}
+
 			}
 		}
-		
+
 	}
-	
-	
 	
 }

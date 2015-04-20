@@ -4,19 +4,28 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,6 +33,7 @@ import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 import com.enlight.game.entity.analysis.UserRetained;
 import com.enlight.game.service.serverZone.ServerZoneService;
+import com.enlight.game.util.JsonBinder;
 
 @ContextConfiguration(locations = {"/applicationContext.xml"})
 public class EsServerTest extends SpringTransactionalTestCase{
@@ -58,7 +68,7 @@ public class EsServerTest extends SpringTransactionalTestCase{
 	                        .field("ctRetained", userRetained.getCtRetained())
 	                        .field("retained", userRetained.getRetained())
 	                        .field("key", userRetained.getKey())
-	                        .field("ts",userRetained.getTs())
+	                        .field("ts","["+userRetained.getTs()+","+userRetained.getRetained()+"]")
 	                        .field("value", userRetained.getValue())
 	                    .endObject()
 		                  )
@@ -66,7 +76,7 @@ public class EsServerTest extends SpringTransactionalTestCase{
 	}
 	
 	//platForm
-	@Test
+	//@Test
 	public void test9() throws IOException {	
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
@@ -150,6 +160,53 @@ public class EsServerTest extends SpringTransactionalTestCase{
 		
 	}
 	
+
+	//散列表 无序
+	private static final String index = "log_fb_user";
+	
+	private static final String type = "fb_user_total";
+	
+	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
+	
+	@Test
+	public void test() throws IOException, ElasticsearchException, ParseException{
+		SearchResponse response = client.prepareSearch(index)
+		        .setTypes(type)
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setPostFilter(
+		                FilterBuilders.andFilter(
+		        		        FilterBuilders.rangeFilter("date").from("2014-04-12").to("2015-05-14"),
+		                		FilterBuilders.termFilter("key", "server"),
+		                		FilterBuilders.termFilter("value", "3"))
+		        		)
+		        .addSort("date", SortOrder.ASC)
+		        .setFrom(0).setSize(daysBetween("2014-04-12","2015-05-14")).setExplain(true)
+		        .execute()
+		        .actionGet();
+		
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		for (SearchHit hit : response.getHits()) {
+			Map<String, Object> source = hit.getSource();
+			System.out.println(source);
+			map.put(source.get("date").toString(), source.get("userTotal").toString());
+		}
+		System.out.println(map);
+		
+		System.out.println(binder.toJson(map));
+		
+	}
+	
+	public static int daysBetween(String smdate,String bdate) throws ParseException{  
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
+        Calendar cal = Calendar.getInstance();    
+        cal.setTime(sdf.parse(smdate));    
+        long time1 = cal.getTimeInMillis();                 
+        cal.setTime(sdf.parse(bdate));    
+        long time2 = cal.getTimeInMillis();         
+        long between_days=(time2-time1)/(1000*3600*24);  
+            
+        return Integer.parseInt(String.valueOf(between_days));     
+    }  
 	
 	
 }

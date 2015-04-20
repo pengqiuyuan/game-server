@@ -12,6 +12,7 @@ public class EsUtilTest {
 
 	public String nowDate(){
 		String nowDate = sdf.format(new Date());
+		System.out.println("xian zai " + nowDate);
 		return nowDate;
 	}
 	
