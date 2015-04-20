@@ -384,6 +384,9 @@
                 yAxis : [
                     {
                         type : 'value',
+                        axisLabel : {
+                            formatter: '{value}％'
+                        },
                         splitArea : {show : true}
                     }
                 ],
@@ -429,6 +432,9 @@
                 yAxis : [
                     {
                         type : 'value',
+                        axisLabel : {
+                            formatter: '{value}％'
+                        },
                         splitArea : {show : true}
                     }
                 ],
@@ -474,6 +480,9 @@
                 yAxis : [
                     {
                         type : 'value',
+                        axisLabel : {
+                            formatter: '{value}％'
+                        },
                         splitArea : {show : true}
                     }
                 ],

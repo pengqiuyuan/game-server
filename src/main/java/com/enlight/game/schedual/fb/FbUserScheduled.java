@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -24,10 +23,6 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.enlight.game.service.platForm.PlatFormService;
-import com.enlight.game.service.server.ServerService;
-import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.EsUtil;
 
@@ -51,15 +46,6 @@ public class FbUserScheduled {
 	private static final String bulk_type_total = "fb_user_total";
 	
 	EsUtil esUtilTest = new EsUtil();
-	
-	@Autowired
-	private ServerZoneService serverZoneService;
-	
-	@Autowired
-	private ServerService serverService;
-	
-	@Autowired
-	private PlatFormService platFormService;
 	
 	@Autowired
 	private StoreService storeService;
@@ -165,7 +151,6 @@ public class FbUserScheduled {
 			    )
 				.setSize(10).execute().actionGet();
 		Terms genders = sr.getAggregations().get("serverZone");	
-		List<Long> serverZones = serverZoneService.findServerId();
 		
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
@@ -182,23 +167,6 @@ public class FbUserScheduled {
 			                  )
 			        );
 			System.out.println("昨天新增用户serverZone："+e.getDocCount()  +" " + e.getKey());
-			serverZones.remove(Long.valueOf(e.getKey()));
-		}
-		for (Long lo : serverZones) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userAdd", 0)
-		                        .field("key", "serverZone")
-		                        .field("value",lo.toString())
-		                        .field("ts_add",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("昨天新增用户serverZone,全部是0："+" " + lo.toString());
 		}
 		
 		//运营大区用户累计
@@ -211,7 +179,6 @@ public class FbUserScheduled {
 			}
 		}
 		Terms gendersTotal = null;
-		List<Long> szs = serverZoneService.findServerId();
 		Map<String, Long> map = new HashMap<String, Long>();
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).
@@ -267,26 +234,7 @@ public class FbUserScheduled {
 			                  )
 			        );
 			System.out.println("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
-			szs.remove(Long.valueOf(entry.getKey()));
 		}
-		
-		for (Long lo : szs) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", 0)
-		                        .field("key", "serverZone")
-		                        .field("value",lo.toString())
-		                        .field("ts_total",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("历史累计用户serverZone,全部是0："+"  " +lo.toString());
-		}
-		
 		bulkRequest.execute().actionGet();	
 	}
 	
@@ -306,7 +254,6 @@ public class FbUserScheduled {
 			    )
 				.setSize(300).execute().actionGet();
 		Terms genders = sr.getAggregations().get("platForm");	
-		List<String> platForms = platFormService.findPlatFormId();
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
 			        .setSource(jsonBuilder()
@@ -322,24 +269,8 @@ public class FbUserScheduled {
 			                  )
 			        );
 			System.out.println("昨天新增用户platForm："+e.getDocCount()  +" " + e.getKey());
-			platForms.remove(e.getKey());
 		}
-		for (String lo : platForms) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userAdd", 0)
-		                        .field("key", "platForm")
-		                        .field("value",lo)
-		                        .field("ts_add",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("昨天新增用户platForm,全部是0："+" " + lo.toString());
-		}
+
 		//渠道用户累计
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
 		boolean ty = false;
@@ -350,7 +281,6 @@ public class FbUserScheduled {
 			}
 		}
 		Terms gendersTotal = null;
-		List<String> pfs = platFormService.findPlatFormId();
 		Map<String, Long> map = new HashMap<String, Long>();
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -402,25 +332,8 @@ public class FbUserScheduled {
 			                  )
 			        );
 			System.out.println("历史累计用户platForm："+entry.getValue().toString()  +"  " +entry.getKey());
-			pfs.remove(entry.getKey());
 		}
-		
-		for (String lo : pfs) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", 0)
-		                        .field("key", "platForm")
-		                        .field("value",lo.toString())
-		                        .field("ts_total",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("历史累计用户platForm,全部是0："+"  " +lo.toString());
-		}
+
 		bulkRequest.execute().actionGet();	
 	}
 	
@@ -439,7 +352,6 @@ public class FbUserScheduled {
 			    )
 				.setSize(300).execute().actionGet();
 		Terms genders = sr.getAggregations().get("server");	
-		List<String> serverIds = serverService.findServerId(storeService.findByName(game).getId().toString());
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
 			        .setSource(jsonBuilder()
@@ -455,25 +367,8 @@ public class FbUserScheduled {
 			                  )
 			        );
 			System.out.println("昨天新增用户server："+e.getDocCount()  +" " + e.getKey());
-			serverIds.remove(e.getKey());
 		}
 		
-		for (String lo : serverIds) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userAdd", 0)
-		                        .field("key", "server")
-		                        .field("value",lo)
-		                        .field("ts_add",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("昨天新增用户server,全部是0："+" " + lo.toString());
-		}
 		//服务器用户累计
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
 		boolean ty = false;
@@ -484,7 +379,6 @@ public class FbUserScheduled {
 			}
 		}
 		Terms gendersTotal = null;
-		List<String> sis = serverService.findServerId(storeService.findByName(game).getId().toString());
 		Map<String, Long> map = new HashMap<String, Long>();
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -536,24 +430,6 @@ public class FbUserScheduled {
 			                  )
 			        );
 			System.out.println("历史累计用户server："+entry.getValue().toString()  +"  " +entry.getKey());
-			sis.remove(entry.getKey());
-		}
-		
-		for (String lo : sis) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", 0)
-		                        .field("key", "server")
-		                        .field("value",lo.toString())
-		                        .field("ts_total",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("历史累计用户server,全部是0："+"  " +lo.toString());
 		}
 		
 		bulkRequest.execute().actionGet();	

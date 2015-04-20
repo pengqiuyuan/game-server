@@ -76,9 +76,16 @@ public class EsTest extends SpringTransactionalTestCase{
 		Map<String, Object> next = new LinkedHashMap<String, Object>();
 		Map<String, Object> seven = new LinkedHashMap<String, Object>();
 		Map<String, Object> thirty = new LinkedHashMap<String, Object>();
-		
+		System.out.println(response);
+
+		int i = 0;
+		String endDate="";
 		for (SearchHit hit : response.getHits()) {
 			Map<String, Object> source = hit.getSource();
+			if(i==0){
+				System.out.println("000000000000  " + source.get("date"));
+				endDate = source.get("date").toString();
+			}
 			if(source.get("ctRetained").equals("nextDay")){
 				datenext.put(source.get("date").toString(), source.get("retained").toString());
 			}else if(source.get("ctRetained").equals("sevenDay")){
@@ -86,6 +93,7 @@ public class EsTest extends SpringTransactionalTestCase{
 			}else if(source.get("ctRetained").equals("thirtyDay")){
 				datethirty.put(source.get("date").toString(), source.get("retained").toString());
 			}
+			i++;
 		}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -94,10 +102,12 @@ public class EsTest extends SpringTransactionalTestCase{
 		long startTIme = cal.getTimeInMillis();
 		cal.setTime(sdf.parse(dateTo));
 		long endTime = cal.getTimeInMillis();
+		cal.setTime(sdf.parse(endDate));
+		long endT = cal.getTimeInMillis();
 
 		Long oneDay = 1000 * 60 * 60 * 24l;
 		Long time = startTIme;
-		while (time <= endTime) {
+		while (time <= endTime && time <= endT) {
 			Date d = new Date(time);
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			System.out.println(df.format(d));
@@ -135,8 +145,7 @@ public class EsTest extends SpringTransactionalTestCase{
 		
 	}
 	
-	public static int daysBetween(String smdate, String bdate)
-			throws ParseException {
+	public static int daysBetween(String smdate, String bdate) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(sdf.parse(smdate));
