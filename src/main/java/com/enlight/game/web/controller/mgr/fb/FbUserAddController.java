@@ -50,7 +50,7 @@ import com.enlight.game.web.controller.mgr.BaseController;
 @RequestMapping("/manage/fbUserAdd")
 public class FbUserAddController extends BaseController{
 	
-	private static final Logger logger = LoggerFactory.getLogger(FbRetainedController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FbUserAddController.class);
 	
 	/**
 	 * 这个controller默认为fb项目的控制层。项目id文档已定
@@ -99,8 +99,6 @@ public class FbUserAddController extends BaseController{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
-		Map<String, Map<String,String>> mTotal = new HashMap<String, Map<String,String>>();
-		Map<String, Map<String,String>> mAdd = new HashMap<String, Map<String,String>>();
 
 		Map<String, String> mT = new HashMap<String, String>();
 		Map<String, String> mA = new HashMap<String, String>();
@@ -108,7 +106,9 @@ public class FbUserAddController extends BaseController{
 		List<String> sZones = new ArrayList<String>();
 		List<String> pForms = new ArrayList<String>();
 		List<String> svs = new ArrayList<String>();
-
+		//-------------------------------------------------
+		Map<String, Map<String,String>> mTotal = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,String>> mAdd = new HashMap<String, Map<String,String>>();
 		if(searchParams.isEmpty()){
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
@@ -162,12 +162,11 @@ public class FbUserAddController extends BaseController{
 			}
 		   
 		}
-
 		logger.debug(binder.toJson(mTotal));
 		logger.debug(binder.toJson(mAdd));
 		model.addAttribute("mTotal", binder.toJson(mTotal));
 		model.addAttribute("mAdd", binder.toJson(mAdd));
-		
+		//---------------------------------------------------------
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);
 		model.addAttribute("platForm", platFormService.findAll());

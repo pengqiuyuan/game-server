@@ -175,7 +175,7 @@ public class FbRetainedController extends BaseController{
 		model.addAttribute("svs", svs);
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/user/retain";
+		return "/kibana/fb/user/userRetain";
 	}
 	
 	

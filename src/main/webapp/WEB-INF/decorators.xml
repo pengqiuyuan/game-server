@@ -31,7 +31,8 @@
 		<pattern>/*kibana*</pattern>
 		<pattern>/*manage/count*</pattern>
 		<pattern>/*manage/fbRetained*</pattern>
-		<pattern>/*manage/fbUseradd*</pattern>
+		<pattern>/*manage/fbUserAdd*</pattern>
+		<pattern>/*manage/fbUserPay*</pattern>
 	</decorator>
 	
 </decorators>

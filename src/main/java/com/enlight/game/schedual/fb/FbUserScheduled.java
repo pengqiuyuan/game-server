@@ -88,7 +88,7 @@ public class FbUserScheduled {
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
 							FilterBuilders.termFilter("key", "all"),
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()))
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()))
 			        )).execute().actionGet();
 			long s  = 0L;
 			for (SearchHit searchHit : srTotal.getHits()) {
@@ -185,7 +185,7 @@ public class FbUserScheduled {
 					setQuery(
 							QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 									FilterBuilders.andFilter(
-									        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()),
+									        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 							        		FilterBuilders.termFilter("key", "serverZone"))
 					        ))
 					.execute().actionGet();
@@ -235,7 +235,7 @@ public class FbUserScheduled {
 			        );
 			System.out.println("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
-		bulkRequest.execute().actionGet();	
+		bulkRequest.execute().actionGet();
 	}
 	
 	
@@ -285,7 +285,7 @@ public class FbUserScheduled {
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()),
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 			        		FilterBuilders.termFilter("key", "platForm"))
 			        ))
 					.addAggregation(
@@ -333,8 +333,7 @@ public class FbUserScheduled {
 			        );
 			System.out.println("历史累计用户platForm："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
-
-		bulkRequest.execute().actionGet();	
+		bulkRequest.execute().actionGet();
 	}
 	
 	public void esServer() throws IOException, ParseException {	
@@ -383,7 +382,7 @@ public class FbUserScheduled {
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()),
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 			        		FilterBuilders.termFilter("key", "server"))
 			        ))
 					.addAggregation(
@@ -431,9 +430,7 @@ public class FbUserScheduled {
 			        );
 			System.out.println("历史累计用户server："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
-		
-		bulkRequest.execute().actionGet();	
-		
+		bulkRequest.execute().actionGet();
 	}
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)

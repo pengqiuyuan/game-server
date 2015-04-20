@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -30,10 +29,14 @@ public class FbRetainedServer {
 	@Autowired
 	private Client client;
 	
+	private static final String index = "log_fb_user";
+	
+	private static final String type = "fb_user_retained";
+	
 	public Map<String, Map<String, Object>> searchAllRetained(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
-			SearchResponse response = client.prepareSearch("log_fb_user")
-			        .setTypes("fb_user_retained")
+			SearchResponse response = client.prepareSearch(index)
+			        .setTypes(type)
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 			        .setPostFilter(
 			                FilterBuilders.andFilter(
@@ -49,8 +52,8 @@ public class FbRetainedServer {
 	
 	public Map<String, Map<String, Object>> searchServerZoneRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_fb_user")
-		        .setTypes("fb_user_retained")
+		SearchResponse response = client.prepareSearch(index)
+		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
@@ -66,8 +69,8 @@ public class FbRetainedServer {
 	}
 	public Map<String, Map<String, Object>> searchPlatFormRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_fb_user")
-		        .setTypes("fb_user_retained")
+		SearchResponse response = client.prepareSearch(index)
+		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
@@ -85,8 +88,8 @@ public class FbRetainedServer {
 	
 	public Map<String, Map<String, Object>> searchServerRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
-		SearchResponse response = client.prepareSearch("log_fb_user")
-		        .setTypes("fb_user_retained")
+		SearchResponse response = client.prepareSearch(index)
+		        .setTypes(type)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setPostFilter(
 		                FilterBuilders.andFilter(

@@ -17,6 +17,8 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
+import org.quartz.JobDetail;
+import org.quartz.SimpleTrigger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
@@ -48,7 +50,7 @@ public class EsTest extends SpringTransactionalTestCase{
 	}
 	
 	//留存测试
-	@Test
+	//@Test
 	public void test14() throws IOException, ParseException {	
 		
 		String dateFrom = "2015-04-09";

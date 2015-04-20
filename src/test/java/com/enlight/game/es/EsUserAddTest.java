@@ -176,7 +176,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		        ).execute().actionGet();
 	}
 	
-	//@Test
+	@Test
 	public void testuseradd() throws ElasticsearchException, IOException, ParseException{
 		
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
@@ -216,8 +216,10 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
 							FilterBuilders.termFilter("key", "all"),
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()))
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()))
 			        )).execute().actionGet();
+			System.out.println(esUtilTest.twoDayAgoFrom()+"    "+esUtilTest.twoDayAgoF() + "  11111111111  " + srTotal);
+			
 			long s  = 0L;
 			for (SearchHit searchHit : srTotal.getHits()) {
 				Map<String, Object> source = searchHit.getSource();
@@ -259,7 +261,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			        );
 			System.out.println("历史累计用户all："+srTotal.getHits().totalHits());
 		}
-		bulkRequest.execute().actionGet();
+		//bulkRequest.execute().actionGet();
 	}
 	
 	//@Test
@@ -675,7 +677,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		
 		bulkRequest.execute().actionGet();		
 	}	
-	@Test
+	//@Test
 	public void testuseradr() throws ElasticsearchException, IOException, ParseException{
 		testuseradd();
 		testuseraddServerZone();

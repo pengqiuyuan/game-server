@@ -27,10 +27,8 @@
     
     <link href="<%=request.getContextPath()%>/static/echarts/css/echartsHome.css" rel="stylesheet">
 
-  
-<body>
+  <body>
 	<div id="wrapper">
-
 		<div class="wrapper wrapper-content animated fadeInRight">
 			<form id="inputForm" class="orm-inline" method="get" action="#">
 				<div class="row-fluid">
@@ -196,7 +194,6 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</form>
 
@@ -204,14 +201,16 @@
 				<div class="span6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
-							<div id="mainAdd" style="height: 500px; border: 0px solid #ccc; padding: 10px;"></div>
+							<div id="mainAdd"
+								style="height: 500px; border: 0px solid #ccc; padding: 10px;"></div>
 						</div>
 					</div>
 				</div>
-				<div class="span6" id="choose">
+				<div class="span6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
-							<div id="mainTotal" style="height: 500px; border: 0px solid #ccc; padding: 10px;"></div>						
+							<div id="mainTotal"
+								style="height: 500px; border: 0px solid #ccc; padding: 10px;"></div>
 						</div>
 					</div>
 				</div>
@@ -221,12 +220,11 @@
 	</div>
 
 
-	<script
-		src="<%=request.getContextPath()%>/static/echarts/js/echarts.js"></script>
 
-	<script
-		src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
-
+    <script src="<%=request.getContextPath()%>/static/echarts/js/echarts.js"></script>
+    
+    <script src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
+    
 	<script type="text/javascript">
 
 		$("#chooseBtn").click(function(){
@@ -325,7 +323,7 @@
 		})
 		
 	</script>
-
+	
 	<script type="text/javascript">
 	
     require.config({
@@ -377,12 +375,12 @@
             	ad = 1;
             }
             //--- 折柱 ---
-            var myChart = ec.init(document.getElementById('mainAdd'));
+            var myChart = ec.init(document.getElementById('mainTotal'));
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '累计用户',
-                    subtext: '历史累计的玩家帐户数'
+                    text: '当月付费率',
+                    subtext: '所选时期的新增玩家中，在新增后的30日内进行了充值的玩家数和其占比。'
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -425,12 +423,12 @@
                 series : totalSeries
             });
             
-            var myChart = ec.init(document.getElementById('mainTotal'));
+            var myChart = ec.init(document.getElementById('mainAdd'));
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '新增用户',
-                    subtext: '当日新增加的玩家帐户数'
+                    text: '当月新增付费用户数',
+                    subtext: '当月新增加的付费玩家帐户数'
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -478,4 +476,4 @@
         }
     );
     </script>
-</body>
+  </body>

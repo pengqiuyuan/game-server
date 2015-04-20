@@ -2,9 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
 	default-lazy-init="true">
-	
- 	<bean id="fbRetainedScheduled" class="com.enlight.game.schedual.fb.FbRetainedScheduled"/>
- 	<bean id="fbUserScheduled" class="com.enlight.game.schedual.fb.FbUserScheduled"/>
+	 
+ 	<bean id="fbRetainedScheduled" class="com.enlight.game.schedual.fb.FbRetainedScheduled"/> <!-- 用户留存 -->
+ 	<bean id="fbUserScheduled" class="com.enlight.game.schedual.fb.FbUserScheduled"/><!-- 用户新增、累计 -->
+ 	<bean id="fbPayScheduled" class="com.enlight.game.schedual.fb.FbPayConversionScheduled"/><!-- 用户付费率 -->
  	
 	<bean id="fbRetainedMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
    		 <property name="targetObject">
@@ -21,15 +22,28 @@
     	<property name="targetMethod">  
        		 <value>schedual</value> 
    		 </property>  
-	</bean>  
+	</bean>
+	<bean id="fbPayMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="fbPayScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>   
 	
 	<bean id="fbRetainedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="fbRetainedMethod" /> 
      	 <property name="cronExpression" value="0 30 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
-<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+     	 <!--  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
 	<bean id="fbUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="fbUserMethod" /> 
+     	 <property name="cronExpression" value="0 30 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="fbPayTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="fbPayMethod" /> 
      	 <property name="cronExpression" value="0 30 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 <!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
@@ -39,8 +53,9 @@
 	        <list>
 	            <ref bean="fbRetainedTrigger" />
 	            <ref bean="fbUserTrigger" />
+	            <ref bean="fbPayTrigger" />
 	        </list>
 	    </property>
-	</bean>
+	</bean> 
 	
 </beans>
