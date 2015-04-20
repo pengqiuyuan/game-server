@@ -118,6 +118,13 @@ public class FbUserAddServer {
 			cal.setTime(sdf.parse(dateTo));
 			long endTime = cal.getTimeInMillis();
 
+			cal.setTime(new Date());
+			cal.add(cal.DATE,-1);
+			long t = cal.getTimeInMillis();
+			if(endTime>t){
+				endTime = t;
+			}
+			
 			Long oneDay = 1000 * 60 * 60 * 24l;
 			Long time = startTIme;
 			while (time <= endTime) {
