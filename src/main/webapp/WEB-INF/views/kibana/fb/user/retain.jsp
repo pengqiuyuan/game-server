@@ -145,28 +145,96 @@
 						<div class="ibox-content">
 							<div>
 								<h3>筛选	
-								<c:if test="${not empty param.search_EQ_value}">
+								<c:if test="${not empty param.search_EQ_platForm_value}">
 									<c:if test="${param.search_EQ_category=='platForm'}">
-										<span id="show" class="btn btn-primary btn-xs m-l-sm" type="button">查询渠道为：${param.search_EQ_value}</span>
+										<span id="show" class="btn btn-primary btn-xs m-l-sm" type="button">查询渠道为：${param.search_EQ_platForm_value}</span>
 									</c:if>
+								</c:if>
+								<c:if test="${not empty param.search_EQ_server_value}">
 									<c:if test="${param.search_EQ_category=='server'}">
-										<span id="show" class="btn btn-primary btn-xs m-l-sm" type="button">查询服务器为：${param.search_EQ_value}</span>
+										<span id="show" class="btn btn-primary btn-xs m-l-sm" type="button">查询服务器为：${param.search_EQ_server_value}</span>
 									</c:if>
 								</c:if>
 								</h3>
 								
-								<div class="form-group">
-									<div class="btn-group">
-										<select id="category" class="selectpicker show-menu-arrow" name="search_EQ_category">
-											 <option value="">选择筛选类型</option>
-										     <option value="platForm">渠道</option>
-										     <option value="server">服务器</option>
-										  </select>
+								<!-- 选择筛选  开始页面-->
+								<c:if test="${empty param.search_EQ_category}">
+									<div class="form-group">
+										<select class="selectpicker show-menu-arrow t1" name="search_EQ_category" id="t1" >	
+											 <option value="platForm">渠道</option>	
+										</select>
+										<select class="selectpicker show-menu-arrow t2" name=search_EQ_platForm_value id="t2" data-size="30">	
+											 <option value="">选择渠道</option>	
+											 <c:forEach items="${platForm}" var="item" >
+													<option value="${item.pfName }" ${param.search_EQ_platForm_value == item.pfName ? 'selected' : '' }>${item.pfName}</option>
+											 </c:forEach>
+										</select>	
+										<span class="btn btn-primary btn-xs m-l-sm" type="button" id='psfilter'>切换筛选</span>
 									</div>
-									<div class="btn-group" id="divpfResult">
-
+									<div class="form-group">
+										<select class="selectpicker show-menu-arrow t3" name="search_EQ_category" id="t3" disabled="disabled">	
+											 <option value="server">服务器</option>	
+										</select>
+										<select class="selectpicker show-menu-arrow t4" name="search_EQ_server_value" id="t4" disabled="disabled" data-size="30">	
+											    <option value="">选择服务器</option>	
+												<c:forEach items="${server}" var="item" >
+														<option value="${item.serverId }" ${param.search_EQ_server_value == item.serverId ? 'selected' : '' }>${item.serverId}</option>
+												</c:forEach>
+										</select>	
+									</div>								
+								</c:if>
+								<!-- 选择筛选  search_EQ_category 为渠道-->
+								<c:if test="${param.search_EQ_category=='platForm'}">
+									<div class="form-group">
+										<select class="selectpicker show-menu-arrow t1" name="search_EQ_category" id="t1" >	
+											 <option value="platForm">渠道</option>	
+										</select>
+										<select class="selectpicker show-menu-arrow t2" name="search_EQ_platForm_value" id="t2" data-size="30">	
+											 <option value="">选择渠道</option>	
+											 <c:forEach items="${platForm}" var="item" >
+													<option value="${item.pfName }" ${param.search_EQ_platForm_value == item.pfName ? 'selected' : '' }>${item.pfName}</option>
+											 </c:forEach>
+										</select>	
+										<span class="btn btn-primary btn-xs m-l-sm" type="button" id='psfilter'>切换筛选</span>
 									</div>
-								</div>
+									<div class="form-group">
+										<select class="selectpicker show-menu-arrow t3" name="search_EQ_category" id="t3" disabled="disabled">	
+											 <option value="server">服务器</option>	
+										</select>
+										<select class="selectpicker show-menu-arrow t4" name="search_EQ_server_value" id="t4" disabled="disabled" data-size="30">	
+											    <option value="">选择服务器</option>	
+												<c:forEach items="${server}" var="item" >
+														<option value="${item.serverId }" ${param.search_EQ_server_value == item.serverId ? 'selected' : '' }>${item.serverId}</option>
+												</c:forEach>
+										</select>	
+									</div>								
+								</c:if>
+								<!-- 选择筛选  search_EQ_category 为服务器-->
+								<c:if test="${param.search_EQ_category=='server'}">
+									<div class="form-group">
+										<select class="selectpicker show-menu-arrow t1" name="search_EQ_category" id="t1"  disabled="disabled">	
+											 <option value="platForm">渠道</option>	
+										</select>
+										<select class="selectpicker show-menu-arrow t2" name="search_EQ_platForm_value" id="t2"  disabled="disabled" data-size="30">	
+											 <option value="">选择渠道</option>	
+											 <c:forEach items="${platForm}" var="item" >
+													<option value="${item.pfName }" ${param.search_EQ_platForm_value == item.pfName ? 'selected' : '' }>${item.pfName}</option>
+											 </c:forEach>
+										</select>	
+										<span class="btn btn-primary btn-xs m-l-sm" type="button" id='psfilter'>切换筛选</span>
+									</div>
+									<div class="form-group">
+										<select class="selectpicker show-menu-arrow t3" name="search_EQ_category" id="t3">	
+											 <option value="server">服务器</option>	
+										</select>
+										<select class="selectpicker show-menu-arrow t4" name="search_EQ_server_value" id="t4" data-size="30">	
+											    <option value="">选择服务器</option>	
+												<c:forEach items="${server}" var="item" >
+														<option value="${item.serverId }" ${param.search_EQ_server_value == item.serverId ? 'selected' : '' }>${item.serverId}</option>
+												</c:forEach>
+										</select>	
+									</div>								
+								</c:if>
 								<div class="form-group">
 									<button class="btn btn-success " type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;<span class="bold">确定</span>
                                 </button>
@@ -212,6 +280,45 @@
 	
 	                                <div class="flot-chart">
 	                                    <div class="flot-chart-content" id="flot-line-chart"></div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	             </div>
+	             
+	             			<div class="row-fluid">
+	                     <div class="span12">
+	                        <div class="ibox float-e-margins">
+	                            <div class="ibox-title">
+	                                <h5>玩家留存</h5>
+	                                <div class="ibox-tools">
+										<span>
+					                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" >
+					                                <i class="fa fa-envelope"></i>
+					                            </a>
+					                            <div class="dropdown-menu dropdown-messages well" >
+													<h4>N日留存率</h4>
+													<font>某日新增的玩家/设备中，在该日后的第N日中，还有进行游戏的玩家/设备比例。例 如：5月3日新增玩家为100人，这100人中有24人在5月10日这一天内还有玩过游戏，5月3日的7日留存 率=24/100=24%</font>
+					                            </div>
+										</span>
+	                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+	                                        <i class="fa fa-wrench"></i>
+	                                    </a>
+	                                    <ul class="dropdown-menu dropdown-user">
+	                                        <li><a href="#">选项1</a>
+	                                        </li>
+	                                        <li><a href="#">选项2</a>
+	                                        </li>
+	                                    </ul>
+	                                    <a class="close-link">
+	                                        <i class="fa fa-times"></i>
+	                                    </a>
+	                                </div>
+	                            </div>
+	                            <div class="ibox-content">
+	
+	                                <div class="flot-chart">
+	                                    <div class="flot-chart-content" id="flot-line-chart11"></div>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -287,6 +394,31 @@
     <script src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
     
 	<script type="text/javascript">
+	
+		$("#psfilter").click(function(){
+			if($("#t1").attr("disabled")=="disabled" && $("#t2").attr("disabled")=="disabled"){ 
+				$("#t1").removeAttr("disabled"); 
+				$("#t2").removeAttr("disabled"); 
+			}else{
+				$("#t2").val("");
+				$("#t1").attr("disabled","disabled"); 
+				$("#t2").attr("disabled","disabled"); 
+			}
+			
+			if($("#t3").attr("disabled")=="disabled" && $("#t4").attr("disabled")=="disabled"){ 
+				$("#t3").removeAttr("disabled"); 
+				$("#t4").removeAttr("disabled"); 
+			}else{
+				$("#t4").val("");
+				$("#t3").attr("disabled","disabled"); 
+				$("#t4").attr("disabled","disabled"); 
+			}
+			$('#t1').selectpicker('refresh');
+			$('#t2').selectpicker('refresh');
+			$('#t3').selectpicker('refresh');
+			$('#t4').selectpicker('refresh');
+		});
+	
 		$(".btn-success").click(function(){
 			var doingDate=$("#dateFrom").val();
 	        var endDoingDate=$("#dateTo").val();
@@ -375,102 +507,90 @@
 			
 			$("#serverZone").change(function(){
 				$("#show").text("无筛选条件");
-	    		$("#divpfResult").empty();
-	    		$("#category option[value='']").attr("selected", true);
-	    		$('#category').selectpicker('refresh');
-			});
-		    
-		    $("#category").change(function(){
+				
 		    	var serverZoneValue=$("#serverZone").val();
 		    	var serverZoneText=$("#serverZone  option:selected").text();
-		    	var category = $("#category").val()
 				var storeId = $("#storeId").val();
-
-		    	if($("#serverZone").val()=="all"){
-					if(category=="platForm"){
-						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/fbRetained/findPlatForm',
-							type: 'GET',
-							contentType: "application/json;charset=UTF-8",		
-							dataType: 'text',
-							success: function(data){
-								var parsedJson = $.parseJSON(data);
-								$("#divpfResult").empty();
-								if(parsedJson!=""){
-									$("#divpfResult").append("<select class='selectpicker' id='pfByserverIdResult' name='search_EQ_value'></select>");
-									jQuery.each(parsedJson, function(index, itemData) {
-										$("#pfByserverIdResult").append("<option value='"+itemData.pfName+"'>"+itemData.pfName+"</option>");
-					  				});
-									$('#pfByserverIdResult').selectpicker('refresh');
-								}
-							}//回调看看是否有出错
-						});
-			    	}else if(category=="server"){
-						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/fbRetained/findServerByStoreId?storeId='+storeId,
-							type: 'GET',
-							contentType: "application/json;charset=UTF-8",		
-							dataType: 'text',
-							success: function(data){
-								var parsedJson = $.parseJSON(data);
-								$("#divpfResult").empty();
-								if(parsedJson!=""){
-									$("#divpfResult").append("<select class='selectpicker' id='serverByStoreIdResult' name='search_EQ_value'></select>");
-									jQuery.each(parsedJson, function(index, itemData) {
-										$("#serverByStoreIdResult").append("<option value='"+itemData.serverId+"'>"+itemData.serverId+"</option>");
-					  				});
-									$('#serverByStoreIdResult').selectpicker('refresh');
-								}
-							}//回调看看是否有出错
-						});
-			    	}else if(category==""){
-			    		$("#divpfResult").empty();
-			    	}
-		    	}else{
-					if(category=="platForm"){
-						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/fbRetained/findPlatFormByServerId?serverId='+serverZoneValue,
-							type: 'GET',
-							contentType: "application/json;charset=UTF-8",		
-							dataType: 'text',
-							success: function(data){
-								var parsedJson = $.parseJSON(data);
-								$("#divpfResult").empty();
-								if(parsedJson!=""){
-									$("#divpfResult").append("<select class='selectpicker' id='pfByserverIdResult' name='search_EQ_value'></select>");
-									jQuery.each(parsedJson, function(index, itemData) {
-										$("#pfByserverIdResult").append("<option value='"+itemData.pfName+"'>"+itemData.pfName+"</option>");
-					  				});
-									$('#pfByserverIdResult').selectpicker('refresh');
-								}
-							}//回调看看是否有出错
-						});
-			    	}else if(category=="server"){
-						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/fbRetained/findServerByStoreIdAndServerZoneId?storeId='+storeId+'&serverZoneId='+serverZoneValue,
-							type: 'GET',
-							contentType: "application/json;charset=UTF-8",		
-							dataType: 'text',
-							success: function(data){
-								var parsedJson = $.parseJSON(data);
-								$("#divpfResult").empty();								
-								if(parsedJson!=""){
-									$("#divpfResult").append("<select class='selectpicker' id='serverByStoreIdResult' name='search_EQ_value'></select>");
-									jQuery.each(parsedJson, function(index, itemData) {
-										$("#serverByStoreIdResult").append("<option value='"+itemData.serverId+"'>"+itemData.serverId+"</option>");
-					  				});
-									$('#serverByStoreIdResult').selectpicker('refresh');
-								}
-							}//回调看看是否有出错
-						});
-			    	}else if(category==""){
-			    		$("#divpfResult").empty();
-			    	}
-		    		
-		    	}
-
-		    });
-		    
+				if($("#serverZone").val()=="all"){
+					$.ajax({                                               
+						url: '<%=request.getContextPath()%>/manage/fbRetained/findPlatForm',
+						type: 'GET',
+						contentType: "application/json;charset=UTF-8",		
+						dataType: 'text',
+						success: function(data){
+							var parsedJson = $.parseJSON(data);
+							$("#t2").empty();
+							$("#t2").append("<option value=''>选择渠道</option>	");
+							if(parsedJson!=""){
+								jQuery.each(parsedJson, function(index, itemData) {
+									$("#t2").append("<option value='"+itemData.pfName+"'>"+itemData.pfName+"</option>");
+				  				});
+							}
+				    		$("#t2 option[value='']").attr("selected", true);
+							$('#t2').selectpicker('refresh'); 
+						}//回调看看是否有出错
+					});
+					
+					$.ajax({                                               
+						url: '<%=request.getContextPath()%>/manage/fbRetained/findServerByStoreId?storeId='+storeId,
+						type: 'GET',
+						contentType: "application/json;charset=UTF-8",		
+						dataType: 'text',
+						success: function(data){
+							var parsedJson = $.parseJSON(data);
+							$("#t4").empty();
+							$("#t4").append("<option value=''>选择服务器</option>");
+							if(parsedJson!=""){
+								jQuery.each(parsedJson, function(index, itemData) {
+									$("#t4").append("<option value='"+itemData.serverId+"'>"+itemData.serverId+"</option>");
+				  				});
+							}
+				    		$("#t4 option[value='']").attr("selected", true);
+							$('#t4').selectpicker('refresh');
+						}//回调看看是否有出错
+					});
+				}else{
+					$.ajax({                                               
+						url: '<%=request.getContextPath()%>/manage/fbRetained/findPlatFormByServerId?serverId='+serverZoneValue,
+						type: 'GET',
+						contentType: "application/json;charset=UTF-8",		
+						dataType: 'text',
+						success: function(data){
+							var parsedJson = $.parseJSON(data);
+							$("#t2").empty();
+							$("#t2").append("<option value=''>选择渠道</option>	");
+							if(parsedJson!=""){
+								jQuery.each(parsedJson, function(index, itemData) {
+									$("#t2").append("<option value='"+itemData.pfName+"'>"+itemData.pfName+"</option>");
+				  				});
+							}
+				    		$("#t2 option[value='']").attr("selected", true);
+							$('#t2').selectpicker('refresh');
+						}//回调看看是否有出错
+					});
+					
+					$.ajax({                                               
+						url: '<%=request.getContextPath()%>/manage/fbRetained/findServerByStoreIdAndServerZoneId?storeId='+storeId+'&serverZoneId='+serverZoneValue,
+						type: 'GET',
+						contentType: "application/json;charset=UTF-8",		
+						dataType: 'text',
+						success: function(data){
+							var parsedJson = $.parseJSON(data);
+							$("#t4").empty();
+							$("#t4").append("<option value=''>选择服务器</option>	");
+							if(parsedJson!=""){
+								jQuery.each(parsedJson, function(index, itemData) {
+									$("#t4").append("<option value='"+itemData.serverId+"'>"+itemData.serverId+"</option>");
+				  				});
+							}
+				    		$("#t4 option[value='']").attr("selected", true);
+							$('#t4').selectpicker('refresh');
+						}//回调看看是否有出错
+					});
+				}
+			
+			});
+		    	    
 			
             var dateNextDay=$.parseJSON($("#datenext").val())
             var dateSevenDay=$.parseJSON($("#dateSeven").val())
@@ -536,6 +656,53 @@
                 $.plot($("#flot-line-chart"), [dateNextDay,dateSevenDay,dateThirtyDay], barOptions);
                 
                 $(".dataTables-example").dataTable();
+                
+                
+                var data = [[0, 11],[1, 15],[2, 25],[3, 24],[4, 13],[5, 18]];
+                var dataset = [{ label: "2012 Average Temperature", data: data, color: "#5482FF" }];
+                var ticks = [[0, "London"], [1, "New York"], [2, "New Delhi"], [3, "Taipei"],[4, "Beijing"], [5, "Sydney"]];
+
+                var options = {
+                    series: {
+                        bars: {
+                            show: true
+                        }
+                    },
+                    bars: {
+                        align: "center",
+                        barWidth: 0.5
+                    },
+                    xaxis: {
+                        axisLabel: "World Cities",
+                        axisLabelUseCanvas: true,
+                        axisLabelFontSizePixels: 12,
+                        axisLabelFontFamily: 'Verdana, Arial',
+                        axisLabelPadding: 10,
+                        ticks: ticks
+                    },
+                    yaxis: {
+                        axisLabel: "Average Temperature",
+                        axisLabelUseCanvas: true,
+                        axisLabelFontSizePixels: 12,
+                        axisLabelFontFamily: 'Verdana, Arial',
+                        axisLabelPadding: 3,
+                        tickFormatter: function (v, axis) {
+                            return v + "°C";
+                        }
+                    },
+                    legend: {
+                        noColumns: 0,
+                        labelBoxBorderColor: "#000000",
+                        position: "nw"
+                    },
+                    grid: {
+                        hoverable: true,
+                        borderWidth: 2,
+                        backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+                    }
+                };
+                
+                $.plot($("#flot-line-chart11"), dataset, options);
 	    
 		})
 		

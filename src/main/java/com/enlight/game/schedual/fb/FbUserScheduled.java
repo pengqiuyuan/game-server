@@ -81,7 +81,6 @@ public class FbUserScheduled {
 		                  )
 		        );
 		bulkRequest.execute().actionGet();
-
 	}	
 	
 	public void esServerZone() throws IOException, ParseException {	

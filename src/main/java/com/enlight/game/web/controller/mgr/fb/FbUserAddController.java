@@ -99,40 +99,55 @@ public class FbUserAddController extends BaseController{
 		Map<String, Object> mAdd = new HashMap<String, Object>();
 		
 		if(searchParams.isEmpty()){
+			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
 			mTotal = fbUserTotalServer.searchAllUserTotal(dateFrom, dateTo);
 			mAdd = fbUserAddServer.searchAllUserAdd(dateFrom, dateTo);
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
-			logger.debug("查看所有运营大区。。。all" );
+			model.addAttribute("platForm", platFormService.findAll());
+			model.addAttribute("server", serverService.findByStoreId(storeId));
 		}else{
-			model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-			model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-			if(searchParams.get("EQ_value")!="" && searchParams.get("EQ_value")!=null){
-				if(searchParams.get("EQ_category").toString().equals("platForm")){
-					PlatForm platform =  platFormService.findByPfName(searchParams.get("EQ_value").toString());
-					mTotal = fbUserTotalServer.searchPlatFormUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
-					mAdd = fbUserAddServer.searchPlatFormUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
-					logger.debug("查看渠道。。。"+platform.getPfId());
-				}else if(searchParams.get("EQ_category").toString().equals("server")){
-					Server server = serverService.findByServerId(searchParams.get("EQ_value").toString());
-					mTotal = fbUserTotalServer.searchServerUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
-					mAdd = fbUserAddServer.searchServerUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
-					logger.debug("查看服务器。。。"+server.getServerId());
-				}
+			if(searchParams.get("EQ_platForm_value")!="" && searchParams.get("EQ_platForm_value")!=null){
+				//查询渠道
+				model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
+				model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
+				model.addAttribute("platForm",  searchParams.get("EQ_serverZone").toString().equals("all")?platFormService.findAll():platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
+				model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
+				PlatForm platform =  platFormService.findByPfName(searchParams.get("EQ_platForm_value").toString());
+				mTotal = fbUserTotalServer.searchPlatFormUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
+				mAdd = fbUserAddServer.searchPlatFormUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
+			}else if(searchParams.get("EQ_server_value")!="" && searchParams.get("EQ_server_value")!=null){
+				//查询服务器
+				model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
+				model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
+				model.addAttribute("platForm",  searchParams.get("EQ_serverZone").toString().equals("all")?platFormService.findAll():platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
+				model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
+				Server server = serverService.findByServerId(searchParams.get("EQ_server_value").toString());
+				mTotal = fbUserTotalServer.searchServerUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
+				mAdd = fbUserAddServer.searchServerUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
 			}else{
+				//查询运营大区
 				if(searchParams.get("EQ_serverZone").toString().equals("all")){
+					model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
+					model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
 					mTotal = fbUserTotalServer.searchAllUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
 					mAdd = fbUserAddServer.searchAllUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-					logger.debug("查看所有运营大区。。。all" );
+					model.addAttribute("platForm", platFormService.findAll());
+					model.addAttribute("server", serverService.findByStoreId(storeId));
 				}else{
+					model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
+					model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
+					model.addAttribute("platForm",  platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
+					model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
 					mTotal = fbUserTotalServer.searchServerZoneUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
 					mAdd = fbUserAddServer.searchServerZoneUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
-					logger.debug("查看运营大区。。。" +searchParams.get("EQ_serverZone").toString());
 				}
 			}
-		}	
+		}
+
+	
 		model.addAttribute("userTotal", mTotal.get("userTotal"));
 		model.addAttribute("tableTotal", mTotal.get("table"));
 		
