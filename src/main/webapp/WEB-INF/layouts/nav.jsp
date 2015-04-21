@@ -112,9 +112,9 @@
 										</li>
 									</shiro:hasAnyRoles>
 									<shiro:hasAnyRoles name="admin,32">
-										<li class="dropdown-submenu"><a tabindex="-1" href="#">CK统计日志</a>
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS统计日志</a>
 											<ul class="dropdown-menu">
-												<li><a tabindex="-1" href="#">CK测试</a></li>
+												<li><a tabindex="-1" href="#">KDS测试</a></li>
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
@@ -198,7 +198,7 @@
 											                  <li class="dropdown-submenu">
 											                  	<a tabindex="-1" href="${ctx}/manage/count/fb/user?id=1#/dashboard/file/user.json">用户相关日志(总)</a>
 											                    <ul class="dropdown-menu">
-												                  <li><a href="${ctx}/manage/count/fb/userRetained">用户留存</a></li>
+												                  <li><a href="${ctx}/manage/retained/fb/userRetained/1">用户留存</a></li>
 												                </ul>
 											                  </li>
 											                  <li><a href="${ctx}/manage/count/fb/user?id=2#/dashboard/file/userLogin.json">用户登录</a></li>

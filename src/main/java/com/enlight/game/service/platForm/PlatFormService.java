@@ -32,6 +32,10 @@ public class PlatFormService {
 	@Autowired
 	private AccountService accountService;
 	
+	public PlatForm findByPfName(String pfName){
+		return platFormDao.findByPfName(pfName);
+	}
+	
 	public PlatForm findByPfId(String pfId){
 		return platFormDao.findByPfId(pfId);
 	}

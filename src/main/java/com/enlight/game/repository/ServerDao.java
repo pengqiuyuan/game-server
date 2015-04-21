@@ -1,5 +1,6 @@
 package com.enlight.game.repository;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -22,4 +23,10 @@ public interface ServerDao extends PagingAndSortingRepository<Server, Long>,JpaS
 	void deleteByServerZoneId(String serverZoneId);
 	
 	Set<Server> findByServerZoneIdAndStoreId(String serverZoneId,String storeId);
+	
+	@Modifying
+	@Query("from Server server where server.status='1'")
+	List<Server> findAll();
+	
+	Set<Server> findByStoreId(String storeId);
 }

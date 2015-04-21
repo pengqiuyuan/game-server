@@ -1,6 +1,7 @@
 package com.enlight.game.service.server;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +32,14 @@ public class ServerService {
 	
 	@Autowired
 	private AccountService accountService;
+	
+	public Set<Server> findByStoreId(String storeId){
+		return serverDao.findByStoreId(storeId);
+	}
+	
+	public List<Server> findAll(){
+		return serverDao.findAll();
+	}
 	
 	public Server findById(Long id){
 		return serverDao.findOne(id);

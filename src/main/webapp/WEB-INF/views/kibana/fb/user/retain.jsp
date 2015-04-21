@@ -30,10 +30,19 @@
             <!-- Data Tables -->
     <script src="<%=request.getContextPath()%>/static/flot/js/jquery.dataTables.js"></script>
     <script src="<%=request.getContextPath()%>/static/flot/js/dataTables.bootstrap.js"></script>
+    <style type="text/css">
+	    form {
+		  margin: 0 0 0px;
+		}
+    </style>
   </head>
 
   <body>
       <div id="wrapper">
+      		<input type="hidden" id="datenext" value="${datenext}" >
+      		<input type="hidden" id="dateSeven" value="${dateSeven}" >
+      		<input type="hidden" id="datethirty" value="${datethirty}" >
+      		<input type="hidden" id="table" value="${table}" >
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="span10">
                     <h2>Flot图表</h2>
@@ -42,8 +51,40 @@
 
 		<div class="wrapper wrapper-content animated fadeInRight">
 		
-					<div class="row-fluid">
-				<div class="span3">
+
+			
+			<form class="orm-inline"  method="get" action="#">
+			<div class="row-fluid">
+					<div class="span12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-content">
+								<div>
+									<div class="form-group">
+										<input type="hidden" id="storeId"  value="${store.id}" > 
+										<span class="btn btn-primary btn-xs m-l-sm" type="button">${store.name}</span>
+										<div class="btn-group">
+											<select class="selectpicker show-menu-arrow">
+											     <option value="serverZone">运营大区</option>
+											</select>
+										</div>
+										<div class="btn-group">
+											<select class='selectpicker' data-width="100%" name="search_EQ_serverZone" id="serverZone">
+													<option value="all">IOS官方、IOS越狱、安卓官方、安卓越狱</option>
+													<c:forEach items="${serverZone}" var="it" >
+														<option value="${it.id}" ${param.search_EQ_serverZone == it.id ? 'selected' : '' }>
+															${it.serverName}
+														</option>
+													</c:forEach>
+											</select>
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>
+			<div class="row-fluid">	
+				<div class="span6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 							<div>
@@ -55,22 +96,33 @@
 								</h3>
 								
 								<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
-									<input class="span" size="16" type="text" id="dateFrom" value="">
+									<c:if test="${not empty param.search_EQ_dateFrom}">
+										<input class="span" size="16" type="text" id="dateFrom" value="${param.search_EQ_dateFrom == dateFrom  ? dateFrom : param.search_EQ_dateFrom }" name="search_EQ_dateFrom">
+									</c:if>
+									<c:if test="${empty param.search_EQ_dateFrom}">
+										<input class="span" size="16" type="text" id="dateFrom" value="${dateFrom}" name="search_EQ_dateFrom">
+									</c:if> 
 									<span class="add-on"><i class="icon-th"></i></span>
 								</div>
 								<div class="input-append date">
 									<span class="add-on">到</span>
 								</div>
 								<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
-									<input class="span" size="16" type="text" id="dateTo" value="">
+									<c:if test="${not empty param.search_EQ_dateFrom}">
+										<input class="span" size="16" type="text" id="dateTo" value="${param.search_EQ_dateTo == dateTo  ? dateTo : param.search_EQ_dateTo }" name="search_EQ_dateTo">
+									</c:if>
+									<c:if test="${empty param.search_EQ_dateFrom}">
+										<input class="span" size="16" type="text" id="dateTo" value="${dateTo}" name="search_EQ_dateTo">
+									</c:if>
+
 									<span class="add-on"><i class="icon-th"></i></span>
 								</div>
 								
 								<div class="form-group">
-									<button class="btn btn-primary" id="yesterday">昨日</button>
-									<button class="btn btn-primary" id="sevenDayAgo">近7日</button>
-									<button class="btn btn-primary" id="thirtyDayAgo">近30日</button>
-									<button class="btn btn-success " type="button"><i class="fa fa-check"></i>&nbsp;&nbsp;<span class="bold">确定</span>
+									<a href="#" class="btn btn-primary" id="yesterday">昨日</a>
+									<a href="#" class="btn btn-primary" id="sevenDayAgo">近7日</a>
+									<a href="#" class="btn btn-primary" id="thirtyDayAgo">近30日</a>
+									<button class="btn btn-success" id="sub" type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;<span class="bold">确定</span>
                                 </button>
 								</div>
 							</div>
@@ -78,28 +130,35 @@
 					</div>
 				</div>
 				
-				<div class="span9" id="choose">
+				<div class="span6" id="choose">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 							<div>
-								<h3>筛选</h3>
+								<h3>筛选	
+								<c:if test="${not empty param.search_EQ_value}">
+									<c:if test="${param.search_EQ_category=='platForm'}">
+										<span id="show" class="btn btn-primary btn-xs m-l-sm" type="button">查询渠道为：${param.search_EQ_value}</span>
+									</c:if>
+									<c:if test="${param.search_EQ_category=='server'}">
+										<span id="show" class="btn btn-primary btn-xs m-l-sm" type="button">查询服务器为：${param.search_EQ_value}</span>
+									</c:if>
+								</c:if>
+								</h3>
+								
 								<div class="form-group">
 									<div class="btn-group">
-										<select id="category" class="selectpicker show-menu-arrow">
+										<select id="category" class="selectpicker show-menu-arrow" name="search_EQ_category">
 											 <option value="">选择筛选类型</option>
-										     <option value="serverZone">运营大区</option>
 										     <option value="platForm">渠道</option>
+										     <option value="server">服务器</option>
 										  </select>
-									</div>
-									<div class="btn-group" id="divServerResult">
-
 									</div>
 									<div class="btn-group" id="divpfResult">
 
 									</div>
 								</div>
 								<div class="form-group">
-									<button class="btn btn-success " type="button"><i class="fa fa-check"></i>&nbsp;&nbsp;<span class="bold">确定</span>
+									<button class="btn btn-success " type="submit"><i class="fa fa-check"></i>&nbsp;&nbsp;<span class="bold">确定</span>
                                 </button>
 
 								</div>
@@ -109,7 +168,7 @@
 			</div>
 				
 			</div>
-		
+			</form>
 			<div class="row-fluid">
 	                     <div class="span12">
 	                        <div class="ibox float-e-margins">
@@ -183,6 +242,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    	<c:forEach items="${table}" var="it" >
+				  							<tr class="gradeX"><td>${it.value.date}</td><td>${it.value.nextDayRetain}</td><td>${it.value.sevenDayRetain}</td><td class="center">${it.value.thirtyDayRetain}</td></tr>
+										</c:forEach>
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -211,21 +273,11 @@
     <script src="<%=request.getContextPath()%>/static/flot/js/jquery.flot.pie.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/static/flot/js/jquery.flot.axislabels.js"></script>
     <!-- Flot demo data -->
-    <script src="<%=request.getContextPath()%>/static/flot/js/flot-demo.js"></script>
+
     <script src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
     
-
 	<script type="text/javascript">
 		$(function(){
-			$("#chooseBtn").click(function(){
-				if($("#choose").css("display")=="none"){
-					$("#choose").show();
-					$("#chooseBtn").text("关闭筛选条件");
-				}else if($("#choose").css("display")=="block"){
-					$("#choose").hide();
-					$("#chooseBtn").text("添加筛选条件");
-				}
-			});
 			
 			$('.dp3').datepicker({
 		        keyboardNavigation: false,
@@ -272,100 +324,171 @@
 					}//回调看看是否有出错
 				});
 			});
+			
+			$("#serverZone").change(function(){
+				$("#show").text("无筛选条件");
+	    		$("#divpfResult").empty();
+	    		$("#category option[value='']").attr("selected", true);
+	    		$('#category').selectpicker('refresh');
+			});
 		    
 		    $("#category").change(function(){
+		    	var serverZoneValue=$("#serverZone").val();
+		    	var serverZoneText=$("#serverZone  option:selected").text();
 		    	var category = $("#category").val()
-		    	if(category=="serverZone"){
-					$.ajax({                                               
-						url: '<%=request.getContextPath()%>/manage/retained/findServerZone',
-						type: 'GET',
-						contentType: "application/json;charset=UTF-8",		
-						dataType: 'text',
-						success: function(data){
-							var parsedJson = $.parseJSON(data);
-							$("#divServerResult").empty();
-							$("#divpfResult").empty();
-							$("#divServerResult").append("<select class='selectpicker' id='serverResult' multiple data-selected-text-format='count>3' ></select>");
-							jQuery.each(parsedJson, function(index, itemData) {
-								$("#serverResult").append("<option>"+itemData.serverName+"</option>");
-			  				});
-							$('#serverResult').selectpicker('refresh');
-						}//回调看看是否有出错
-					});
-		    	}else if(category=="platForm"){
-					$.ajax({                                               
-						url: '<%=request.getContextPath()%>/manage/retained/findServerZone',
-						type: 'GET',
-						contentType: "application/json;charset=UTF-8",		
-						dataType: 'text',
-						success: function(data){
-							var parsedJson = $.parseJSON(data);
-							$("#divServerResult").empty();
-							$("#divServerResult").append("<select class='selectpicker' id='pfresult'><option value=''>选择大区</option></select>");
-							jQuery.each(parsedJson, function(index, itemData) {
-								$("#pfresult").append("<option value='"+itemData.id+"'>"+itemData.serverName+"</option>");
-			  				});
-							$('#pfresult').selectpicker('refresh');
-							
-							$("#pfresult").change(function(){
-								var pf_server = $("#pfresult").val();
-								$.ajax({                                               
-									url: '<%=request.getContextPath()%>/manage/retained/findPlatFormByServerId?serverId='+pf_server,
-									type: 'GET',
-									contentType: "application/json;charset=UTF-8",		
-									dataType: 'text',
-									success: function(data){
-										var parsedJson = $.parseJSON(data);
-										$("#divpfResult").empty();
-										$("#divpfResult").append("<select class='selectpicker' id='pfByserverIdResult' multiple data-selected-text-format='count>3' ></select>");
-										jQuery.each(parsedJson, function(index, itemData) {
-											$("#pfByserverIdResult").append("<option>"+itemData.pfName+"</option>");
-						  				});
-										$('#pfByserverIdResult').selectpicker('refresh');
-									}//回调看看是否有出错
-								});
-							});		
-							
-						}//回调看看是否有出错
-					});
-		    	}else if(category==""){
-		    		$("#divServerResult").empty();
-		    		$("#divpfResult").empty();
+				var storeId = $("#storeId").val();
+
+		    	if($("#serverZone").val()=="all"){
+					if(category=="platForm"){
+						$.ajax({                                               
+							url: '<%=request.getContextPath()%>/manage/retained/findPlatForm',
+							type: 'GET',
+							contentType: "application/json;charset=UTF-8",		
+							dataType: 'text',
+							success: function(data){
+								var parsedJson = $.parseJSON(data);
+								$("#divpfResult").empty();
+								if(parsedJson!=""){
+									$("#divpfResult").append("<select class='selectpicker' id='pfByserverIdResult' name='search_EQ_value'></select>");
+									jQuery.each(parsedJson, function(index, itemData) {
+										$("#pfByserverIdResult").append("<option value='"+itemData.pfName+"'>"+itemData.pfName+"</option>");
+					  				});
+									$('#pfByserverIdResult').selectpicker('refresh');
+								}
+							}//回调看看是否有出错
+						});
+			    	}else if(category=="server"){
+						$.ajax({                                               
+							url: '<%=request.getContextPath()%>/manage/retained/findServerByStoreId?storeId='+storeId,
+							type: 'GET',
+							contentType: "application/json;charset=UTF-8",		
+							dataType: 'text',
+							success: function(data){
+								var parsedJson = $.parseJSON(data);
+								$("#divpfResult").empty();
+								if(parsedJson!=""){
+									$("#divpfResult").append("<select class='selectpicker' id='serverByStoreIdResult' name='search_EQ_value'></select>");
+									jQuery.each(parsedJson, function(index, itemData) {
+										$("#serverByStoreIdResult").append("<option value='"+itemData.serverId+"'>"+itemData.serverId+"</option>");
+					  				});
+									$('#serverByStoreIdResult').selectpicker('refresh');
+								}
+							}//回调看看是否有出错
+						});
+			    	}else if(category==""){
+			    		$("#divpfResult").empty();
+			    	}
+		    	}else{
+					if(category=="platForm"){
+						$.ajax({                                               
+							url: '<%=request.getContextPath()%>/manage/retained/findPlatFormByServerId?serverId='+serverZoneValue,
+							type: 'GET',
+							contentType: "application/json;charset=UTF-8",		
+							dataType: 'text',
+							success: function(data){
+								var parsedJson = $.parseJSON(data);
+								$("#divpfResult").empty();
+								if(parsedJson!=""){
+									$("#divpfResult").append("<select class='selectpicker' id='pfByserverIdResult' name='search_EQ_value'></select>");
+									jQuery.each(parsedJson, function(index, itemData) {
+										$("#pfByserverIdResult").append("<option value='"+itemData.pfName+"'>"+itemData.pfName+"</option>");
+					  				});
+									$('#pfByserverIdResult').selectpicker('refresh');
+								}
+							}//回调看看是否有出错
+						});
+			    	}else if(category=="server"){
+						$.ajax({                                               
+							url: '<%=request.getContextPath()%>/manage/retained/findServerByStoreIdAndServerZoneId?storeId='+storeId+'&serverZoneId='+serverZoneValue,
+							type: 'GET',
+							contentType: "application/json;charset=UTF-8",		
+							dataType: 'text',
+							success: function(data){
+								var parsedJson = $.parseJSON(data);
+								$("#divpfResult").empty();								
+								if(parsedJson!=""){
+									$("#divpfResult").append("<select class='selectpicker' id='serverByStoreIdResult' name='search_EQ_value'></select>");
+									jQuery.each(parsedJson, function(index, itemData) {
+										$("#serverByStoreIdResult").append("<option value='"+itemData.serverId+"'>"+itemData.serverId+"</option>");
+					  				});
+									$('#serverByStoreIdResult').selectpicker('refresh');
+								}
+							}//回调看看是否有出错
+						});
+			    	}else if(category==""){
+			    		$("#divpfResult").empty();
+			    	}
+		    		
 		    	}
+
 		    });
 		    
-            var data1 = {
-            		"companys": [
-            			{
-            				"date": "2015-04-12",
-            				"nextDayRetain": "65%",
-            				"sevenDayRetain": "30%",
-            				"thirtyDayRetain": "12%"
-            			},
-            			{
-            				"date": "2015-04-13",
-            				"nextDayRetain": "78%",
-            				"sevenDayRetain": "32%",
-            				"thirtyDayRetain": "15%"
-            			},
-            			{
-            				"date": "2015-04-15",
-            				"nextDayRetain": "56%",
-            				"sevenDayRetain": "26%",
-            				"thirtyDayRetain": "11%"
-            			}
-            		]
-            	}
-            var messageElement = $("#retainTable").find('tbody');
-            $.each(data1.companys,function(i,val){
-            	var content = '<tr class="gradeX"><td>'+val.date+'</td>'
-            					  +'<td>'+val.nextDayRetain+'</td>'
-            					  +'<td>'+val.sevenDayRetain+'</td>'
-            					  +'<td class="center">'+val.thirtyDayRetain+'</td>';
-            	messageElement.append(content);
-            });
-            $(".dataTables-example").dataTable();
-		    
+			
+            var dateNextDay=$.parseJSON($("#datenext").val())
+            var dateSevenDay=$.parseJSON($("#dateSeven").val())
+            var dateThirtyDay=$.parseJSON($("#datethirty").val())
+
+            var barOptions = {
+                    series: {
+                        lines: {
+                            show: true,
+                            lineWidth: 2,
+                            fill: true,
+                            fillColor: {
+                                colors: [{
+                                    opacity: 0.0
+                                }, {
+                                    opacity: 0.0
+                                }]
+                            }
+                        }
+                    },
+                    yaxis: {
+                        axisLabel: "用户留存率(%)"
+                    },
+                    xaxes: [{
+                        mode: 'time',
+                        timeformat: "%m/%d"
+                    }],
+                    colors: ["#1ab394"],
+                    grid: {
+                        color: "#999999",
+                        hoverable: true,
+                        clickable: true,
+                        tickColor: "#D4D4D4",
+                        borderWidth:0
+                    },
+                    legend: {
+                        show: true,            
+                        position: 'sw'
+                    },
+                    tooltip: true,
+                    tooltipOpts: {
+                        content: "日期: %x, %s为: %y %"
+                    }
+                };
+          		var dateNextDay = {
+                    label: "次日留存率",
+                    points: {  show: true,radius: 3 },
+                    lines: { show: true },
+                    data: dateNextDay
+                };
+                var dateSevenDay = {
+                    label: "7日留存率",
+                    points: {  show: true,radius: 3 },
+                    lines: { show: true },
+                    data: dateSevenDay
+                };
+                var dateThirtyDay = {
+                        label: "30日留存率",
+                        points: {  show: true ,radius: 3 },
+                        lines: { show: true },
+                        data: dateThirtyDay
+                    };
+                $.plot($("#flot-line-chart"), [dateNextDay,dateSevenDay,dateThirtyDay], barOptions);
+                
+                $(".dataTables-example").dataTable();
+	    
 		})
 		
 	</script>

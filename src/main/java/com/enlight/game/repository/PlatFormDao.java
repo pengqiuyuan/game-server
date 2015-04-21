@@ -24,4 +24,5 @@ public interface PlatFormDao extends PagingAndSortingRepository<PlatForm, Long>,
 	List<PlatForm> findAll();
 	
 	List<PlatForm> findByServerZoneId(String serverZoneId);
+	
 }
