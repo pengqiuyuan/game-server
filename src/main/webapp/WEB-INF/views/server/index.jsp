@@ -47,7 +47,7 @@
 			<thead>
 				<tr>
 					<th title="编号" width="120px">编号</th>
-					<th title="服务器名称">服务器名称</th>
+					<th title="服务器名称">服务器ID</th>
 					<th title="IP">IP</th>
 					<th title="端口">端口</th>
 					<th title="游戏项目">游戏项目</th>

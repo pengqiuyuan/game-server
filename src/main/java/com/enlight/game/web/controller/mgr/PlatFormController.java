@@ -197,6 +197,20 @@ public class PlatFormController extends BaseController{
 		return "/platForm/info";
 	}
 	
+	
+	/**
+	 * Ajax请求校验ID是否唯一。
+	 */
+	@RequestMapping(value = "/checkId")
+	@ResponseBody
+	public String checkId(@RequestParam("pfId") String pfId) {
+		if (platFormService.findByPfId(pfId)== null) {
+			return "true";
+		} else {
+			return "false";
+		}
+	}
+	
 	public ShiroUser getCurrentUser() {
 		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		return user;

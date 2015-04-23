@@ -29,9 +29,7 @@
 	
      <decorator name="default2" page="default2.jsp">
 		<pattern>/*kibana*</pattern>
-	</decorator>
-	
-	<decorator name="default3" page="default2.jsp">
 		<pattern>/*manage/count*</pattern>
 	</decorator>
+	
 </decorators>

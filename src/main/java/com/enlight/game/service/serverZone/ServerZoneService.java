@@ -33,6 +33,10 @@ public class ServerZoneService {
 	@Autowired
 	private AccountService accountService;
 	
+	public List<Long> findServerId(){
+		return serverZoneDao.findServerId();
+	}
+	
 	public List<ServerZone> findAll(){
 		return serverZoneDao.findAll();
 	}

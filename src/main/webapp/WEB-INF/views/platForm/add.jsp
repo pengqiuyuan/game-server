@@ -63,7 +63,8 @@ margin-left:10px;
 					required:true
 				},
 				pfId:{
-					required:true
+					required:true,
+					remote: '<%=request.getContextPath()%>/manage/platForm/checkId'
 				},
 				pfName:{
 					required:true
@@ -73,7 +74,8 @@ margin-left:10px;
 					required:"运营大区必须填写"
 				},
 				pfId:{
-					required:"渠道编号必须填写"
+					required:"渠道编号必须填写",
+					remote: "渠道编号已存在"
 				},
 				pfName:{
 					required:"渠道名称必须填写"
