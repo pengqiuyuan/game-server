@@ -235,7 +235,7 @@
 		    
 			$("#yesterday").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retailed/getDate',
+					url: '<%=request.getContextPath()%>/manage/count/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -248,7 +248,7 @@
 			});
 			$("#sevenDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retailed/getDate',
+					url: '<%=request.getContextPath()%>/manage/count/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -261,7 +261,7 @@
 			});
 			$("#thirtyDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/retailed/getDate',
+					url: '<%=request.getContextPath()%>/manage/count/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -277,7 +277,7 @@
 		    	var category = $("#category").val()
 		    	if(category=="serverZone"){
 					$.ajax({                                               
-						url: '<%=request.getContextPath()%>/manage/retailed/findServerZone',
+						url: '<%=request.getContextPath()%>/manage/count/findServerZone',
 						type: 'GET',
 						contentType: "application/json;charset=UTF-8",		
 						dataType: 'text',
@@ -294,7 +294,7 @@
 					});
 		    	}else if(category=="platForm"){
 					$.ajax({                                               
-						url: '<%=request.getContextPath()%>/manage/retailed/findServerZone',
+						url: '<%=request.getContextPath()%>/manage/count/findServerZone',
 						type: 'GET',
 						contentType: "application/json;charset=UTF-8",		
 						dataType: 'text',
@@ -310,7 +310,7 @@
 							$("#pfresult").change(function(){
 								var pf_server = $("#pfresult").val();
 								$.ajax({                                               
-									url: '<%=request.getContextPath()%>/manage/retailed/findPlatFormByServerId?serverId='+pf_server,
+									url: '<%=request.getContextPath()%>/manage/count/findPlatFormByServerId?serverId='+pf_server,
 									type: 'GET',
 									contentType: "application/json;charset=UTF-8",		
 									dataType: 'text',
