@@ -226,7 +226,7 @@
       "type": "query",
       "collapse": false,
       "notice": false,
-      "enable": true,
+      "enable": false,
       "values": [
         {
           "sem": "_type",
