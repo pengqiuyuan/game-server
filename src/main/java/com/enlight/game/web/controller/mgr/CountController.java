@@ -142,7 +142,6 @@ public class CountController extends BaseController{
 		return "/kibana/fb/user/index";
 	}	
 	
-	
 	/**
 	 * 用户留存
 	 */
@@ -154,56 +153,6 @@ public class CountController extends BaseController{
 		return "/kibana/fb/user/retain";
 	}
 	
-	@RequestMapping(value = "/findServerZone")
-	@ResponseBody
-	public List<ServerZone> findServerZone() {
-		List<ServerZone> serverZones = serverZoneService.findAll();
-		return serverZones;
-	}
-	
-	@RequestMapping(value = "/findPlatForm")
-	@ResponseBody
-	public List<PlatForm> findPlatForm() {
-		List<PlatForm> platForms = platFormService.findAll();
-		return platForms;
-	}
-	
-	@RequestMapping(value = "/findPlatFormByServerId")
-	@ResponseBody
-	public List<PlatForm> findPlatFormByServerId(@RequestParam(value="serverId")String serverId) {
-		List<PlatForm> platForms = platFormService.findByServerZoneId(serverId);
-		return platForms;
-	}
-	
-	/**
-	 * 服务器获取时间
-	 */
-	@RequestMapping(value="/getDate")
-	@ResponseBody
-	public Map<String, String> getDate(){
-		Map<String,String> dateMap = new HashMap<String, String>();
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
-		Calendar calendar = new GregorianCalendar(); 
-		String nowDate = sdf.format(new Date());
-		
-	    calendar.setTime(new Date()); 
-	    calendar.add(calendar.DATE,-1);
-	    String yesterday = sdf.format(calendar.getTime());
-	    
-	    calendar.setTime(new Date()); 
-	    calendar.add(calendar.DATE,-7);
-	    String sevenDayAgo = sdf.format(calendar.getTime()); 
-	    
-	    calendar.setTime(new Date()); 
-	    calendar.add(calendar.DATE,-30);
-	    String thirtyDayAgo = sdf.format(calendar.getTime()); 
-		
-	    dateMap.put("nowDate",nowDate);
-	    dateMap.put("yesterday",yesterday);
-	    dateMap.put("sevenDayAgo",sevenDayAgo);
-	    dateMap.put("thirtyDayAgo",thirtyDayAgo);
-		return dateMap;
-	}
 	
 	/**
 	 * 取出Shiro中的当前用户Id.

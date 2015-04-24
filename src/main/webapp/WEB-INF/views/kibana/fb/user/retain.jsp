@@ -13,8 +13,8 @@
 	<meta http-equiv="Cache-Control" content="no-store" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0"/>
-      <link rel="stylesheet" href="css/bootstrap.light.min.css" title="Light">
-
+    <link href="<%=request.getContextPath()%>/static/flot/css/bootstrap.light.min.css" title="Light" rel="stylesheet">
+    
     <link href="http://hplus.oss.aliyuncs.com/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/static/flot/css/animate.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/static/flot/css/datepicker3.css" rel="stylesheet">
@@ -235,7 +235,7 @@
 		    
 			$("#yesterday").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/count/getDate',
+					url: '<%=request.getContextPath()%>/manage/retained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -248,7 +248,7 @@
 			});
 			$("#sevenDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/count/getDate',
+					url: '<%=request.getContextPath()%>/manage/retained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -261,7 +261,7 @@
 			});
 			$("#thirtyDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/count/getDate',
+					url: '<%=request.getContextPath()%>/manage/retained/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -277,7 +277,7 @@
 		    	var category = $("#category").val()
 		    	if(category=="serverZone"){
 					$.ajax({                                               
-						url: '<%=request.getContextPath()%>/manage/count/findServerZone',
+						url: '<%=request.getContextPath()%>/manage/retained/findServerZone',
 						type: 'GET',
 						contentType: "application/json;charset=UTF-8",		
 						dataType: 'text',
@@ -294,7 +294,7 @@
 					});
 		    	}else if(category=="platForm"){
 					$.ajax({                                               
-						url: '<%=request.getContextPath()%>/manage/count/findServerZone',
+						url: '<%=request.getContextPath()%>/manage/retained/findServerZone',
 						type: 'GET',
 						contentType: "application/json;charset=UTF-8",		
 						dataType: 'text',
@@ -310,7 +310,7 @@
 							$("#pfresult").change(function(){
 								var pf_server = $("#pfresult").val();
 								$.ajax({                                               
-									url: '<%=request.getContextPath()%>/manage/count/findPlatFormByServerId?serverId='+pf_server,
+									url: '<%=request.getContextPath()%>/manage/retained/findPlatFormByServerId?serverId='+pf_server,
 									type: 'GET',
 									contentType: "application/json;charset=UTF-8",		
 									dataType: 'text',
