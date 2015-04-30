@@ -19,6 +19,8 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +38,7 @@ public class EsRetainedServer {
 			SearchResponse response = client.prepareSearch("log_retained")
 			        .setTypes("fb_retained")
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+			        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 			        .setPostFilter(
 			                FilterBuilders.andFilter(
 			        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -43,7 +46,7 @@ public class EsRetainedServer {
 			        		)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
-			        .actionGet();			
+			        .actionGet();		
 			return retained(response);
 	}
 	
@@ -52,6 +55,7 @@ public class EsRetainedServer {
 		SearchResponse response = client.prepareSearch("log_retained")
 		        .setTypes("fb_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -68,6 +72,7 @@ public class EsRetainedServer {
 		SearchResponse response = client.prepareSearch("log_retained")
 		        .setTypes("fb_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -86,6 +91,7 @@ public class EsRetainedServer {
 		SearchResponse response = client.prepareSearch("log_retained")
 		        .setTypes("fb_retained")
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .addSort(SortBuilders.fieldSort("date").order(SortOrder.DESC))
 		        .setPostFilter(
 		                FilterBuilders.andFilter(
 		        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),

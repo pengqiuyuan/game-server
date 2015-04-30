@@ -102,24 +102,24 @@
 					
 
 				    <shiro:hasAnyRoles name="admin,10002">
-					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">统计日志展示<b class="caret"></b></a>
+					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">实时统计日志<b class="caret"></b></a>
 								<ul class="dropdown-menu">
 									<shiro:hasAnyRoles name="admin,31">
-										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN统计日志</a>
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN实时日志</a>
 											<ul class="dropdown-menu">
 												<li><a tabindex="-1" href="#">KUN测试</a></li>
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
 									<shiro:hasAnyRoles name="admin,32">
-										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS统计日志</a>
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS实时日志</a>
 											<ul class="dropdown-menu">
 												<li><a tabindex="-1" href="#">KDS测试</a></li>
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
 									<shiro:hasAnyRoles name="admin,21,22,23,24,25,26,27,28">
-										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB统计日志</a>
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB实时日志</a>
 											<ul class="dropdown-menu">
 												<shiro:hasAnyRoles name="admin,22">
 												<li class="dropdown-submenu">
@@ -198,7 +198,7 @@
 											                  <li class="dropdown-submenu">
 											                  	<a tabindex="-1" href="${ctx}/manage/count/fb/user?id=1#/dashboard/file/user.json">用户相关日志(总)</a>
 											                    <ul class="dropdown-menu">
-												                  <li><a href="${ctx}/manage/retained/fb/userRetained/1">用户留存</a></li>
+												                  <li><a href="${ctx}/manage/retained/fb/userRetained">用户留存</a></li>
 												                </ul>
 											                  </li>
 											                  <li><a href="${ctx}/manage/count/fb/user?id=2#/dashboard/file/userLogin.json">用户登录</a></li>
@@ -212,13 +212,42 @@
 												<li><a href="#">sample</a></li>
 											</ul>
 
+										</li>
+									</shiro:hasAnyRoles>
+								</ul>
+						</li>
+					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">离线统计日志<b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<shiro:hasAnyRoles name="admin,31">
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN离线日志</a>
+											<ul class="dropdown-menu">
+												<li><a tabindex="-1" href="#">KUN测试</a></li>
+											</ul>
+										</li>
+									</shiro:hasAnyRoles>
+									<shiro:hasAnyRoles name="admin,32">
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS离线日志</a>
+											<ul class="dropdown-menu">
+												<li><a tabindex="-1" href="#">KDS测试</a></li>
+											</ul>
+										</li>
+									</shiro:hasAnyRoles>
+									<shiro:hasAnyRoles name="admin,21,22,23,24,25,26,27,28">
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB离线日志</a>
+											<ul class="dropdown-menu">
+												<shiro:hasAnyRoles name="admin,28">
+													  <li class="dropdown-submenu">
+															<li><a href="${ctx}/manage/retained/fb/userRetained">用户留存</a></li>
+										               </li>	
+												</shiro:hasAnyRoles>
+												<li class="divider"></li>
+												<li><a href="#">sample</a></li>
+											</ul>
 
 										</li>
 									</shiro:hasAnyRoles>
 								</ul>
-
-
-						</li>			
+						</li>									
 				    </shiro:hasAnyRoles>	
 					
 

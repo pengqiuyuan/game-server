@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.EnumFunction;
@@ -46,9 +46,14 @@ import com.enlight.game.web.controller.mgr.BaseController;
 
 @Controller("RetainedController")
 @RequestMapping("/manage/retained")
-public class RetainedController extends BaseController{
+public class FbRetainedController extends BaseController{
 	
-	private static final Logger logger = LoggerFactory.getLogger(RetainedController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FbRetainedController.class);
+	
+	/**
+	 * 这个controller默认为fb项目的控制层。项目id文档已定
+	 */
+	private static final String storeId = "1";
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
@@ -78,8 +83,8 @@ public class RetainedController extends BaseController{
 	 * @throws ElasticsearchException 
 	 */
 	@RequiresRoles(value = { "admin", "28" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userRetained/{storeId}", method = RequestMethod.GET)
-	public String userRetained(Model model,ServletRequest request,@PathVariable("storeId") final String storeId) throws ElasticsearchException, IOException, ParseException{
+	@RequestMapping(value = "/fb/userRetained", method = RequestMethod.GET)
+	public String userRetained(Model model,ServletRequest request) throws ElasticsearchException, IOException, ParseException{
 		logger.debug("user Retained...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
@@ -114,8 +119,7 @@ public class RetainedController extends BaseController{
 					logger.debug("查看运营大区。。。" +searchParams.get("EQ_serverZone").toString());
 				}
 			}
-		}
-	
+		}	
 		model.addAttribute("datenext", m.get("datenext"));
 		model.addAttribute("dateSeven", m.get("dateSeven"));
 		model.addAttribute("datethirty", m.get("datethirty"));
