@@ -1,22 +1,54 @@
 {
-  "title": "虚拟充值币获取",
-  "role": "24",
+  "title": "用户登录与创建",
+  "role": "28",
   "game": "kun",
   "services": {
     "query": {
       "list": {
         "0": {
-          "id": 0,
+          "query": "create",
+          "alias": "",
           "color": "#7EB26D",
+          "id": 0,
+          "pin": false,
+          "type": "lucene",
+          "enable": true
+        },
+        "1": {
+          "id": 1,
+          "color": "#EAB839",
           "alias": "",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "dummy_get"
+          "query": "login"
+        }
+        ,
+        "2": {
+          "id": 2,
+          "color": "rgb(239, 132, 60)",
+          "alias": "",
+          "pin": false,
+          "type": "lucene",
+          "enable": true,
+          "query": "online"
+        }
+        ,
+        "3": {
+          "id": 3,
+          "color": "rgb(110, 208, 224)",
+          "alias": "",
+          "pin": false,
+          "type": "lucene",
+          "enable": true,
+          "query": "newbieguide"
         }
       },
       "ids": [
-        0
+        0,
+        1,
+        2,
+        3
       ]
     },
     "filter": {
@@ -39,7 +71,7 @@
   },
   "rows": [
     {
-      "title": "00",
+      "title": "图表",
       "height": "350px",
       "editable": true,
       "collapse": false,
@@ -66,7 +98,8 @@
             "check": [],
             "threshold": {},
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "annotate": {
@@ -119,7 +152,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间虚拟充值币获取次数"
+          "title": "单位时间用户登录、创建次数"
         },
         {
           "error": false,
@@ -146,6 +179,9 @@
             "玩家平台ID",
             "玩家GUID",
             "玩家名字",
+            "是否首次登录",
+            "玩家登陆ip",
+            "登录设备系统",
             "日志分类关键字"
           ],
           "highlight": [],
@@ -162,14 +198,15 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "style": {
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "虚拟充值币获取"
+          "title": "用户登录与创建"
         }
       ],
       "notice": false
@@ -179,7 +216,7 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-kun-]YYYY.MM",
+    "pattern": "[logstash-kds-]YYYY.MM",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
@@ -202,17 +239,18 @@
           "input": ""
         }
       ],
-      "generate": true,
+      "generate": false,
       "query": "*",
       "pinned": true,
-      "history": [],
+      "history": [
+      ],
       "remember": 10
     },
     {
-    "title":"查询过滤",
+      "title":"查询过滤",
       "type": "filtering",
       "collapse": false,
-      "notice": true,
+      "notice": false,
       "enable": true
     }
   ],

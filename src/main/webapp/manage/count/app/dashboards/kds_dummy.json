@@ -1,5 +1,5 @@
 {
-  "title": "虚拟充值币获取",
+  "title": "虚拟充值币获取与消耗",
   "role": "24",
   "game": "kun",
   "services": {
@@ -13,10 +13,20 @@
           "type": "lucene",
           "enable": true,
           "query": "dummy_get"
+        },
+        "1": {
+          "id": 1,
+          "color": "#EAB839",
+          "alias": "",
+          "pin": false,
+          "type": "lucene",
+          "enable": true,
+          "query": "dummy_cost"
         }
       },
       "ids": [
-        0
+        0,
+        1
       ]
     },
     "filter": {
@@ -66,7 +76,8 @@
             "check": [],
             "threshold": {},
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "annotate": {
@@ -119,7 +130,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间虚拟充值币获取次数"
+          "title": "单位时间虚拟充值币获取、消耗次数"
         },
         {
           "error": false,
@@ -162,14 +173,15 @@
           "queries": {
             "mode": "all",
             "ids": [
-              0
+              0,
+              1
             ]
           },
           "style": {
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "虚拟充值币获取"
+          "title": "虚拟充值币获取与消耗"
         }
       ],
       "notice": false
@@ -179,14 +191,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-kun-]YYYY.MM",
+    "pattern": "[logstash-kds-]YYYY.MM",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-      "title":"搜索",
+        "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -205,7 +217,9 @@
       "generate": true,
       "query": "*",
       "pinned": true,
-      "history": [],
+      "history": [
+
+      ],
       "remember": 10
     },
     {

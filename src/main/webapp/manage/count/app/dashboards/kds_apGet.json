@@ -1,18 +1,18 @@
 {
-  "title": "虚拟充值币获取",
-  "role": "24",
+  "title": "体力获取",
+  "role": "21",
   "game": "kun",
   "services": {
     "query": {
       "list": {
         "0": {
-          "id": 0,
-          "color": "#7EB26D",
+          "query": "ap_get",
           "alias": "",
+          "color": "#7EB26D",
+          "id": 0,
           "pin": false,
           "type": "lucene",
-          "enable": true,
-          "query": "dummy_get"
+          "enable": true
         }
       },
       "ids": [
@@ -119,7 +119,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间虚拟充值币获取次数"
+          "title": "单位时间体力获取次数"
         },
         {
           "error": false,
@@ -169,7 +169,7 @@
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "虚拟充值币获取"
+          "title": "体力获取"
         }
       ],
       "notice": false
@@ -179,14 +179,14 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-kun-]YYYY.MM",
+    "pattern": "[logstash-kds-]YYYY.MM",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",
   "panel_hints": true,
   "pulldowns": [
     {
-      "title":"搜索",
+    "title":"搜索",
       "type": "query",
       "collapse": false,
       "notice": false,
@@ -202,10 +202,11 @@
           "input": ""
         }
       ],
-      "generate": true,
+      "generate": false,
       "query": "*",
       "pinned": true,
-      "history": [],
+      "history": [
+      ],
       "remember": 10
     },
     {
