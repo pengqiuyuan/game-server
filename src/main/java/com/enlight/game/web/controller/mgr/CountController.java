@@ -1,13 +1,5 @@
 package com.enlight.game.web.controller.mgr;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -19,18 +11,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.enlight.game.entity.EnumFunction;
-import com.enlight.game.entity.PlatForm;
-import com.enlight.game.entity.ServerZone;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.serverZone.ServerZoneService;
+import com.enlight.game.web.controller.mgr.BaseController;
 
 
 /**
- * 数据统计fb
+ * 数据统计
  * @author dell
  *
  */
@@ -51,11 +41,11 @@ public class CountController extends BaseController{
 	 * @return
 	 */
 	@RequiresRoles(value = { "admin", "22" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/item", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbItem", method = RequestMethod.GET)
 	public String item(@RequestParam(value = "id")String id,Model model){
 		logger.debug("item coming..."+id);
 		model.addAttribute("user", EnumFunction.ENUM_ITEM);
-		return "/kibana/fb/item/index";
+		return "/kibana/fb/index";
 	}	
 	
 	/**
@@ -63,11 +53,11 @@ public class CountController extends BaseController{
 	 * @return
 	 */
 	@RequiresRoles(value = { "admin", "21" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/ap", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbAp", method = RequestMethod.GET)
 	public String ap(@RequestParam(value = "id")long id,Model model){
 		logger.debug("ap coming...");
 		model.addAttribute("user", EnumFunction.ENUM_AP);
-		return "/kibana/fb/ap/index";
+		return "/kibana/fb/index";
 	}	
 	
 	/**
@@ -75,11 +65,11 @@ public class CountController extends BaseController{
 	 * @return
 	 */
 	@RequiresRoles(value = { "admin", "23" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/money", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbMoney", method = RequestMethod.GET)
 	public String money(@RequestParam(value = "id")long id,Model model){
 		logger.debug("money coming...");
 		model.addAttribute("user", EnumFunction.ENUM_MONEY);
-		return "/kibana/fb/money/index";
+		return "/kibana/fb/index";
 	}	
 	
 	/**
@@ -87,11 +77,11 @@ public class CountController extends BaseController{
 	 * @return
 	 */
 	@RequiresRoles(value = { "admin", "24" }, logical = Logical.OR)
-	@RequestMapping(value = "/dummy", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbDummy", method = RequestMethod.GET)
 	public String dummy(@RequestParam(value="id")long id,Model model){
 		logger.debug("dummy coming...");
 		model.addAttribute("user", EnumFunction.ENUM_DUMMY);
-		return "/kibana/fb/dummy/index";
+		return "/kibana/fb/index";
 	}	
 	
 	/**
@@ -99,11 +89,11 @@ public class CountController extends BaseController{
 	 * @return
 	 */
 	@RequiresRoles(value = { "admin", "25" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/coin", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbCoin", method = RequestMethod.GET)
 	public String coin(@RequestParam(value="id")long id,Model model){
 		logger.debug("coin coming...");
 		model.addAttribute("user", EnumFunction.ENUM_COIN);
-		return "/kibana/fb/coin/index";
+		return "/kibana/fb/index";
 	}	
 	
 	/**
@@ -111,11 +101,11 @@ public class CountController extends BaseController{
 	 * @return
 	 */
 	@RequiresRoles(value = { "admin", "26" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/arenacoin", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbArenacoin", method = RequestMethod.GET)
 	public String arenacoin(@RequestParam(value="id")long id,Model model){
 		logger.debug("arenacoin coming...");
 		model.addAttribute("user", EnumFunction.ENUM_ARENACOIN);
-		return "/kibana/fb/arenacoin/index";
+		return "/kibana/fb/index";
 	}	
 	
 	/**
@@ -123,11 +113,11 @@ public class CountController extends BaseController{
 	 * @return
 	 */
 	@RequiresRoles(value = { "admin", "27" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/expeditioncoin", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbExpeditioncoin", method = RequestMethod.GET)
 	public String expeditioncoin(@RequestParam(value="id")long id,Model model){
 		logger.debug("expeditioncoin coming...");
 		model.addAttribute("user", EnumFunction.ENUM_EXPEDITIONCOIN);
-		return "/kibana/fb/expeditioncoin/index";
+		return "/kibana/fb/index";
 	}	
 	  
 	/**
@@ -135,18 +125,18 @@ public class CountController extends BaseController{
 	 * @return
 	 */
 	@RequiresRoles(value = { "admin", "28" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/user", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbUser", method = RequestMethod.GET)
 	public String user(@RequestParam(value="id")long id,Model model){
 		logger.debug("user coming...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);
-		return "/kibana/fb/user/index";
+		return "/kibana/fb/index";
 	}	
 	
 	/**
 	 * 用户留存
 	 */
 	@RequiresRoles(value = { "admin", "28" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userRetained", method = RequestMethod.GET)
+	@RequestMapping(value = "/userRetained", method = RequestMethod.GET)
 	public String userRetained(Model model){
 		logger.debug("user Retained...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);

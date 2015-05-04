@@ -14,35 +14,35 @@ public class EnumFunction extends BaseEntry{
 	/**
 	 * 道具日志 数据库对应enum_role字段
 	 */
-	public final static String ENUM_ITEM = "9";
+	public final static String ENUM_ITEM = "22";
 	/**
 	 * 体力日志
 	 */
-	public final static String ENUM_AP = "10";
+	public final static String ENUM_AP = "21";
 	/**
 	 * 真实充值币日志
 	 */
-	public final static String ENUM_MONEY = "11";
+	public final static String ENUM_MONEY = "23";
 	/**
 	 * 虚拟充值币日志
 	 */
-	public final static String ENUM_DUMMY = "12";
+	public final static String ENUM_DUMMY = "24";
 	/**
 	 * 游戏币日志
 	 */
-	public final static String ENUM_COIN = "13";
+	public final static String ENUM_COIN = "25";
 	/**
 	 * 竞技场徽章(货币)日志
 	 */
-	public final static String ENUM_ARENACOIN = "14";
+	public final static String ENUM_ARENACOIN = "26";
 	/**
 	 * 燃烧远征龙鳞币(货币)日志
 	 */
-	public final static String ENUM_EXPEDITIONCOIN = "15";
+	public final static String ENUM_EXPEDITIONCOIN = "27";
 	/**
 	 * 用户相关日志
 	 */
-	public final static String ENUM_USER = "16";
+	public final static String ENUM_USER = "28";
 	
 	/**
 	 * 权限 1,2,3,4,5...

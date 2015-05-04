@@ -91,31 +91,36 @@ public class FbRetainedController extends BaseController{
 
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
-		String dateFrom = eightDayAgoFrom();
-		String dateTo = nowDate();
+
 		
 		Map<String, Object> m = new HashMap<String, Object>();
 		
 		if(searchParams.isEmpty()){
+			String dateFrom = eightDayAgoFrom();
+			String dateTo = nowDate();
 			m = EsRetainedServer.searchAllRetained(dateFrom, dateTo);
+			model.addAttribute("dateFrom", dateFrom);
+			model.addAttribute("dateTo", dateTo);
 			logger.debug("查看所有运营大区。。。all" );
 		}else{
+			model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
+			model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
 			if(searchParams.get("EQ_value")!="" && searchParams.get("EQ_value")!=null){
 				if(searchParams.get("EQ_category").toString().equals("platForm")){
 					PlatForm platform =  platFormService.findByPfName(searchParams.get("EQ_value").toString());
-					m = EsRetainedServer.searchPlatFormRetained(dateFrom, dateTo, platform.getPfId());
+					m = EsRetainedServer.searchPlatFormRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
 					logger.debug("查看渠道。。。"+platform.getPfId());
 				}else if(searchParams.get("EQ_category").toString().equals("server")){
 					Server server = serverService.findByServerId(searchParams.get("EQ_value").toString());
-					m = EsRetainedServer.searchServerRetained(dateFrom, dateTo, server.getServerId());
+					m = EsRetainedServer.searchServerRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
 					logger.debug("查看服务器。。。"+server.getServerId());
 				}
 			}else{
 				if(searchParams.get("EQ_serverZone").toString().equals("all")){
-					m = EsRetainedServer.searchAllRetained(dateFrom, dateTo);
+					m = EsRetainedServer.searchAllRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
 					logger.debug("查看所有运营大区。。。all" );
 				}else{
-					m = EsRetainedServer.searchServerZoneRetained(dateFrom, dateTo, searchParams.get("EQ_serverZone").toString());
+					m = EsRetainedServer.searchServerZoneRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
 					logger.debug("查看运营大区。。。" +searchParams.get("EQ_serverZone").toString());
 				}
 			}
@@ -127,8 +132,7 @@ public class FbRetainedController extends BaseController{
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);
-		model.addAttribute("dateFrom", dateFrom);
-		model.addAttribute("dateTo", dateTo);
+
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		return "/kibana/fb/user/retain";
 	}

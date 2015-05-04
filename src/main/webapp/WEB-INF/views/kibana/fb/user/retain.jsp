@@ -15,7 +15,7 @@
 	<meta http-equiv="Expires" content="0"/>
     <link href="<%=request.getContextPath()%>/static/flot/css/bootstrap.light.min.css" title="Light" rel="stylesheet">
     
-    <link href="http://hplus.oss.aliyuncs.com/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/static/flot/css/font-awesome.css?v=4.3.0" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/static/flot/css/animate.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/static/flot/css/datepicker3.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/static/flot/css/style.css?v=2.1.0" rel="stylesheet">
@@ -30,9 +30,15 @@
             <!-- Data Tables -->
     <script src="<%=request.getContextPath()%>/static/flot/js/jquery.dataTables.js"></script>
     <script src="<%=request.getContextPath()%>/static/flot/js/dataTables.bootstrap.js"></script>
+    <script src="${ctx}/static/jquery-validation/1.11.1/jquery.validate.min.js" type="text/javascript"></script>
     <style type="text/css">
 	    form {
 		  margin: 0 0 0px;
+		}
+		.control-label {
+		  float: left;
+		  padding-top: 5px;
+		  text-align: right;
 		}
     </style>
   </head>
@@ -50,10 +56,8 @@
             </div>
 
 		<div class="wrapper wrapper-content animated fadeInRight">
-		
 
-			
-			<form class="orm-inline"  method="get" action="#">
+			<form id="inputForm" class="orm-inline"  method="get" action="#">
 			<div class="row-fluid">
 					<div class="span12">
 						<div class="ibox float-e-margins">
@@ -94,28 +98,31 @@
 		                                 <label class="label label-primary" id="chooseBtn">添加筛选条件</label>
 		                            </div>
 								</h3>
+								<div class="control-group">
+									<label class="control-label" for=beginD>活动时间：</label>
+									<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
+										<c:if test="${not empty param.search_EQ_dateFrom}">
+											<input  size="16" type="text" id="dateFrom" value="${param.search_EQ_dateFrom == dateFrom  ? dateFrom : param.search_EQ_dateFrom }" name="search_EQ_dateFrom">
+										</c:if>
+										<c:if test="${empty param.search_EQ_dateFrom}">
+											<input  size="16" type="text" id="dateFrom" value="${dateFrom}" name="search_EQ_dateFrom">
+										</c:if> 
+										<span class="add-on" style="display: none"></span>
+									</div>
+								</div>
 								
-								<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
-									<c:if test="${not empty param.search_EQ_dateFrom}">
-										<input class="span" size="16" type="text" id="dateFrom" value="${param.search_EQ_dateFrom == dateFrom  ? dateFrom : param.search_EQ_dateFrom }" name="search_EQ_dateFrom">
-									</c:if>
-									<c:if test="${empty param.search_EQ_dateFrom}">
-										<input class="span" size="16" type="text" id="dateFrom" value="${dateFrom}" name="search_EQ_dateFrom">
-									</c:if> 
-									<span class="add-on"><i class="icon-th"></i></span>
-								</div>
-								<div class="input-append date">
-									<span class="add-on">到</span>
-								</div>
-								<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
-									<c:if test="${not empty param.search_EQ_dateFrom}">
-										<input class="span" size="16" type="text" id="dateTo" value="${param.search_EQ_dateTo == dateTo  ? dateTo : param.search_EQ_dateTo }" name="search_EQ_dateTo">
-									</c:if>
-									<c:if test="${empty param.search_EQ_dateFrom}">
-										<input class="span" size="16" type="text" id="dateTo" value="${dateTo}" name="search_EQ_dateTo">
-									</c:if>
-
-									<span class="add-on"><i class="icon-th"></i></span>
+								<div class="control-group">
+									<label class="control-label" for="endD">结束时间：</label>
+									<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
+										<c:if test="${not empty param.search_EQ_dateFrom}">
+											<input  size="16" type="text" id="dateTo" value="${param.search_EQ_dateTo == dateTo  ? dateTo : param.search_EQ_dateTo }" name="search_EQ_dateTo">
+										</c:if>
+										<c:if test="${empty param.search_EQ_dateFrom}">
+											<input  size="16" type="text" id="dateTo" value="${dateTo}" name="search_EQ_dateTo">
+										</c:if>
+										<span class="add-on" style="display: none"></span>
+									</div>
+									<div id="time" style="display: none;width: 20%; margin-top: 10px;"><button data-dismiss="alert" class="close">×</button>结束时间不能小于开始时间</div>
 								</div>
 								
 								<div class="form-group">
@@ -277,7 +284,45 @@
     <script src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
     
 	<script type="text/javascript">
+		$(".btn-success").click(function(){
+			var doingDate=$("#dateFrom").val();
+	        var endDoingDate=$("#dateTo").val();
+	        var startTime = new Date(doingDate).getTime();
+	        var endTime = new Date(endDoingDate).getTime();
+	         if(!endDoingDate.length==0){
+	        	 if(startTime>endTime){
+	             	$("#time").show();
+	             	return false;
+	        	 }else{
+	        		 $("#time").hide();
+	        		 return true;
+	        	 }
+	        }else{
+	        	$("#time").hide();
+	        	return true;
+	        }
+			
+		});
+	
 		$(function(){
+			
+			$("#inputForm").validate({
+				rules:{
+					search_EQ_dateFrom:{
+						required:true
+					},
+					search_EQ_dateTo:{
+						required:true
+					}
+				},messages:{
+					search_EQ_dateFrom:{
+						required:"选择起始时间"
+					},
+					search_EQ_dateTo:{
+						required:"选择结束时间"
+					}
+				}
+			});
 			
 			$('.dp3').datepicker({
 		        keyboardNavigation: false,

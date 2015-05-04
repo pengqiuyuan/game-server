@@ -93,6 +93,7 @@ public class FbRetainedScheduled {
 	                        .field("key", userRetained.getKey())
 	                        .field("ts","["+userRetained.getTs()+","+userRetained.getRetained()+"]")
 	                        .field("value", userRetained.getValue())
+	                        .field("@timestamp", new Date())
 	                    .endObject()
 		                  )
 		        ).execute().actionGet();
@@ -109,6 +110,7 @@ public class FbRetainedScheduled {
 	                        .field("retained", userRetained.getRetained())
 	                        .field("key", userRetained.getKey())
 	                        .field("ts","["+userRetained.getTs()+","+userRetained.getRetained()+"]")
+	                        .field("@timestamp", new Date())
 	                    .endObject()
 		                  )
 		        ).execute().actionGet();
