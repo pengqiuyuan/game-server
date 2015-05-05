@@ -26,9 +26,7 @@
 					</shiro:lacksRole>
 			</div>
 			</shiro:hasAnyRoles>
-<!--              <div class="nav-collapse" style="padding-top: 10px;font-size: 18px;font-weight: bold;color:black;float: left;width: 200px;">
-                                                  光线游戏内容管理平台
-            </div> -->
+
             <shiro:hasAnyRoles name='admin,10000,10001,10002'>
 			<div class="nav-collapse">
 				<ul class="nav navbar-nav">
@@ -198,7 +196,7 @@
 											                  <li class="dropdown-submenu">
 											                  	<a tabindex="-1" href="${ctx}/manage/count/fbUser?id=1#/dashboard/file/fb_user.json">用户相关日志(总)</a>
 											                    <ul class="dropdown-menu">
-												                  <li><a href="${ctx}/manage/retained/fb/userRetained">用户留存</a></li>
+												                  <li><a href="${ctx}/manage/retained/fb/fbUserRetained">用户留存</a></li>
 												                </ul>
 											                  </li>
 											                  <li><a href="${ctx}/manage/count/fbUser?id=2#/dashboard/file/fb_userLogin.json">用户登录</a></li>

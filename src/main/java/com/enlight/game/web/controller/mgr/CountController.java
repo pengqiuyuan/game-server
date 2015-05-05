@@ -136,7 +136,7 @@ public class CountController extends BaseController{
 	 * 用户留存
 	 */
 	@RequiresRoles(value = { "admin", "28" }, logical = Logical.OR)
-	@RequestMapping(value = "/userRetained", method = RequestMethod.GET)
+	@RequestMapping(value = "/fbUserRetained", method = RequestMethod.GET)
 	public String userRetained(Model model){
 		logger.debug("user Retained...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);
