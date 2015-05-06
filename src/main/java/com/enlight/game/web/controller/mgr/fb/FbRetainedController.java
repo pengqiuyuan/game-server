@@ -82,7 +82,7 @@ public class FbRetainedController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "28" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userRetained", method = RequestMethod.GET)
 	public String userRetained(Model model,ServletRequest request) throws ElasticsearchException, IOException, ParseException{
 		logger.debug("user Retained...");

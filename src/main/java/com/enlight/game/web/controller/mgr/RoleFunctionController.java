@@ -196,8 +196,8 @@ public class RoleFunctionController extends BaseController{
 			for (int i = 0; i < functions.length; i++) {
 				RoleAndEnum roleAndEnum = new RoleAndEnum();
 				roleAndEnum.setRoleRunctionId(r.getId());
-				roleAndEnum.setEnumRole(Integer.valueOf(functions[i]));
-				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(Integer.valueOf(functions[i]));
+				roleAndEnum.setEnumRole(functions[i]);
+				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(functions[i]);
 			  	if(enumFunction!=null){
 			  		roleAndEnum.setEnumName(enumFunction.getEnumName());
 			  	}
@@ -330,8 +330,8 @@ public class RoleFunctionController extends BaseController{
         for (String roleFunctionAdd : funs) {
 			RoleAndEnum roleAndEnum = new RoleAndEnum();
 			roleAndEnum.setRoleRunctionId(roleFunction.getId());
-			roleAndEnum.setEnumRole(Integer.valueOf(roleFunctionAdd));
-			EnumFunction enumFunction =  enumFunctionService.findByEnumRole(Integer.valueOf(roleFunctionAdd));
+			roleAndEnum.setEnumRole(roleFunctionAdd);
+			EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleFunctionAdd);
 		  	if(enumFunction!=null){
 		  		roleAndEnum.setEnumName(enumFunction.getEnumName());
 		  	}

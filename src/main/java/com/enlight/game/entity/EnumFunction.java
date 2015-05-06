@@ -47,7 +47,7 @@ public class EnumFunction extends BaseEntry{
 	/**
 	 * 权限 1,2,3,4,5...
 	 */
-	private Integer enumRole;
+	private String enumRole;
 	/**
 	 * 功能名称（1 服务器搜索与查看，2 服务器配置与开关，6 新增邮件）
 	 */
@@ -68,11 +68,12 @@ public class EnumFunction extends BaseEntry{
 	 */
 	private int categoryId;
 	
-	public Integer getEnumRole() {
+
+	public String getEnumRole() {
 		return enumRole;
 	}
 
-	public void setEnumRole(Integer enumRole) {
+	public void setEnumRole(String enumRole) {
 		this.enumRole = enumRole;
 	}
 

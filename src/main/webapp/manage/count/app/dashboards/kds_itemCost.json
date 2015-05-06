@@ -1,7 +1,7 @@
 {
   "title": "道具消耗",
   "role": "22",
-  "game": "kun",
+  "game": "kds",
   "services": {
     "query": {
       "list": {

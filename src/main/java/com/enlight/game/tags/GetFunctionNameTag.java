@@ -45,7 +45,7 @@ public class GetFunctionNameTag extends TagSupport {
 			WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(pageContext.getServletContext());//获取SPRING的上下文
 			EnumFunctionService enumFunctionService = (EnumFunctionService) ctx.getBean("enumFunctionService");
 
-		    EnumFunction enumFunction =  enumFunctionService.findById(Long.parseLong(id));
+		    EnumFunction enumFunction =  enumFunctionService.findByEnumRole(id);
 			if(enumFunction!=null){
 				pageContext.getOut().write(enumFunction.getEnumName()+" ");
 				}

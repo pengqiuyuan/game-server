@@ -59,9 +59,9 @@ public class RoleFunctionService {
 		return roleFunctionDao.findByGameIdAndRole(gameId, role);
 	}
 	
-	public List<Integer> findByGameIdAndRoleFunctions(Long gameId,String role){
+	public List<String> findByGameIdAndRoleFunctions(Long gameId,String role){
 		List<RoleFunction> roleFunctions =  roleFunctionDao.findByGameIdAndRole(gameId, role);
-		List<Integer> i = roleAndEnumService.findByRole(roleFunctions.get(0).getId());
+		List<String> i = roleAndEnumService.findByRole(roleFunctions.get(0).getId());
 		return i;
 	}
 	

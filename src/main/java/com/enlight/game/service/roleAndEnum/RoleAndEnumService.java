@@ -33,7 +33,7 @@ public class RoleAndEnumService {
 		roleAndEnumDao.deleteByRoleRunctionId(id);
 	}
 	
-	public List<Integer> findByRole(Long id){
+	public List<String> findByRole(Long id){
 		return roleAndEnumDao.findByRole(id);
 	}
 	

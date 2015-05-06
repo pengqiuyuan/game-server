@@ -238,9 +238,9 @@ public class UsersController extends BaseController{
 			if (request.getParameterValues("storeId") != null && request.getParameterValues("role") != null) {
 				if (request.getParameterValues("storeId") != null && request.getParameterValues("role").length > 0) {
 					for (int i = 0; i < request.getParameterValues("storeId").length; i++) {
-						List<Integer> funcs = roleFunctionService.findByGameIdAndRoleFunctions(Long.parseLong(request.getParameterValues("storeId")[i]), request.getParameterValues("role")[i]);
+						List<String> funcs = roleFunctionService.findByGameIdAndRoleFunctions(Long.parseLong(request.getParameterValues("storeId")[i]), request.getParameterValues("role")[i]);
 						String functions = "";
-						for (Integer string : funcs) {
+						for (String string : funcs) {
 							functions = functions + ","+string;
 						}
 						UserRole userRole = new UserRole();

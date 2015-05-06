@@ -83,43 +83,159 @@
 							</ul>
 					    </li>
 					</shiro:hasAnyRoles>
-
-<%-- 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">玩家账号<b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<shiro:hasAnyRoles name='admin,3'>
-							<li><a href="#">游戏玩家列表查看与搜索</a></li>
-								</shiro:hasAnyRoles>
-							<shiro:hasAnyRoles name='admin,4'>
-								<li><a href="#">角色数据修改与登录封禁</a></li>
-							</shiro:hasAnyRoles>
-							<li class="divider"></li>
-							<li><a href="#">sample</a></li>
-						</ul>
-					</li> --%>
 					
 
 				    <shiro:hasAnyRoles name="admin,10002">
 					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">实时统计日志<b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<shiro:hasAnyRoles name="admin,31">
+									<shiro:hasAnyRoles name="admin,KUN_AP,KUN_ITEM,KUN_MONEY,KUN_DUMMY,KUN_COIN,KUN_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN实时日志</a>
 											<ul class="dropdown-menu">
-												<li><a tabindex="-1" href="#">KUN测试</a></li>
+												<shiro:hasAnyRoles name="admin,KUN_ITEM">
+												<li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">道具日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/kunItem?id=1#/dashboard/file/kun_item.json">道具日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/kunItem?id=2#/dashboard/file/kun_itemGet.json">道具获得</a></li>
+									                  <li><a href="${ctx}/manage/count/kunItem?id=3#/dashboard/file/kun_itemCost.json">道具消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <shiro:hasAnyRoles name="admin,KUN_AP">
+								               <li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">体力日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/kunAp?id=1#/dashboard/file/kun_ap.json">体力日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/kunAp?id=2#/dashboard/file/kun_apGet.json">体力获得</a></li>
+									                  <li><a href="${ctx}/manage/count/kunAp?id=3#/dashboard/file/kun_apCost.json">体力消耗</a></li>
+									                </ul>
+								               </li>
+												</shiro:hasAnyRoles>
+											   <shiro:hasAnyRoles name="admin,KUN_MONEY">
+														<li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">真实充值币日志</a>
+											                <ul class="dropdown-menu">
+											                  <li><a tabindex="-1" href="${ctx}/manage/count/kunMoney?id=1#/dashboard/file/kun_money.json">真实充值币日志(总)</a></li>
+											                  <li><a href="${ctx}/manage/count/kunMoney?id=2#/dashboard/file/kun_moneyGet.json">真实充值币获得</a></li>
+											                  <li><a href="${ctx}/manage/count/kunMoney?id=3#/dashboard/file/kun_moneyCost.json">真实充值币消耗</a></li>
+											                </ul>
+										               </li>
+												</shiro:hasAnyRoles>
+												<shiro:hasAnyRoles name="admin,KUN_DUMMY">
+												<li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">虚拟充值币日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/kunDummy?id=1#/dashboard/file/kun_dummy.json">虚拟充值币日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/kunDummy?id=2#/dashboard/file/kun_dummyGet.json">虚拟充值币获得</a></li>
+									                  <li><a href="${ctx}/manage/count/kunDummy?id=3#/dashboard/file/kun_dummyCost.json">虚拟充值币消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <shiro:hasAnyRoles name="admin,KUN_COIN">
+								               <li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">游戏币日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/kunCoin?id=1#/dashboard/file/kun_coin.json">游戏币日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/kunCoin?id=2#/dashboard/file/kun_coinGet.json">游戏币获得</a></li>
+									                  <li><a href="${ctx}/manage/count/kunCoin?id=3#/dashboard/file/kun_coinCost.json">游戏币消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <shiro:hasAnyRoles name="admin,KUN_USER">
+													  <li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">用户相关日志</a>
+											                <ul class="dropdown-menu">
+											                  <li class="dropdown-submenu">
+											                  	<a tabindex="-1" href="${ctx}/manage/count/kunUser?id=1#/dashboard/file/kun_user.json">用户相关日志(总)</a>
+											                  </li>
+											                  <li><a href="${ctx}/manage/count/kunUser?id=2#/dashboard/file/kun_userLogin.json">用户登录</a></li>
+											                  <li><a href="${ctx}/manage/count/kunUser?id=3#/dashboard/file/kun_userCreate.json">用户创建</a></li>
+											                  <li><a href="${ctx}/manage/count/kunUser?id=4#/dashboard/file/kun_userOnline.json">在线用户</a></li>
+											                  <li><a href="${ctx}/manage/count/kunUser?id=5#/dashboard/file/kun_userNewbieguide.json">新手引导与功能引导</a></li>
+											                </ul>
+										               </li>	
+												</shiro:hasAnyRoles>
+												<li class="divider"></li>
+												<li><a href="#">sample</a></li>
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin,32">
+									<shiro:hasAnyRoles name="admin,KDS_AP,KDS_ITEM,KDS_MONEY,KDS_DUMMY,KDS_COIN,KDS_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS实时日志</a>
 											<ul class="dropdown-menu">
-												<li><a tabindex="-1" href="#">KDS测试</a></li>
+												<shiro:hasAnyRoles name="admin,KDS_ITEM">
+												<li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">道具日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/kdsItem?id=1#/dashboard/file/kds_item.json">道具日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/kdsItem?id=2#/dashboard/file/kds_itemGet.json">道具获得</a></li>
+									                  <li><a href="${ctx}/manage/count/kdsItem?id=3#/dashboard/file/kds_itemCost.json">道具消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <shiro:hasAnyRoles name="admin,KDS_AP">
+								               <li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">体力日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/kdsAp?id=1#/dashboard/file/kds_ap.json">体力日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/kdsAp?id=2#/dashboard/file/kds_apGet.json">体力获得</a></li>
+									                  <li><a href="${ctx}/manage/count/kdsAp?id=3#/dashboard/file/kds_apCost.json">体力消耗</a></li>
+									                </ul>
+								               </li>
+												</shiro:hasAnyRoles>
+											   <shiro:hasAnyRoles name="admin,KDS_MONEY">
+														<li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">真实充值币日志</a>
+											                <ul class="dropdown-menu">
+											                  <li><a tabindex="-1" href="${ctx}/manage/count/kdsMoney?id=1#/dashboard/file/kds_money.json">真实充值币日志(总)</a></li>
+											                  <li><a href="${ctx}/manage/count/kdsMoney?id=2#/dashboard/file/kds_moneyGet.json">真实充值币获得</a></li>
+											                  <li><a href="${ctx}/manage/count/kdsMoney?id=3#/dashboard/file/kds_moneyCost.json">真实充值币消耗</a></li>
+											                </ul>
+										               </li>
+												</shiro:hasAnyRoles>
+												<shiro:hasAnyRoles name="admin,KDS_DUMMY">
+												<li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">虚拟充值币日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/kdsDummy?id=1#/dashboard/file/kds_dummy.json">虚拟充值币日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/kdsDummy?id=2#/dashboard/file/kds_dummyGet.json">虚拟充值币获得</a></li>
+									                  <li><a href="${ctx}/manage/count/kdsDummy?id=3#/dashboard/file/kds_dummyCost.json">虚拟充值币消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <shiro:hasAnyRoles name="admin,KDS_COIN">
+								               <li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">游戏币日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/kdsCoin?id=1#/dashboard/file/kds_coin.json">游戏币日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/kdsCoin?id=2#/dashboard/file/kds_coinGet.json">游戏币获得</a></li>
+									                  <li><a href="${ctx}/manage/count/kdsCoin?id=3#/dashboard/file/kds_coinCost.json">游戏币消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <shiro:hasAnyRoles name="admin,KDS_USER">
+													  <li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">用户相关日志</a>
+											                <ul class="dropdown-menu">
+											                  <li class="dropdown-submenu">
+											                  	<a tabindex="-1" href="${ctx}/manage/count/kdsUser?id=1#/dashboard/file/kds_user.json">用户相关日志(总)</a>
+											                  </li>
+											                  <li><a href="${ctx}/manage/count/kdsUser?id=2#/dashboard/file/kds_userLogin.json">用户登录</a></li>
+											                  <li><a href="${ctx}/manage/count/kdsUser?id=3#/dashboard/file/kds_userCreate.json">用户创建</a></li>
+											                  <li><a href="${ctx}/manage/count/kdsUser?id=4#/dashboard/file/kds_userOnline.json">在线用户</a></li>
+											                  <li><a href="${ctx}/manage/count/kdsUser?id=5#/dashboard/file/kds_userNewbieguide.json">新手引导与功能引导</a></li>
+											                </ul>
+										               </li>	
+												</shiro:hasAnyRoles>
+												<li class="divider"></li>
+												<li><a href="#">sample</a></li>
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin,21,22,23,24,25,26,27,28">
+									<shiro:hasAnyRoles name="admin,FB_AP,FB_ITEM,FB_MONEY,FB_DUMMY,FB_COIN,FB_ARENACOIN,FB_EXPEDITIONC,FB_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB实时日志</a>
 											<ul class="dropdown-menu">
-												<shiro:hasAnyRoles name="admin,22">
+												<shiro:hasAnyRoles name="admin,FB_ITEM">
 												<li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">道具日志</a>
 									                <ul class="dropdown-menu">
@@ -129,7 +245,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
-								               <shiro:hasAnyRoles name="admin,21">
+								               <shiro:hasAnyRoles name="admin,FB_AP">
 								               <li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">体力日志</a>
 									                <ul class="dropdown-menu">
@@ -139,7 +255,7 @@
 									                </ul>
 								               </li>
 												</shiro:hasAnyRoles>
-												<shiro:hasAnyRoles name="admin,23">
+												<shiro:hasAnyRoles name="admin,FB_MONEY">
 														<li class="dropdown-submenu">
 										                    <a tabindex="-1" href="#">真实充值币日志</a>
 											                <ul class="dropdown-menu">
@@ -149,17 +265,17 @@
 											                </ul>
 										               </li>
 												</shiro:hasAnyRoles>
-												<shiro:hasAnyRoles name="admin,24">
+												<shiro:hasAnyRoles name="admin,FB_DUMMY">
 												<li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">虚拟充值币日志</a>
 									                <ul class="dropdown-menu">
 									                  <li><a tabindex="-1" href="${ctx}/manage/count/fbDummy?id=1#/dashboard/file/fb_dummy.json">虚拟充值币日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/dummy?id=2#/fbDashboard/file/fb_dummyGet.json">虚拟充值币获得</a></li>
-									                  <li><a href="${ctx}/manage/count/dummy?id=3#/fbDashboard/file/fb_dummyCost.json">虚拟充值币消耗</a></li>
+									                  <li><a href="${ctx}/manage/count/fbDummy?id=2#/dashboard/file/fb_dummyGet.json">虚拟充值币获得</a></li>
+									                  <li><a href="${ctx}/manage/count/fbDummy?id=3#/dashboard/file/fb_dummyCost.json">虚拟充值币消耗</a></li>
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
-								               <shiro:hasAnyRoles name="admin,25">
+								               <shiro:hasAnyRoles name="admin,FB_COIN">
 								               <li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">游戏币日志</a>
 									                <ul class="dropdown-menu">
@@ -169,7 +285,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
-								               <shiro:hasAnyRoles name="admin,26">
+								               <shiro:hasAnyRoles name="admin,FB_ARENACOIN">
 								               <li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">竞技场徽章(货币)日志</a>
 									                <ul class="dropdown-menu">
@@ -179,7 +295,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
-								               <shiro:hasAnyRoles name="admin,27">
+								               <shiro:hasAnyRoles name="admin,FB_EXPEDITIONC">
 								               <li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">燃烧远征龙鳞币(货币)日志</a>
 									                <ul class="dropdown-menu">
@@ -189,7 +305,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
-												<shiro:hasAnyRoles name="admin,28">
+												<shiro:hasAnyRoles name="admin,FB_USER">
 													  <li class="dropdown-submenu">
 										                    <a tabindex="-1" href="#">用户相关日志</a>
 											                <ul class="dropdown-menu">
@@ -216,24 +332,24 @@
 						</li>
 					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">离线统计日志<b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<shiro:hasAnyRoles name="admin,31">
+									<shiro:hasAnyRoles name="admin,KUN_AP,KUN_ITEM,KUN_MONEY,KUN_DUMMY,KUN_COIN,KUN_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN离线日志</a>
 											<ul class="dropdown-menu">
 												<li><a tabindex="-1" href="#">KUN测试</a></li>
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin,32">
+									<shiro:hasAnyRoles name="admin,KDS_AP,KDS_ITEM,KDS_MONEY,KDS_DUMMY,KDS_COIN,KDS_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS离线日志</a>
 											<ul class="dropdown-menu">
 												<li><a tabindex="-1" href="#">KDS测试</a></li>
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin,21,22,23,24,25,26,27,28">
+									<shiro:hasAnyRoles name="admin,FB_AP,FB_ITEM,FB_MONEY,FB_DUMMY,FB_COIN,FB_ARENACOIN,FB_EXPEDITIONC,FB_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB离线日志</a>
 											<ul class="dropdown-menu">
-												<shiro:hasAnyRoles name="admin,28">
+												<shiro:hasAnyRoles name="admin,FB_USER">
 													  <li class="dropdown-submenu">
 															<li><a href="${ctx}/manage/retained/fb/userRetained">用户留存</a></li>
 										               </li>	

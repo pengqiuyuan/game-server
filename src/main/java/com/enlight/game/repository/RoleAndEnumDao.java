@@ -18,7 +18,7 @@ public interface RoleAndEnumDao extends PagingAndSortingRepository<RoleAndEnum, 
 	
 	@Modifying
 	@Query("select roleAndEnum.enumRole from RoleAndEnum roleAndEnum where roleAndEnum.roleRunctionId =?1 And roleAndEnum.status='1'")
-	List<Integer> findByRole(Long roleRunctionId);
+	List<String> findByRole(Long roleRunctionId);
 	
 	@Modifying
 	@Query("delete from RoleAndEnum roleAndEnum where roleAndEnum.roleRunctionId =?1")

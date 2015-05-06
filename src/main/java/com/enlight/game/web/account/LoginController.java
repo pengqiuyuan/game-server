@@ -88,7 +88,7 @@ public class LoginController {
 				if(!userRoles.isEmpty() && userRoles.size()!=0){
 					List<String> list = userRoles.get(0).getRoleList();
 					for (String f : list) {
-						EnumFunction enumFunction  = enumFunctionService.findByEnumRole(Integer.valueOf(f));
+						EnumFunction enumFunction  = enumFunctionService.findByEnumRole(f);
 						EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
 						enumCategories.add(enumCategory);
 					}
