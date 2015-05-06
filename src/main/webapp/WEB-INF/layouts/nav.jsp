@@ -388,10 +388,11 @@
 </div>
 
 <script type="text/javascript">
+	
 	function changeTag(id,categoryId,sta){
 		var th = $("#storeIdN");
 		th.empty();
-		$.ajax({                                               
+ 		$.ajax({                                               
 			url: '<%=request.getContextPath()%>/manage/findStores?storeId='+id+'&categoryId='+categoryId+'&sta='+sta,
 			type: 'GET',
 			contentType: "application/json;charset=UTF-8",		

@@ -21,7 +21,8 @@
 </style>
 </head>
 <body>
-	<%@ include file="/WEB-INF/layouts/nav.jsp"%>
+
 	<sitemesh:body/>
+	<%@ include file="/WEB-INF/layouts/nav.jsp"%>
 </body>
 </html>
