@@ -110,24 +110,12 @@ public class FbUserAddServer {
 	}
 	
 	public Map<String, Object> retained(SearchResponse response){
-			
-			Map<String, Object> m = new HashMap<String, Object>();
-			LinkedList<String> userAdd = new LinkedList<String>();
-			HashMap<String, UserAdd> map = new HashMap<String, FbUserAddServer.UserAdd>();
-			
+			Map<String, Object> map = new HashMap<String, Object>();
 			for (SearchHit hit : response.getHits()) {
 				Map<String, Object> source = hit.getSource();
-				userAdd.add(source.get("ts_add").toString());
-				
-				UserAdd u = new UserAdd();
-				u.setDate(source.get("date").toString());
-				u.setUserAdd(source.get("userAdd").toString());
-				map.put(source.get("date").toString(), u);
-			}
-			
-			m.put("userAdd", userAdd);
-			m.put("table", map);			
-			return m;
+				map.put(source.get("date").toString(), source.get("userAdd").toString());
+			}		
+			return map;
 	}
 	
 		public static int daysBetween(String smdate,String bdate) throws ParseException{  
@@ -141,30 +129,6 @@ public class FbUserAddServer {
 	            
 	        return Integer.parseInt(String.valueOf(between_days));     
 	    }  
-		
-		public class UserAdd{
-			
-			private String date ="---";
-			
-			private String userAdd="---";
-
-			public String getDate() {
-				return date;
-			}
-
-			public void setDate(String date) {
-				this.date = date;
-			}
-
-			public String getUserAdd() {
-				return userAdd;
-			}
-
-			public void setUserAdd(String userAdd) {
-				this.userAdd = userAdd;
-			}
-
-		}
 		
 
 		

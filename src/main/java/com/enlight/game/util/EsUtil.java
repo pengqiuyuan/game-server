@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 public class EsUtil {
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
+	SimpleDateFormat s =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
 
 	public String nowDate(){
@@ -28,6 +29,14 @@ public class EsUtil {
 	    calendar.add(calendar.DATE,-2);
 	    Date date=calendar.getTime();
 	    String da = sdf.format(date); 
+		return da;
+	}
+	
+	public String twoDayAgoF(){
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-2);
+	    Date date=calendar.getTime();
+	    String da = s.format(date); 
 		return da;
 	}
 	

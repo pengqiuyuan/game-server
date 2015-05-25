@@ -1,13 +1,16 @@
 package com.enlight.game.web.controller.mgr.fb;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.EnumFunction;
+import com.enlight.game.entity.GiftItem;
 import com.enlight.game.entity.PlatForm;
 import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
@@ -88,16 +92,24 @@ public class FbUserAddController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userAdd", method = RequestMethod.GET)
-	public String userRetained(Model model,ServletRequest request) throws ElasticsearchException, IOException, ParseException{
+	public String userRetained(Model model,ServletRequest request,
+			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
+			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
+			@RequestParam(value = "server", defaultValue = "") String[] sv) throws ElasticsearchException, IOException, ParseException{
 		logger.debug("user add total...");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
-		
 		Map<String, Object> mTotal = new HashMap<String, Object>();
 		Map<String, Object> mAdd = new HashMap<String, Object>();
+
+		Map<String,LinkedList<String>> m = new HashMap<String, LinkedList<String>>();
 		
+
+		List<String> sZones = new ArrayList<String>();
+		List<String> pForms = new ArrayList<String>();
+		List<String> svs = new ArrayList<String>();
+
 		if(searchParams.isEmpty()){
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
@@ -109,6 +121,39 @@ public class FbUserAddController extends BaseController{
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
 		}else{
+		    Long startTIme = sdf.parse(searchParams.get("EQ_dateFrom").toString()).getTime(); 
+		    Long endTime = sdf.parse(searchParams.get("EQ_dateTo").toString()).getTime();
+		    Long oneDay = 1000 * 60 * 60 * 24l;  
+		    Long time = startTIme;  
+		    while (time <= endTime) {  
+		        Date d = new Date(time);  
+		        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
+		        System.out.println(df.format(d).toString());  
+		        time += oneDay;  
+		    } 
+		    if(sZone != null && sZone.length>0){
+				for (int i = 0; i < sZone.length; i++) {
+					sZones.add(sZone[i]);
+					System.out.println(sZone[i]);
+					mTotal = fbUserTotalServer.searchServerZoneUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+				}
+			}
+			if(pForm != null && pForm.length>0){
+				for (int i = 0; i < pForm.length; i++) {
+					pForms.add(pForm[i]);
+					System.out.println(pForm[i]);
+					mTotal = fbUserTotalServer.searchPlatFormUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+				}
+			}
+			if(sv != null && sv.length>0){
+				for (int i = 0; i < sv.length; i++) {
+					svs.add(sv[i]);
+					System.out.println(sv[i]);
+					mTotal = fbUserTotalServer.searchServerUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+				}
+			}
+		    
+			/**
 			if(searchParams.get("EQ_platForm_value")!="" && searchParams.get("EQ_platForm_value")!=null){
 				//查询渠道
 				model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
@@ -145,8 +190,8 @@ public class FbUserAddController extends BaseController{
 					mAdd = fbUserAddServer.searchServerZoneUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
 				}
 			}
+			**/
 		}
-
 	
 		model.addAttribute("userTotal", mTotal.get("userTotal"));
 		model.addAttribute("tableTotal", mTotal.get("table"));
@@ -156,7 +201,15 @@ public class FbUserAddController extends BaseController{
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);
+		model.addAttribute("platForm", platFormService.findAll());
+		model.addAttribute("server", serverService.findByStoreId(storeId));
+		
+		model.addAttribute("sZones", sZones);
+		model.addAttribute("pForms", pForms);
+		model.addAttribute("svs", svs);
+		
 
+		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		return "/kibana/fb/user/userAdd";
 	}

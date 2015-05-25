@@ -132,12 +132,40 @@ public class FbRetainedController extends BaseController{
 					model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
 					model.addAttribute("platForm",  platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
 					model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
-					m = EsRetainedServer.searchServerZoneRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
 				}
 			}
 		}
 		
-
+		if(searchParams.isEmpty()){
+			String dateFrom = thirtyDayAgoFrom();
+			String dateTo = nowDate();
+			m = EsRetainedServer.searchAllRetained(dateFrom, dateTo);
+			model.addAttribute("dateFrom", dateFrom);
+			model.addAttribute("dateTo", dateTo);
+			logger.debug("查看所有运营大区。。。all" );
+		}else{
+			model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
+			model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
+			if(searchParams.get("EQ_value")!="" && searchParams.get("EQ_value")!=null){
+				if(searchParams.get("EQ_category").toString().equals("platForm")){
+					PlatForm platform =  platFormService.findByPfName(searchParams.get("EQ_value").toString());
+					m = EsRetainedServer.searchPlatFormRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
+					logger.debug("查看渠道。。。"+platform.getPfId());
+				}else if(searchParams.get("EQ_category").toString().equals("server")){
+					Server server = serverService.findByServerId(searchParams.get("EQ_value").toString());
+					m = EsRetainedServer.searchServerRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
+					logger.debug("查看服务器。。。"+server.getServerId());
+				}
+			}else{
+				if(searchParams.get("EQ_serverZone").toString().equals("all")){
+					m = EsRetainedServer.searchAllRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+					logger.debug("查看所有运营大区。。。all" );
+				}else{
+					m = EsRetainedServer.searchServerZoneRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
+					logger.debug("查看运营大区。。。" +searchParams.get("EQ_serverZone").toString());
+				}
+			}
+		}	
 		model.addAttribute("datenext", m.get("datenext"));
 		model.addAttribute("dateSeven", m.get("dateSeven"));
 		model.addAttribute("datethirty", m.get("datethirty"));

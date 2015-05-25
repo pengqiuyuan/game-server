@@ -110,24 +110,12 @@ public class FbUserTotalServer {
 	}
 	
 	public Map<String, Object> retained(SearchResponse response){
-			
-			Map<String, Object> m = new HashMap<String, Object>();
-			LinkedList<String> userTotal = new LinkedList<String>();
-			HashMap<String, UserTotal> map = new HashMap<String, FbUserTotalServer.UserTotal>();
-			
+			Map<String, Object> map = new HashMap<String, Object>();
 			for (SearchHit hit : response.getHits()) {
 				Map<String, Object> source = hit.getSource();
-				userTotal.add(source.get("ts_total").toString());
-				
-				UserTotal u = new UserTotal();
-				u.setDate(source.get("date").toString());
-				u.setUserTotal(source.get("userTotal").toString());
-				map.put(source.get("date").toString(), u);
+				map.put(source.get("date").toString(), source.get("userTotal").toString());
 			}
-			
-			m.put("userTotal", userTotal);
-			m.put("table", map);			
-			return m;
+			return map;
 	}
 	
 		public static int daysBetween(String smdate,String bdate) throws ParseException{  
@@ -141,31 +129,5 @@ public class FbUserTotalServer {
 	            
 	        return Integer.parseInt(String.valueOf(between_days));     
 	    }  
-		
-		public class UserTotal{
-			
-			private String date ="---";
-			
-			private String userTotal="---";
-
-			public String getDate() {
-				return date;
-			}
-
-			public void setDate(String date) {
-				this.date = date;
-			}
-
-			public String getUserTotal() {
-				return userTotal;
-			}
-
-			public void setUserTotal(String userTotal) {
-				this.userTotal = userTotal;
-			}
-			
-		}
-		
-
-		
+	
 }
