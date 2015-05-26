@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class FbUserAddServer {
 	
 	private static final String type = "fb_user_add";
 	
-	public Map<String, Object> searchAllUserAdd(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserAdd(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
 			SearchResponse response = client.prepareSearch(index)
 			        .setTypes(type)
@@ -47,14 +48,14 @@ public class FbUserAddServer {
 			        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 			                		FilterBuilders.termFilter("key", "all"))
 			        		)
-			        .addSort("date", SortOrder.DESC)
+			        .addSort("date", SortOrder.ASC)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
 			        .actionGet();		
 			return retained(response);
 	}
 	
-	public Map<String, Object> searchServerZoneUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
@@ -65,13 +66,13 @@ public class FbUserAddServer {
 		                		FilterBuilders.termFilter("key", "serverZone"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
-		        .addSort("date", SortOrder.DESC)
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();		
 		return retained(response);
 	}
-	public Map<String, Object> searchPlatFormUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
@@ -82,7 +83,7 @@ public class FbUserAddServer {
 		                		FilterBuilders.termFilter("key", "platForm"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
-		        .addSort("date", SortOrder.DESC)
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -90,7 +91,7 @@ public class FbUserAddServer {
 		return retained(response);
 	}
 	
-	public Map<String, Object> searchServerUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
@@ -101,7 +102,7 @@ public class FbUserAddServer {
 		                		FilterBuilders.termFilter("key", "server"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
-		        .addSort("date", SortOrder.DESC)
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -109,8 +110,8 @@ public class FbUserAddServer {
 		return retained(response);
 	}
 	
-	public Map<String, Object> retained(SearchResponse response){
-			Map<String, Object> map = new HashMap<String, Object>();
+	public Map<String, String> retained(SearchResponse response){
+			Map<String, String> map = new LinkedHashMap<String, String>();
 			for (SearchHit hit : response.getHits()) {
 				Map<String, Object> source = hit.getSource();
 				map.put(source.get("date").toString(), source.get("userAdd").toString());

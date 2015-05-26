@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class FbUserTotalServer {
 	
 	private static final String type = "fb_user_total";
 	
-	public Map<String, Object> searchAllUserTotal(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserTotal(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
 			SearchResponse response = client.prepareSearch(index)
 			        .setTypes(type)
@@ -47,14 +48,14 @@ public class FbUserTotalServer {
 			        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
 			                		FilterBuilders.termFilter("key", "all"))
 			        		)
-			        .addSort("date", SortOrder.DESC)
+			        .addSort("date", SortOrder.ASC)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
 			        .actionGet();		
 			return retained(response);
 	}
 	
-	public Map<String, Object> searchServerZoneUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
@@ -65,13 +66,13 @@ public class FbUserTotalServer {
 		                		FilterBuilders.termFilter("key", "serverZone"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
-		        .addSort("date", SortOrder.DESC)
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();		
 		return retained(response);
 	}
-	public Map<String, Object> searchPlatFormUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
@@ -82,7 +83,7 @@ public class FbUserTotalServer {
 		                		FilterBuilders.termFilter("key", "platForm"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
-		        .addSort("date", SortOrder.DESC)
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -90,7 +91,7 @@ public class FbUserTotalServer {
 		return retained(response);
 	}
 	
-	public Map<String, Object> searchServerUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 
 		SearchResponse response = client.prepareSearch(index)
 		        .setTypes(type)
@@ -101,7 +102,7 @@ public class FbUserTotalServer {
 		                		FilterBuilders.termFilter("key", "server"),
 		                		FilterBuilders.termFilter("value", value))
 		        		)
-		        .addSort("date", SortOrder.DESC)
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -109,8 +110,8 @@ public class FbUserTotalServer {
 		return retained(response);
 	}
 	
-	public Map<String, Object> retained(SearchResponse response){
-			Map<String, Object> map = new HashMap<String, Object>();
+	public Map<String, String> retained(SearchResponse response){
+			Map<String, String> map = new LinkedHashMap<String, String>();
 			for (SearchHit hit : response.getHits()) {
 				Map<String, Object> source = hit.getSource();
 				map.put(source.get("date").toString(), source.get("userTotal").toString());

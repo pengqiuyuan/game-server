@@ -30,12 +30,6 @@
   <body>
       <div id="wrapper">
 
-            <div class="row wrapper border-bottom white-bg page-heading">
-                <div class="span10">
-                    <h2>${store.name}:新增用户</h2>
-                </div>
-            </div>
-
 		<div class="wrapper wrapper-content animated fadeInRight">
 			<form id="inputForm" class="orm-inline"  method="get" action="#">
 			<div class="row-fluid">
@@ -45,7 +39,7 @@
 								<div>
 									<div class="form-group">
 										<input type="hidden" id="storeId"  value="${store.id}" > 
-										<span class="btn btn-primary btn-xs m-l-sm" type="button">${store.name}</span>
+										<span class="btn btn-primary btn-xs m-l-sm" type="button">${store.name}：新增用户</span>
 									</div>
 							</div>
 						</div>
@@ -60,16 +54,16 @@
 								<h3>筛选	
 								</h3>
                                 <h4>运营大区：
-                                    <label class="checkbox inline"> <input type="checkbox" name="serverZone" value="所有运营大区"   <c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有运营大区' }">checked="checked" </c:if></c:forEach> > 所有运营大区</label>
-                                    <label class="checkbox inline"> <input type="checkbox" name="serverZone"  value="所有Ios"  <c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有Ios' }">checked="checked" </c:if></c:forEach> > 所有Ios </label> 
-                                    <label class="checkbox inline"> <input type="checkbox" name="serverZone"  value="所有Android"  <c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有Android' }">checked="checked" </c:if></c:forEach> > 所有Android</label>
+                                    <label class="checkbox inline"> <input type="checkbox" name="serverZone" value="all"   <c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有运营大区' }">checked="checked" </c:if></c:forEach> > 所有运营大区</label>
+<%--                                     <label class="checkbox inline"> <input type="checkbox" name="serverZone"  value="所有Ios"  <c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有Ios' }">checked="checked" </c:if></c:forEach> > 所有Ios </label> 
+                                    <label class="checkbox inline"> <input type="checkbox" name="serverZone"  value="所有Android"  <c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有Android' }">checked="checked" </c:if></c:forEach> > 所有Android</label> --%>
                                     <c:forEach items="${serverZone}" var="item" >
-                                   		<label class="checkbox inline"> <input type="checkbox" name="serverZone"  value="${item.serverName }"  <c:forEach items="${sZones}" var="i" ><c:if test="${i == item.serverName }">checked="checked" </c:if></c:forEach> > ${item.serverName }</label>
+                                   		<label class="checkbox inline"> <input type="checkbox" name="serverZone"  value="${item.id }"  <c:forEach items="${sZones}" var="i" ><c:if test="${i == item.serverName }">checked="checked" </c:if></c:forEach> > ${item.serverName }</label>
 									</c:forEach>	
                                 </h4>
                                 <h4>渠道：
                                 	<c:forEach items="${platForm}" var="item" >
-                                		<label class="checkbox inline"> <input type="checkbox" name="platForm"  value="${item.pfName }" <c:forEach items="${pForms}" var="i" ><c:if test="${i == item.pfName }">checked="checked" </c:if></c:forEach> > ${item.pfName }</label>
+                                		<label class="checkbox inline"> <input type="checkbox" name="platForm"  value="${item.pfId }" <c:forEach items="${pForms}" var="i" ><c:if test="${i == item.pfName }">checked="checked" </c:if></c:forEach> > ${item.pfName }</label>
 									</c:forEach>
                                 </h4>
                                 <h4>服务器：
@@ -176,9 +170,8 @@
 
  <!--Step:1 Prepare a dom for ECharts which (must) has size (width & hight)-->
     <!--Step:1 为ECharts准备一个具备大小（宽高）的Dom-->
-    <div id="main" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
-    <div id="mainMap" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
-    <div id="mainTime" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+    <div id="mainAdd" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+    <div id="mainTotal" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
     <script src="<%=request.getContextPath()%>/static/echarts/js/echarts.js"></script>
     
     <script src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
@@ -283,6 +276,7 @@
 	</script>
 	
 	<script type="text/javascript">
+	
     require.config({
         paths: {
             echarts: '../../../static/echarts/js'
@@ -297,19 +291,53 @@
             'echarts/chart/map'
         ],
         function (ec) {
+            var totalName = [];
+            var totalDate =[];
+            var totalSeries = [];
+        	var td = 0;
+            for(var key in ${mTotal}){
+            	totalName.push(key);
+            	var da = [];
+            	for ( var datakey in ${mTotal}[key]) {  
+            		if(td == 0){
+            			totalDate.push(datakey)
+            		}
+            		da.push(${mTotal}[key][datakey])                    
+                }  
+            	totalSeries.push({name:key,type:'line',data:da});
+            	td = 1;
+            }
+            
+            
+            var addName = [];
+            var addDate = [];
+            var addSeries = [];
+            var ad = 0;
+            for(var key in ${mAdd}){
+            	addName.push(key);
+            	var da = [];
+            	for ( var datakey in ${mAdd}[key]) {  
+            		if(ad == 0){
+            			addDate.push(datakey)
+            		}
+            		da.push(${mAdd}[key][datakey])                   
+                } 
+            	addSeries.push({name:key,type:'line',data:da});
+            	ad = 1;
+            }
             //--- 折柱 ---
-            var myChart = ec.init(document.getElementById('main'));
+            var myChart = ec.init(document.getElementById('mainAdd'));
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '${store.name}新增用户',
-                    subtext: '纯属虚构'
+                    text: '累计用户',
+                    subtext: '历史累计的玩家帐户数'
                 },
                 tooltip : {
                     trigger: 'axis'
                 },
                 legend: {
-                    data:['蒸发量','降水量','落花暖暖']
+                    data:totalName
                 },
                 toolbox: {
                     show : true,
@@ -331,137 +359,70 @@
                 xAxis : [
                     {
                         type : 'category',
-                        data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                        data : totalDate
                     }
                 ],
                 yAxis : [
                     {
                         type : 'value',
+                        axisLabel : {
+                            formatter: '{value} 账户数'
+                        },
                         splitArea : {show : true}
                     }
                 ],
-                series : [
-                    {
-                        name:'蒸发量',
-                        type:'line',
-                        data:[2.0, 4.9, 7.0, 23.2, 25.6, 0, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-                    },
-                    {
-                        name:'降水量',
-                        type:'line',
-                        data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 0, 182.2, 48.7, 18.8, 6.0, 2.3]
-                    }
-                    ,
-                    {
-                        name:'落花暖暖',
-                        type:'line',
-                        data:[0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0]
-                    }
-                ]
+                series : totalSeries
             });
             
-            // --- 地图 ---
-            var myChart2 = ec.init(document.getElementById('mainMap'));
-            myChart2.setTheme('macarons');
-            myChart2.setOption({
-                tooltip : {
-                    trigger: 'item',
-                    formatter: '{b}'
-                },
-                series : [
-                    {
-                        name: '中国',
-                        type: 'map',
-                        mapType: 'china',
-                        selectedMode : 'multiple',
-                        itemStyle:{
-                            normal:{label:{show:true}},
-                            emphasis:{label:{show:true}}
-                        },
-                        data:[
-                            {name:'广东',selected:true}
-                        ]
-                    }
-                ]
-            });
-            
-            // --- 地图 ---
-            var myChart3 = ec.init(document.getElementById('mainTime'));
-            myChart3.setTheme('macarons');
-            myChart3.setOption({
+            var myChart = ec.init(document.getElementById('mainTotal'));
+            myChart.setTheme('macarons');
+            myChart.setOption({
                 title : {
-                    text : '时间坐标折线图',
-                    subtext : 'dataZoom支持'
+                    text: '新增用户',
+                    subtext: '当日新增加的玩家帐户数'
                 },
                 tooltip : {
-                    trigger: 'item',
-                    formatter : function (params) {
-                        var date = new Date(params.value[0]);
-                        data = date.getFullYear() + '-'
-                               + (date.getMonth() + 1) + '-'
-                               + date.getDate() + ' '
-                               + date.getHours() + ':'
-                               + date.getMinutes();
-                        return data + '<br/>'
-                               + params.value[1] + ', ' 
-                               + params.value[2];
-                    }
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:addName
                 },
                 toolbox: {
                     show : true,
                     feature : {
                         mark : {show: true},
                         dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
                         restore : {show: true},
                         saveAsImage : {show: true}
                     }
                 },
-                dataZoom: {
-                    show: true,
-                    start : 70
+                dataZoom : {
+                    show : true,
+                    realtime : true,
+                    start : 0,
+                    end : 100
                 },
-                legend : {
-                    data : ['series1']
-                },
-                grid: {
-                    y2: 80
-                },
+                calculable : true,
                 xAxis : [
                     {
-                        type : 'time',
-                        splitNumber:20
+                        type : 'category',
+                        data : addDate
                     }
                 ],
                 yAxis : [
                     {
-                        type : 'value'
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value} 账户数'
+                        },
+                        splitArea : {show : true}
                     }
                 ],
-                series : [
-                    {
-                        name: 'series1',
-                        type: 'line',
-                        showAllSymbol: true,
-                        symbolSize: function (value){
-                            return Math.round(value[2]/10) + 2;
-                        },
-                        data: (function () {
-                            var d = [];
-                            var len = 0;
-                            var now = new Date();
-                            var value;
-                            while (len++ < 200) {
-                                d.push([
-                                    new Date(2014, 9, 1, 0, len * 10000),
-                                    (Math.random()*30).toFixed(2) - 0,
-                                    (Math.random()*100).toFixed(2) - 0
-                                ]);
-                            }
-                            return d;
-                        })()
-                    }
-                ]
+                series : addSeries
             });
+            
+            
             
         }
     );

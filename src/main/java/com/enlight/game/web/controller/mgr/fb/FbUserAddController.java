@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,15 +25,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.web.Servlets;
 
-import com.enlight.game.entity.EnumFunction;
-import com.enlight.game.entity.GiftItem;
 import com.enlight.game.entity.PlatForm;
 import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
@@ -47,6 +43,7 @@ import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
+import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
 @Controller("FbUserAddController")
@@ -62,6 +59,8 @@ public class FbUserAddController extends BaseController{
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
+	
+	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
 	
 	@Autowired
 	private ServerZoneService serverZoneService;
@@ -100,12 +99,12 @@ public class FbUserAddController extends BaseController{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
-		Map<String, Object> mTotal = new HashMap<String, Object>();
-		Map<String, Object> mAdd = new HashMap<String, Object>();
+		Map<String, Map<String,String>> mTotal = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,String>> mAdd = new HashMap<String, Map<String,String>>();
 
-		Map<String,LinkedList<String>> m = new HashMap<String, LinkedList<String>>();
+		Map<String, String> mT = new HashMap<String, String>();
+		Map<String, String> mA = new HashMap<String, String>();
 		
-
 		List<String> sZones = new ArrayList<String>();
 		List<String> pForms = new ArrayList<String>();
 		List<String> svs = new ArrayList<String>();
@@ -114,90 +113,60 @@ public class FbUserAddController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			mTotal = fbUserTotalServer.searchAllUserTotal(dateFrom, dateTo);
-			mAdd = fbUserAddServer.searchAllUserAdd(dateFrom, dateTo);
+			mT = fbUserTotalServer.searchAllUserTotal(dateFrom, dateTo);
+			mA = fbUserAddServer.searchAllUserAdd(dateFrom, dateTo);
+			mTotal.put("所有运营大区", mT);
+			mAdd.put("所有运营大区", mA);
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
 		}else{
-		    Long startTIme = sdf.parse(searchParams.get("EQ_dateFrom").toString()).getTime(); 
-		    Long endTime = sdf.parse(searchParams.get("EQ_dateTo").toString()).getTime();
-		    Long oneDay = 1000 * 60 * 60 * 24l;  
-		    Long time = startTIme;  
-		    while (time <= endTime) {  
-		        Date d = new Date(time);  
-		        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
-		        System.out.println(df.format(d).toString());  
-		        time += oneDay;  
-		    } 
 		    if(sZone != null && sZone.length>0){
 				for (int i = 0; i < sZone.length; i++) {
-					sZones.add(sZone[i]);
-					System.out.println(sZone[i]);
-					mTotal = fbUserTotalServer.searchServerZoneUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+					if(sZone[i].equals("all")){
+						sZones.add("所有运营大区");
+						mT = fbUserTotalServer.searchAllUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mA = fbUserAddServer.searchAllUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mTotal.put("所有运营大区", mT);
+						mAdd.put("所有运营大区", mA);
+					}else{
+						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
+						sZones.add(szName);
+						mT = fbUserTotalServer.searchServerZoneUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mA = fbUserAddServer.searchServerZoneUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mTotal.put(szName, mT);
+						mAdd.put(szName, mA);
+					}
+
 				}
 			}
 			if(pForm != null && pForm.length>0){
 				for (int i = 0; i < pForm.length; i++) {
-					pForms.add(pForm[i]);
-					System.out.println(pForm[i]);
-					mTotal = fbUserTotalServer.searchPlatFormUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
+					pForms.add(pfName);
+					mT = fbUserTotalServer.searchPlatFormUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mA = fbUserAddServer.searchPlatFormUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mTotal.put(pfName, mT);
+					mAdd.put(pfName, mA);
 				}
 			}
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					System.out.println(sv[i]);
-					mTotal = fbUserTotalServer.searchServerUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mT = fbUserTotalServer.searchServerUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mA = fbUserAddServer.searchServerUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mTotal.put(sv[i], mT);
+					mAdd.put(sv[i], mA);
 				}
 			}
-		    
-			/**
-			if(searchParams.get("EQ_platForm_value")!="" && searchParams.get("EQ_platForm_value")!=null){
-				//查询渠道
-				model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-				model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-				model.addAttribute("platForm",  searchParams.get("EQ_serverZone").toString().equals("all")?platFormService.findAll():platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
-				model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
-				PlatForm platform =  platFormService.findByPfName(searchParams.get("EQ_platForm_value").toString());
-				mTotal = fbUserTotalServer.searchPlatFormUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
-				mAdd = fbUserAddServer.searchPlatFormUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
-			}else if(searchParams.get("EQ_server_value")!="" && searchParams.get("EQ_server_value")!=null){
-				//查询服务器
-				model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-				model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-				model.addAttribute("platForm",  searchParams.get("EQ_serverZone").toString().equals("all")?platFormService.findAll():platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
-				model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
-				Server server = serverService.findByServerId(searchParams.get("EQ_server_value").toString());
-				mTotal = fbUserTotalServer.searchServerUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
-				mAdd = fbUserAddServer.searchServerUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
-			}else{
-				//查询运营大区
-				if(searchParams.get("EQ_serverZone").toString().equals("all")){
-					model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-					model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-					mTotal = fbUserTotalServer.searchAllUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-					mAdd = fbUserAddServer.searchAllUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-					model.addAttribute("platForm", platFormService.findAll());
-					model.addAttribute("server", serverService.findByStoreId(storeId));
-				}else{
-					model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-					model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-					model.addAttribute("platForm",  platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
-					model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
-					mTotal = fbUserTotalServer.searchServerZoneUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
-					mAdd = fbUserAddServer.searchServerZoneUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
-				}
-			}
-			**/
+		   
 		}
-	
-		model.addAttribute("userTotal", mTotal.get("userTotal"));
-		model.addAttribute("tableTotal", mTotal.get("table"));
-		
-		model.addAttribute("userAdd", mAdd.get("userAdd"));
-		model.addAttribute("tableAdd", mAdd.get("table"));
+
+		logger.debug(binder.toJson(mTotal));
+		logger.debug(binder.toJson(mAdd));
+		model.addAttribute("mTotal", binder.toJson(mTotal));
+		model.addAttribute("mAdd", binder.toJson(mAdd));
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);

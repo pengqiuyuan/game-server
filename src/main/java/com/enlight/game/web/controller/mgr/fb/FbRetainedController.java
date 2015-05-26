@@ -3,6 +3,7 @@ package com.enlight.game.web.controller.mgr.fb;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -28,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.web.Servlets;
 
-import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.PlatForm;
 import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
@@ -40,6 +40,7 @@ import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
+import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
 @Controller("RetainedController")
@@ -56,6 +57,8 @@ public class FbRetainedController extends BaseController{
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
 	
+	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
+	
 	@Autowired
 	private ServerZoneService serverZoneService;
 	
@@ -66,7 +69,7 @@ public class FbRetainedController extends BaseController{
 	private PlatFormService platFormService;
 	
 	@Autowired
-	private FbRetainedServer EsRetainedServer;
+	private FbRetainedServer esRetainedServer;
 	
 	@Autowired
 	private AccountService accountService;
@@ -82,98 +85,95 @@ public class FbRetainedController extends BaseController{
 	 */
 	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userRetained", method = RequestMethod.GET)
-	public String userRetained(Model model,ServletRequest request) throws ElasticsearchException, IOException, ParseException{
-		logger.debug("fb user Retained...");
-		model.addAttribute("user", EnumFunction.ENUM_USER);
+	public String userRetained(Model model,ServletRequest request,
+			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
+			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
+			@RequestParam(value = "server", defaultValue = "") String[] sv) throws ElasticsearchException, IOException, ParseException{
+		logger.debug("user add total...");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
+		
+		Map<String, Map<String,Object>> next = new HashMap<String, Map<String,Object>>();
+		Map<String, Map<String,Object>> seven = new HashMap<String, Map<String,Object>>();
+		Map<String, Map<String,Object>> thirty = new HashMap<String, Map<String,Object>>();
 
+		Map<String, Map<String, Object>> n = new HashMap<String, Map<String, Object>>();
 		
-		Map<String, Object> m = new HashMap<String, Object>();
-		
+		List<String> sZones = new ArrayList<String>();
+		List<String> pForms = new ArrayList<String>();
+		List<String> svs = new ArrayList<String>();
+
 		if(searchParams.isEmpty()){
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			m = EsRetainedServer.searchAllRetained(dateFrom, dateTo);
+			n =esRetainedServer.searchAllRetained(dateFrom, dateTo);
+			next.put("所有运营大区", n.get("next"));
+			seven.put("所有运营大区", n.get("seven"));
+			thirty.put("所有运营大区", n.get("thirty"));
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
 		}else{
-			if(searchParams.get("EQ_platForm_value")!="" && searchParams.get("EQ_platForm_value")!=null){
-				//查询渠道
-				model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-				model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-				model.addAttribute("platForm",  searchParams.get("EQ_serverZone").toString().equals("all")?platFormService.findAll():platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
-				model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
-				PlatForm platform =  platFormService.findByPfName(searchParams.get("EQ_platForm_value").toString());
-				m = EsRetainedServer.searchPlatFormRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
-			}else if(searchParams.get("EQ_server_value")!="" && searchParams.get("EQ_server_value")!=null){
-				//查询服务器
-				model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-				model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-				model.addAttribute("platForm",  searchParams.get("EQ_serverZone").toString().equals("all")?platFormService.findAll():platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
-				model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
-				Server server = serverService.findByServerId(searchParams.get("EQ_server_value").toString());
-				m = EsRetainedServer.searchServerRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
-			}else{
-				//查询运营大区
-				if(searchParams.get("EQ_serverZone").toString().equals("all")){
-					model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-					model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-					m = EsRetainedServer.searchAllRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-					model.addAttribute("platForm", platFormService.findAll());
-					model.addAttribute("server", serverService.findByStoreId(storeId));
-				}else{
-					model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-					model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-					model.addAttribute("platForm",  platFormService.findByServerZoneId(searchParams.get("EQ_serverZone").toString()));
-					model.addAttribute("server", searchParams.get("EQ_serverZone").toString().equals("all")?serverService.findByStoreId(storeId):serverService.findByServerZoneIdAndStoreId(searchParams.get("EQ_serverZone").toString(),storeId));
+		    if(sZone != null && sZone.length>0){
+				for (int i = 0; i < sZone.length; i++) {
+					if(sZone[i].equals("all")){
+						sZones.add("所有运营大区");
+						n =esRetainedServer.searchAllRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						next.put("所有运营大区", n.get("next"));
+						seven.put("所有运营大区", n.get("seven"));
+						thirty.put("所有运营大区", n.get("thirty"));
+					}else{
+						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
+						sZones.add(szName);
+						n =esRetainedServer.searchServerZoneRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						next.put(szName, n.get("next"));
+						seven.put(szName, n.get("seven"));
+						thirty.put(szName, n.get("thirty"));
+					}
+
 				}
 			}
+			if(pForm != null && pForm.length>0){
+				for (int i = 0; i < pForm.length; i++) {
+					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
+					pForms.add(pfName);
+					n =esRetainedServer.searchPlatFormRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					next.put(pfName, n.get("next"));
+					seven.put(pfName, n.get("seven"));
+					thirty.put(pfName, n.get("thirty"));
+				}
+			}
+			if(sv != null && sv.length>0){
+				for (int i = 0; i < sv.length; i++) {
+					svs.add(sv[i]);
+					n =esRetainedServer.searchServerRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					next.put(sv[i], n.get("next"));
+					seven.put(sv[i], n.get("seven"));
+					thirty.put(sv[i], n.get("thirty"));
+				}
+			}
+		   
 		}
-		
-		if(searchParams.isEmpty()){
-			String dateFrom = thirtyDayAgoFrom();
-			String dateTo = nowDate();
-			m = EsRetainedServer.searchAllRetained(dateFrom, dateTo);
-			model.addAttribute("dateFrom", dateFrom);
-			model.addAttribute("dateTo", dateTo);
-			logger.debug("查看所有运营大区。。。all" );
-		}else{
-			model.addAttribute("dateFrom", searchParams.get("EQ_dateFrom").toString());
-			model.addAttribute("dateTo", searchParams.get("EQ_dateTo").toString());
-			if(searchParams.get("EQ_value")!="" && searchParams.get("EQ_value")!=null){
-				if(searchParams.get("EQ_category").toString().equals("platForm")){
-					PlatForm platform =  platFormService.findByPfName(searchParams.get("EQ_value").toString());
-					m = EsRetainedServer.searchPlatFormRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), platform.getPfId());
-					logger.debug("查看渠道。。。"+platform.getPfId());
-				}else if(searchParams.get("EQ_category").toString().equals("server")){
-					Server server = serverService.findByServerId(searchParams.get("EQ_value").toString());
-					m = EsRetainedServer.searchServerRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), server.getServerId());
-					logger.debug("查看服务器。。。"+server.getServerId());
-				}
-			}else{
-				if(searchParams.get("EQ_serverZone").toString().equals("all")){
-					m = EsRetainedServer.searchAllRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-					logger.debug("查看所有运营大区。。。all" );
-				}else{
-					m = EsRetainedServer.searchServerZoneRetained(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), searchParams.get("EQ_serverZone").toString());
-					logger.debug("查看运营大区。。。" +searchParams.get("EQ_serverZone").toString());
-				}
-			}
-		}	
-		model.addAttribute("datenext", m.get("datenext"));
-		model.addAttribute("dateSeven", m.get("dateSeven"));
-		model.addAttribute("datethirty", m.get("datethirty"));
-		model.addAttribute("table", m.get("table"));
+
+		logger.debug(binder.toJson(next));
+		logger.debug(binder.toJson(seven));
+		logger.debug(binder.toJson(thirty));
+		model.addAttribute("next", binder.toJson(next));
+		model.addAttribute("seven", binder.toJson(seven));
+		model.addAttribute("thirty", binder.toJson(thirty));
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);
-
+		model.addAttribute("platForm", platFormService.findAll());
+		model.addAttribute("server", serverService.findByStoreId(storeId));
+		
+		model.addAttribute("sZones", sZones);
+		model.addAttribute("pForms", pForms);
+		model.addAttribute("svs", svs);
+		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 		return "/kibana/fb/user/retain";
 	}
