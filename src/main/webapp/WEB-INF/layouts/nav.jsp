@@ -370,6 +370,7 @@
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
 																		<li><a href="${ctx}/manage/fbUserIncome/fb/userIncome">收入分析</a></li>
+																		<li><a href="${ctx}/manage/fbMoneyPayP/fb/moneyPayP">ARPU与ARPPU</a></li>
 																	<li>
 																</ul>
 														</li>

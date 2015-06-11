@@ -35,6 +35,7 @@
 		<pattern>/*manage/fbUserPay*</pattern>
 		<pattern>/*manage/fbUserActive*</pattern>
 		<pattern>/*manage/fbUserIncome*</pattern>
+	    <pattern>/*manage/fbMoneyPayP*</pattern>
 	</decorator>
 	
 </decorators>

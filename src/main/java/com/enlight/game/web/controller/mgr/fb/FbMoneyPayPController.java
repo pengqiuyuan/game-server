@@ -35,6 +35,7 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
+import com.enlight.game.service.es.fb.FbMoneyPayPServer;
 import com.enlight.game.service.es.fb.FbUserActiveServer;
 import com.enlight.game.service.es.fb.FbUserIncomeServer;
 import com.enlight.game.service.platForm.PlatFormService;
@@ -44,11 +45,11 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
-@Controller("FbIncomeController")
-@RequestMapping("/manage/fbUserIncome")
-public class FbIncomeController extends BaseController{
+@Controller("FbMoneyPayPController")
+@RequestMapping("/manage/fbMoneyPayP")
+public class FbMoneyPayPController extends BaseController{
 	
-	private static final Logger logger = LoggerFactory.getLogger(FbIncomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FbMoneyPayPController.class);
 	
 	/**
 	 * 这个controller默认为fb项目的控制层。项目id文档已定
@@ -76,28 +77,29 @@ public class FbIncomeController extends BaseController{
 	private StoreService storeService;
 	
 	@Autowired
-	private FbUserIncomeServer fbUserIncomeServer;
+	private FbMoneyPayPServer fbMoneyPayPServer;
 	
 	/**
-	 * 收入分析 收入金额 充值次数 充值人数
+	 * ARPU(日) ARPU(月) ARPPU(日) ARPPU(月)
 	 * @throws ParseException 
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
 	@RequiresRoles(value = { "admin", "FB_MONEY" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userIncome", method = RequestMethod.GET)
-	public String userActive(Model model,ServletRequest request,
+	@RequestMapping(value = "/fb/moneyPayP", method = RequestMethod.GET)
+	public String userMoneyPayP(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
 			@RequestParam(value = "server", defaultValue = "") String[] sv) throws ElasticsearchException, IOException, ParseException{
-		logger.debug("user income ...");
+		logger.debug("user ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) ...");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
 		
-		Map<String, Map<String,String>> sum = new HashMap<String, Map<String,String>>();
-		Map<String, Map<String,String>> count = new HashMap<String, Map<String,String>>();
-		Map<String, Map<String,String>> peoplenum = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,String>> arpuday = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,String>> arpumouth = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,String>> arppuday = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,String>> arppumouth = new HashMap<String, Map<String,String>>();
 
 		Map<String, Map<String, Object>> n = new HashMap<String, Map<String, Object>>();
 		
@@ -109,9 +111,10 @@ public class FbIncomeController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			sum.put("所有运营大区", fbUserIncomeServer.searchAllIncomesum(dateFrom, dateTo));
-			count.put("所有运营大区", fbUserIncomeServer.searchAllIncomecount(dateFrom, dateTo));
-			peoplenum.put("所有运营大区", fbUserIncomeServer.searchAllIncomepeoplenum(dateFrom, dateTo));
+			arpuday.put("所有运营大区", fbMoneyPayPServer.searchAllArpuDay(dateFrom, dateTo));
+			arpumouth.put("所有运营大区", fbMoneyPayPServer.searchAllArpuMouth(dateFrom, dateTo));
+			arppuday.put("所有运营大区", fbMoneyPayPServer.searchAllArppuDay(dateFrom, dateTo));
+			arppumouth.put("所有运营大区", fbMoneyPayPServer.searchAllArppuMouth(dateFrom, dateTo));
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
@@ -121,15 +124,17 @@ public class FbIncomeController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						sum.put("所有运营大区", fbUserIncomeServer.searchAllIncomesum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						count.put("所有运营大区", fbUserIncomeServer.searchAllIncomecount(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						peoplenum.put("所有运营大区", fbUserIncomeServer.searchAllIncomepeoplenum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						arpuday.put("所有运营大区", fbMoneyPayPServer.searchAllArpuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						arpumouth.put("所有运营大区", fbMoneyPayPServer.searchAllArpuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						arppuday.put("所有运营大区", fbMoneyPayPServer.searchAllArppuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						arppumouth.put("所有运营大区", fbMoneyPayPServer.searchAllArppuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						sum.put(szName, fbUserIncomeServer.searchServerZoneIncomesum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						count.put(szName, fbUserIncomeServer.searchServerZoneIncomecount(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						peoplenum.put(szName, fbUserIncomeServer.searchServerZoneIncomepeoplenum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						arpuday.put(szName, fbMoneyPayPServer.searchServerZoneArpuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						arpumouth.put(szName, fbMoneyPayPServer.searchServerZoneArpuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						arppuday.put(szName, fbMoneyPayPServer.searchServerZoneArppuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						arppumouth.put(szName, fbMoneyPayPServer.searchServerZoneArppuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
 					}
 
 				}
@@ -138,28 +143,32 @@ public class FbIncomeController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					sum.put(pfName, fbUserIncomeServer.searchPlatFormIncomesum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					count.put(pfName, fbUserIncomeServer.searchPlatFormIncomecount(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					peoplenum.put(pfName, fbUserIncomeServer.searchPlatFormIncomepeople(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					arpuday.put(pfName, fbMoneyPayPServer.searchPlatFormArpuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					arpumouth.put(pfName, fbMoneyPayPServer.searchPlatFormArpuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					arppuday.put(pfName, fbMoneyPayPServer.searchPlatFormArppuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					arppumouth.put(pfName, fbMoneyPayPServer.searchPlatFormArppuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
 				}
 			}
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					sum.put(sv[i], fbUserIncomeServer.searchServerIncomesum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					count.put(sv[i], fbUserIncomeServer.searchServerIncomecount(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					peoplenum.put(sv[i], fbUserIncomeServer.searchServerIncomepeoplenum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					arpuday.put(sv[i], fbMoneyPayPServer.searchServerArpuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					arpumouth.put(sv[i], fbMoneyPayPServer.searchServerArpuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					arppuday.put(sv[i], fbMoneyPayPServer.searchServerArppuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					arppumouth.put(sv[i], fbMoneyPayPServer.searchServerArppuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
 				}
 			}
 		   
 		}
 
-		logger.debug(binder.toJson(sum));
-		logger.debug(binder.toJson(count));
-		logger.debug(binder.toJson(peoplenum));
-		model.addAttribute("next", binder.toJson(sum));
-		model.addAttribute("seven", binder.toJson(count));
-		model.addAttribute("thirty", binder.toJson(peoplenum));
+		logger.debug(binder.toJson(arpuday));
+		logger.debug(binder.toJson(arpumouth));
+		logger.debug(binder.toJson(arppuday));
+		logger.debug(binder.toJson(arppumouth));
+		model.addAttribute("arpuday", binder.toJson(arpuday));
+		model.addAttribute("arpumouth", binder.toJson(arpumouth));
+		model.addAttribute("arppuday", binder.toJson(arppuday));
+		model.addAttribute("arppumouth", binder.toJson(arppumouth));
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);
@@ -171,7 +180,7 @@ public class FbIncomeController extends BaseController{
 		model.addAttribute("svs", svs);
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/user/userIncome";
+		return "/kibana/fb/money/moneyPayP";
 	}
 	
 	

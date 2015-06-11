@@ -19,6 +19,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -544,7 +545,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		bulkRequest.execute().actionGet();	
 	}
 	
-	@Test
+	//@Test
 	public void testmouthserverzone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
@@ -645,7 +646,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		
 	}
 	
-	@Test
+	//@Test
 	public void testmouthplatform() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
@@ -879,5 +880,22 @@ public class EsPayPTest extends SpringTransactionalTestCase{
         
 	}	
 	
-	
+	@Test
+	public void te(){
+		System.out.println("2015-03-14".substring(0,7));
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from("2015-03-14".substring(0,7)).to("2015-05-14".substring(0,7)),
+                		FilterBuilders.termFilter("key", "all"))
+                		);
+		SearchResponse response = client.prepareSearch("log_fb_money")
+		        .setTypes("fb_money_arpu_mouth")
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setQuery(builder)
+		        .addSort("date", SortOrder.ASC)
+		        .setFrom(0).setSize(30).setExplain(true)
+		        .execute()
+		        .actionGet();	
+		System.out.println(response);
+	}
 }
