@@ -206,7 +206,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币获取次数［人物等级］"
+          "title": "虚拟币消耗次数［人物等级］"
         },
         {
           "error": false,
@@ -239,7 +239,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币获取次数［人物等级］"
+          "title": "虚拟币消耗次数［人物等级］"
         },
         {
           "error": false,
@@ -272,7 +272,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币获取次数［人物等级］"
+          "title": "虚拟币消耗次数［人物等级］"
         },
         {
           "error": false,
@@ -503,7 +503,7 @@
           "tmode": "terms_stats",
           "tstat": "total",
           "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［获取途径］"
+          "title": "虚拟币消耗总值［消耗途径］"
         },
         {
           "error": false,
@@ -536,7 +536,7 @@
           "tmode": "terms_stats",
           "tstat": "total",
           "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［获取途径］"
+          "title": "虚拟币消耗总值［消耗途径］"
         },
         {
           "error": false,
@@ -569,7 +569,7 @@
           "tmode": "terms_stats",
           "tstat": "total",
           "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［获取途径］"
+          "title": "虚拟币消耗总值［消耗途径］"
         },
         {
           "error": false,

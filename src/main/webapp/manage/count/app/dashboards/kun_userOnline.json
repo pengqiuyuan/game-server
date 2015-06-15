@@ -37,7 +37,7 @@
       ]
     }
   },
-  "rows": [
+   "rows": [
     {
       "title": "当前在线人数",
       "height": "350px",
@@ -96,12 +96,12 @@
             "1w",
             "1y"
           ],
-          "lines": true,
+          "lines": false,
           "fill": 0,
           "linewidth": 3,
           "points": false,
           "pointradius": 5,
-          "bars": false,
+          "bars": true,
           "stack": false,
           "threshold": false,
           "spyable": true,
@@ -134,7 +134,7 @@
             "当前在线人数",
             "desc"
           ],
-          "overflow": "min-height",
+          "overflow": "height",
           "fields": [
             "_type",
             "@timestamp",
@@ -168,6 +168,105 @@
           },
           "normTimes": true,
           "title": "单位时间在线用户"
+        },
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "日期",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "mean",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "pie",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms_stats",
+          "tstat": "mean",
+          "valuefield": "当前在线人数",
+          "title": "在线人数（当前在线人数）"
+        },
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "日期",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "mean",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "bar",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms_stats",
+          "tstat": "mean",
+          "valuefield": "当前在线人数",
+          "title": "在线人数（当前在线人数）"
+        },
+        {
+          "error": false,
+          "span": 4,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "日期",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "mean",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "table",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms_stats",
+          "tstat": "mean",
+          "valuefield": "当前在线人数",
+          "title": "在线人数（当前在线人数）"
         }
       ],
       "notice": false
@@ -204,8 +303,7 @@
       "generate": false,
       "query": "*",
       "pinned": true,
-      "history": [
-      ],
+      "history": [],
       "remember": 10
     },
     {

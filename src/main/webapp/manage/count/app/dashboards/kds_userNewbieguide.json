@@ -1,7 +1,7 @@
 {
-  "title": "在线用户",
+  "title": "新手引导",
   "role": "28",
-  "game": "kds",
+  "game": "fb",
   "services": {
     "query": {
       "list": {
@@ -12,7 +12,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "online"
+          "query": "newbieguide"
         }
       },
       "ids": [
@@ -39,20 +39,21 @@
   },
    "rows": [
     {
-      "title": "当前在线人数",
+      "title": "新手引导",
       "height": "350px",
       "editable": true,
       "collapse": false,
       "collapsable": true,
+      "notice": false,
       "panels": [
         {
           "span": 12,
           "editable": true,
           "type": "histogram",
           "loadingEditor": false,
-          "mode": "mean",
+          "mode": "count",
           "time_field": "@timestamp",
-          "value_field": "当前在线人数",
+          "value_field": null,
           "x-axis": true,
           "y-axis": true,
           "scale": 1,
@@ -96,13 +97,13 @@
             "1w",
             "1y"
           ],
-          "lines": false,
+          "lines": true,
           "fill": 0,
           "linewidth": 3,
           "points": false,
           "pointradius": 5,
-          "bars": true,
-          "stack": false,
+          "bars": false,
+          "stack": true,
           "threshold": false,
           "spyable": true,
           "zoomlinks": true,
@@ -119,7 +120,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间在线用户线形图"
+          "title": "单位时间新手引导次数"
         },
         {
           "error": false,
@@ -127,14 +128,14 @@
           "editable": true,
           "type": "table",
           "loadingEditor": false,
-          "size": 25,
-          "pages": 20,
+          "size": 100,
+          "pages": 5,
           "offset": 0,
           "sort": [
-            "当前在线人数",
+            "_score",
             "desc"
           ],
-          "overflow": "height",
+          "overflow": "min-height",
           "fields": [
             "_type",
             "@timestamp",
@@ -144,7 +145,9 @@
             "渠道ID",
             "服务器ID",
             "日志分类关键字",
-            "当前在线人数"
+            "角色ID",
+            "角色等级",
+            "功能编号"
           ],
           "highlight": [],
           "sortable": true,
@@ -167,20 +170,20 @@
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "单位时间在线用户"
+          "title": "新手引导"
         },
         {
           "error": false,
-          "span": 4,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "日期",
+          "field": "角色等级",
           "exclude": [],
           "missing": false,
           "other": false,
           "size": 10,
-          "order": "mean",
+          "order": "count",
           "style": {
             "font-size": "10pt"
           },
@@ -197,23 +200,23 @@
               0
             ]
           },
-          "tmode": "terms_stats",
-          "tstat": "mean",
-          "valuefield": "当前在线人数",
-          "title": "在线人数（当前在线人数）"
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "新手引导次数（角色等级）角色完成引导时等级"
         },
         {
           "error": false,
-          "span": 4,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "日期",
+          "field": "角色等级",
           "exclude": [],
           "missing": false,
           "other": false,
           "size": 10,
-          "order": "mean",
+          "order": "count",
           "style": {
             "font-size": "10pt"
           },
@@ -230,23 +233,23 @@
               0
             ]
           },
-          "tmode": "terms_stats",
-          "tstat": "mean",
-          "valuefield": "当前在线人数",
-          "title": "在线人数（当前在线人数）"
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "新手引导次数（角色等级）角色完成引导时等级"
         },
         {
           "error": false,
-          "span": 4,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "日期",
+          "field": "角色等级",
           "exclude": [],
           "missing": false,
           "other": false,
           "size": 10,
-          "order": "mean",
+          "order": "count",
           "style": {
             "font-size": "10pt"
           },
@@ -263,13 +266,111 @@
               0
             ]
           },
-          "tmode": "terms_stats",
-          "tstat": "mean",
-          "valuefield": "当前在线人数",
-          "title": "在线人数（当前在线人数）"
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "新手引导次数（角色等级）角色完成引导时等级"
+        },
+        {
+          "error": false,
+          "span": 2,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "功能编号",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "pie",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "新手引导次数（功能编号）角色完成新手引导的功能编号"
+        },
+        {
+          "error": false,
+          "span": 2,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "功能编号",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "bar",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "新手引导次数（功能编号）角色完成新手引导的功能编号"
+        },
+        {
+          "error": false,
+          "span": 2,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "功能编号",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "table",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "新手引导次数（功能编号）角色完成新手引导的功能编号"
         }
-      ],
-      "notice": false
+      ]
     }
   ],
   "editable": true,

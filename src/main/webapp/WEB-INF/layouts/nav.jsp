@@ -309,11 +309,8 @@
 													  <li class="dropdown-submenu">
 										                    <a tabindex="-1" href="#">用户相关日志</a>
 											                <ul class="dropdown-menu">
-											                  <li class="dropdown-submenu">
+											                  <li>
 											                  	<a tabindex="-1" href="${ctx}/manage/count/fbUser#/dashboard/file/fb_user.json">用户相关日志(总)</a>
-											                    <ul class="dropdown-menu">
-												                  <li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
-												                </ul>
 											                  </li>
 											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userLogin.json">用户登录</a></li>
 											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userCreate.json">用户创建</a></li>
