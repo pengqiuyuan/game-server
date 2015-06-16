@@ -283,22 +283,22 @@ function (angular, app, _, $, kbn) {
 	            				dt = dat;
 	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 	            		});
-	              		slice = { name : td,label : v.term, data : [[k,v.count]], actions: true};
+	              		slice = { label : dt, data : [[k,v.count]], actions: true};
             	  }else if(scope.panel.field==="服务器ID"){
                       if(game === "fb"){
-                    	  slice = { name : "fb_s"+v.term, label : v.term, data : [[k,v.count]], actions: true};
+                    	  slice = { label : "fb_s"+v.term, data : [[k,v.count]], actions: true};
 	      	          }else if(game === "kds"){
-	      	        	  slice = { name : "fb_s"+v.term, label : v.term, data : [[k,v.count]], actions: true};
+	      	        	  slice = { label : "kds_s"+v.term, data : [[k,v.count]], actions: true};
 	      	          }else if(game ==="kun"){
-	      	        	  slice = { name : "fb_s"+v.term, label : v.term, data : [[k,v.count]], actions: true};
+	      	        	  slice = { label : "kds_s"+v.term, data : [[k,v.count]], actions: true};
 	      	          }
             	  }else if(scope.panel.field==="人物等级"||scope.panel.field==="角色等级"){
-            		  slice = { name : v.term+'级', label : v.term, data : [[k,v.count]], actions: true};
+            		  slice = { label : v.term+'级', data : [[k,v.count]], actions: true};
             	  }else if(scope.panel.field==="支付货币"){
             		  if(v.term=='1'){
-            			slice = { name : '人民币',  label : v.term, data : [[k,v.count]], actions: true};
+            			slice = { label : '人民币', data : [[k,v.count]], actions: true};
             		  }else if(v.term=='2'){
-            			slice = { name : '美元',  label : v.term, data : [[k,v.count]], actions: true};
+            			slice = { label : '美元', data : [[k,v.count]], actions: true};
             		  }
             	  }else if(scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号"){
 	          		  	var dt ="";
@@ -313,10 +313,10 @@ function (angular, app, _, $, kbn) {
 	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 	            		});
 	              		console.log(dt);
-	              		slice = { name : dt,  label : v.term, data : [[k,v.count]], actions: true};
+	              		slice = { label : dt, data : [[k,v.count]], actions: true};
             	  }
             	  else{
-            		  slice = { name : v.term,  label : v.term, data : [[k,v.count]], actions: true};
+            		  slice = { label : v.term, data : [[k,v.count]], actions: true};
             	  }
           
             }
@@ -333,24 +333,24 @@ function (angular, app, _, $, kbn) {
 	            				dt = dat;
 	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 	            		});
-	                    slice = { name : dt,  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	                    slice = { label : dt, data : [[k,v[scope.panel.tstat]]], actions: true};
             	  }
             	  else if(scope.panel.field==="服务器ID"){
                       if(game === "fb"){
-                    	  slice = { name : "fb_s"+v.term,  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+                    	  slice = { label : "fb_s"+v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
 	      	          }else if(game === "kds"){
-	      	        	  slice = { name : "kds_s"+v.term,  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	      	        	  slice = { label : "kds_s"+v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
 	      	          }else if(game ==="kun"){
-	      	        	  slice = { name : "kds_s"+v.term,  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	      	        	  slice = { label : "kds_s"+v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
 	      	          }
             	  }
             	  else if(scope.panel.field==="人物等级"||scope.panel.field==="角色等级"){
-            		  slice = { name : v.term+'级',  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+            		  slice = { label : v.term+'级', data : [[k,v[scope.panel.tstat]]], actions: true};
             	  }else if(scope.panel.field==="支付货币"){
             		  if(v.term=='1'){
-	              			slice = { name : '人民币',  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	              			slice = { label : '人民币', data : [[k,v[scope.panel.tstat]]], actions: true};
 	              		  }else if(v.term=='2'){
-	              			slice = { name : '美元',  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	              			slice = { label : '美元', data : [[k,v[scope.panel.tstat]]], actions: true};
 	              	  }
 	              }else if(scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号"){
 	          		  	var dt ="";
@@ -364,10 +364,10 @@ function (angular, app, _, $, kbn) {
 	            				dt = dat;
 	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 	            		});
-	              		slice = { name : dt,  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	              		slice = { label : dt, data : [[k,v[scope.panel.tstat]]], actions: true};
             	  }
             	  else{
-                    slice = { name : v.term,  label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+                    slice = { label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
             	  }
             }
             scope.data.push(slice);
