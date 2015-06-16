@@ -20,11 +20,14 @@ define([
 ],
 function (angular, app, _, $, kbn) {
   'use strict';
-
+  
   var module = angular.module('kibana.panels.terms', []);
   app.useModule(module);
 
+  var game;
+  
   module.controller('terms', function($scope, querySrv, dashboard, filterSrv, fields) {
+	game  = dashboard.current.game; 
     $scope.panelMeta = {
       modals : [
         {
@@ -268,10 +271,104 @@ function (angular, app, _, $, kbn) {
           _.each(scope.results.facets.terms.terms, function(v) {
             var slice;
             if(scope.panel.tmode === 'terms') {
-              slice = { label : v.term, data : [[k,v.count]], actions: true};
+            	  if(scope.panel.field==="运营大区ID" ||scope.panel.field==="渠道ID"){
+            		  	var dt ="";
+	              		$.ajax({                                               
+	            			url: '/game-server/manage/count/findValue?name='+scope.panel.field+'&key=' + v.term + '&game=' + game, 
+	            			type: 'GET',
+	            			contentType: "application/json;charset=UTF-8",		
+	            			dataType: 'text',
+	            			async : false,
+	            			success: function(dat){
+	            				dt = dat;
+	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+	            		});
+	              		slice = { label : dt, data : [[k,v.count]], actions: true};
+            	  }else if(scope.panel.field==="服务器ID"){
+                      if(game === "fb"){
+                    	  slice = { label : "fb_s"+v.term, data : [[k,v.count]], actions: true};
+	      	          }else if(game === "kds"){
+	      	        	  slice = { label : "kds_s"+v.term, data : [[k,v.count]], actions: true};
+	      	          }else if(game ==="kun"){
+	      	        	  slice = { label : "kds_s"+v.term, data : [[k,v.count]], actions: true};
+	      	          }
+            	  }else if(scope.panel.field==="人物等级"||scope.panel.field==="角色等级"){
+            		  slice = { label : v.term+'级', data : [[k,v.count]], actions: true};
+            	  }else if(scope.panel.field==="支付货币"){
+            		  if(v.term=='1'){
+            			slice = { label : '人民币', data : [[k,v.count]], actions: true};
+            		  }else if(v.term=='2'){
+            			slice = { label : '美元', data : [[k,v.count]], actions: true};
+            		  }
+            	  }else if(scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号"){
+	          		  	var dt ="";
+	              		$.ajax({                                               
+	            			url: '/game-server/manage/count/findValue?name='+scope.panel.field+'&key=' + v.term + '&game=' + game, 
+	            			type: 'GET',
+	            			contentType: "application/json;charset=UTF-8",		
+	            			dataType: 'text',
+	            			async : false,
+	            			success: function(dat){
+	            				dt = dat;
+	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+	            		});
+	              		console.log(dt);
+	              		slice = { label : dt, data : [[k,v.count]], actions: true};
+            	  }
+            	  else{
+            		  slice = { label : v.term, data : [[k,v.count]], actions: true};
+            	  }
+          
             }
             if(scope.panel.tmode === 'terms_stats') {
-              slice = { label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+            	  if(scope.panel.field==="运营大区ID" ||scope.panel.field==="渠道ID"){
+            		  	var dt ="";
+	              		$.ajax({                                               
+	            			url: '/game-server/manage/count/findValue?name='+scope.panel.field+'&key=' + v.term + '&game=' + game, 
+	            			type: 'GET',
+	            			contentType: "application/json;charset=UTF-8",		
+	            			dataType: 'text',
+	            			async : false,
+	            			success: function(dat){
+	            				dt = dat;
+	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+	            		});
+	                    slice = { label : dt, data : [[k,v[scope.panel.tstat]]], actions: true};
+            	  }
+            	  else if(scope.panel.field==="服务器ID"){
+                      if(game === "fb"){
+                    	  slice = { label : "fb_s"+v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	      	          }else if(game === "kds"){
+	      	        	  slice = { label : "kds_s"+v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	      	          }else if(game ==="kun"){
+	      	        	  slice = { label : "kds_s"+v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+	      	          }
+            	  }
+            	  else if(scope.panel.field==="人物等级"||scope.panel.field==="角色等级"){
+            		  slice = { label : v.term+'级', data : [[k,v[scope.panel.tstat]]], actions: true};
+            	  }else if(scope.panel.field==="支付货币"){
+            		  if(v.term=='1'){
+	              			slice = { label : '人民币', data : [[k,v[scope.panel.tstat]]], actions: true};
+	              		  }else if(v.term=='2'){
+	              			slice = { label : '美元', data : [[k,v[scope.panel.tstat]]], actions: true};
+	              	  }
+	              }else if(scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号"){
+	          		  	var dt ="";
+	              		$.ajax({                                               
+	            			url: '/game-server/manage/count/findValue?name='+scope.panel.field+'&key=' + v.term + '&game=' + game, 
+	            			type: 'GET',
+	            			contentType: "application/json;charset=UTF-8",		
+	            			dataType: 'text',
+	            			async : false,
+	            			success: function(dat){
+	            				dt = dat;
+	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+	            		});
+	              		slice = { label : dt, data : [[k,v[scope.panel.tstat]]], actions: true};
+            	  }
+            	  else{
+                    slice = { label : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+            	  }
             }
             scope.data.push(slice);
             k = k + 1;

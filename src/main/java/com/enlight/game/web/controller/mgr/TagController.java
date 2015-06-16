@@ -96,6 +96,7 @@ public class TagController {
 			HttpServletRequest request, HttpServletResponse response,  RedirectAttributes redirectAttributes) throws IOException, AppBizException {
 		String category = request.getParameter("category");
 		String storeId = request.getParameter("gameId");
+		Stores store = storeService.findById(Long.valueOf(storeId));
 		ModelAndView mav=new ModelAndView();
 		logger.debug("上传标签文件..."+ file.getName()  +  "  " + file.getOriginalFilename());
 		HSSFWorkbook wb = new HSSFWorkbook(file.getInputStream());
@@ -113,6 +114,7 @@ public class TagController {
 							ta.setTagId(tag.getTagId());
 							ta.setCategory(category);
 							ta.setStoreId(storeId);
+							ta.setStoreName(store.getName());
 							tagService.update(ta);
 							giftPropsService.update(ta); //更新项目道具
 							tagsUpdate.add(ta);
@@ -120,6 +122,7 @@ public class TagController {
 					}
 				}else{
 					tag.setStoreId(storeId);
+					tag.setStoreName(store.getName());
 					tag.setCategory(category);
 					tagService.save(tag);
 					tagsAdd.add(tag);

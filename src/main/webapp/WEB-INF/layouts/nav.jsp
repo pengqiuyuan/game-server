@@ -101,6 +101,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
+								               <!-- 
 								               <shiro:hasAnyRoles name="admin,KUN_AP">
 								               <li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">体力日志</a>
@@ -111,6 +112,7 @@
 									                </ul>
 								               </li>
 												</shiro:hasAnyRoles>
+												 -->
 											   <shiro:hasAnyRoles name="admin,KUN_MONEY">
 														<li class="dropdown-submenu">
 										                    <a tabindex="-1" href="#">真实充值币日志</a>
@@ -173,6 +175,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
+								               <!--  
 								               <shiro:hasAnyRoles name="admin,KDS_AP">
 								               <li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">体力日志</a>
@@ -183,6 +186,7 @@
 									                </ul>
 								               </li>
 												</shiro:hasAnyRoles>
+												-->
 											   <shiro:hasAnyRoles name="admin,KDS_MONEY">
 														<li class="dropdown-submenu">
 										                    <a tabindex="-1" href="#">真实充值币日志</a>
@@ -245,6 +249,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
+								               <!--  
 								               <shiro:hasAnyRoles name="admin,FB_AP">
 								               <li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">体力日志</a>
@@ -255,6 +260,7 @@
 									                </ul>
 								               </li>
 												</shiro:hasAnyRoles>
+												-->
 												<shiro:hasAnyRoles name="admin,FB_MONEY">
 														<li class="dropdown-submenu">
 										                    <a tabindex="-1" href="#">真实充值币日志</a>
@@ -285,6 +291,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
+								               <!--  
 								               <shiro:hasAnyRoles name="admin,FB_ARENACOIN">
 								               <li class="dropdown-submenu">
 								                    <a tabindex="-1" href="#">竞技场徽章(货币)日志</a>
@@ -305,6 +312,7 @@
 									                </ul>
 								               </li>
 								               </shiro:hasAnyRoles>
+								                -->
 												<shiro:hasAnyRoles name="admin,FB_USER">
 													  <li class="dropdown-submenu">
 										                    <a tabindex="-1" href="#">用户相关日志</a>

@@ -37,7 +37,7 @@
       ]
     }
   },
-  "rows": [
+   "rows": [
     {
       "title": "00",
       "height": "350px",
@@ -100,7 +100,7 @@
           },
           "auto_int": true,
           "resolution": 100,
-          "interval": "10m",
+          "interval": "1h",
           "intervals": [
             "auto",
             "1s",
@@ -215,7 +215,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "bar",
+          "chart": "pie",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -433,39 +433,6 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "geoip.city_name",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "真实币获得（国家分布）"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
           "field": "geoip.real_region_name",
           "exclude": [],
           "missing": false,
@@ -479,40 +446,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "真实币获得（省分布）"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "geoip.real_region_name",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
+          "chart": "pie",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -545,40 +479,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "真实币获得（市分布）"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "geoip.city_name",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
+          "chart": "pie",
           "counter_pos": "above",
           "spyable": true,
           "queries": {

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.print.attribute.standard.Severity;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,8 @@ public class ServerZoneService {
 	
 	@Autowired
 	private AccountService accountService;
+	
+
 	
 	public List<Long> findServerId(){
 		return serverZoneDao.findServerId();

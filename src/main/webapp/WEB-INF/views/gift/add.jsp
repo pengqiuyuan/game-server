@@ -299,7 +299,7 @@ line-height: 30px;
 	        var endDoingDate=$("#endD").val();
 	        var startTime = new Date(doingDate).getTime();
 	        var endTime = new Date(endDoingDate).getTime();
-	         if(!endDoingDate.length==0){
+	         if(!endDoingDate.length=0){
 	        	 if(startTime>endTime){
 	             	$("#time").show();
 	             	return false;

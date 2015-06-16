@@ -168,9 +168,6 @@ public class GiftPropsController extends BaseController{
 		 return SUCCESS_RESULT;
 	}
 	
-	/**
-	 * Ajax请求校验loginName是否唯一。
-	 */
 	@RequestMapping(value = "/checkTagId")
 	@ResponseBody
 	public String checkLoginName(@RequestParam("fieldValue") String fieldValue

@@ -1,21 +1,33 @@
 package com.enlight.game.web.controller.mgr;
 
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.EnumFunction;
+import com.enlight.game.entity.PlatForm;
+import com.enlight.game.entity.Server;
+import com.enlight.game.entity.ServerZone;
+import com.enlight.game.entity.Tag;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.platForm.PlatFormService;
+import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
+import com.enlight.game.service.tag.TagService;
 import com.enlight.game.web.controller.mgr.BaseController;
 
 
@@ -36,11 +48,18 @@ public class CountController extends BaseController{
 	
 	private static final String GAME_KDS = "kds";
 	
+	
 	@Autowired
 	private ServerZoneService serverZoneService;
 	
 	@Autowired
 	private PlatFormService platFormService;
+	
+	@Autowired
+	private ServerService serverService;
+	
+	@Autowired
+	private TagService tagService;
 	
 	/**
 	 * 道具日志
@@ -324,5 +343,59 @@ public class CountController extends BaseController{
 		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		return user;
 	}
+	
+	/**
+	 * 返回key对应value
+	 * @return
+	 * @throws AppBizException
+	 */
+	@RequestMapping(value="/findValue",method=RequestMethod.GET)	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String findValue(@RequestParam(value="name") String name
+			,@RequestParam(value="key") String key
+			,@RequestParam(value="game") String game) throws AppBizException{
+		String value = "";
+		try {
+			if(name.equals("运营大区ID")){
+				ServerZone s =  serverZoneService.findById(Long.valueOf(key));
+				if(s != null){
+					value = s.getServerName();
+				}else{value = key;}
+			}else if(name.equals("渠道ID")){
+				PlatForm p = platFormService.findByPfId(key);
+				if(p!=null){
+					value = p.getPfName();
+				}else{value=key;}
+			}else if(name.equals("获得途径")||name.equals("消耗途径")||name.equals("日志道具id")){
+				List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreName(Long.valueOf(key),Tag.CATEGORY_ITEM,game.toUpperCase());
+				if(!tags.isEmpty()){
+					value = tags.get(0).getTagName();
+				}else{
+					value = key;
+				}
+			}else if(name.equals("功能编号")){ //新手引导
+				List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreName(Long.valueOf(key),Tag.CATEGORY_NEWPLAYER_GUIDE,game.toUpperCase());
+				if(!tags.isEmpty()){
+					value = tags.get(0).getTagName();
+				}else{
+					value = key;
+				}
+			}
+			return value;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return key;
+		}
+	}
 
+	@RequestMapping(value="/findNewGuide",method=RequestMethod.GET)	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public String findNewGuide(@RequestParam(value="name") String name
+			,@RequestParam(value="key") String key
+			,@RequestParam(value="game") String game) throws AppBizException{
+		String value = "";
+		return value;
+	}
 }

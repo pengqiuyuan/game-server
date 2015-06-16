@@ -10,8 +10,11 @@ import javax.persistence.Table;
 @Table(name="game_tag")
 public class Tag {
 	
-	//道具
+	//道具 获得途径
 	public static final String CATEGORY_ITEM = "1";
+	
+	//新手引导
+	public static final String CATEGORY_NEWPLAYER_GUIDE  = "2";
 
 	private Long id;
 	
@@ -25,6 +28,8 @@ public class Tag {
 	private String category;
 	
 	private String storeId;
+	
+	private String storeName;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,5 +72,14 @@ public class Tag {
 	public void setStoreId(String storeId) {
 		this.storeId = storeId;
 	}
+
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+	
 	
 }
