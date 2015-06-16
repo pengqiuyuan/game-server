@@ -1,7 +1,7 @@
 {
-  "title": "虚拟充值币消耗",
-  "role": "24",
-  "game": "kun",
+  "title": "道具消耗",
+  "role": "22",
+  "game": "fb",
   "services": {
     "query": {
       "list": {
@@ -12,7 +12,7 @@
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "dummy_cost"
+          "query": "item_cost"
         }
       },
       "ids": [
@@ -37,7 +37,7 @@
       ]
     }
   },
-   "rows": [
+  "rows": [
     {
       "title": "00",
       "height": "350px",
@@ -66,7 +66,7 @@
             "check": [],
             "threshold": {},
             "ids": [
-              1
+              0
             ]
           },
           "annotate": {
@@ -119,7 +119,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间虚拟充值币消耗次数"
+          "title": "单位时间道具消耗次数"
         },
         {
           "error": false,
@@ -147,10 +147,10 @@
             "玩家GUID",
             "玩家名字",
             "日志分类关键字",
-            "消耗途径",
             "二级消耗途径",
-            "减少的虚拟币数量",
-            "人物等级"
+            "消耗途径",
+            "日志道具id",
+            "消耗的道具数量"
           ],
           "highlight": [],
           "sortable": true,
@@ -166,22 +166,22 @@
           "queries": {
             "mode": "all",
             "ids": [
-              1
+              0
             ]
           },
           "style": {
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "虚拟充值币消耗"
+          "title": "道具消耗"
         },
-                {
+        {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "人物等级",
+          "field": "日志道具id",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -206,15 +206,15 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［人物等级］"
+          "title": "道具消耗次数［日志道具ID］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "人物等级",
+          "field": "日志道具id",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -239,15 +239,15 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［人物等级］"
+          "title": "道具消耗次数［日志道具ID］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "人物等级",
+          "field": "日志道具id",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -272,86 +272,20 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［人物等级］"
+          "title": "道具消耗次数［日志道具ID］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "人物等级",
+          "field": "日志道具id",
           "exclude": [],
           "missing": false,
           "other": false,
           "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［人物等级］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "人物等级",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［人物等级］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "人物等级",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
+          "order": "total",
           "style": {
             "font-size": "10pt"
           },
@@ -370,12 +304,12 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［人物等级］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［日志道具ID］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -404,11 +338,11 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［消耗途径］"
+          "title": "道具消耗次数［消耗途径］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -437,11 +371,11 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［消耗途径］"
+          "title": "道具消耗次数［消耗途径］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -470,11 +404,11 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［消耗途径］"
+          "title": "道具消耗次数［消耗途径］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -491,7 +425,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "pie",
+          "chart": "table",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -502,16 +436,115 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［消耗途径］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［消耗途径］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "消耗途径",
+          "field": "运营大区ID",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "pie",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "道具消耗次数［运营大区］"
+        },
+        {
+          "error": false,
+          "span": 3,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "运营大区ID",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "bar",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "道具消耗次数［运营大区］"
+        },
+        {
+          "error": false,
+          "span": 3,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "运营大区ID",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "count",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "table",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms",
+          "tstat": "total",
+          "valuefield": "",
+          "title": "道具消耗次数［运营大区］"
+        },
+        {
+          "error": false,
+          "span": 3,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "运营大区ID",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -524,39 +557,6 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［消耗途径］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "消耗途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
           "chart": "table",
           "counter_pos": "above",
           "spyable": true,
@@ -568,408 +568,12 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［消耗途径］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［运营大区］"
         },
         {
           "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级消耗途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "虚拟币消耗次数［二级消耗途径］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级消耗途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "虚拟币消耗次数［二级消耗途径］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级消耗途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "虚拟币消耗次数［二级消耗途径］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级消耗途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［二级消耗途径］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级消耗途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［二级消耗途径］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级消耗途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［二级消耗途径］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "虚拟币消耗次数［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "虚拟币消耗次数［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "虚拟币消耗次数［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -998,110 +602,11 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［渠道排名］"
+          "title": "道具消耗次数［渠道］"
         },
         {
           "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "渠道ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "虚拟币消耗次数［渠道排名］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "渠道ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "虚拟币消耗次数［渠道排名］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "渠道ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［渠道排名］"
-        },
-        {
-          "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -1127,14 +632,14 @@
               0
             ]
           },
-          "tmode": "terms_stats",
+          "tmode": "terms",
           "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［渠道排名］"
+          "valuefield": "",
+          "title": "道具消耗次数［渠道］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -1160,14 +665,47 @@
               0
             ]
           },
-          "tmode": "terms_stats",
+          "tmode": "terms",
           "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［渠道排名］"
+          "valuefield": "",
+          "title": "道具消耗次数［渠道］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "渠道ID",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "total",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
+          "chart": "table",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms_stats",
+          "tstat": "total",
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［渠道］"
+        },
+        {
+          "error": false,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -1196,11 +734,11 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［服务器］"
+          "title": "道具消耗次数［服务器］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -1229,11 +767,11 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［服务器］"
+          "title": "道具消耗次数［服务器］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -1262,11 +800,11 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "虚拟币消耗次数［服务器］"
+          "title": "道具消耗次数［服务器］"
         },
         {
           "error": false,
-          "span": 2,
+          "span": 3,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -1275,73 +813,7 @@
           "missing": false,
           "other": false,
           "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［服务器］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "服务器ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［服务器］"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "服务器ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
+          "order": "total",
           "style": {
             "font-size": "10pt"
           },
@@ -1360,8 +832,8 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "减少的虚拟币数量",
-          "title": "虚拟币消耗总值［服务器］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［服务器］"
         }
       ],
       "notice": false
@@ -1371,7 +843,7 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-kun-]YYYY.MM",
+    "pattern": "[logstash-fb-]YYYY.MM",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED",
     "warm_fields": true
   },
@@ -1395,7 +867,7 @@
           "input": ""
         }
       ],
-      "generate": true,
+      "generate": false,
       "query": "*",
       "pinned": true,
       "history": [],

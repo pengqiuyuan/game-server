@@ -1,18 +1,18 @@
 {
-  "title": "道具获取",
+  "title": "道具消耗",
   "role": "22",
-  "game": "fb",
+  "game": "kun",
   "services": {
     "query": {
       "list": {
         "0": {
-          "query": "item_get",
-          "alias": "",
-          "color": "#7EB26D",
           "id": 0,
+          "color": "#7EB26D",
+          "alias": "",
           "pin": false,
           "type": "lucene",
-          "enable": true
+          "enable": true,
+          "query": "item_cost"
         }
       },
       "ids": [
@@ -119,7 +119,7 @@
             "value_type": "cumulative",
             "query_as_alias": true
           },
-          "title": "单位时间道具获取次数"
+          "title": "单位时间道具消耗次数"
         },
         {
           "error": false,
@@ -147,10 +147,10 @@
             "玩家GUID",
             "玩家名字",
             "日志分类关键字",
+            "二级消耗途径",
+            "消耗途径",
             "日志道具id",
-            "获得途径",
-            "二级获得途径",
-            "增加的道具数量"
+            "消耗的道具数量"
           ],
           "highlight": [],
           "sortable": true,
@@ -173,7 +173,7 @@
             "font-size": "9pt"
           },
           "normTimes": true,
-          "title": "道具获取"
+          "title": "道具消耗"
         },
         {
           "error": false,
@@ -206,7 +206,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［日志道具ID］"
+          "title": "道具消耗次数［日志道具ID］"
         },
         {
           "error": false,
@@ -239,7 +239,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［日志道具ID］"
+          "title": "道具消耗次数［日志道具ID］"
         },
         {
           "error": false,
@@ -272,7 +272,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［日志道具ID］"
+          "title": "道具消耗次数［日志道具ID］"
         },
         {
           "error": false,
@@ -304,8 +304,8 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "增加的道具数量",
-          "title": "道具获取总值［日志道具ID］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［日志道具ID］"
         },
         {
           "error": false,
@@ -313,7 +313,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "获得途径",
+          "field": "消耗途径",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -338,7 +338,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［获得途径］"
+          "title": "道具消耗次数［消耗途径］"
         },
         {
           "error": false,
@@ -346,7 +346,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "获得途径",
+          "field": "消耗途径",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -371,7 +371,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［获得途径］"
+          "title": "道具消耗次数［消耗途径］"
         },
         {
           "error": false,
@@ -379,7 +379,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "获得途径",
+          "field": "消耗途径",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -404,7 +404,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［获得途径］"
+          "title": "道具消耗次数［消耗途径］"
         },
         {
           "error": false,
@@ -412,7 +412,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "获得途径",
+          "field": "消耗途径",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -436,8 +436,8 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "增加的道具数量",
-          "title": "道具获取总值［获得途径］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［消耗途径］"
         },
         {
           "error": false,
@@ -445,7 +445,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "二级获得途径",
+          "field": "运营大区ID",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -470,7 +470,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［二级获得途径］"
+          "title": "道具消耗次数［运营大区］"
         },
         {
           "error": false,
@@ -478,7 +478,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "二级获得途径",
+          "field": "运营大区ID",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -503,7 +503,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［二级获得途径］"
+          "title": "道具消耗次数［运营大区］"
         },
         {
           "error": false,
@@ -511,7 +511,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "二级获得途径",
+          "field": "运营大区ID",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -536,7 +536,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［二级获得途径］"
+          "title": "道具消耗次数［运营大区］"
         },
         {
           "error": false,
@@ -544,7 +544,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "二级获得途径",
+          "field": "运营大区ID",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -568,140 +568,8 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "增加的道具数量",
-          "title": "道具获取总值［二级获得途径］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "道具获取次数［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "道具获取次数［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "道具获取次数［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms_stats",
-          "tstat": "total",
-          "valuefield": "增加的道具数量",
-          "title": "道具获取总值［运营大区］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［运营大区］"
         },
         {
           "error": false,
@@ -734,7 +602,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［渠道］"
+          "title": "道具消耗次数［渠道］"
         },
         {
           "error": false,
@@ -742,7 +610,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "运营大区ID",
+          "field": "渠道ID",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -767,7 +635,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［渠道］"
+          "title": "道具消耗次数［渠道］"
         },
         {
           "error": false,
@@ -775,7 +643,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "运营大区ID",
+          "field": "渠道ID",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -800,7 +668,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［渠道］"
+          "title": "道具消耗次数［渠道］"
         },
         {
           "error": false,
@@ -808,12 +676,12 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "运营大区ID",
+          "field": "渠道ID",
           "exclude": [],
           "missing": false,
           "other": false,
           "size": 10,
-          "order": "count",
+          "order": "total",
           "style": {
             "font-size": "10pt"
           },
@@ -832,8 +700,8 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "增加的道具数量",
-          "title": "道具获取总值［渠道］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［渠道］"
         },
         {
           "error": false,
@@ -866,7 +734,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［服务器］"
+          "title": "道具消耗次数［服务器］"
         },
         {
           "error": false,
@@ -899,7 +767,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［服务器］"
+          "title": "道具消耗次数［服务器］"
         },
         {
           "error": false,
@@ -932,7 +800,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "道具获取次数［服务器］"
+          "title": "道具消耗次数［服务器］"
         },
         {
           "error": false,
@@ -945,7 +813,7 @@
           "missing": false,
           "other": false,
           "size": 10,
-          "order": "count",
+          "order": "total",
           "style": {
             "font-size": "10pt"
           },
@@ -964,8 +832,8 @@
           },
           "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "增加的道具数量",
-          "title": "道具获取总值［服务器］"
+          "valuefield": "消耗的道具数量",
+          "title": "道具消耗总数［服务器］"
         }
       ],
       "notice": false
@@ -975,7 +843,7 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-fb-]YYYY.MM",
+    "pattern": "[logstash-kun-]YYYY.MM",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED",
     "warm_fields": true
   },
