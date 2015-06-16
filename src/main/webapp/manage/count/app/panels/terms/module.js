@@ -283,7 +283,7 @@ function (angular, app, _, $, kbn) {
 	            				dt = dat;
 	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 	            		});
-	              		slice = { name : td,label : v.term, data : [[k,v.count]], actions: true};
+	              		slice = { name : dt,label : v.term, data : [[k,v.count]], actions: true};
             	  }else if(scope.panel.field==="服务器ID"){
                       if(game === "fb"){
                     	  slice = { name : "fb_s"+v.term, label : v.term, data : [[k,v.count]], actions: true};
@@ -312,7 +312,6 @@ function (angular, app, _, $, kbn) {
 	            				dt = dat;
 	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 	            		});
-	              		console.log(dt);
 	              		slice = { name : dt,  label : v.term, data : [[k,v.count]], actions: true};
             	  }
             	  else{

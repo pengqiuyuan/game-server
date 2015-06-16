@@ -335,8 +335,16 @@ function (angular, $, kbn, _, config, moment, Modernizr) {
     };
 
     this.file_load = function(file) {
+      var u;
+      if(file.indexOf('_')>-1){
+    	  var name = file.split("_")[0];
+    	  u = "app/dashboards/"+name+"/"+file.replace(/\.(?!json)/,"/")+'?' + new Date().getTime();
+      }else{
+    	  u = "app/dashboards/"+file.replace(/\.(?!json)/,"/")+'?' + new Date().getTime();
+      }
+      
       return $http({
-        url: "app/dashboards/"+file.replace(/\.(?!json)/,"/")+'?' + new Date().getTime(),
+        url: u,
         method: "GET",
         transformResponse: function(response) {
           return renderTemplate(response,$routeParams);
