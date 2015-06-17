@@ -268,22 +268,28 @@ function (angular, app, _, $, kbn) {
         function build_results() {
           var k = 0;
           scope.data = [];
+          
+          var all =[];
+          _.each(scope.results.facets.terms.terms, function(v) {
+        	  all.push(v.term);
+          });
+          var map = {};
+  		  $.ajax({                                               
+			  url: '/game-server/manage/count/findallvalue?name='+scope.panel.field + '&game=' + game, 
+			  type: 'POST',
+			  contentType: "application/json;charset=UTF-8",		
+			  data: JSON.stringify(all), 
+			  dataType: 'json',
+			  async : false,
+			  success: function(dat){
+			  	 map = eval(dat);
+			  },error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+		  });
           _.each(scope.results.facets.terms.terms, function(v) {
             var slice;
             if(scope.panel.tmode === 'terms') {
-            	  if(scope.panel.field==="运营大区ID" ||scope.panel.field==="渠道ID"){
-            		  	var dt ="";
-	              		$.ajax({                                               
-	            			url: '/game-server/manage/count/findValue?name='+scope.panel.field+'&key=' + v.term + '&game=' + game, 
-	            			type: 'GET',
-	            			contentType: "application/json;charset=UTF-8",		
-	            			dataType: 'text',
-	            			async : false,
-	            			success: function(dat){
-	            				dt = dat;
-	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
-	            		});
-	              		slice = { label : dt , name : v.term, data : [[k,v.count]], actions: true};
+            	  if(scope.panel.field==="运营大区ID" ||scope.panel.field==="渠道ID" ||scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号"){
+	              		slice = { label : map[v.term] , name : v.term, data : [[k,v.count]], actions: true};
             	  }else if(scope.panel.field==="服务器ID"){
                       if(game === "fb"){
                     	  slice = { label : "fb_s"+v.term, name : v.term, data : [[k,v.count]], actions: true};
@@ -300,19 +306,6 @@ function (angular, app, _, $, kbn) {
             		  }else if(v.term=='2'){
             			slice = { label : '美元',  name : v.term, data : [[k,v.count]], actions: true};
             		  }
-            	  }else if(scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号"){
-	          		  	var dt ="";
-	              		$.ajax({                                               
-	            			url: '/game-server/manage/count/findValue?name='+scope.panel.field+'&key=' + v.term + '&game=' + game, 
-	            			type: 'GET',
-	            			contentType: "application/json;charset=UTF-8",		
-	            			dataType: 'text',
-	            			async : false,
-	            			success: function(dat){
-	            				dt = dat;
-	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
-	            		});
-	              		slice = { label: dt,  name : v.term, data : [[k,v.count]], actions: true};
             	  }
             	  else{
             		  slice = { label : v.term,  name : v.term, data : [[k,v.count]], actions: true};
@@ -320,19 +313,8 @@ function (angular, app, _, $, kbn) {
           
             }
             if(scope.panel.tmode === 'terms_stats') {
-            	  if(scope.panel.field==="运营大区ID" ||scope.panel.field==="渠道ID"){
-            		  	var dt ="";
-	              		$.ajax({                                               
-	            			url: '/game-server/manage/count/findValue?name='+scope.panel.field+'&key=' + v.term + '&game=' + game, 
-	            			type: 'GET',
-	            			contentType: "application/json;charset=UTF-8",		
-	            			dataType: 'text',
-	            			async : false,
-	            			success: function(dat){
-	            				dt = dat;
-	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
-	            		});
-	                    slice = { label : dt,  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
+          	  	if(scope.panel.field==="运营大区ID" ||scope.panel.field==="渠道ID" ||scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号"){
+	                    slice = { label : map[v.term],  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
             	  }
             	  else if(scope.panel.field==="服务器ID"){
                       if(game === "fb"){
@@ -351,20 +333,7 @@ function (angular, app, _, $, kbn) {
 	              		  }else if(v.term=='2'){
 	              			slice = { label : '美元',  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
 	              	  }
-	              }else if(scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号"){
-	          		  	var dt ="";
-	              		$.ajax({                                               
-	            			url: '/game-server/manage/count/findValue?name='+scope.panel.field+'&key=' + v.term + '&game=' + game, 
-	            			type: 'GET',
-	            			contentType: "application/json;charset=UTF-8",		
-	            			dataType: 'text',
-	            			async : false,
-	            			success: function(dat){
-	            				dt = dat;
-	            			},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
-	            		});
-	              		slice = { label : dt,  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
-            	  }
+	              }
             	  else{
                     slice = { label : v.term,  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
             	  }

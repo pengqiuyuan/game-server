@@ -15,6 +15,8 @@ public interface TagDao extends PagingAndSortingRepository<Tag, Long>,JpaSpecifi
 	
 	List<Tag> findByTagIdAndCategoryAndStoreName(Long tagId,String category,String storeName);
 	
+	List<Tag> findByCategoryAndStoreName(String category,String storeName);
+	
 	List<Tag> findByTagNameAndCategoryAndStoreId(String tagName,String category,String storeId);
 
 	

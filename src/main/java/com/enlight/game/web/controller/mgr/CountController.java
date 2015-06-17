@@ -1,6 +1,11 @@
 package com.enlight.game.web.controller.mgr;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
@@ -11,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +34,7 @@ import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.tag.TagService;
+import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
 
@@ -61,6 +68,7 @@ public class CountController extends BaseController{
 	@Autowired
 	private TagService tagService;
 	
+	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
 	/**
 	 * 道具日志
 	 * @return
@@ -349,53 +357,45 @@ public class CountController extends BaseController{
 	 * @return
 	 * @throws AppBizException
 	 */
-	@RequestMapping(value="/findValue",method=RequestMethod.GET)	
+	@RequestMapping(value="/findallvalue",method=RequestMethod.POST)	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public String findValue(@RequestParam(value="name") String name
-			,@RequestParam(value="key") String key
-			,@RequestParam(value="game") String game) throws AppBizException{
-		String value = "";
-		try {
+	public Map<String,String> findallvalue(@RequestParam(value="name") String name
+			,@RequestParam(value="game") String game
+			,@RequestBody String[] arr
+			) throws AppBizException{
+		Map<String,String> value = new HashMap<String, String>();
+		for (String string : arr) {
 			if(name.equals("运营大区ID")){
-				ServerZone s =  serverZoneService.findById(Long.valueOf(key));
+				ServerZone s =  serverZoneService.findById(Long.valueOf(string));
 				if(s != null){
-					value = s.getServerName();
-				}else{value = key;}
-			}else if(name.equals("渠道ID")){
-				PlatForm p = platFormService.findByPfId(key);
-				if(p!=null){
-					value = p.getPfName();
-				}else{value=key;}
-			}else if(name.equals("获得途径")||name.equals("消耗途径")||name.equals("日志道具id")){
-				List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreName(Long.valueOf(key),Tag.CATEGORY_ITEM,game.toUpperCase());
-				if(!tags.isEmpty()){
-					value = tags.get(0).getTagName();
+					value.put(string, s.getServerName());
 				}else{
-					value = key;
+					value.put(string,string);
+					}
+			}else if(name.equals("渠道ID")){
+				PlatForm p = platFormService.findByPfId(string);
+				if(p!=null){
+					value.put(string,p.getPfName());
+				}else{value.put(string,string);}
+			}else if(name.equals("获得途径")||name.equals("消耗途径")||name.equals("日志道具id")){
+				List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreName(Long.valueOf(string),Tag.CATEGORY_ITEM,game.toUpperCase());
+				if(!tags.isEmpty()){
+					value.put(string,tags.get(0).getTagName());
+				}else{
+					value.put(string,string);
 				}
 			}else if(name.equals("功能编号")){ //新手引导
-				List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreName(Long.valueOf(key),Tag.CATEGORY_NEWPLAYER_GUIDE,game.toUpperCase());
+				List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreName(Long.valueOf(string),Tag.CATEGORY_NEWPLAYER_GUIDE,game.toUpperCase());
 				if(!tags.isEmpty()){
-					value = tags.get(0).getTagName();
+					value.put(string,tags.get(0).getTagName());
 				}else{
-					value = key;
+					value.put(string,string);
 				}
 			}
-			return value;
-		} catch (Exception e) {
-			// TODO: handle exception
-			return key;
 		}
-	}
-
-	@RequestMapping(value="/findNewGuide",method=RequestMethod.GET)	
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public String findNewGuide(@RequestParam(value="name") String name
-			,@RequestParam(value="key") String key
-			,@RequestParam(value="game") String game) throws AppBizException{
-		String value = "";
+		
+		
 		return value;
 	}
 }

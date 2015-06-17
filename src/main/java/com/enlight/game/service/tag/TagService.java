@@ -32,6 +32,11 @@ public class TagService {
 		return tagDao.findByTagIdAndCategoryAndStoreName(tagId,category,storeName);
 	}
 	
+	public List<Tag> findByCategoryAndStoreName(String category,String storeName){
+		return tagDao.findByCategoryAndStoreName(category,storeName);
+	}
+	
+	
 	public List<Tag> findByTagNameAndCategoryAndStoreId(String tagName,String category,String storeId){
 		return tagDao.findByTagNameAndCategoryAndStoreId(tagName, category,storeId);
 	}

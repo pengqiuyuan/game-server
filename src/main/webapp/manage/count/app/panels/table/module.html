@@ -140,6 +140,7 @@
               </span>
               <span ng-show='!panel.sortable'>{{field}}</span>
               <i ng-show="!$last" class="pointer link icon-caret-right" ng-click="_.move(panel.fields,$index,$index+1)"></i>
+              <i class='icon-search pointer' ng-click="build_search_add(field)" bs-tooltip="'Add filter to match this value'"></i>
             </th>
 
           </thead>
