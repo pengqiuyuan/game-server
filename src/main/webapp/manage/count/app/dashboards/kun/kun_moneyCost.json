@@ -172,7 +172,6 @@
             "减少的充值币数量",
             "消耗途径",
             "购买的商品数量",
-            "二级消耗途径",
             "人物等级"
           ],
           "highlight": [],
@@ -448,6 +447,39 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
+          "chart": "bar",
+          "counter_pos": "above",
+          "spyable": true,
+          "queries": {
+            "mode": "all",
+            "ids": [
+              0
+            ]
+          },
+          "tmode": "terms_stats",
+          "tstat": "total",
+          "valuefield": "购买的商品数量",
+          "title": "真实币消耗数量（购买的商品数量）"
+        },
+        {
+          "error": false,
+          "span": 2,
+          "editable": true,
+          "type": "terms",
+          "loadingEditor": false,
+          "field": "人物等级",
+          "exclude": [],
+          "missing": false,
+          "other": false,
+          "size": 10,
+          "order": "total",
+          "style": {
+            "font-size": "10pt"
+          },
+          "donut": false,
+          "tilt": false,
+          "labels": true,
+          "arrangement": "horizontal",
           "chart": "table",
           "counter_pos": "above",
           "spyable": true,
@@ -514,7 +546,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "table",
+          "chart": "bar",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -534,40 +566,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "二级消耗途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "购买的商品数量",
-          "title": "真实币二级消耗途径（二级消耗途径）"
-        },
-        {
-          "error": false,
-          "span": 2,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级消耗途径",
+          "field": "消耗途径",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -592,7 +591,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "购买的商品数量",
-          "title": "真实币二级消耗途径（二级消耗途径）"
+          "title": "真实币消耗途径（消耗途径）"
         },
         {
           "error": false,
@@ -800,7 +799,7 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-kds-]YYYY.MM",
+    "pattern": "[logstash-kun-]YYYY.MM",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED",
     "warm_fields": true
   },

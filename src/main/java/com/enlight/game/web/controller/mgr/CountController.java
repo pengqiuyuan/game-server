@@ -1,11 +1,8 @@
 package com.enlight.game.web.controller.mgr;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.PlatForm;
-import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Tag;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
