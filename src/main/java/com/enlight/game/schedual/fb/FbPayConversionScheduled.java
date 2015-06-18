@@ -248,7 +248,9 @@ public class FbPayConversionScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}	
 	
 	public void esServerZone() throws IOException, ParseException {	
@@ -345,7 +347,6 @@ public class FbPayConversionScheduled {
 			                  )
 			        );
 			System.out.println("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
-			//bulkRequest.execute().actionGet();	
 		}
 		
 		//首日付费率、首日付费数
@@ -524,7 +525,9 @@ public class FbPayConversionScheduled {
 			                  )
 			        );
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	public void esPlatForm() throws IOException, ParseException {	
@@ -798,7 +801,9 @@ public class FbPayConversionScheduled {
 			        );
 		}
 		
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	public void esServer() throws IOException, ParseException {	
@@ -1071,7 +1076,9 @@ public class FbPayConversionScheduled {
 			                  )
 			        );
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)

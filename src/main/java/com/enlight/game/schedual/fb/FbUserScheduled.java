@@ -138,7 +138,9 @@ public class FbUserScheduled {
 			        );
 			System.out.println("历史累计用户all："+srTotal.getHits().totalHits());
 		}
-		bulkRequest.execute().actionGet();
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 
 	}	
 	
@@ -242,7 +244,9 @@ public class FbUserScheduled {
 			        );
 			System.out.println("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
-		bulkRequest.execute().actionGet();
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	
@@ -340,7 +344,9 @@ public class FbUserScheduled {
 			        );
 			System.out.println("历史累计用户platForm："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
-		bulkRequest.execute().actionGet();
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	public void esServer() throws IOException, ParseException {	
@@ -437,7 +443,9 @@ public class FbUserScheduled {
 			        );
 			System.out.println("历史累计用户server："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
-		bulkRequest.execute().actionGet();
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)

@@ -163,7 +163,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		bulkRequest.execute().actionGet();	
 	}
 	
-	//@Test
+	@Test
 	public void testdayserverzone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
@@ -259,7 +259,10 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 				        );
 			}
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
+		
 	}
 	
 	//@Test

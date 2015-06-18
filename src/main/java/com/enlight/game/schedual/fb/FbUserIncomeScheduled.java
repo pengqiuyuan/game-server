@@ -92,7 +92,9 @@ public class FbUserIncomeScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	public void test1serverZone() throws IOException, ParseException {	
@@ -125,7 +127,9 @@ public class FbUserIncomeScheduled {
 				                  )
 				        );
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}	
 	
 	public void test1platForm() throws IOException, ParseException {	
@@ -158,7 +162,9 @@ public class FbUserIncomeScheduled {
 				                  )
 				        );
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	public void test1server() throws IOException, ParseException {	
@@ -191,7 +197,9 @@ public class FbUserIncomeScheduled {
 				                  )
 				        );
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	
@@ -217,7 +225,9 @@ public class FbUserIncomeScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	public void test2serverZone() throws IOException, ParseException {	
@@ -247,7 +257,9 @@ public class FbUserIncomeScheduled {
 			                  )
 			        );
 		}   
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	public void test2platForm() throws IOException, ParseException {	
@@ -277,7 +289,9 @@ public class FbUserIncomeScheduled {
 			                  )
 			        );
 		}   
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	public void test2server() throws IOException, ParseException {	
@@ -307,7 +321,9 @@ public class FbUserIncomeScheduled {
 			                  )
 			        );
 		}   
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	//充值人数
@@ -336,7 +352,9 @@ public class FbUserIncomeScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	public void test3serverZone() throws IOException, ParseException {	
@@ -369,7 +387,9 @@ public class FbUserIncomeScheduled {
 			                  )
 			        );
 		}   
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	public void test3platForm() throws IOException, ParseException {	
@@ -402,7 +422,9 @@ public class FbUserIncomeScheduled {
 			                  )
 			        );
 		}   
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	public void test3server() throws IOException, ParseException {	
@@ -436,7 +458,9 @@ public class FbUserIncomeScheduled {
 			                  )
 			        );
 		}   
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)

@@ -112,7 +112,9 @@ public class FbRetainedScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 		System.out.println("####################");
 	}
 	
@@ -131,7 +133,9 @@ public class FbRetainedScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 		System.out.println("####################");
 	}
 	

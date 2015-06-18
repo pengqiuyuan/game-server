@@ -144,7 +144,9 @@ public class FbPayPenetrationScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	public void testdayserverzone() throws IOException, ParseException {	
@@ -239,7 +241,9 @@ public class FbPayPenetrationScheduled {
 				        );
 			}
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	public void testdayplatform() throws IOException, ParseException {	
@@ -334,7 +338,9 @@ public class FbPayPenetrationScheduled {
 				        );
 			}
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	public void testdayserver() throws IOException, ParseException {	
@@ -429,7 +435,9 @@ public class FbPayPenetrationScheduled {
 				        );
 			}
 		}
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	
@@ -510,7 +518,9 @@ public class FbPayPenetrationScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
 	}
 	
 	public void testmouthserverzone() throws IOException, ParseException {	
@@ -605,7 +615,9 @@ public class FbPayPenetrationScheduled {
 			}
 		}
 		if(!mapsum.isEmpty()){
+			if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
+		}
 		}
 		
 	}
@@ -702,7 +714,9 @@ public class FbPayPenetrationScheduled {
 			}
 		}
 		if(!mapsum.isEmpty()){
+			if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
+		}
 		}
 	}
 	
@@ -798,7 +812,9 @@ public class FbPayPenetrationScheduled {
 			}
 		}
 		if(!mapsum.isEmpty()){
+			if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
+		}
 		}
 	}
 	

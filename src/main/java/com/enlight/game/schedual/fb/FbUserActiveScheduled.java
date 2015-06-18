@@ -146,7 +146,9 @@ public class FbUserActiveScheduled {
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}	
 	
 	//serverzone
@@ -243,7 +245,9 @@ public class FbUserActiveScheduled {
 			                  )
 			        );
 		}  
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}
 	
 	//platform
@@ -340,7 +344,9 @@ public class FbUserActiveScheduled {
 			                  )
 			        );
 		}  
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}	
 	
 	//server
@@ -437,7 +443,9 @@ public class FbUserActiveScheduled {
 			                  )
 			        );
 		}  
-		bulkRequest.execute().actionGet();	
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}	
 	}	
 
 	
