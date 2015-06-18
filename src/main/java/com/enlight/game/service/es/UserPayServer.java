@@ -1,4 +1,4 @@
-package com.enlight.game.service.es.fb;
+package com.enlight.game.service.es;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -24,11 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
-public class FbUserPayServer {
+public class UserPayServer {
 	
 
 	@Autowired
 	private Client client;
+	
+	/**
 	
 	private static final String index_money = "log_fb_money";
 	
@@ -41,6 +43,8 @@ public class FbUserPayServer {
 	private static final String type_week = "fb_money_week"; //首周付费率
 	
 	private static final String type_mouth = "fb_money_mouth"; //首月付费率
+	
+	**/
 	
 	private static final String key_add = "add";
 	
@@ -61,7 +65,7 @@ public class FbUserPayServer {
 	
 	
 	//add新增付费用户
-	public Map<String, String> searchAllUserAdd(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserAdd(String index_money,String type_add,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -78,7 +82,7 @@ public class FbUserPayServer {
 			return retained(response,dateFrom,dateTo,key_add);
 	}
 	//all累计付费用户
-	public Map<String, String> searchAllUserAll(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserAll(String index_money,String type_all,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -95,7 +99,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_all);
 	}
 	
-	public Map<String, String> searchAllUserDay(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserDay(String index_money,String type_day,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -112,7 +116,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_day);
 	}
 	
-	public Map<String, String> searchAllUserDaynum(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserDaynum(String index_money,String type_day,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -129,7 +133,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_day_num);
 	}
 	
-	public Map<String, String> searchAllUserWeek(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserWeek(String index_money,String type_week,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -146,7 +150,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_week);
 	}
 	
-	public Map<String, String> searchAllUserWeeknum(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserWeeknum(String index_money,String type_week,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -163,7 +167,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_week_num);
 	}
 	
-	public Map<String, String> searchAllUserMouth(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserMouth(String index_money,String type_mouth,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -180,7 +184,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_mouth);
 	}
 	
-	public Map<String, String> searchAllUserMouthnum(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllUserMouthnum(String index_money,String type_mouth,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -199,7 +203,7 @@ public class FbUserPayServer {
 	
 	//-------------------------------------------------
 	//serverzone 新增付费用户
-	public Map<String, String> searchServerZoneUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserAdd(String index_money,String type_add,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -217,7 +221,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_add);
 	}
 	//serverzone 累计付费用户
-	public Map<String, String> searchServerZoneUserAll(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserAll(String index_money,String type_all,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -235,7 +239,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_all);
 	}
 	
-	public Map<String, String> searchServerZoneUserDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserDay(String index_money,String type_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -253,7 +257,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_day);
 	}
 	
-	public Map<String, String> searchServerZoneUserDaynum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserDaynum(String index_money,String type_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -272,7 +276,7 @@ public class FbUserPayServer {
 	}
 	
 	
-	public Map<String, String> searchServerZoneUserWeek(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserWeek(String index_money,String type_week,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -290,7 +294,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_week);
 	}
 	
-	public Map<String, String> searchServerZoneUserWeeknum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserWeeknum(String index_money,String type_week,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -308,7 +312,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_week_num);
 	}
 	
-	public Map<String, String> searchServerZoneUserMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserMouth(String index_money,String type_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -326,7 +330,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_mouth);
 	}
 	
-	public Map<String, String> searchServerZoneUserMouthnum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserMouthnum(String index_money,String type_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -345,7 +349,7 @@ public class FbUserPayServer {
 	}
 	//---------------------------------------
 	//platform 新增付费用户
-	public Map<String, String> searchPlatFormUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserAdd(String index_money,String type_add,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -364,7 +368,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_add);
 	}
 	//platform 累计付费用户
-	public Map<String, String> searchPlatFormUserAll(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserAll(String index_money,String type_all,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -383,7 +387,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_all);
 	}
 	
-	public Map<String, String> searchPlatFormUserDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserDay(String index_money,String type_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -401,7 +405,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_day);
 	}
 	
-	public Map<String, String> searchPlatFormUserDaynum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserDaynum(String index_money,String type_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -420,7 +424,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_day_num);
 	}
 	
-	public Map<String, String> searchPlatFormUserWeek(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserWeek(String index_money,String type_week,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -439,7 +443,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_week);
 	}
 	
-	public Map<String, String> searchPlatFormUserWeeknum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserWeeknum(String index_money,String type_week,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -458,7 +462,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_week_num);
 	}
 	
-	public Map<String, String> searchPlatFormUserMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserMouth(String index_money,String type_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -477,7 +481,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_mouth);
 	}
 	
-	public Map<String, String> searchPlatFormUserMouthnum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserMouthnum(String index_money,String type_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -498,7 +502,7 @@ public class FbUserPayServer {
 	
 	//------------------------
 	//server 新增付费用户
-	public Map<String, String> searchServerUserAdd(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserAdd(String index_money,String type_add,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -517,7 +521,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_add);
 	}
 	//server 累计付费用户
-	public Map<String, String> searchServerUserAll(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserAll(String index_money,String type_all,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -536,7 +540,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_all);
 	}
 	
-	public Map<String, String> searchServerUserDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserDay(String index_money,String type_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -555,7 +559,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_day);
 	}
 	
-	public Map<String, String> searchServerUserDaynum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserDaynum(String index_money,String type_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -575,7 +579,7 @@ public class FbUserPayServer {
 		
 	}
 	
-	public Map<String, String> searchServerUserWeek(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserWeek(String index_money,String type_week,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -593,7 +597,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_week);
 	}
 	
-	public Map<String, String> searchServerUserWeeknum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserWeeknum(String index_money,String type_week,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -611,7 +615,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_week_num);
 	}
 	
-	public Map<String, String> searchServerUserMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserMouth(String index_money,String type_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -629,7 +633,7 @@ public class FbUserPayServer {
 		return retained(response,dateFrom,dateTo,key_mouth_num);
 	}
 	
-	public Map<String, String> searchServerUserMouthnum(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserMouthnum(String index_money,String type_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),

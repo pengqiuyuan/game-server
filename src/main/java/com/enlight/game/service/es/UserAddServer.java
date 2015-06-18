@@ -1,4 +1,4 @@
-package com.enlight.game.service.es.fb;
+package com.enlight.game.service.es;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,34 +24,35 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
-public class FbRetainedServer {
+public class UserAddServer {
 	
 
 	@Autowired
 	private Client client;
 	
+	/**
 	private static final String index = "log_fb_user";
 	
-	private static final String type = "fb_user_retained";
-	
-	public Map<String, Map<String, Object>> searchAllRetained(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	private static final String type_add = "fb_user_add";
+	**/
+	public Map<String, String> searchAllUserAdd(String index ,String type_add , String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
 			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type)
+			        .setTypes(type_add)
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 			        .setQuery(builder)
-			        .addSort("date", SortOrder.DESC)
+			        .addSort("date", SortOrder.ASC)
 			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 			        .execute()
 			        .actionGet();		
 			return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, Map<String, Object>> searchServerZoneRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserAdd(String index ,String type_add ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -60,16 +60,16 @@ public class FbRetainedServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
+		        .setTypes(type_add)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
-		        .addSort("date", SortOrder.DESC)
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();		
 		return retained(response,dateFrom,dateTo);
 	}
-	public Map<String, Map<String, Object>> searchPlatFormRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserAdd(String index ,String type_add ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -77,17 +77,18 @@ public class FbRetainedServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
+		        .setTypes(type_add)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
-		        .addSort("date", SortOrder.DESC)
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
+		
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, Map<String, Object>> searchServerRetained(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserAdd(String index ,String type_add ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -95,10 +96,10 @@ public class FbRetainedServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
+		        .setTypes(type_add)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
-		        .addSort("date", SortOrder.DESC)		
+		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();
@@ -106,73 +107,44 @@ public class FbRetainedServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, Map<String, Object>> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
-		Map<String, Map<String, Object>> m = new HashMap<String, Map<String, Object>>();
+	public Map<String, String> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
+			Map<String, String> map = new LinkedHashMap<String, String>();
+			for (SearchHit hit : response.getHits()) {
+				Map<String, Object> source = hit.getSource();
+				map.put(source.get("date").toString(), source.get("userAdd").toString());
+			}		
+			Map<String, String> m = new LinkedHashMap<String, String>();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(sdf.parse(dateFrom));
+			long startTIme = cal.getTimeInMillis();
+			cal.setTime(sdf.parse(dateTo));
+			long endTime = cal.getTimeInMillis();
 
-		Map<String, Object> datenext = new HashMap<String, Object>();
-		Map<String, Object> dateSeven = new HashMap<String, Object>();
-		Map<String, Object> datethirty = new HashMap<String, Object>();
-
-		Map<String, Object> next = new LinkedHashMap<String, Object>();
-		Map<String, Object> seven = new LinkedHashMap<String, Object>();
-		Map<String, Object> thirty = new LinkedHashMap<String, Object>();
-		
-		for (SearchHit hit : response.getHits()) {
-			Map<String, Object> source = hit.getSource();
-			if(source.get("ctRetained").equals("nextDay")){
-				datenext.put(source.get("date").toString(), source.get("retained").toString());
-			}else if(source.get("ctRetained").equals("sevenDay")){
-				dateSeven.put(source.get("date").toString(), source.get("retained").toString());
-			}else if(source.get("ctRetained").equals("thirtyDay")){
-				datethirty.put(source.get("date").toString(), source.get("retained").toString());
+			cal.setTime(new Date());
+			cal.add(cal.DATE,-1);
+			long t = cal.getTimeInMillis();
+			if(endTime>t){
+				endTime = t;
 			}
-		}
-
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(sdf.parse(dateFrom));
-		long startTIme = cal.getTimeInMillis();
-		cal.setTime(sdf.parse(dateTo));
-		long endTime = cal.getTimeInMillis();
-
-		cal.setTime(new Date());
-		cal.add(cal.DATE,-2);
-		long t = cal.getTimeInMillis();
-		if(endTime>t){
-			endTime = t;
-		}
-		
-		Long oneDay = 1000 * 60 * 60 * 24l;
-		Long time = startTIme;
-		while (time <= endTime) {
-			Date d = new Date(time);
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			String key = df.format(d);
-			if(datenext.containsKey(key)){
-				next.put(key, datenext.get(key));
-			}else{
-				next.put(key, "0.00");
+			
+			Long oneDay = 1000 * 60 * 60 * 24l;
+			Long time = startTIme;
+			while (time <= endTime) {
+				Date d = new Date(time);
+				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				String key = df.format(d);
+				if(map.containsKey(key)){
+					m.put(key, map.get(key));
+				}else{
+					m.put(key, "0");
+				}
+				time += oneDay;
 			}
-			if(dateSeven.containsKey(df.format(d))){
-				seven.put(key, dateSeven.get(key));
-			}else{
-				seven.put(key, "0.00");
-			}
-			if(datethirty.containsKey(df.format(d))){
-				thirty.put(key, datethirty.get(key));
-			}else{
-				thirty.put(key, "0.00");
-			}
-			time += oneDay;
-		}
-
-		m.put("next", next);
-		m.put("seven", seven);
-		m.put("thirty", thirty);
-
-		return m;
+			return m;
 	}
-	
+
 	public static int daysBetween(String smdate, String bdate)
 			throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -184,7 +156,8 @@ public class FbRetainedServer {
 		long between_days = (time2 - time1) / (1000 * 3600 * 24);
 
 		return Integer.parseInt(String.valueOf(between_days));
-	}
+	} 
+		
 
 		
 }

@@ -35,9 +35,9 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
-import com.enlight.game.service.es.fb.FbUserAddServer;
-import com.enlight.game.service.es.fb.FbUserPayServer;
-import com.enlight.game.service.es.fb.FbUserTotalServer;
+import com.enlight.game.service.es.UserAddServer;
+import com.enlight.game.service.es.UserPayServer;
+import com.enlight.game.service.es.UserTotalServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -56,6 +56,18 @@ public class FbUserPayController extends BaseController{
 	 */
 	private static final String storeId = "1";
 	
+	private static final String index_money = "log_fb_money";
+	
+	private static final String type_add = "fb_money_add";
+	
+	private static final String type_all = "fb_money_all";
+	
+	private static final String type_day = "fb_money_day"; //首日付费率
+	
+	private static final String type_week = "fb_money_week"; //首周付费率
+	
+	private static final String type_mouth = "fb_money_mouth"; //首月付费率
+	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
 	
@@ -71,7 +83,7 @@ public class FbUserPayController extends BaseController{
 	private PlatFormService platFormService;
 	
 	@Autowired
-	private FbUserPayServer fbUserPayServer;
+	private UserPayServer userPayServer;
 	
 	@Autowired
 	private AccountService accountService;
@@ -109,8 +121,8 @@ public class FbUserPayController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			mT = fbUserPayServer.searchAllUserAll(dateFrom, dateTo);
-			mA = fbUserPayServer.searchAllUserAdd(dateFrom, dateTo);
+			mT = userPayServer.searchAllUserAll(index_money, type_all, dateFrom, dateTo);
+			mA = userPayServer.searchAllUserAdd(index_money, type_add, dateFrom, dateTo);
 			mTotal.put("所有运营大区", mT);
 			mAdd.put("所有运营大区", mA);
 			model.addAttribute("dateFrom", dateFrom);
@@ -122,15 +134,15 @@ public class FbUserPayController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						mT = fbUserPayServer.searchAllUserAll(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-						mA = fbUserPayServer.searchAllUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mT = userPayServer.searchAllUserAll(index_money, type_all, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mA = userPayServer.searchAllUserAdd(index_money, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
 						mTotal.put("所有运营大区", mT);
 						mAdd.put("所有运营大区", mA);
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						mT = fbUserPayServer.searchServerZoneUserAll(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
-						mA = fbUserPayServer.searchServerZoneUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mT = userPayServer.searchServerZoneUserAll(index_money, type_all, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mA = userPayServer.searchServerZoneUserAdd(index_money, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
 						mTotal.put(szName, mT);
 						mAdd.put(szName, mA);
 					}
@@ -141,8 +153,8 @@ public class FbUserPayController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					mT = fbUserPayServer.searchPlatFormUserAll(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
-					mA = fbUserPayServer.searchPlatFormUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mT = userPayServer.searchPlatFormUserAll(index_money, type_all, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mA = userPayServer.searchPlatFormUserAdd(index_money, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
 					mTotal.put(pfName, mT);
 					mAdd.put(pfName, mA);
 				}
@@ -150,8 +162,8 @@ public class FbUserPayController extends BaseController{
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					mT = fbUserPayServer.searchServerUserAll(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
-					mA = fbUserPayServer.searchServerUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mT = userPayServer.searchServerUserAll(index_money, type_all, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mA = userPayServer.searchServerUserAdd(index_money, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
 					mTotal.put(sv[i], mT);
 					mAdd.put(sv[i], mA);
 				}
@@ -174,7 +186,7 @@ public class FbUserPayController extends BaseController{
 		model.addAttribute("svs", svs);
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/user/userPay";
+		return "/kibana/user/userPay";
 	}
 	
 	/**
@@ -207,8 +219,8 @@ public class FbUserPayController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			mT = fbUserPayServer.searchAllUserDay(dateFrom, dateTo);
-			mA = fbUserPayServer.searchAllUserDaynum(dateFrom, dateTo);
+			mT = userPayServer.searchAllUserDay(index_money, type_day, dateFrom, dateTo);
+			mA = userPayServer.searchAllUserDaynum(index_money, type_day, dateFrom, dateTo);
 			mTotal.put("所有运营大区", mT);
 			mAdd.put("所有运营大区", mA);
 			model.addAttribute("dateFrom", dateFrom);
@@ -220,15 +232,15 @@ public class FbUserPayController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						mT = fbUserPayServer.searchAllUserDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-						mA = fbUserPayServer.searchAllUserDaynum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mT = userPayServer.searchAllUserDay(index_money, type_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mA = userPayServer.searchAllUserDaynum(index_money, type_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
 						mTotal.put("所有运营大区", mT);
 						mAdd.put("所有运营大区", mA);
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						mT = fbUserPayServer.searchServerZoneUserDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
-						mA = fbUserPayServer.searchServerZoneUserDaynum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mT = userPayServer.searchServerZoneUserDay(index_money, type_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mA = userPayServer.searchServerZoneUserDaynum(index_money, type_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
 						mTotal.put(szName, mT);
 						mAdd.put(szName, mA);
 					}
@@ -239,8 +251,8 @@ public class FbUserPayController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					mT = fbUserPayServer.searchPlatFormUserDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
-					mA = fbUserPayServer.searchPlatFormUserDaynum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mT = userPayServer.searchPlatFormUserDay(index_money, type_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mA = userPayServer.searchPlatFormUserDaynum(index_money, type_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
 					mTotal.put(pfName, mT);
 					mAdd.put(pfName, mA);
 				}
@@ -248,8 +260,8 @@ public class FbUserPayController extends BaseController{
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					mT = fbUserPayServer.searchServerUserDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
-					mA = fbUserPayServer.searchServerUserDaynum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mT = userPayServer.searchServerUserDay(index_money, type_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mA = userPayServer.searchServerUserDaynum(index_money, type_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
 					mTotal.put(sv[i], mT);
 					mAdd.put(sv[i], mA);
 				}
@@ -272,7 +284,7 @@ public class FbUserPayController extends BaseController{
 		model.addAttribute("svs", svs);
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/user/userDay";
+		return "/kibana/user/userDay";
 	}
 	
 	/**
@@ -305,8 +317,8 @@ public class FbUserPayController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			mT = fbUserPayServer.searchAllUserWeek(dateFrom, dateTo);
-			mA = fbUserPayServer.searchAllUserWeeknum(dateFrom, dateTo);
+			mT = userPayServer.searchAllUserWeek(index_money, type_week, dateFrom, dateTo);
+			mA = userPayServer.searchAllUserWeeknum(index_money, type_week, dateFrom, dateTo);
 			mTotal.put("所有运营大区", mT);
 			mAdd.put("所有运营大区", mA);
 			model.addAttribute("dateFrom", dateFrom);
@@ -318,15 +330,15 @@ public class FbUserPayController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						mT = fbUserPayServer.searchAllUserWeek(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-						mA = fbUserPayServer.searchAllUserWeeknum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mT = userPayServer.searchAllUserWeek(index_money, type_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mA = userPayServer.searchAllUserWeeknum(index_money, type_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
 						mTotal.put("所有运营大区", mT);
 						mAdd.put("所有运营大区", mA);
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						mT = fbUserPayServer.searchServerZoneUserWeek(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
-						mA = fbUserPayServer.searchServerZoneUserWeeknum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mT = userPayServer.searchServerZoneUserWeek(index_money, type_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mA = userPayServer.searchServerZoneUserWeeknum(index_money, type_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
 						mTotal.put(szName, mT);
 						mAdd.put(szName, mA);
 					}
@@ -337,8 +349,8 @@ public class FbUserPayController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					mT = fbUserPayServer.searchPlatFormUserWeek(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
-					mA = fbUserPayServer.searchPlatFormUserWeeknum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mT = userPayServer.searchPlatFormUserWeek(index_money, type_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mA = userPayServer.searchPlatFormUserWeeknum(index_money, type_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
 					mTotal.put(pfName, mT);
 					mAdd.put(pfName, mA);
 				}
@@ -346,8 +358,8 @@ public class FbUserPayController extends BaseController{
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					mT = fbUserPayServer.searchServerUserWeek(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
-					mA = fbUserPayServer.searchServerUserWeeknum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mT = userPayServer.searchServerUserWeek(index_money, type_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mA = userPayServer.searchServerUserWeeknum(index_money, type_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
 					mTotal.put(sv[i], mT);
 					mAdd.put(sv[i], mA);
 				}
@@ -370,7 +382,7 @@ public class FbUserPayController extends BaseController{
 		model.addAttribute("svs", svs);
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/user/userWeek";
+		return "/kibana/user/userWeek";
 	}
 	
 	/**
@@ -403,8 +415,8 @@ public class FbUserPayController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			mT = fbUserPayServer.searchAllUserMouth(dateFrom, dateTo);
-			mA = fbUserPayServer.searchAllUserMouthnum(dateFrom, dateTo);
+			mT = userPayServer.searchAllUserMouth(index_money, type_mouth, dateFrom, dateTo);
+			mA = userPayServer.searchAllUserMouthnum(index_money, type_mouth, dateFrom, dateTo);
 			mTotal.put("所有运营大区", mT);
 			mAdd.put("所有运营大区", mA);
 			model.addAttribute("dateFrom", dateFrom);
@@ -416,15 +428,15 @@ public class FbUserPayController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						mT = fbUserPayServer.searchAllUserMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-						mA = fbUserPayServer.searchAllUserMouthnum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mT = userPayServer.searchAllUserMouth(index_money, type_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mA = userPayServer.searchAllUserMouthnum(index_money, type_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
 						mTotal.put("所有运营大区", mT);
 						mAdd.put("所有运营大区", mA);
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						mT = fbUserPayServer.searchServerZoneUserMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
-						mA = fbUserPayServer.searchServerZoneUserMouthnum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mT = userPayServer.searchServerZoneUserMouth(index_money, type_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mA = userPayServer.searchServerZoneUserMouthnum(index_money, type_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
 						mTotal.put(szName, mT);
 						mAdd.put(szName, mA);
 					}
@@ -435,8 +447,8 @@ public class FbUserPayController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					mT = fbUserPayServer.searchPlatFormUserMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
-					mA = fbUserPayServer.searchPlatFormUserMouthnum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mT = userPayServer.searchPlatFormUserMouth(index_money, type_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mA = userPayServer.searchPlatFormUserMouthnum(index_money, type_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
 					mTotal.put(pfName, mT);
 					mAdd.put(pfName, mA);
 				}
@@ -444,8 +456,8 @@ public class FbUserPayController extends BaseController{
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					mT = fbUserPayServer.searchServerUserMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
-					mA = fbUserPayServer.searchServerUserMouthnum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mT = userPayServer.searchServerUserMouth(index_money, type_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mA = userPayServer.searchServerUserMouthnum(index_money, type_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
 					mTotal.put(sv[i], mT);
 					mAdd.put(sv[i], mA);
 				}

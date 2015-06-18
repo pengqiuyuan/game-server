@@ -1,4 +1,4 @@
-package com.enlight.game.service.es.fb;
+package com.enlight.game.service.es;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -24,24 +24,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
-public class FbUserTotalServer {
+public class UserTotalServer {
 	
 
 	@Autowired
 	private Client client;
-	
+	/**
 	private static final String index = "log_fb_user";
 	
-	private static final String type = "fb_user_total";
-	
-	public Map<String, String> searchAllUserTotal(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	private static final String type_total = "fb_user_total";
+	**/
+	public Map<String, String> searchAllUserTotal(String index,String type_total,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
 			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type)
+			        .setTypes(type_total)
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 			        .setQuery(builder)
 			        .addSort("date", SortOrder.ASC)
@@ -51,7 +51,7 @@ public class FbUserTotalServer {
 			return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchServerZoneUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneUserTotal(String index,String type_total,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -59,7 +59,7 @@ public class FbUserTotalServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
+		        .setTypes(type_total)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -68,7 +68,7 @@ public class FbUserTotalServer {
 		        .actionGet();		
 		return retained(response,dateFrom,dateTo);
 	}
-	public Map<String, String> searchPlatFormUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormUserTotal(String index,String type_total,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -76,7 +76,7 @@ public class FbUserTotalServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
+		        .setTypes(type_total)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -87,7 +87,7 @@ public class FbUserTotalServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchServerUserTotal(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerUserTotal(String index,String type_total,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -95,7 +95,7 @@ public class FbUserTotalServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
+		        .setTypes(type_total)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)

@@ -35,9 +35,9 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
-import com.enlight.game.service.es.fb.FbMoneyPayPServer;
-import com.enlight.game.service.es.fb.FbUserActiveServer;
-import com.enlight.game.service.es.fb.FbUserIncomeServer;
+import com.enlight.game.service.es.MoneyPayPServer;
+import com.enlight.game.service.es.UserActiveServer;
+import com.enlight.game.service.es.UserIncomeServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -55,6 +55,16 @@ public class FbMoneyPayPController extends BaseController{
 	 * 这个controller默认为fb项目的控制层。项目id文档已定
 	 */
 	private static final String storeId = "1";
+	
+	private static final String index = "log_fb_money";
+	
+	private static final String type_money_arpu_day = "fb_money_arpu_day";
+	
+	private static final String type_money_arpu_mouth = "fb_money_arpu_mouth";
+	
+	private static final String type_money_arppu_day = "fb_money_arppu_day";
+	
+	private static final String type_money_arppu_mouth = "fb_money_arppu_mouth";
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
@@ -77,7 +87,7 @@ public class FbMoneyPayPController extends BaseController{
 	private StoreService storeService;
 	
 	@Autowired
-	private FbMoneyPayPServer fbMoneyPayPServer;
+	private MoneyPayPServer moneyPayPServer;
 	
 	/**
 	 * ARPU(日) ARPU(月) ARPPU(日) ARPPU(月)
@@ -111,10 +121,10 @@ public class FbMoneyPayPController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			arpuday.put("所有运营大区", fbMoneyPayPServer.searchAllArpuDay(dateFrom, dateTo));
-			arpumouth.put("所有运营大区", fbMoneyPayPServer.searchAllArpuMouth(dateFrom, dateTo));
-			arppuday.put("所有运营大区", fbMoneyPayPServer.searchAllArppuDay(dateFrom, dateTo));
-			arppumouth.put("所有运营大区", fbMoneyPayPServer.searchAllArppuMouth(dateFrom, dateTo));
+			arpuday.put("所有运营大区", moneyPayPServer.searchAllArpuDay(index, type_money_arpu_day, dateFrom, dateTo));
+			arpumouth.put("所有运营大区", moneyPayPServer.searchAllArpuMouth(index, type_money_arpu_mouth, dateFrom, dateTo));
+			arppuday.put("所有运营大区", moneyPayPServer.searchAllArppuDay(index, type_money_arppu_day, dateFrom, dateTo));
+			arppumouth.put("所有运营大区", moneyPayPServer.searchAllArppuMouth(index, type_money_arppu_mouth, dateFrom, dateTo));
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
@@ -124,17 +134,17 @@ public class FbMoneyPayPController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						arpuday.put("所有运营大区", fbMoneyPayPServer.searchAllArpuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						arpumouth.put("所有运营大区", fbMoneyPayPServer.searchAllArpuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						arppuday.put("所有运营大区", fbMoneyPayPServer.searchAllArppuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						arppumouth.put("所有运营大区", fbMoneyPayPServer.searchAllArppuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						arpuday.put("所有运营大区", moneyPayPServer.searchAllArpuDay(index, type_money_arpu_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						arpumouth.put("所有运营大区", moneyPayPServer.searchAllArpuMouth(index, type_money_arpu_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						arppuday.put("所有运营大区", moneyPayPServer.searchAllArppuDay(index, type_money_arppu_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						arppumouth.put("所有运营大区", moneyPayPServer.searchAllArppuMouth(index, type_money_arppu_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						arpuday.put(szName, fbMoneyPayPServer.searchServerZoneArpuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						arpumouth.put(szName, fbMoneyPayPServer.searchServerZoneArpuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						arppuday.put(szName, fbMoneyPayPServer.searchServerZoneArppuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						arppumouth.put(szName, fbMoneyPayPServer.searchServerZoneArppuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						arpuday.put(szName, moneyPayPServer.searchServerZoneArpuDay(index, type_money_arpu_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						arpumouth.put(szName, moneyPayPServer.searchServerZoneArpuMouth(index, type_money_arpu_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						arppuday.put(szName, moneyPayPServer.searchServerZoneArppuDay(index, type_money_arppu_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						arppumouth.put(szName, moneyPayPServer.searchServerZoneArppuMouth(index, type_money_arppu_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
 					}
 
 				}
@@ -143,19 +153,19 @@ public class FbMoneyPayPController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					arpuday.put(pfName, fbMoneyPayPServer.searchPlatFormArpuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					arpumouth.put(pfName, fbMoneyPayPServer.searchPlatFormArpuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					arppuday.put(pfName, fbMoneyPayPServer.searchPlatFormArppuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					arppumouth.put(pfName, fbMoneyPayPServer.searchPlatFormArppuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					arpuday.put(pfName, moneyPayPServer.searchPlatFormArpuDay(index, type_money_arpu_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					arpumouth.put(pfName, moneyPayPServer.searchPlatFormArpuMouth(index, type_money_arpu_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					arppuday.put(pfName, moneyPayPServer.searchPlatFormArppuDay(index, type_money_arppu_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					arppumouth.put(pfName, moneyPayPServer.searchPlatFormArppuMouth(index, type_money_arppu_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
 				}
 			}
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					arpuday.put(sv[i], fbMoneyPayPServer.searchServerArpuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					arpumouth.put(sv[i], fbMoneyPayPServer.searchServerArpuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					arppuday.put(sv[i], fbMoneyPayPServer.searchServerArppuDay(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					arppumouth.put(sv[i], fbMoneyPayPServer.searchServerArppuMouth(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					arpuday.put(sv[i], moneyPayPServer.searchServerArpuDay(index, type_money_arpu_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					arpumouth.put(sv[i], moneyPayPServer.searchServerArpuMouth(index, type_money_arpu_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					arppuday.put(sv[i], moneyPayPServer.searchServerArppuDay(index, type_money_arppu_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					arppumouth.put(sv[i], moneyPayPServer.searchServerArppuMouth(index, type_money_arppu_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
 				}
 			}
 		   
@@ -180,7 +190,7 @@ public class FbMoneyPayPController extends BaseController{
 		model.addAttribute("svs", svs);
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/money/moneyPayP";
+		return "/kibana/money/moneyPayP";
 	}
 	
 	

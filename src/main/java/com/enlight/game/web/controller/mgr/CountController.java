@@ -75,7 +75,7 @@ public class CountController extends BaseController{
 		logger.debug("item coming...");
 		model.addAttribute("user", EnumFunction.ENUM_ITEM);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -88,7 +88,7 @@ public class CountController extends BaseController{
 		logger.debug("ap coming...");
 		model.addAttribute("user", EnumFunction.ENUM_AP);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -101,7 +101,7 @@ public class CountController extends BaseController{
 		logger.debug("money coming...");
 		model.addAttribute("user", EnumFunction.ENUM_MONEY);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -114,7 +114,7 @@ public class CountController extends BaseController{
 		logger.debug("dummy coming...");
 		model.addAttribute("user", EnumFunction.ENUM_DUMMY);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -127,7 +127,7 @@ public class CountController extends BaseController{
 		logger.debug("coin coming...");
 		model.addAttribute("user", EnumFunction.ENUM_COIN);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -140,7 +140,7 @@ public class CountController extends BaseController{
 		logger.debug("arenacoin coming...");
 		model.addAttribute("user", EnumFunction.ENUM_ARENACOIN);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -153,7 +153,7 @@ public class CountController extends BaseController{
 		logger.debug("expeditioncoin coming...");
 		model.addAttribute("user", EnumFunction.ENUM_EXPEDITIONCOIN);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/index";
+		return "/kibana/index";
 	}	
 	  
 	/**
@@ -166,7 +166,7 @@ public class CountController extends BaseController{
 		logger.debug("user coming...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -178,7 +178,7 @@ public class CountController extends BaseController{
 		logger.debug("user Retained...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);
 		model.addAttribute("game", GAME_Fb);
-		return "/kibana/fb/user/retain";
+		return "/kibana/index";
 	}
 	
 	//kun
@@ -192,7 +192,7 @@ public class CountController extends BaseController{
 		logger.debug("item coming...");
 		model.addAttribute("user", EnumFunction.ENUM_ITEM);
 		model.addAttribute("game", GAME_KUN);
-		return "/kibana/kun/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -205,7 +205,7 @@ public class CountController extends BaseController{
 		logger.debug("ap coming...");
 		model.addAttribute("user", EnumFunction.ENUM_AP);
 		model.addAttribute("game", GAME_KUN);
-		return "/kibana/kun/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -218,7 +218,7 @@ public class CountController extends BaseController{
 		logger.debug("money coming...");
 		model.addAttribute("user", EnumFunction.ENUM_MONEY);
 		model.addAttribute("game", GAME_KUN);
-		return "/kibana/kun/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -231,7 +231,7 @@ public class CountController extends BaseController{
 		logger.debug("dummy coming...");
 		model.addAttribute("user", EnumFunction.ENUM_DUMMY);
 		model.addAttribute("game", GAME_KUN);
-		return "/kibana/kun/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -244,7 +244,7 @@ public class CountController extends BaseController{
 		logger.debug("coin coming...");
 		model.addAttribute("user", EnumFunction.ENUM_COIN);
 		model.addAttribute("game", GAME_KUN);
-		return "/kibana/kun/index";
+		return "/kibana/index";
 	}		
 	  
 	/**
@@ -256,7 +256,7 @@ public class CountController extends BaseController{
 		logger.debug("user coming...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);
 		model.addAttribute("game", GAME_KUN);
-		return "/kibana/kun/index";
+		return "/kibana/index";
 	}	
 	
 	
@@ -271,7 +271,7 @@ public class CountController extends BaseController{
 		logger.debug("item coming...");
 		model.addAttribute("user", EnumFunction.ENUM_ITEM);
 		model.addAttribute("game", GAME_KDS);
-		return "/kibana/kds/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -284,7 +284,7 @@ public class CountController extends BaseController{
 		logger.debug("ap coming...");
 		model.addAttribute("user", EnumFunction.ENUM_AP);
 		model.addAttribute("game", GAME_KDS);
-		return "/kibana/kds/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -297,7 +297,7 @@ public class CountController extends BaseController{
 		logger.debug("money coming...");
 		model.addAttribute("user", EnumFunction.ENUM_MONEY);
 		model.addAttribute("game", GAME_KDS);
-		return "/kibana/kds/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -310,7 +310,7 @@ public class CountController extends BaseController{
 		logger.debug("dummy coming...");
 		model.addAttribute("user", EnumFunction.ENUM_DUMMY);
 		model.addAttribute("game", GAME_KDS);
-		return "/kibana/kds/index";
+		return "/kibana/index";
 	}	
 	
 	/**
@@ -323,7 +323,7 @@ public class CountController extends BaseController{
 		logger.debug("coin coming...");
 		model.addAttribute("user", EnumFunction.ENUM_COIN);
 		model.addAttribute("game", GAME_KDS);
-		return "/kibana/kds/index";
+		return "/kibana/index";
 	}	
 	  
 	/**
@@ -336,7 +336,7 @@ public class CountController extends BaseController{
 		logger.debug("user coming...");
 		model.addAttribute("user", EnumFunction.ENUM_USER);
 		model.addAttribute("game", GAME_KDS);
-		return "/kibana/kds/index";
+		return "/kibana/index";
 	}	
 	
 	

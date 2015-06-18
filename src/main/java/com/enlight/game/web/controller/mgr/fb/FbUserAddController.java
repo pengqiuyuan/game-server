@@ -37,8 +37,8 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
-import com.enlight.game.service.es.fb.FbUserAddServer;
-import com.enlight.game.service.es.fb.FbUserTotalServer;
+import com.enlight.game.service.es.UserAddServer;
+import com.enlight.game.service.es.UserTotalServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -57,6 +57,12 @@ public class FbUserAddController extends BaseController{
 	 */
 	private static final String storeId = "1";
 	
+	private static final String index= "log_fb_user";
+	
+	private static final String type_add = "fb_user_add";
+	
+	private static final String type_total = "fb_user_total";
+	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
 	
@@ -72,10 +78,10 @@ public class FbUserAddController extends BaseController{
 	private PlatFormService platFormService;
 	
 	@Autowired
-	private FbUserTotalServer fbUserTotalServer;
+	private UserTotalServer userTotalServer;
 	
 	@Autowired
-	private FbUserAddServer fbUserAddServer;
+	private UserAddServer userAddServer;
 	
 	@Autowired
 	private AccountService accountService;
@@ -113,8 +119,8 @@ public class FbUserAddController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			mT = fbUserTotalServer.searchAllUserTotal(dateFrom, dateTo);
-			mA = fbUserAddServer.searchAllUserAdd(dateFrom, dateTo);
+			mT = userTotalServer.searchAllUserTotal(index, type_total, dateFrom, dateTo);
+			mA = userAddServer.searchAllUserAdd(index, type_add, dateFrom, dateTo);
 			mTotal.put("所有运营大区", mT);
 			mAdd.put("所有运营大区", mA);
 			model.addAttribute("dateFrom", dateFrom);
@@ -126,15 +132,15 @@ public class FbUserAddController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						mT = fbUserTotalServer.searchAllUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-						mA = fbUserAddServer.searchAllUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mT = userTotalServer.searchAllUserTotal(index, type_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mA = userAddServer.searchAllUserAdd(index, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
 						mTotal.put("所有运营大区", mT);
 						mAdd.put("所有运营大区", mA);
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						mT = fbUserTotalServer.searchServerZoneUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
-						mA = fbUserAddServer.searchServerZoneUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mT = userTotalServer.searchServerZoneUserTotal(index, type_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mA = userAddServer.searchServerZoneUserAdd(index, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
 						mTotal.put(szName, mT);
 						mAdd.put(szName, mA);
 					}
@@ -145,8 +151,8 @@ public class FbUserAddController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					mT = fbUserTotalServer.searchPlatFormUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
-					mA = fbUserAddServer.searchPlatFormUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mT = userTotalServer.searchPlatFormUserTotal(index, type_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mA = userAddServer.searchPlatFormUserAdd(index, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
 					mTotal.put(pfName, mT);
 					mAdd.put(pfName, mA);
 				}
@@ -154,8 +160,8 @@ public class FbUserAddController extends BaseController{
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					mT = fbUserTotalServer.searchServerUserTotal(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
-					mA = fbUserAddServer.searchServerUserAdd(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mT = userTotalServer.searchServerUserTotal(index, type_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mA = userAddServer.searchServerUserAdd(index, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
 					mTotal.put(sv[i], mT);
 					mAdd.put(sv[i], mA);
 				}
@@ -179,7 +185,7 @@ public class FbUserAddController extends BaseController{
 
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/user/userAdd";
+		return "/kibana/user/userAdd";
 	}
 	
 	

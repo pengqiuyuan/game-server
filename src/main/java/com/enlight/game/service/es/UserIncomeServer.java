@@ -1,4 +1,4 @@
-package com.enlight.game.service.es.fb;
+package com.enlight.game.service.es;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -24,31 +24,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
-public class FbMoneyPayPServer {
+public class UserIncomeServer {
 	
 
 	@Autowired
 	private Client client;
-	
+	/**
 	private static final String index = "log_fb_money";
 	
-	private static final String type_money_arpu_day = "fb_money_arpu_day";
+	private static final String type_income_sum = "fb_money_income_sum";
 	
-	private static final String type_money_arpu_mouth = "fb_money_arpu_mouth";
+	private static final String type_income_count = "fb_money_income_count";
 	
-	private static final String type_money_arppu_day = "fb_money_arppu_day";
-	
-	private static final String type_money_arppu_mouth = "fb_money_arppu_mouth";
-	
-	
-	public Map<String, String> searchAllArpuDay(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	private static final String type_income_peoplenum = "fb_money_income_peoplenum";
+	**/
+	public Map<String, String> searchAllIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
 			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type_money_arpu_day)
+			        .setTypes(type_income_sum)
 			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 			        .setQuery(builder)
 			        .addSort("date", SortOrder.ASC)
@@ -58,31 +55,14 @@ public class FbMoneyPayPServer {
 			return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchAllArpuMouth(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
-                		FilterBuilders.termFilter("key", "all"))
-                		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return mouthre(response,dateFrom,dateTo);
-	}
-	
-	public Map<String, String> searchAllArppuDay(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_day)
+		        .setTypes(type_income_count)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -92,28 +72,24 @@ public class FbMoneyPayPServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchAllArppuMouth(String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchAllIncomepeoplenum(String index ,String type_income_peoplenum ,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_mouth)
+		        .setTypes(type_income_peoplenum)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();		
-		return mouthre(response,dateFrom,dateTo);
+		return retained(response,dateFrom,dateTo);
 	}
 	
-	
-	
-	
-	
-	public Map<String, String> searchServerZoneArpuDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -121,7 +97,7 @@ public class FbMoneyPayPServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_day)
+		        .setTypes(type_income_sum)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -131,25 +107,7 @@ public class FbMoneyPayPServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchServerZoneArpuMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
-                		FilterBuilders.termFilter("key", "serverZone"),
-                		FilterBuilders.termFilter("value", value))
-                		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return mouthre(response,dateFrom,dateTo);
-	}
-	
-	public Map<String, String> searchServerZoneArppuDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -157,7 +115,7 @@ public class FbMoneyPayPServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_day)
+		        .setTypes(type_income_count)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -167,28 +125,25 @@ public class FbMoneyPayPServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchServerZoneArppuMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerZoneIncomepeoplenum(String index ,String type_income_peoplenum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_mouth)
+		        .setTypes(type_income_peoplenum)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
 		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 		        .execute()
 		        .actionGet();		
-		return mouthre(response,dateFrom,dateTo);
+		return retained(response,dateFrom,dateTo);
 	}
 	
-	
-	
-	
-	public Map<String, String> searchPlatFormArpuDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -196,7 +151,7 @@ public class FbMoneyPayPServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_day)
+		        .setTypes(type_income_sum)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -207,26 +162,7 @@ public class FbMoneyPayPServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchPlatFormArpuMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
-                		FilterBuilders.termFilter("key", "platForm"),
-                		FilterBuilders.termFilter("value", value))
-                		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return mouthre(response,dateFrom,dateTo);
-	}
-	
-	public Map<String, String> searchPlatFormArppuDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -234,7 +170,7 @@ public class FbMoneyPayPServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_day)
+		        .setTypes(type_income_count)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -245,35 +181,15 @@ public class FbMoneyPayPServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchPlatFormArppuMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchPlatFormIncomepeople(String index ,String type_income_peoplenum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return mouthre(response,dateFrom,dateTo);
-	}
-	
-	
-	public Map<String, String> searchServerArpuDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-                		FilterBuilders.termFilter("key", "server"),
-                		FilterBuilders.termFilter("value", value))
-                		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_day)
+		        .setTypes(type_income_peoplenum)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -284,26 +200,7 @@ public class FbMoneyPayPServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchServerArpuMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
-                		FilterBuilders.termFilter("key", "server"),
-                		FilterBuilders.termFilter("value", value))
-                		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return mouthre(response,dateFrom,dateTo);
-	}
-	
-	public Map<String, String> searchServerArppuDay(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -311,7 +208,7 @@ public class FbMoneyPayPServer {
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_day)
+		        .setTypes(type_income_sum)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -322,15 +219,15 @@ public class FbMoneyPayPServer {
 		return retained(response,dateFrom,dateTo);
 	}
 	
-	public Map<String, String> searchServerArppuMouth(String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, String> searchServerIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
 		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_mouth)
+		        .setTypes(type_income_count)
 		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 		        .setQuery(builder)
 		        .addSort("date", SortOrder.ASC)
@@ -338,7 +235,26 @@ public class FbMoneyPayPServer {
 		        .execute()
 		        .actionGet();
 		
-		return mouthre(response,dateFrom,dateTo);
+		return retained(response,dateFrom,dateTo);
+	}
+	
+	public Map<String, String> searchServerIncomepeoplenum(String index ,String type_income_peoplenum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "server"),
+                		FilterBuilders.termFilter("value", value))
+                		);
+		SearchResponse response = client.prepareSearch(index)
+		        .setTypes(type_income_peoplenum)
+		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		        .setQuery(builder)
+		        .addSort("date", SortOrder.ASC)
+		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+		        .execute()
+		        .actionGet();
+		
+		return retained(response,dateFrom,dateTo);
 	}
 	
 	public Map<String, String> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
@@ -377,15 +293,6 @@ public class FbMoneyPayPServer {
 				time += oneDay;
 			}
 			return m;
-	}
-	
-	public Map<String, String> mouthre(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
-		Map<String, String> map = new LinkedHashMap<String, String>();
-		for (SearchHit hit : response.getHits()) {
-			Map<String, Object> source = hit.getSource();
-			map.put(source.get("date").toString(), source.get("cv").toString());
-		}		
-		return map;
 	}
 
 	public static int daysBetween(String smdate, String bdate)

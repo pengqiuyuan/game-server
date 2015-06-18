@@ -35,8 +35,8 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
-import com.enlight.game.service.es.fb.FbUserActiveServer;
-import com.enlight.game.service.es.fb.FbUserIncomeServer;
+import com.enlight.game.service.es.UserActiveServer;
+import com.enlight.game.service.es.UserIncomeServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -54,6 +54,14 @@ public class FbIncomeController extends BaseController{
 	 * 这个controller默认为fb项目的控制层。项目id文档已定
 	 */
 	private static final String storeId = "1";
+	
+	private static final String index = "log_fb_money";
+	
+	private static final String type_income_sum = "fb_money_income_sum";
+	
+	private static final String type_income_count = "fb_money_income_count";
+	
+	private static final String type_income_peoplenum = "fb_money_income_peoplenum";
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
@@ -76,7 +84,7 @@ public class FbIncomeController extends BaseController{
 	private StoreService storeService;
 	
 	@Autowired
-	private FbUserIncomeServer fbUserIncomeServer;
+	private UserIncomeServer userIncomeServer;
 	
 	/**
 	 * 收入分析 收入金额 充值次数 充值人数
@@ -109,9 +117,9 @@ public class FbIncomeController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			sum.put("所有运营大区", fbUserIncomeServer.searchAllIncomesum(dateFrom, dateTo));
-			count.put("所有运营大区", fbUserIncomeServer.searchAllIncomecount(dateFrom, dateTo));
-			peoplenum.put("所有运营大区", fbUserIncomeServer.searchAllIncomepeoplenum(dateFrom, dateTo));
+			sum.put("所有运营大区", userIncomeServer.searchAllIncomesum(index, type_income_sum, dateFrom, dateTo));
+			count.put("所有运营大区", userIncomeServer.searchAllIncomecount(index, type_income_count, dateFrom, dateTo));
+			peoplenum.put("所有运营大区", userIncomeServer.searchAllIncomepeoplenum(index, type_income_peoplenum, dateFrom, dateTo));
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
@@ -121,15 +129,15 @@ public class FbIncomeController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						sum.put("所有运营大区", fbUserIncomeServer.searchAllIncomesum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						count.put("所有运营大区", fbUserIncomeServer.searchAllIncomecount(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						peoplenum.put("所有运营大区", fbUserIncomeServer.searchAllIncomepeoplenum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						sum.put("所有运营大区", userIncomeServer.searchAllIncomesum(index, type_income_sum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						count.put("所有运营大区", userIncomeServer.searchAllIncomecount(index, type_income_count, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						peoplenum.put("所有运营大区", userIncomeServer.searchAllIncomepeoplenum(index, type_income_peoplenum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						sum.put(szName, fbUserIncomeServer.searchServerZoneIncomesum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						count.put(szName, fbUserIncomeServer.searchServerZoneIncomecount(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						peoplenum.put(szName, fbUserIncomeServer.searchServerZoneIncomepeoplenum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						sum.put(szName, userIncomeServer.searchServerZoneIncomesum(index, type_income_sum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						count.put(szName, userIncomeServer.searchServerZoneIncomecount(index, type_income_count, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						peoplenum.put(szName, userIncomeServer.searchServerZoneIncomepeoplenum(index, type_income_peoplenum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
 					}
 
 				}
@@ -138,17 +146,17 @@ public class FbIncomeController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					sum.put(pfName, fbUserIncomeServer.searchPlatFormIncomesum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					count.put(pfName, fbUserIncomeServer.searchPlatFormIncomecount(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					peoplenum.put(pfName, fbUserIncomeServer.searchPlatFormIncomepeople(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					sum.put(pfName, userIncomeServer.searchPlatFormIncomesum(index, type_income_sum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					count.put(pfName, userIncomeServer.searchPlatFormIncomecount(index, type_income_count, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					peoplenum.put(pfName, userIncomeServer.searchPlatFormIncomepeople(index, type_income_peoplenum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
 				}
 			}
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					sum.put(sv[i], fbUserIncomeServer.searchServerIncomesum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					count.put(sv[i], fbUserIncomeServer.searchServerIncomecount(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					peoplenum.put(sv[i], fbUserIncomeServer.searchServerIncomepeoplenum(searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					sum.put(sv[i], userIncomeServer.searchServerIncomesum(index, type_income_sum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					count.put(sv[i], userIncomeServer.searchServerIncomecount(index, type_income_count, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					peoplenum.put(sv[i], userIncomeServer.searchServerIncomepeoplenum(index, type_income_peoplenum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
 				}
 			}
 		   
@@ -171,7 +179,7 @@ public class FbIncomeController extends BaseController{
 		model.addAttribute("svs", svs);
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/fb/user/userIncome";
+		return "/kibana/user/userIncome";
 	}
 	
 	
