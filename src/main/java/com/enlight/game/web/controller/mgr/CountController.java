@@ -361,37 +361,43 @@ public class CountController extends BaseController{
 			,@RequestBody String[] arr
 			) throws AppBizException{
 		Map<String,String> value = new HashMap<String, String>();
-		for (String string : arr) {
+		
+		Map<String, String> map = new HashMap<String, String>();
+		if(arr.length != 0){
 			if(name.equals("运营大区ID")){
-				ServerZone s =  serverZoneService.findById(Long.valueOf(string));
-				if(s != null){
-					value.put(string, s.getServerName());
-				}else{
-					value.put(string,string);
-					}
+				List<ServerZone> serverZones =  serverZoneService.findAll();
+				for (ServerZone serverZone : serverZones) {
+					map.put(serverZone.getId().toString(),serverZone.getServerName());
+				}
 			}else if(name.equals("渠道ID")){
-				PlatForm p = platFormService.findByPfId(string);
-				if(p!=null){
-					value.put(string,p.getPfName());
-				}else{value.put(string,string);}
+				List<PlatForm> platForms =  platFormService.findAll();
+				for (PlatForm platForm : platForms) {
+					map.put(platForm.getPfId(),platForm.getPfName());
+				}
 			}else if(name.equals("获得途径")||name.equals("消耗途径")||name.equals("日志道具id")){
-				List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreName(Long.valueOf(string),Tag.CATEGORY_ITEM,game.toUpperCase());
-				if(!tags.isEmpty()){
-					value.put(string,tags.get(0).getTagName());
-				}else{
-					value.put(string,string);
+				List<Tag> tags = tagService.findByCategoryAndStoreName(Tag.CATEGORY_ITEM,game.toUpperCase());
+				for (Tag tag : tags) {
+					map.put(tag.getTagId().toString(), tag.getTagName());
 				}
 			}else if(name.equals("功能编号")){ //新手引导
-				List<Tag> tags = tagService.findByTagIdAndCategoryAndStoreName(Long.valueOf(string),Tag.CATEGORY_NEWPLAYER_GUIDE,game.toUpperCase());
-				if(!tags.isEmpty()){
-					value.put(string,tags.get(0).getTagName());
-				}else{
-					value.put(string,string);
+				List<Tag> tags = tagService.findByCategoryAndStoreName(Tag.CATEGORY_NEWPLAYER_GUIDE,game.toUpperCase());
+				for (Tag tag : tags) {
+					map.put(tag.getTagId().toString(), tag.getTagName());
 				}
 			}
 		}
 		
-		
+		for (String string : arr) {
+			if(!map.isEmpty()){
+				if(map.containsKey(string)){
+					value.put(string,map.get(string));
+				}else{
+					value.put(string,string);
+				}
+			}else{
+				value.put(string,string);
+			}
+		}
 		return value;
 	}
 }
