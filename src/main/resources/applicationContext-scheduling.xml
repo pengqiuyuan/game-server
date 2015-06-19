@@ -89,6 +89,185 @@
      	 <property name="cronExpression" value="0 30 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 	</bean>
 	
+	
+	
+	<bean id="kdsRetainedScheduled" class="com.enlight.game.schedual.kds.KdsRetainedScheduled"/> <!-- 用户留存 -->
+ 	<bean id="kdsUserScheduled" class="com.enlight.game.schedual.kds.KdsUserScheduled"/><!-- 用户新增、累计 -->
+ 	<bean id="kdsPayScheduled" class="com.enlight.game.schedual.kds.KdsPayConversionScheduled"/><!-- 用户付费率 -->
+ 	<bean id="kdsUserActiveScheduled" class="com.enlight.game.schedual.kds.KdsUserActiveScheduled"/><!-- 用户活跃 -->
+ 	<bean id="kdsUserIncomeScheduled" class="com.enlight.game.schedual.kds.KdsUserIncomeScheduled"/><!-- 收入分析 -->
+ 	<bean id="kdsPayPenetrationScheduled" class="com.enlight.game.schedual.kds.KdsPayPenetrationScheduled"/><!-- 收入分析 arpu arppu-->
+ 	
+	<bean id="kdsRetainedMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kdsRetainedScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>
+	<bean id="kdsUserMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kdsUserScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>
+	<bean id="kdsPayMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kdsPayScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>   
+	<bean id="kdsUserActiveMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kdsUserActiveScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>   
+	<bean id="kdsUserIncomeMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kdsUserIncomeScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>  
+	<bean id="kdsPayPenetrationMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kdsPayPenetrationScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>  
+	
+	<bean id="kdsRetainedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kdsRetainedMethod" /> 
+     	 <property name="cronExpression" value="0 40 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <!--  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kdsUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kdsUserMethod" /> 
+     	 <property name="cronExpression" value="0 40 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kdsPayTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kdsPayMethod" /> 
+     	 <property name="cronExpression" value="0 40 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kdsUserActiveTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kdsUserActiveMethod" /> 
+     	 <property name="cronExpression" value="0 40 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kdsUserIncomeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kdsUserIncomeMethod" /> 
+     	 <property name="cronExpression" value="0 40 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kdsPayPenetrationTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kdsPayPenetrationMethod" /> 
+     	 <property name="cronExpression" value="0 40 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+	</bean>
+	
+	
+	
+	
+	
+	<bean id="kunRetainedScheduled" class="com.enlight.game.schedual.kun.KunRetainedScheduled"/> <!-- 用户留存 -->
+ 	<bean id="kunUserScheduled" class="com.enlight.game.schedual.kun.KunUserScheduled"/><!-- 用户新增、累计 -->
+ 	<bean id="kunPayScheduled" class="com.enlight.game.schedual.kun.KunPayConversionScheduled"/><!-- 用户付费率 -->
+ 	<bean id="kunUserActiveScheduled" class="com.enlight.game.schedual.kun.KunUserActiveScheduled"/><!-- 用户活跃 -->
+ 	<bean id="kunUserIncomeScheduled" class="com.enlight.game.schedual.kun.KunUserIncomeScheduled"/><!-- 收入分析 -->
+ 	<bean id="kunPayPenetrationScheduled" class="com.enlight.game.schedual.kun.KunPayPenetrationScheduled"/><!-- 收入分析 arpu arppu-->
+ 	
+	<bean id="kunRetainedMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kunRetainedScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>
+	<bean id="kunUserMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kunUserScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>
+	<bean id="kunPayMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kunPayScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>   
+	<bean id="kunUserActiveMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kunUserActiveScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>   
+	<bean id="kunUserIncomeMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kunUserIncomeScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>  
+	<bean id="kunPayPenetrationMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="kunPayPenetrationScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>  
+	
+	<bean id="kunRetainedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kunRetainedMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <!--  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kunUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kunUserMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kunPayTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kunPayMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kunUserActiveTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kunUserActiveMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kunUserIncomeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kunUserIncomeMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="kunPayPenetrationTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="kunPayPenetrationMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+	</bean>
+	
+	
 	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 	    <property name="triggers">
 	        <list>
@@ -98,6 +277,20 @@
 	            <ref bean="fbUserActiveTrigger" />
 	            <ref bean="fbUserIncomeTrigger" />
 	            <ref bean="fbPayPenetrationTrigger" />
+	            
+	            <ref bean="kdsRetainedTrigger" />
+	            <ref bean="kdsUserTrigger" />
+	            <ref bean="kdsPayTrigger" />
+	            <ref bean="kdsUserActiveTrigger" />
+	            <ref bean="kdsUserIncomeTrigger" />
+	            <ref bean="kdsPayPenetrationTrigger" />
+	            
+	            <ref bean="kunRetainedTrigger" />
+	            <ref bean="kunUserTrigger" />
+	            <ref bean="kunPayTrigger" />
+	            <ref bean="kunUserActiveTrigger" />
+	            <ref bean="kunUserIncomeTrigger" />
+	            <ref bean="kunPayPenetrationTrigger" />
 	        </list>
 	    </property>
 	</bean> 

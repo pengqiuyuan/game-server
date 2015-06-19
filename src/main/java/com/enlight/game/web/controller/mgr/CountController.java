@@ -369,7 +369,7 @@ public class CountController extends BaseController{
 				for (ServerZone serverZone : serverZones) {
 					map.put(serverZone.getId().toString(),serverZone.getServerName());
 				}
-			}else if(name.equals("渠道ID")){
+			}else if(name.equals("渠道ID") || name.equals("注册渠道")){
 				List<PlatForm> platForms =  platFormService.findAll();
 				for (PlatForm platForm : platForms) {
 					map.put(platForm.getPfId(),platForm.getPfName());

@@ -440,7 +440,6 @@ public class FbUserIncomeScheduled {
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
 			    ).execute().actionGet();
-		System.out.println(peoplenum);
 		Terms genders = peoplenum.getAggregations().get("server");	
 		for (Terms.Bucket e : genders.getBuckets()) {
 			Cardinality agg = e.getAggregations().get("agg");

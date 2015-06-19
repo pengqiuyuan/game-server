@@ -1,4 +1,4 @@
-package com.enlight.game.web.controller.mgr.fb;
+package com.enlight.game.web.controller.mgr.kds;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -45,28 +45,28 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
-@Controller("FbUserPayController")
-@RequestMapping("/manage/fbUserPay")
-public class FbUserPayController extends BaseController{
+@Controller("KdsUserPayController")
+@RequestMapping("/manage/kdsUserPay")
+public class KdsUserPayController extends BaseController{
 	
-	private static final Logger logger = LoggerFactory.getLogger(FbUserPayController.class);
+	private static final Logger logger = LoggerFactory.getLogger(KdsUserPayController.class);
 	
 	/**
-	 * 这个controller默认为fb项目的控制层。项目id文档已定
+	 * 这个controller默认为kds项目的控制层。项目id文档已定
 	 */
-	private static final String storeId = "1";
+	private static final String storeId = "3";
 	
-	private static final String index_money = "log_fb_money";
+	private static final String index_money = "log_kds_money";
 	
-	private static final String type_add = "fb_money_add";
+	private static final String type_add = "kds_money_add";
 	
-	private static final String type_all = "fb_money_all";
+	private static final String type_all = "kds_money_all";
 	
-	private static final String type_day = "fb_money_day"; //首日付费率
+	private static final String type_day = "kds_money_day"; //首日付费率
 	
-	private static final String type_week = "fb_money_week"; //首周付费率
+	private static final String type_week = "kds_money_week"; //首周付费率
 	
-	private static final String type_mouth = "fb_money_mouth"; //首月付费率
+	private static final String type_mouth = "kds_money_mouth"; //首月付费率
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
@@ -97,8 +97,8 @@ public class FbUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userPay", method = RequestMethod.GET)
+	@RequiresRoles(value = { "admin", "KDS_USER" }, logical = Logical.OR)
+	@RequestMapping(value = "/kds/userPay", method = RequestMethod.GET)
 	public String userPay(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
@@ -195,8 +195,8 @@ public class FbUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userDay", method = RequestMethod.GET)
+	@RequiresRoles(value = { "admin", "KDS_USER" }, logical = Logical.OR)
+	@RequestMapping(value = "/kds/userDay", method = RequestMethod.GET)
 	public String userDay(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
@@ -293,8 +293,8 @@ public class FbUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userWeek", method = RequestMethod.GET)
+	@RequiresRoles(value = { "admin", "KDS_USER" }, logical = Logical.OR)
+	@RequestMapping(value = "/kds/userWeek", method = RequestMethod.GET)
 	public String userWeek(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
@@ -391,8 +391,8 @@ public class FbUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userMouth", method = RequestMethod.GET)
+	@RequiresRoles(value = { "admin", "KDS_USER" }, logical = Logical.OR)
+	@RequestMapping(value = "/kds/userMouth", method = RequestMethod.GET)
 	public String userMouth(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,

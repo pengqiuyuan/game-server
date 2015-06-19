@@ -1,4 +1,4 @@
-package com.enlight.game.web.controller.mgr.fb;
+package com.enlight.game.web.controller.mgr.kds;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -43,24 +43,24 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
-@Controller("FbActiveController")
-@RequestMapping("/manage/fbActive")
-public class FbActiveController extends BaseController{
+@Controller("KdsActiveController")
+@RequestMapping("/manage/kdsActive")
+public class KdsActiveController extends BaseController{
 	
-	private static final Logger logger = LoggerFactory.getLogger(FbActiveController.class);
+	private static final Logger logger = LoggerFactory.getLogger(KdsActiveController.class);
 	
 	/**
-	 * 这个controller默认为fb项目的控制层。项目id文档已定
+	 * 这个controller默认为kds项目的控制层。项目id文档已定
 	 */
-	private static final String storeId = "1";
+	private static final String storeId = "3";
 	
-	private static final String index = "log_fb_user";
+	private static final String index = "log_kds_user";
 	
-	private static final String type_active_day = "fb_user_active_day";
+	private static final String type_active_day = "kds_user_active_day";
 	
-	private static final String type_active_week = "fb_user_active_week";
+	private static final String type_active_week = "kds_user_active_week";
 	
-	private static final String type_active_mouth = "fb_user_active_mouth";
+	private static final String type_active_mouth = "kds_user_active_mouth";
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
@@ -91,8 +91,8 @@ public class FbActiveController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userActive", method = RequestMethod.GET)
+	@RequiresRoles(value = { "admin", "KDS_USER" }, logical = Logical.OR)
+	@RequestMapping(value = "/kds/userActive", method = RequestMethod.GET)
 	public String userActive(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,

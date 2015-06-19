@@ -1,6 +1,7 @@
-package com.enlight.game.web.controller.mgr.fb;
+package com.enlight.game.web.controller.mgr.kun;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +37,8 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
-import com.enlight.game.service.es.UserActiveServer;
+import com.enlight.game.service.es.UserAddServer;
+import com.enlight.game.service.es.UserTotalServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -43,24 +46,22 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
-@Controller("FbActiveController")
-@RequestMapping("/manage/fbActive")
-public class FbActiveController extends BaseController{
+@Controller("KunUserAddController")
+@RequestMapping("/manage/kunUserAdd")
+public class KunUserAddController extends BaseController{
 	
-	private static final Logger logger = LoggerFactory.getLogger(FbActiveController.class);
+	private static final Logger logger = LoggerFactory.getLogger(KunUserAddController.class);
 	
 	/**
-	 * 这个controller默认为fb项目的控制层。项目id文档已定
+	 * 这个controller默认为kun项目的控制层。项目id文档已定
 	 */
-	private static final String storeId = "1";
+	private static final String storeId = "2";
 	
-	private static final String index = "log_fb_user";
+	private static final String index= "log_kun_user";
 	
-	private static final String type_active_day = "fb_user_active_day";
+	private static final String type_add = "kun_user_add";
 	
-	private static final String type_active_week = "fb_user_active_week";
-	
-	private static final String type_active_mouth = "fb_user_active_mouth";
+	private static final String type_total = "kun_user_total";
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
@@ -77,7 +78,10 @@ public class FbActiveController extends BaseController{
 	private PlatFormService platFormService;
 	
 	@Autowired
-	private UserActiveServer userActiveServer;
+	private UserTotalServer userTotalServer;
+	
+	@Autowired
+	private UserAddServer userAddServer;
 	
 	@Autowired
 	private AccountService accountService;
@@ -86,39 +90,39 @@ public class FbActiveController extends BaseController{
 	private StoreService storeService;
 	
 	/**
-	 * 活跃用户
+	 * 用户新增
 	 * @throws ParseException 
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userActive", method = RequestMethod.GET)
-	public String userActive(Model model,ServletRequest request,
+	@RequiresRoles(value = { "admin", "KUN_USER" }, logical = Logical.OR)
+	@RequestMapping(value = "/kun/userAdd", method = RequestMethod.GET)
+	public String userRetained(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
 			@RequestParam(value = "server", defaultValue = "") String[] sv) throws ElasticsearchException, IOException, ParseException{
-		logger.debug("user active...");
+		logger.debug("user add total...");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
-		
-		Map<String, Map<String,String>> next = new HashMap<String, Map<String,String>>();
-		Map<String, Map<String,String>> seven = new HashMap<String, Map<String,String>>();
-		Map<String, Map<String,String>> thirty = new HashMap<String, Map<String,String>>();
 
-		Map<String, Map<String, Object>> n = new HashMap<String, Map<String, Object>>();
+		Map<String, String> mT = new HashMap<String, String>();
+		Map<String, String> mA = new HashMap<String, String>();
 		
 		List<String> sZones = new ArrayList<String>();
 		List<String> pForms = new ArrayList<String>();
 		List<String> svs = new ArrayList<String>();
-
+		//-------------------------------------------------
+		Map<String, Map<String,String>> mTotal = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,String>> mAdd = new HashMap<String, Map<String,String>>();
 		if(searchParams.isEmpty()){
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			next.put("所有运营大区", userActiveServer.searchAllUserDay(index, type_active_day, dateFrom, dateTo));
-			seven.put("所有运营大区", userActiveServer.searchAllUserWeek(index, type_active_week, dateFrom, dateTo));
-			thirty.put("所有运营大区", userActiveServer.searchAllUserMouth(index, type_active_mouth, dateFrom, dateTo));
+			mT = userTotalServer.searchAllUserTotal(index, type_total, dateFrom, dateTo);
+			mA = userAddServer.searchAllUserAdd(index, type_add, dateFrom, dateTo);
+			mTotal.put("所有运营大区", mT);
+			mAdd.put("所有运营大区", mA);
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
@@ -128,15 +132,17 @@ public class FbActiveController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						next.put("所有运营大区", userActiveServer.searchAllUserDay(index, type_active_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						seven.put("所有运营大区", userActiveServer.searchAllUserWeek(index, type_active_week,searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						thirty.put("所有运营大区", userActiveServer.searchAllUserMouth(index, type_active_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						mT = userTotalServer.searchAllUserTotal(index, type_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mA = userAddServer.searchAllUserAdd(index, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						mTotal.put("所有运营大区", mT);
+						mAdd.put("所有运营大区", mA);
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						next.put(szName, userActiveServer.searchServerZoneUserDay(index, type_active_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						seven.put(szName, userActiveServer.searchServerZoneUserWeek(index, type_active_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						thirty.put(szName, userActiveServer.searchServerZoneUserMouth(index, type_active_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						mT = userTotalServer.searchServerZoneUserTotal(index, type_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mA = userAddServer.searchServerZoneUserAdd(index, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						mTotal.put(szName, mT);
+						mAdd.put(szName, mA);
 					}
 
 				}
@@ -145,29 +151,28 @@ public class FbActiveController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					next.put(pfName, userActiveServer.searchPlatFormUserDay(index, type_active_day,searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					seven.put(pfName, userActiveServer.searchPlatFormUserWeek(index, type_active_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					thirty.put(pfName, userActiveServer.searchPlatFormUserMouth(index, type_active_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					mT = userTotalServer.searchPlatFormUserTotal(index, type_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mA = userAddServer.searchPlatFormUserAdd(index, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					mTotal.put(pfName, mT);
+					mAdd.put(pfName, mA);
 				}
 			}
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					next.put(sv[i], userActiveServer.searchServerUserDay(index, type_active_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					seven.put(sv[i], userActiveServer.searchServerUserWeek(index, type_active_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					thirty.put(sv[i], userActiveServer.searchServerUserMouth(index, type_active_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					mT = userTotalServer.searchServerUserTotal(index, type_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mA = userAddServer.searchServerUserAdd(index, type_add, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					mTotal.put(sv[i], mT);
+					mAdd.put(sv[i], mA);
 				}
 			}
 		   
 		}
-
-		logger.debug(binder.toJson(next));
-		logger.debug(binder.toJson(seven));
-		logger.debug(binder.toJson(thirty));
-		model.addAttribute("next", binder.toJson(next));
-		model.addAttribute("seven", binder.toJson(seven));
-		model.addAttribute("thirty", binder.toJson(thirty));
-		
+		logger.debug(binder.toJson(mTotal));
+		logger.debug(binder.toJson(mAdd));
+		model.addAttribute("mTotal", binder.toJson(mTotal));
+		model.addAttribute("mAdd", binder.toJson(mAdd));
+		//---------------------------------------------------------
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);
 		model.addAttribute("platForm", platFormService.findAll());
@@ -177,8 +182,10 @@ public class FbActiveController extends BaseController{
 		model.addAttribute("pForms", pForms);
 		model.addAttribute("svs", svs);
 		
+
+		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/user/userActive";
+		return "/kibana/user/userAdd";
 	}
 	
 	

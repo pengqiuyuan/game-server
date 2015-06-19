@@ -45,7 +45,7 @@ import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
 @Controller("FbIncomeController")
-@RequestMapping("/manage/fbUserIncome")
+@RequestMapping("/manage/fbIncome")
 public class FbIncomeController extends BaseController{
 	
 	private static final Logger logger = LoggerFactory.getLogger(FbIncomeController.class);

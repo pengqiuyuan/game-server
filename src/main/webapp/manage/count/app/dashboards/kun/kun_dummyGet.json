@@ -821,7 +821,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "pie",
+          "chart": "bar",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -854,7 +854,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "pie",
+          "chart": "table",
           "counter_pos": "above",
           "spyable": true,
           "queries": {

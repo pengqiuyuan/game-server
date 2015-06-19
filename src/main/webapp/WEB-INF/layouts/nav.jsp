@@ -340,14 +340,66 @@
 									<shiro:hasAnyRoles name="admin,KUN_AP,KUN_ITEM,KUN_MONEY,KUN_DUMMY,KUN_COIN,KUN_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN离线日志</a>
 											<ul class="dropdown-menu">
-												<li><a tabindex="-1" href="#">KUN测试</a></li>
+												<li class="dropdown-submenu">
+													<shiro:hasAnyRoles name="admin,KUN_USER">
+														<li><a href="${ctx}/manage/kunRetained/kun/userRetained">用户留存</a></li>
+														<li><a href="${ctx}/manage/kunUserAdd/kun/userAdd">用户新增</a></li>
+														<li><a href="${ctx}/manage/kunActive/kun/userActive">活跃用户</a></li>
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<li><a href="${ctx}/manage/kunUserPay/kun/userPay">新增付费用户</a></li>
+																	<li><a href="${ctx}/manage/kunUserPay/kun/userDay">当日付费率</a></li>
+																	<li><a href="${ctx}/manage/kunUserPay/kun/userWeek">当周付费率</a></li>
+																	<li><a href="${ctx}/manage/kunUserPay/kun/userMouth">当月付费率</a></li>
+																<li>
+															</ul>
+														</li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,KUN_MONEY">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
+																<ul class="dropdown-menu">
+																	<li class="dropdown-submenu">
+																		<li><a href="${ctx}/manage/kunIncome/kun/userIncome">收入分析</a></li>
+																		<li><a href="${ctx}/manage/kunMoneyPayP/kun/moneyPayP">ARPU与ARPPU</a></li>
+																	<li>
+																</ul>
+														</li>
+													</shiro:hasAnyRoles>
+												<li>	
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
 									<shiro:hasAnyRoles name="admin,KDS_AP,KDS_ITEM,KDS_MONEY,KDS_DUMMY,KDS_COIN,KDS_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS离线日志</a>
 											<ul class="dropdown-menu">
-												<li><a tabindex="-1" href="#">KDS测试</a></li>
+												<li class="dropdown-submenu">
+													<shiro:hasAnyRoles name="admin,KDS_USER">
+														<li><a href="${ctx}/manage/kdsRetained/kds/userRetained">用户留存</a></li>
+														<li><a href="${ctx}/manage/kdsUserAdd/kds/userAdd">用户新增</a></li>
+														<li><a href="${ctx}/manage/kdsActive/kds/userActive">活跃用户</a></li>
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<li><a href="${ctx}/manage/kdsUserPay/kds/userPay">新增付费用户</a></li>
+																	<li><a href="${ctx}/manage/kdsUserPay/kds/userDay">当日付费率</a></li>
+																	<li><a href="${ctx}/manage/kdsUserPay/kds/userWeek">当周付费率</a></li>
+																	<li><a href="${ctx}/manage/kdsUserPay/kds/userMouth">当月付费率</a></li>
+																<li>
+															</ul>
+														</li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,KDS_MONEY">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
+																<ul class="dropdown-menu">
+																	<li class="dropdown-submenu">
+																		<li><a href="${ctx}/manage/kdsIncome/kds/userIncome">收入分析</a></li>
+																		<li><a href="${ctx}/manage/kdsMoneyPayP/kds/moneyPayP">ARPU与ARPPU</a></li>
+																	<li>
+																</ul>
+														</li>
+													</shiro:hasAnyRoles>
+												<li>	
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
@@ -358,7 +410,7 @@
 													<shiro:hasAnyRoles name="admin,FB_USER">
 														<li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
 														<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd">用户新增</a></li>
-														<li><a href="${ctx}/manage/fbUserActive/fb/userActive">活跃用户</a></li>
+														<li><a href="${ctx}/manage/fbActive/fb/userActive">活跃用户</a></li>
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
@@ -374,7 +426,7 @@
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
-																		<li><a href="${ctx}/manage/fbUserIncome/fb/userIncome">收入分析</a></li>
+																		<li><a href="${ctx}/manage/fbIncome/fb/userIncome">收入分析</a></li>
 																		<li><a href="${ctx}/manage/fbMoneyPayP/fb/moneyPayP">ARPU与ARPPU</a></li>
 																	<li>
 																</ul>

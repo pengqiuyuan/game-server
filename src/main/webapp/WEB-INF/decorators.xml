@@ -33,9 +33,24 @@
 		<pattern>/*manage/fbRetained*</pattern>
 		<pattern>/*manage/fbUserAdd*</pattern>
 		<pattern>/*manage/fbUserPay*</pattern>
-		<pattern>/*manage/fbUserActive*</pattern>
-		<pattern>/*manage/fbUserIncome*</pattern>
+		<pattern>/*manage/fbActive*</pattern>
+		<pattern>/*manage/fbIncome*</pattern>
 	    <pattern>/*manage/fbMoneyPayP*</pattern>
+	    
+	    <pattern>/*manage/kunRetained*</pattern>
+		<pattern>/*manage/kunUserAdd*</pattern>
+		<pattern>/*manage/kunUserPay*</pattern>
+		<pattern>/*manage/kunActive*</pattern>
+		<pattern>/*manage/kunIncome*</pattern>
+	    <pattern>/*manage/kunMoneyPayP*</pattern>
+	    
+	    <pattern>/*manage/kdsRetained*</pattern>
+		<pattern>/*manage/kdsUserAdd*</pattern>
+		<pattern>/*manage/kdsUserPay*</pattern>
+		<pattern>/*manage/kdsActive*</pattern>
+		<pattern>/*manage/kdsIncome*</pattern>
+	    <pattern>/*manage/kdsMoneyPayP*</pattern>
+	    
 	</decorator>
 	
 </decorators>

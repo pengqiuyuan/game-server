@@ -1,4 +1,4 @@
-package com.enlight.game.web.controller.mgr.fb;
+package com.enlight.game.web.controller.mgr.kun;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -35,7 +35,7 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
-import com.enlight.game.service.es.UserActiveServer;
+import com.enlight.game.service.es.RetainedServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -43,24 +43,20 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 
-@Controller("FbActiveController")
-@RequestMapping("/manage/fbActive")
-public class FbActiveController extends BaseController{
+@Controller("KunRetainedController")
+@RequestMapping("/manage/kunRetained")
+public class KunRetainedController extends BaseController{
 	
-	private static final Logger logger = LoggerFactory.getLogger(FbActiveController.class);
+	private static final Logger logger = LoggerFactory.getLogger(KunRetainedController.class);
 	
 	/**
-	 * 这个controller默认为fb项目的控制层。项目id文档已定
+	 * 这个controller默认为kun项目的控制层。项目id文档已定
 	 */
-	private static final String storeId = "1";
+	private static final String storeId = "2";
 	
-	private static final String index = "log_fb_user";
+	private static final String index = "log_kun_user";
 	
-	private static final String type_active_day = "fb_user_active_day";
-	
-	private static final String type_active_week = "fb_user_active_week";
-	
-	private static final String type_active_mouth = "fb_user_active_mouth";
+	private static final String type = "kun_user_retained";
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	Calendar calendar = new GregorianCalendar(); 
@@ -77,7 +73,7 @@ public class FbActiveController extends BaseController{
 	private PlatFormService platFormService;
 	
 	@Autowired
-	private UserActiveServer userActiveServer;
+	private RetainedServer retainedServer;
 	
 	@Autowired
 	private AccountService accountService;
@@ -86,25 +82,25 @@ public class FbActiveController extends BaseController{
 	private StoreService storeService;
 	
 	/**
-	 * 活跃用户
+	 * 用户留存
 	 * @throws ParseException 
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fb/userActive", method = RequestMethod.GET)
-	public String userActive(Model model,ServletRequest request,
+	@RequiresRoles(value = { "admin", "KUN_USER" }, logical = Logical.OR)
+	@RequestMapping(value = "/kun/userRetained", method = RequestMethod.GET)
+	public String userRetained(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
 			@RequestParam(value = "server", defaultValue = "") String[] sv) throws ElasticsearchException, IOException, ParseException{
-		logger.debug("user active...");
+		logger.debug("user add total...");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
 		
-		Map<String, Map<String,String>> next = new HashMap<String, Map<String,String>>();
-		Map<String, Map<String,String>> seven = new HashMap<String, Map<String,String>>();
-		Map<String, Map<String,String>> thirty = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,Object>> next = new HashMap<String, Map<String,Object>>();
+		Map<String, Map<String,Object>> seven = new HashMap<String, Map<String,Object>>();
+		Map<String, Map<String,Object>> thirty = new HashMap<String, Map<String,Object>>();
 
 		Map<String, Map<String, Object>> n = new HashMap<String, Map<String, Object>>();
 		
@@ -116,9 +112,10 @@ public class FbActiveController extends BaseController{
 			//条件为空时
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
-			next.put("所有运营大区", userActiveServer.searchAllUserDay(index, type_active_day, dateFrom, dateTo));
-			seven.put("所有运营大区", userActiveServer.searchAllUserWeek(index, type_active_week, dateFrom, dateTo));
-			thirty.put("所有运营大区", userActiveServer.searchAllUserMouth(index, type_active_mouth, dateFrom, dateTo));
+			n =retainedServer.searchAllRetained(index, type, dateFrom, dateTo);
+			next.put("所有运营大区", n.get("next"));
+			seven.put("所有运营大区", n.get("seven"));
+			thirty.put("所有运营大区", n.get("thirty"));
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
@@ -128,15 +125,17 @@ public class FbActiveController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						next.put("所有运营大区", userActiveServer.searchAllUserDay(index, type_active_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						seven.put("所有运营大区", userActiveServer.searchAllUserWeek(index, type_active_week,searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
-						thirty.put("所有运营大区", userActiveServer.searchAllUserMouth(index, type_active_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						n =retainedServer.searchAllRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						next.put("所有运营大区", n.get("next"));
+						seven.put("所有运营大区", n.get("seven"));
+						thirty.put("所有运营大区", n.get("thirty"));
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						next.put(szName, userActiveServer.searchServerZoneUserDay(index, type_active_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						seven.put(szName, userActiveServer.searchServerZoneUserWeek(index, type_active_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
-						thirty.put(szName, userActiveServer.searchServerZoneUserMouth(index, type_active_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						n =retainedServer.searchServerZoneRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						next.put(szName, n.get("next"));
+						seven.put(szName, n.get("seven"));
+						thirty.put(szName, n.get("thirty"));
 					}
 
 				}
@@ -145,17 +144,19 @@ public class FbActiveController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					next.put(pfName, userActiveServer.searchPlatFormUserDay(index, type_active_day,searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					seven.put(pfName, userActiveServer.searchPlatFormUserWeek(index, type_active_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
-					thirty.put(pfName, userActiveServer.searchPlatFormUserMouth(index, type_active_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					n =retainedServer.searchPlatFormRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					next.put(pfName, n.get("next"));
+					seven.put(pfName, n.get("seven"));
+					thirty.put(pfName, n.get("thirty"));
 				}
 			}
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					next.put(sv[i], userActiveServer.searchServerUserDay(index, type_active_day, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					seven.put(sv[i], userActiveServer.searchServerUserWeek(index, type_active_week, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
-					thirty.put(sv[i], userActiveServer.searchServerUserMouth(index, type_active_mouth, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					n =retainedServer.searchServerRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					next.put(sv[i], n.get("next"));
+					seven.put(sv[i], n.get("seven"));
+					thirty.put(sv[i], n.get("thirty"));
 				}
 			}
 		   
@@ -178,7 +179,7 @@ public class FbActiveController extends BaseController{
 		model.addAttribute("svs", svs);
 		
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/kibana/user/userActive";
+		return "/kibana/user/userRetain";
 	}
 	
 	
