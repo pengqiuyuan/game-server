@@ -191,7 +191,7 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-kds-]YYYY.MM",
+    "pattern": "[logstash-kds-money-]YYYY.MM",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED"
   },
   "style": "dark",

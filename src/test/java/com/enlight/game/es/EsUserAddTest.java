@@ -50,6 +50,8 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
@@ -74,7 +76,7 @@ import com.enlight.game.util.JsonBinder;
 @ContextConfiguration(locations = {"/applicationContext.xml"})
 public class EsUserAddTest extends SpringTransactionalTestCase{
 	@Autowired
-	private Client client;
+	public Client client;
 	
 	//项目名称
 	private static final String game = "FB";
@@ -89,96 +91,18 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 	
 	private static final String bulk_type_total = "fb_user_total";
 	
-	@Autowired
-	private ServerZoneService serverZoneService;
+	private static final Integer szsize = 10; //运营大区
 	
-	@Autowired
-	private ServerService serverService;
+	private static final Integer pfsize = 300; //渠道
 	
-	@Autowired
-	private PlatFormService platFormService;
+	private static final Integer srsize = 300; //服务器
+	
+	EsUtil esUtilTest = new EsUtil();
 	
 	@Autowired
 	private StoreService storeService;
-	
-	EsUtilTest esUtilTest = new EsUtilTest();
-	
-	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
-	
-	public static int daysBetween(String smdate,String bdate) throws ParseException{  
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
-        Calendar cal = Calendar.getInstance();    
-        cal.setTime(sdf.parse(smdate));    
-        long time1 = cal.getTimeInMillis();                 
-        cal.setTime(sdf.parse(bdate));    
-        long time2 = cal.getTimeInMillis();         
-        long between_days=(time2-time1)/(1000*3600*24);  
-            
-       return Integer.parseInt(String.valueOf(between_days));     
-    }  
-	
-	public Long createCount(String from , String to){
-		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"))
-		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
-		System.out.println(sr);
-		Long count = sr.getHits().getTotalHits();
-		return count;
-	}
-	
-	public Long createServerZoneCount(String key,String from , String to){
-		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"),
-		        		FilterBuilders.termFilter("服务器ID", key))
-		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
-		System.out.println(sr);
-		Long count = sr.getHits().getTotalHits();
-		return count;
-	}
-	
-	public Long createPlatFormCount(String key,String from , String to){
-		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"),
-		        		FilterBuilders.termFilter("渠道ID", key))
-		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
-		System.out.println(sr);
-		Long count = sr.getHits().getTotalHits();
-		return count;
-	}
-	
-	//@Test
-	public void testStart() {
-		assertNotNull(client);
-	}
-	
-	
-	public void bulk(UserRetained userRetained) throws IOException{
-		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		bulkRequest.add(client.prepareIndex("log_retained", "fb_retained")
-		        .setSource(jsonBuilder()
-			           	 .startObject()
-	                        .field("date", userRetained.getDate().split("T")[0])
-	                        .field("gameId", userRetained.getGameId())
-	                        .field("ctRetained", userRetained.getCtRetained())
-	                        .field("retained", userRetained.getRetained())
-	                        .field("key", userRetained.getKey())
-	                    .endObject()
-		                  )
-		        ).execute().actionGet();
-	}
-	
-	@Test
-	public void testuseradd() throws ElasticsearchException, IOException, ParseException{
-		
+
+	public void esAll() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		//新增用户
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -218,8 +142,6 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 							FilterBuilders.termFilter("key", "all"),
 					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()))
 			        )).execute().actionGet();
-			System.out.println(esUtilTest.twoDayAgoFrom()+"    "+esUtilTest.twoDayAgoF() + "  11111111111  " + srTotal);
-			
 			long s  = 0L;
 			for (SearchHit searchHit : srTotal.getHits()) {
 				Map<String, Object> source = searchHit.getSource();
@@ -261,12 +183,13 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			        );
 			System.out.println("历史累计用户all："+srTotal.getHits().totalHits());
 		}
-		//bulkRequest.execute().actionGet();
-	}
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
+		}
+
+	}	
 	
-	//@Test
-	public void testuseraddServerZone() throws ElasticsearchException, IOException, ParseException{
-		//UserAdd userAdd = new UserAdd();
+	public void esServerZone() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
@@ -278,11 +201,10 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
-			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
+			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
 			    )
-				.setSize(10).execute().actionGet();
+				.setSize(szsize).execute().actionGet();
 		Terms genders = sr.getAggregations().get("serverZone");	
-		List<Long> serverZones = serverZoneService.findServerId();
 		
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
@@ -299,23 +221,6 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			                  )
 			        );
 			System.out.println("昨天新增用户serverZone："+e.getDocCount()  +" " + e.getKey());
-			serverZones.remove(Long.valueOf(e.getKey()));
-		}
-		for (Long lo : serverZones) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userAdd", 0)
-		                        .field("key", "serverZone")
-		                        .field("value",lo.toString())
-		                        .field("ts_add",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("昨天新增用户serverZone,全部是0："+" " + lo.toString());
 		}
 		
 		//运营大区用户累计
@@ -328,14 +233,13 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			}
 		}
 		Terms gendersTotal = null;
-		List<Long> szs = serverZoneService.findServerId();
 		Map<String, Long> map = new HashMap<String, Long>();
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).
 					setQuery(
 							QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 									FilterBuilders.andFilter(
-									        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()),
+									        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 							        		FilterBuilders.termFilter("key", "serverZone"))
 					        ))
 					.execute().actionGet();
@@ -360,9 +264,9 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 									FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
 					        ))
 					.addAggregation(
-				    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
+				    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
 				    )
-					.setSize(10).execute().actionGet();
+					.setSize(szsize).execute().actionGet();
 			gendersTotal = srTotal.getAggregations().get("serverZone");
 			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
 				map.put(entry.getKey(), entry.getDocCount());
@@ -384,32 +288,14 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			                  )
 			        );
 			System.out.println("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
-			szs.remove(Long.valueOf(entry.getKey()));
 		}
-		
-		for (Long lo : szs) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", 0)
-		                        .field("key", "serverZone")
-		                        .field("value",lo.toString())
-		                        .field("ts_total",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("历史累计用户serverZone,全部是0："+"  " +lo.toString());
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
 		}
-		
-		bulkRequest.execute().actionGet();			
 	}
 	
 	
-	//@Test
-	public void testuseraddPlatForm() throws ElasticsearchException, IOException, ParseException{
+	public void esPlatForm() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
@@ -420,11 +306,10 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
-			    		AggregationBuilders.terms("platForm").field("渠道ID").size(300)
+			    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
 			    )
-				.setSize(300).execute().actionGet();
+				.setSize(pfsize).execute().actionGet();
 		Terms genders = sr.getAggregations().get("platForm");	
-		List<String> platForms = platFormService.findPlatFormId();
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
 			        .setSource(jsonBuilder()
@@ -440,24 +325,8 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			                  )
 			        );
 			System.out.println("昨天新增用户platForm："+e.getDocCount()  +" " + e.getKey());
-			platForms.remove(e.getKey());
 		}
-		for (String lo : platForms) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userAdd", 0)
-		                        .field("key", "platForm")
-		                        .field("value",lo)
-		                        .field("ts_add",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("昨天新增用户platForm,全部是0："+" " + lo.toString());
-		}
+
 		//渠道用户累计
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
 		boolean ty = false;
@@ -468,18 +337,17 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			}
 		}
 		Terms gendersTotal = null;
-		List<String> pfs = platFormService.findPlatFormId();
 		Map<String, Long> map = new HashMap<String, Long>();
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()),
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 			        		FilterBuilders.termFilter("key", "platForm"))
 			        ))
 					.addAggregation(
-				    		AggregationBuilders.terms("platForm").field("value").size(300)
+				    		AggregationBuilders.terms("platForm").field("value").size(pfsize)
 				    )
-					.setSize(300).execute().actionGet();
+					.setSize(pfsize).execute().actionGet();
 			for (SearchHit searchHit : srTotal.getHits()) {
 				Map<String, Object> source = searchHit.getSource();
 				long s = Long.valueOf(source.get("userTotal").toString());
@@ -496,9 +364,9 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
 			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
 					.addAggregation(
-				    		AggregationBuilders.terms("platForm").field("渠道ID").size(300)
+				    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
 				    )
-					.setSize(300).execute().actionGet();
+					.setSize(pfsize).execute().actionGet();
 			gendersTotal = srTotal.getAggregations().get("platForm");
 			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
 				map.put(entry.getKey(), entry.getDocCount());
@@ -520,30 +388,13 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			                  )
 			        );
 			System.out.println("历史累计用户platForm："+entry.getValue().toString()  +"  " +entry.getKey());
-			pfs.remove(entry.getKey());
 		}
-		
-		for (String lo : pfs) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", 0)
-		                        .field("key", "platForm")
-		                        .field("value",lo.toString())
-		                        .field("ts_total",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("历史累计用户platForm,全部是0："+"  " +lo.toString());
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
 		}
-		bulkRequest.execute().actionGet();		
-	}	
+	}
 	
-	//@Test
-	public void testuseraddServer() throws ElasticsearchException, IOException, ParseException{
+	public void esServer() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
@@ -554,11 +405,10 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
-			    		AggregationBuilders.terms("server").field("服务器ID").size(300)
+			    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 			    )
-				.setSize(300).execute().actionGet();
+				.setSize(srsize).execute().actionGet();
 		Terms genders = sr.getAggregations().get("server");	
-		List<String> serverIds = serverService.findServerId(storeService.findByName(game).getId().toString());
 		for (Terms.Bucket e : genders.getBuckets()) {
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
 			        .setSource(jsonBuilder()
@@ -574,25 +424,8 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			                  )
 			        );
 			System.out.println("昨天新增用户server："+e.getDocCount()  +" " + e.getKey());
-			serverIds.remove(e.getKey());
 		}
 		
-		for (String lo : serverIds) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userAdd", 0)
-		                        .field("key", "server")
-		                        .field("value",lo)
-		                        .field("ts_add",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("昨天新增用户server,全部是0："+" " + lo.toString());
-		}
 		//服务器用户累计
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
 		boolean ty = false;
@@ -603,18 +436,17 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			}
 		}
 		Terms gendersTotal = null;
-		List<String> sis = serverService.findServerId(storeService.findByName(game).getId().toString());
 		Map<String, Long> map = new HashMap<String, Long>();
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()),
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 			        		FilterBuilders.termFilter("key", "server"))
 			        ))
 					.addAggregation(
-				    		AggregationBuilders.terms("server").field("value").size(300)
+				    		AggregationBuilders.terms("server").field("value").size(srsize)
 				    )
-					.setSize(300).execute().actionGet();
+					.setSize(srsize).execute().actionGet();
 			for (SearchHit searchHit : srTotal.getHits()) {
 				Map<String, Object> source = searchHit.getSource();
 				long s = Long.valueOf(source.get("userTotal").toString());
@@ -631,9 +463,9 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
 					.addAggregation(
-				    		AggregationBuilders.terms("server").field("服务器ID").size(300)
+				    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 				    )
-					.setSize(300).execute().actionGet();
+					.setSize(srsize).execute().actionGet();
 			gendersTotal = srTotal.getAggregations().get("server");
 			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
 				map.put(entry.getKey(), entry.getDocCount());
@@ -655,34 +487,21 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			                  )
 			        );
 			System.out.println("历史累计用户server："+entry.getValue().toString()  +"  " +entry.getKey());
-			sis.remove(entry.getKey());
 		}
-		
-		for (String lo : sis) {
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", 0)
-		                        .field("key", "server")
-		                        .field("value",lo.toString())
-		                        .field("ts_total",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("历史累计用户server,全部是0："+"  " +lo.toString());
+		if(bulkRequest.numberOfActions()!=0){
+			bulkRequest.execute().actionGet();	
 		}
-		
-		bulkRequest.execute().actionGet();		
-	}	
-	//@Test
-	public void testuseradr() throws ElasticsearchException, IOException, ParseException{
-		testuseradd();
-		testuseraddServerZone();
-		testuseraddPlatForm();
-		testuseraddServer();
+	}
+	
+	@Test
+	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
+	public void schedual() throws Exception{
+		System.out.println("----------------用户 useradd  usertotal 调度开始");
+		esAll();
+		esServerZone();
+		esPlatForm();
+		esServer();
+		System.out.println("----------------用户 useradd  usertotal 调度结束");
 	}
 	
 }
