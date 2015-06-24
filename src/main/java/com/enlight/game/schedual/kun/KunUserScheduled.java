@@ -82,6 +82,7 @@ public class KunUserScheduled {
 		        );
 		System.out.println("昨天新增用户all："+sr.getHits().totalHits());
 		//累计用户
+		/**
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
 		boolean ty = false;
 		if(responseindex.isExists()){
@@ -138,6 +139,27 @@ public class KunUserScheduled {
 			        );
 			System.out.println("历史累计用户all："+srTotal.getHits().totalHits());
 		}
+		**/
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
+				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+						FilterBuilders.andFilter(
+								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.termFilter("日志分类关键字", "create")
+								))
+						).execute().actionGet();
+		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
+		        .setSource(jsonBuilder()
+			           	 .startObject()
+	                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+	                        .field("gameId", game)
+	                        .field("userTotal", srTotal.getHits().totalHits())
+	                        .field("key", "all")
+	                        .field("ts_total",ts.toString())
+	                        .field("@timestamp", new Date())
+	                    .endObject()
+		                  )
+		        );
+		System.out.println("历史累计用户all："+srTotal.getHits().totalHits());
 		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
 		}
@@ -179,6 +201,7 @@ public class KunUserScheduled {
 		}
 		
 		//运营大区用户累计
+		/**
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
 		boolean ty = false;
 		if(responseindex.isExists()){
@@ -227,7 +250,22 @@ public class KunUserScheduled {
 				map.put(entry.getKey(), entry.getDocCount());
 			}
 		}
-
+		**/
+		Terms gendersTotal = null;
+		Map<String, Long> map = new HashMap<String, Long>();
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+						QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+								FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
+				        ))
+				.addAggregation(
+			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
+			    )
+				.setSize(szsize).execute().actionGet();
+		gendersTotal = srTotal.getAggregations().get("serverZone");
+		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
+		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
 			        .setSource(jsonBuilder()
@@ -283,6 +321,7 @@ public class KunUserScheduled {
 		}
 
 		//渠道用户累计
+		/**
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
 		boolean ty = false;
 		if(responseindex.isExists()){
@@ -327,7 +366,19 @@ public class KunUserScheduled {
 				map.put(entry.getKey(), entry.getDocCount());
 			}
 		}
-
+		**/
+		Terms gendersTotal = null;
+		Map<String, Long> map = new HashMap<String, Long>();
+		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
+				.addAggregation(
+			    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
+			    )
+				.setSize(pfsize).execute().actionGet();
+		gendersTotal = srTotal.getAggregations().get("platForm");
+		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
+		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
 			        .setSource(jsonBuilder()
@@ -382,6 +433,7 @@ public class KunUserScheduled {
 		}
 		
 		//服务器用户累计
+		/**
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
 		boolean ty = false;
 		if(responseindex.isExists()){
@@ -426,7 +478,19 @@ public class KunUserScheduled {
 				map.put(entry.getKey(), entry.getDocCount());
 			}
 		}
-
+		**/
+		Terms gendersTotal = null;
+		Map<String, Long> map = new HashMap<String, Long>();
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+				FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
+				.addAggregation(
+			    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
+			    )
+				.setSize(srsize).execute().actionGet();
+		gendersTotal = srTotal.getAggregations().get("server");
+		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
+		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
 			        .setSource(jsonBuilder()

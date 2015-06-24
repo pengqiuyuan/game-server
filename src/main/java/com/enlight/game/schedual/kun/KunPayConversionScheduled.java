@@ -89,6 +89,7 @@ public class KunPayConversionScheduled {
 		        );
 		System.out.println("新增付费用户："+newpayuser);
 		//累计付费用户
+		/**
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index_money).execute().actionGet(); 
 		boolean ty = false;
 		if(responseindex.isExists()){
@@ -123,6 +124,18 @@ public class KunPayConversionScheduled {
 			allpayuser  = srTotal.getHits().totalHits();
 			System.out.println("历史累计付费用户all："+allpayuser);
 		}
+		**/
+		long allpayuser  = 0L;
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type_money).setSearchType("count").setQuery(
+				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+						FilterBuilders.andFilter(
+								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        		FilterBuilders.termFilter("是否首次充值", "1")
+								))
+						).execute().actionGet();
+		allpayuser  = srTotal.getHits().totalHits();
+		System.out.println("历史累计付费用户all："+allpayuser);
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
@@ -286,6 +299,7 @@ public class KunPayConversionScheduled {
 			//bulkRequest.execute().actionGet();
 		}
 		//累计付费用户
+		/**
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index_money).execute().actionGet(); 
 		boolean ty = false;
 		if(responseindex.isExists()){
@@ -332,6 +346,24 @@ public class KunPayConversionScheduled {
 			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
 				map.put(entry.getKey(), entry.getDocCount());
 			}
+		}
+		**/
+		Map<String, Long> map = new HashMap<String, Long>();
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type_money).setSearchType("count").setQuery(
+				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+						FilterBuilders.andFilter(
+								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        		FilterBuilders.termFilter("是否首次充值", "1")
+								))
+						)
+						.addAggregation(
+					    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
+					    )
+						.setSize(10).execute().actionGet();
+		Terms gendersTotal = srTotal.getAggregations().get("serverZone");
+		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
 		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
@@ -562,6 +594,7 @@ public class KunPayConversionScheduled {
 			System.out.println("昨天新增付费用户platForm："+e.getDocCount()  +" " + e.getKey());
 		}
 		//累计付费用户
+		/**
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index_money).execute().actionGet(); 
 		boolean ty = false;
 		if(responseindex.isExists()){
@@ -607,6 +640,24 @@ public class KunPayConversionScheduled {
 			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
 				map.put(entry.getKey(), entry.getDocCount());
 			}
+		}
+		**/
+		Map<String, Long> map = new HashMap<String, Long>();
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type_money).setSearchType("count").setQuery(
+				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+						FilterBuilders.andFilter(
+								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        		FilterBuilders.termFilter("是否首次充值", "1")
+								))
+						)
+						.addAggregation(
+								AggregationBuilders.terms("platForm").field("渠道ID").size(300)
+					    )
+						.setSize(300).execute().actionGet();
+		Terms gendersTotal = srTotal.getAggregations().get("platForm");
+		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
 		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
@@ -838,6 +889,7 @@ public class KunPayConversionScheduled {
 			System.out.println("昨天新增付费用户server："+e.getDocCount()  +" " + e.getKey());
 		}
 		//累计付费用户
+		/**
 		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index_money).execute().actionGet(); 
 		boolean ty = false;
 		if(responseindex.isExists()){
@@ -884,6 +936,25 @@ public class KunPayConversionScheduled {
 				map.put(entry.getKey(), entry.getDocCount());
 			}
 		}
+		**/
+		Map<String, Long> map = new HashMap<String, Long>();
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type_money).setSearchType("count").setQuery(
+				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+						FilterBuilders.andFilter(
+								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        		FilterBuilders.termFilter("是否首次充值", "1")
+								))
+						)
+						.addAggregation(
+								AggregationBuilders.terms("server").field("服务器ID").size(300)
+					    )
+						.setSize(300).execute().actionGet();
+		Terms gendersTotal = srTotal.getAggregations().get("server");
+		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
+			map.put(entry.getKey(), entry.getDocCount());
+		}
+		
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
 			        .setSource(jsonBuilder()
