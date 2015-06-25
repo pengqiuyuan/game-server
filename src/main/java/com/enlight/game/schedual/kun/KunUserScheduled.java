@@ -36,7 +36,7 @@ public class KunUserScheduled {
 	//项目名称
 	private static final String game = "KUN";
 	
-	private static final String index = "logstash-kun-*";
+	private static final String index = "logstash-kun-user-*";
 	
 	private static final String type = "kun_user.log";
 	

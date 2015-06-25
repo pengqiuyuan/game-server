@@ -39,7 +39,9 @@ public class KdsPayPenetrationScheduled {
 	//项目名称
 	private static final String game = "KDS";
 	
-	private static final String index = "logstash-kds-*";
+	private static final String index_user = "logstash-kds-user-*";
+	
+	private static final String index_money = "logstash-kds-money-*";
 	
 	private static final String type_user = "kds_user.log";
 	
@@ -73,7 +75,7 @@ public class KdsPayPenetrationScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -84,7 +86,7 @@ public class KdsPayPenetrationScheduled {
 		Sum pays = paysum.getAggregations().get("sum");
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -95,7 +97,7 @@ public class KdsPayPenetrationScheduled {
 		Cardinality peoplen = peoplenum.getAggregations().get("agg");
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
@@ -156,7 +158,7 @@ public class KdsPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -174,7 +176,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -192,7 +194,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
@@ -253,7 +255,7 @@ public class KdsPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -271,7 +273,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -289,7 +291,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
@@ -350,7 +352,7 @@ public class KdsPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -368,7 +370,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -386,7 +388,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
@@ -446,7 +448,7 @@ public class KdsPayPenetrationScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -457,7 +459,7 @@ public class KdsPayPenetrationScheduled {
 		Sum pays = paysum.getAggregations().get("sum");
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -468,7 +470,7 @@ public class KdsPayPenetrationScheduled {
 		Cardinality peoplen = peoplenum.getAggregations().get("agg");
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
@@ -530,7 +532,7 @@ public class KdsPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -548,7 +550,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -566,7 +568,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
@@ -629,7 +631,7 @@ public class KdsPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -647,7 +649,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -665,7 +667,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
@@ -727,7 +729,7 @@ public class KdsPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -745,7 +747,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
@@ -763,7 +765,7 @@ public class KdsPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")

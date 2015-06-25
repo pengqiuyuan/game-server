@@ -44,7 +44,7 @@ public class KunUserIncomeScheduled {
 	//项目名称
 	private static final String game = "KUN";
 	
-	private static final String index = "logstash-kun-*";
+	private static final String index = "logstash-kun-money-*";
 	
 	private static final String type = "kun_money.log";
 	

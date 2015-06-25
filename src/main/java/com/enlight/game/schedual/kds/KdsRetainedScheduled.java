@@ -31,7 +31,7 @@ public class KdsRetainedScheduled {
 	//项目名称
 	private static final String game = "KDS";
 	
-	private static final String index = "logstash-kds-*";
+	private static final String index = "logstash-kds-user-*";
 	
 	private static final String type = "kds_user.log";
 	

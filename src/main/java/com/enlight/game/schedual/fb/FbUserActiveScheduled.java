@@ -43,7 +43,7 @@ public class FbUserActiveScheduled {
 	//项目名称
 	private static final String game = "FB";
 	
-	private static final String index = "logstash-fb-*";
+	private static final String index = "logstash-fb-user-*";
 	
 	private static final String type = "fb_user.log";
 	
