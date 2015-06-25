@@ -117,20 +117,15 @@ color:Red;
 	        </div>
 	</form>
 	<script type="text/javascript">
-	 var i=0;
+	 var tindex=0;
 	$("#addfield").click(function(){
-		i++;
-		if(i<=$("#storeslength").val()){
+		tindex++;
+		if(tindex<=$("#storeslength").val()){
 			 $("#field").prepend("<div id='item'></div>");
 		     $("#item").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
 		     $("#item").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode' name='role'  class='role-select'></select></div></div>" );
-		     $("#item").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	&nbsp;<span id='delElememt"+i+"' class='del btn btn-danger'>删除权限组</span></div></div>" );
-	  		$('select[name="storeId"]').each(function(){
-	  			if($(this).val()!=0){
-				    $("#field").children(":first").children().children("#storeId").find("option[value='"+$(this).val()+"']").remove();	
-	  			}
-			});
-	     
+		     $("#item").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	&nbsp;<span id='delElememt"+tindex+"' class='del btn btn-danger'>删除权限组</span></div></div>" );
+
 	     $("#roleCode").change(function(e){
 			var gameId = $(this).parent().parent().prev().children().children("#storeId").val();
 			var role = $(this).children('option:selected').val();
@@ -153,8 +148,9 @@ color:Red;
 			});
 		}); 
 	     
- 	 	$("#delElememt"+i).click(function(){
+ 	 	$("#delElememt"+tindex).click(function(){
 		  	$(this).parent().parent().parent().remove();
+		  	tindex--;
 		}); 
 		
 		$("#storeId").change(function(e){
@@ -178,6 +174,8 @@ color:Red;
 				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 			});
 		});
+	 }else if(tindex>$("#storeslength").val()){
+		 tindex=$("#storeslength").val();
 	 }
 	}); 
 	

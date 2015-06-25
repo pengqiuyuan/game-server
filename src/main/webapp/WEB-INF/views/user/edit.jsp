@@ -18,7 +18,7 @@
 
 <body>
 	<div class="page-header">
-   		<h2>用户修改2</h2>
+   		<h2>用户修改</h2>
  	</div>
 
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/user/update" >
