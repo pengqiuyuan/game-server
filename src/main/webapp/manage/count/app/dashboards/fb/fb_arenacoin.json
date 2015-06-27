@@ -191,7 +191,7 @@
   "failover": false,
   "index": {
     "interval": "day",
-    "pattern": "[logstash-fb-arenacoin-]YYYY.MM",
+    "pattern": "[logstash-fb-all-]YYYY.MM",
     "default": "NO_TIME_FILTER_OR_INDEX_PATTERN_NOT_MATCHED",
     "warm_fields": true
   },
