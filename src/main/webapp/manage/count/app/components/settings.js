@@ -10,7 +10,7 @@ function (_) {
      * @type {Object}
      */
     var defaults = {
-      elasticsearch     : "http://"+window.location.hostname+":9200",
+      elasticsearch     : "http://"+window.location.hostname+"/port",
       api_version       : "1.0",
       sniff             : true,
       request_timeout   : 30000,

@@ -1,8 +1,8 @@
 <div class="modal-body">
-  <div class="pull-right editor-title">仪表板设置</div>
+  <div class="pull-right editor-title">Dashboard settings</div>
 
   <div ng-model="editor.index" bs-tabs style="text-transform:capitalize;">
-    <div ng-repeat="tab in ['基本设置','索引设置','模块列表','控制项']" data-title="{{tab}}">
+    <div ng-repeat="tab in ['General','Index','Rows','Controls']" data-title="{{tab}}">
     </div>
     <div ng-repeat="tab in dashboard.current.nav|editable" data-title="{{tab.title || tab.type}}">
     </div>
@@ -179,6 +179,6 @@
 
 <div class="modal-footer">
   <button type="button" ng-click="add_row(dashboard.current,row); reset_row();" class="btn btn-info" ng-show="editor.index == 2">Create Row</button>
-  <button type="button" class="btn btn-success" ng-click="editor.index=0;editSave(dashboard);dismiss();reset_panel();dashboard.refresh()">保存</button>
-  <button type="button" class="btn btn-danger" ng-click="editor.index=0;dismiss();reset_panel();dashboard.refresh()">取消</button>
+  <button type="button" class="btn btn-success" ng-click="editor.index=0;editSave(dashboard);dismiss();reset_panel();dashboard.refresh()">Save</button>
+  <button type="button" class="btn btn-danger" ng-click="editor.index=0;dismiss();reset_panel();dashboard.refresh()">Cancel</button>
 </div>

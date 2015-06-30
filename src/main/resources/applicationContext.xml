@@ -73,7 +73,9 @@
  	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 	
     <!-- import submodule config -->
+    
     <import resource="classpath:/application_es.xml"/>     
+
     <import resource="classpath:/applicationContext-scheduling.xml"/>     			  
 		
 	<!-- production环境 -->
@@ -100,7 +102,6 @@
 			<property name="minEvictableIdleTimeMillis" value="600000" />
 
 		</bean>
-		    <import resource="classpath:/application_es.xml"/>  
 	</beans>
 	
 	<!-- local development环境 -->
@@ -150,7 +151,6 @@
 			<jdbc:script location="classpath:data/h2/import-data.sql" encoding="UTF-8"/>
 		</jdbc:initialize-database>
 		-->
-		    <import resource="classpath:/application_es.xml"/>  
 	</beans>
 
 </beans>

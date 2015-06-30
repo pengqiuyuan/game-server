@@ -102,12 +102,12 @@
 			<dependency>
 			  <groupId>fr.pilato.spring</groupId>
 			  <artifactId>spring-elasticsearch</artifactId>
-			  <version>1.4.2</version>
+			  <version>1.4.0</version>
 			</dependency>
 			<dependency>
 			  <groupId>org.elasticsearch</groupId>
 			  <artifactId>elasticsearch</artifactId>
-			  <version>1.4.4</version>
+			  <version>1.6.0</version>
 		</dependency>
 		
 	    <dependency>
