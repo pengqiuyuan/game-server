@@ -119,6 +119,7 @@ line-height: 30px;
 								<input type="text" name="beginD" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="beginD"  placeholder="礼品卡生效时间"/>
 							</div>
 						</div>
+					
 						
 						<div class="control-group">
 							<label class="control-label" for="endD">结束时间：</label>
@@ -299,7 +300,7 @@ line-height: 30px;
 	        var endDoingDate=$("#endD").val();
 	        var startTime = new Date(doingDate).getTime();
 	        var endTime = new Date(endDoingDate).getTime();
-	         if(!endDoingDate.length=0){
+	         if(endDoingDate.length!=0){
 	        	 if(startTime>endTime){
 	             	$("#time").show();
 	             	return false;

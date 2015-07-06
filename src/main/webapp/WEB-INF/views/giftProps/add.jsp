@@ -73,15 +73,15 @@ color:Red;
 		}
 	});
 	
-    var i = 0;
+    var inum = 0;
 	$("#addfield").click(function(){
 		var gameId = $("#gameId").val();
 		if(gameId!=""){
-			if($(this).attr("disabled")!="disabled"){
+
 				$("#message").remove();
-				i++;
-				if(i<=4){
-				    $("#field").prepend( "<div class='control-group' id='fieldValueDiv"+i+"'><label class='control-label' for='name'>道具Id及名称：</label><div class='typeahead-wrapper controls'><input type='text' name='fieldValue' id='fieldValue"+i+"' style='height: 20px;' class='states' value='' placeholder='道具Id及名称，如: 1:金币'/></div></div>" );
+				inum++;
+				if(inum<=4){
+				    $("#field").prepend( "<div class='control-group' id='fieldValueDiv"+inum+"'><label class='control-label' for='name'>道具Id及名称：</label><div class='typeahead-wrapper controls'><input type='text' name='fieldValue' id='fieldValue"+inum+"' style='height: 20px;' class='states' value='' placeholder='道具Id及名称，如: 1:金币'/></div></div>" );
 				}
 			    $('.states').typeahead({
 			        valueKey: 'tagName',
@@ -90,11 +90,11 @@ color:Red;
 			        remote: '<%=request.getContextPath()%>/manage/tag/findItemNameAndId?query=%QUERY&gameId='+gameId
 			    });
 			    
-				$('#fieldValue'+i).blur(function(){
-					var fieldValue = $('#fieldValue'+i).val();
+				$('#fieldValue'+inum).blur(function(){
+					var fieldValue = $('#fieldValue'+inum).val();
 					var tel = /^\d+:/;
 					
-					$('#checkvalue'+i).remove();
+					$('#checkvalue'+inum).remove();
 					if(tel.test(fieldValue)){
 	 					$.ajax({                                               
 							url: '<%=request.getContextPath()%>/manage/giftProps/checkTagId?gameId='+gameId+'&fieldValue='+fieldValue,
@@ -106,14 +106,14 @@ color:Red;
 								if(data=="true"){
 									$('#submit').removeAttr("disabled");
 								}else if(data=="false"){
-									$('#fieldValue'+i).after("<span id='checkvalue"+i+"' class='error'>道具Excel不存在此道具</span>");
+									$('#fieldValue'+inum).after("<span id='checkvalue"+inum+"' class='error'>道具Excel不存在此道具</span>");
 									$('#submit').attr("disabled","disabled");
 								}
 							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 						});
 					}
 				});
-			}		
+		
 		}else{
 			$("#message").remove();
 			$("#inputForm").prev().prepend("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>请选择游戏项目</div>")
