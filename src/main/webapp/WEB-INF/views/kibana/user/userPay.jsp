@@ -198,7 +198,7 @@
 			</form>
 
 			<div class="row-fluid">
-				<div class="span6">
+				<div class="span12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 							<div id="mainAdd"
@@ -206,7 +206,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="span6">
+			</div>
+			
+			<div class="row-fluid">
+				<div class="span12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 							<div id="mainTotal"
