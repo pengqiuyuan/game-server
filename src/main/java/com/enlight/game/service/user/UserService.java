@@ -31,10 +31,10 @@ public class UserService {
 
 	@Autowired
 	private UserDao userDao ;
-	
+
 	@Autowired
 	private AccountService accountService;
-	
+
 	/**
 	 * 分页查询
 	 * @param userId
@@ -60,8 +60,8 @@ public class UserService {
 	public User findById(long id){
 		return userDao.findOne(id);
 	}
-	
-	
+
+
 	/**
 	 * 添加
 	 * @param user
@@ -86,7 +86,7 @@ public class UserService {
 		user1.setServerZone(user.getServerZone());
 		userDao.save(user1);
 	}
-	
+
 	/**
 	 * 删除（伪）
 	 * @param user
@@ -105,7 +105,7 @@ public class UserService {
 		User user1 = this.findById(user.getId());
 		userDao.delete(user1);
 	}
-	
+
 	/**
 	 * 用户激活
 	 * @param user
@@ -115,7 +115,7 @@ public class UserService {
 		user1.setStatus(User.STATUS_VALIDE);
 		userDao.save(user1);
 	}
-	
+
 	/**
 	 * 用户是否唯一
 	 * @param loginName
@@ -125,7 +125,7 @@ public class UserService {
 	  User user = userDao.findByLoginName(loginName);
 	  return user == null ? true:false;
 	}
-	
+
 	/**
 	 * 创建分页请求.
 	 */
@@ -153,7 +153,6 @@ public class UserService {
 		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
 		return spec;
 	}
-	
-	
-}
 
+
+}

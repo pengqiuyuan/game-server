@@ -14,7 +14,7 @@
 <title>用户管理</title>
 </head>
 <body>
-   
+
 	<div >
 		<div class="page-header">
 			<h2>用户管理</h2>
@@ -26,22 +26,22 @@
 				<form id="queryForm" class="well form-inline"  method="get"
 					action="${ctx}/manage/user/index">
 					<label>用户名：</label> <input name="search_LIKE_name"
-						type="text" value="${param.search_LIKE_name}" /> 
-			      		
-						<label>状态：</label> 
-						
+						type="text" value="${param.search_LIKE_name}" />
+
+						<label>状态：</label>
+
 						<select name="search_EQ_status">
 						<option value="">---------请选择---------</option>
 						<option value="1" ${param.search_EQ_status == '1' ? 'selected' : '' } >正常</option>
 						<option value="0" ${param.search_EQ_status == '0' ? 'selected' : '' }  >冻结</option>
 						</select>
-					
+
 						 <input type="submit" class="btn"
 						value="查 找" />
 				<tags:sort />
 				</form>
-			
-			
+
+
 		</div>
 		<table class="table table-striped table-bordered table-condensed">
 			<thead>
@@ -52,15 +52,15 @@
 					<th title="登入名">所属项目</th>
 					<th title="创建时间" width="240px">创建时间</th>
 					<th title="状态">状态</th>
-					
+
 				</tr>
 			</thead>
 			<tbody>
 
 				<c:forEach items="${users.content}" var="item" varStatus="s">
-				
+
 					<tr  >
-					
+
 						<td>
 							<div class="btn-group">
 								<a class="btn" href="#">${item.id}</a> <a
@@ -81,15 +81,15 @@
 							        </shiro:hasAnyRoles>
 							        </c:if>
 
-							        
+
 									<li><a href="<%=request.getContextPath()%>/manage/user/resetPwd?id=${item.id}"><i class="icon-edit"></i>重置密码</a></li>
-						
+
 								</ul>
 							</div>
 						</td>
-						
+
 						<td>
-					
+
 						<a
 							href="<%=request.getContextPath()%>/manage/user/detail?id=${item.id}"
 							 data-fancybox-type="iframe" rel="fancy" title="用户详细" class="showInfo" >${item.name}</a>
@@ -103,17 +103,17 @@
 						</td>
 						<td><fmt:formatDate value="${item.registerDate}" pattern="yyyy/MM/dd" /></td>
 						<td>${item.status == '1' ? '正常' : '冻结' }</td>
-					
-						
+
+
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 
-		
+
 		<tags:pagination page="${users}" paginationSize="5"/>
-		
-		
+
+
 		<shiro:hasAnyRoles name="admin">
 			<div class="form-actions">
 				<a href="<%=request.getContextPath()%>/manage/user/add"
@@ -124,19 +124,19 @@
 	</div>
 		<script type="text/javascript">
 		$(document).ready(function(){
-			
+
 			$(".showInfo").fancybox({
 				autoDimensions:false,
 				width:800,
 				height:600
 			});
-			
-			
-			
+
+
+
 			$(".del").click(function(){
 				var id = $(this).attr("rel");
 					$.ajax({
-						url: '<%=request.getContextPath()%>/manage/user/del?id=' + id, 
+						url: '<%=request.getContextPath()%>/manage/user/del?id=' + id,
 						type: 'DELETE',
 						contentType: "application/json;charset=UTF-8",
 						dataType: 'json',
@@ -146,13 +146,13 @@
 							alert('错误了，请重试');
 						}
 					});
-				
+
 			});
-			
+
 			$(".userdel").click(function(){
 				var id = $(this).attr("rel");
 					$.ajax({
-						url: '<%=request.getContextPath()%>/manage/user/delUser?id=' + id, 
+						url: '<%=request.getContextPath()%>/manage/user/delUser?id=' + id,
 						type: 'DELETE',
 						contentType: "application/json;charset=UTF-8",
 						dataType: 'json',
@@ -162,14 +162,14 @@
 							alert('错误了，请重试');
 						}
 					});
-				
+
 			});
-			
-			
+
+
 			$(".unlock").click(function(){
 				var id = $(this).attr("rel");
 					$.ajax({
-						url: '<%=request.getContextPath()%>/manage/user/active?id=' + id, 
+						url: '<%=request.getContextPath()%>/manage/user/active?id=' + id,
 						type: 'DELETE',
 						contentType: "application/json;charset=UTF-8",
 						dataType: 'json',
@@ -179,16 +179,16 @@
 							alert('错误了，请重试');
 						}
 					});
-				
+
 			});
-			
-			
+
+
 		});
-	
-	
-	
-		
-		
-		</script> 	
+
+
+
+
+
+		</script>
 </body>
 </html>

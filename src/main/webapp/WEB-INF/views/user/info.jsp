@@ -28,10 +28,10 @@
 			<p><span>所属项目：</span><huake:getStoreNameTag id="${user.storeId}"></huake:getStoreNameTag></p>
 			<p><span>创建时间：</span><fmt:formatDate value="${user.registerDate}" pattern="yyyy/MM/dd  HH:mm:ss" /></p>
 			<p><span>状态：</span>${user.status  == 1 ? '正常' : '注销'}</p>
-		
+
 		</div>
-		
-	
+
+
 		</div>
 		<div class="clear"></div>
 </body>
