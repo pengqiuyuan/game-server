@@ -89,7 +89,7 @@ public class LoginController {
 					List<String> list = userRoles.get(0).getRoleList();
 					for (String f : list) {
 						EnumFunction enumFunction  = enumFunctionService.findByEnumRole(f);
-						EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
+						EnumCategory enumCategory = enumCategoryService.find(Long.valueOf(enumFunction.getCategoryId()));
 						enumCategories.add(enumCategory);
 					}
 					map.put("enumCategories", enumCategories);

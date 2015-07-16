@@ -154,7 +154,7 @@ public class RoleFunctionController extends BaseController{
 		}
 		List<EnumCategory> cateAndFunctions = enumCategoryService.findAllNotCount();
 		for (EnumCategory enumCategory : cateAndFunctions) {
-			Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryId(enumCategory.getId().intValue());
+			Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryId(enumCategory.getId().toString());
 			enumCategory.setEnumFunctions(enumFunctions);
 		}
 		model.addAttribute("cateAndFunctions", cateAndFunctions);
@@ -169,7 +169,7 @@ public class RoleFunctionController extends BaseController{
 	public EnumCategory changGameId(@RequestParam("storeId") String storeId) {
 		if(!storeId.equals("")){
 			EnumCategory enumCategory = enumCategoryService.find(EnumCategory.ENUM_COUNT);
-			Set<EnumFunction> enumFunctions =  enumFunctionService.findByGameId(Long.valueOf(storeId));
+			Set<EnumFunction> enumFunctions =  enumFunctionService.findByGameId(storeId);
 			enumCategory.setEnumFunctions(enumFunctions);
 			return enumCategory;
 		}else{
@@ -272,10 +272,10 @@ public class RoleFunctionController extends BaseController{
 		List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
 		for (EnumCategory enumCategory : cateAndFunctions) {
 			if(enumCategory.getId().equals(EnumCategory.ENUM_COUNT)){
-				Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameId(roleFunction.getGameId());
+				Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameId(roleFunction.getGameId().toString());
 				enumCategory.setEnumFunctions(enumFuncs);
 			}else{
-				Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryId(enumCategory.getId().intValue());
+				Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryId(enumCategory.getId().toString());
 				enumCategory.setEnumFunctions(enumFunctions);
 			}
 		}

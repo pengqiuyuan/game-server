@@ -61,7 +61,7 @@ public class GetEnumCategoryTag extends TagSupport {
 			List<RoleAndEnum> roleAndEnums = roleAndEnumService.findByRoleRunctionId(Long.parseLong(id));
 			for (RoleAndEnum roleAndEnum : roleAndEnums) {
 				EnumFunction enumFunction =  enumFunctionService.findByEnumRole(roleAndEnum.getEnumRole());
-				EnumCategory enumCategory = enumCategoryService.find((long)enumFunction.getCategoryId());
+				EnumCategory enumCategory = enumCategoryService.find(Long.valueOf(enumFunction.getCategoryId()));
 				enumCategories.add(enumCategory);
 			}
 			
