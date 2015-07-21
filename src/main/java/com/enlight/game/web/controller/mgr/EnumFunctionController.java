@@ -6,11 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.EnumCategory;
-import com.enlight.game.entity.Server;
-import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
@@ -45,7 +41,7 @@ import com.enlight.game.entity.EnumFunction;
 import com.google.common.collect.Maps;
 
 @Controller("enumFunctionController")
-@RequestMapping(value = "/manage/enumFunction")
+@RequestMapping("/manage/enumFunction")
 public class EnumFunctionController extends BaseController{
 
 	private static final String PAGE_SIZE = "15";
@@ -55,7 +51,6 @@ public class EnumFunctionController extends BaseController{
 	
 	static {
 		sortTypes.put("auto", "自动");
-		sortTypes.put("registerDate", "时间");
 	}
 
 	public static Map<String, String> getSortTypes() {

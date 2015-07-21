@@ -86,27 +86,9 @@ public class GiftController extends BaseController{
 		GiftController.sortTypes = sortTypes;
 	}
 	
-	@Value("#{envProps.list_url}")
-	private String list_url;
-	
-	@Value("#{envProps.save_url}")
-	private String save_url;
-	
-	@Value("#{envProps.del_url}")
-	private String del_url;
-	
-	@Value("#{envProps.export_url}")
-	private String export_url;
-	
-	@Value("#{envProps.review_url}")
-	private String review_url;
-	
-	@Value("#{envProps.search_url}")
-	private String search_url;
-	
-	@Value("#{envProps.searchgift_url}")
-	private String searchgift_url;
-	
+	@Value("#{envProps.billing_url}")
+	private String billing_url;
+
 	@Value("#{envProps.excelpath}")
 	private String excelpath;
 	
@@ -156,7 +138,7 @@ public class GiftController extends BaseController{
 		if (store!=null&&store!="") {
 			try {
 				String category = u.getRoles().equals(User.USER_ROLE_ADMIN)?Gift.CATEGORY_ADMIN:Gift.CATEGORY_ORDINART;
-				String gs = HttpClientUts.doGet(list_url+"?category="+category+"&gameId="+store+"&userId="+user.id, "utf-8");
+				String gs = HttpClientUts.doGet(billing_url+"/api/gameserver/v1/gift/index"+"?category="+category+"&gameId="+store+"&userId="+user.id, "utf-8");
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
 		        List<Gift> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Gift>>() {}); 
 		        //分页显示部分 pageNumber第几页 pageSize每页条数
@@ -222,7 +204,7 @@ public class GiftController extends BaseController{
 					&&status!=null&&status!=""
 					&&query!=null&&query!=""
 					&&status.equals("0")){//GUID
-				String gs = HttpClientUts.doGet(search_url+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
+				String gs = HttpClientUts.doGet(billing_url+"/api/gameserver/v1/gift/search"+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
 				List<GiftSearch> beanList = binder.getMapper().readValue(gs, new TypeReference<List<GiftSearch>>() {}); 
 				List<GiftSearch> List = beanList.subList((pageNumber-1)*pageSize, pageNumber*pageSize>beanList.size()? beanList.size():pageNumber*pageSize);
@@ -235,7 +217,7 @@ public class GiftController extends BaseController{
 					&&status!=null&&status!=""
 					&&query!=null&&query!=""
 					&&status.equals("1")){//礼品码
-				String gs = HttpClientUts.doGet(search_url+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
+				String gs = HttpClientUts.doGet(billing_url+"/api/gameserver/v1/gift/search"+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
 				//String gs="{\"status\":\"1\"}";
 				//gs ="[" +gs +"]";
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
@@ -273,7 +255,7 @@ public class GiftController extends BaseController{
 					&&status!=null&&status!=""
 					&&query!=null&&query!=""
 					&&status.equals("2")){//礼品卡Id
-				String gs = HttpClientUts.doGet(search_url+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
+				String gs = HttpClientUts.doGet(billing_url+"/api/gameserver/v1/gift/search"+"?status="+status+"&query="+query+"&gameId="+store, "utf-8");
 				JSONObject jsonObject = JSONObject.fromString(gs);
 				String num = jsonObject.getString("number");
 				
@@ -397,7 +379,7 @@ public class GiftController extends BaseController{
 		gift.setBeginDate(daBegin.getTime());
 		gift.setEndDate(daEnd.getTime());
 		
-		HttpClientUts.doPost(save_url, JSONObject.fromObject(gift));
+		HttpClientUts.doPost(billing_url+"/api/gameserver/v1/gift/add", JSONObject.fromObject(gift));
 		return "redirect:/manage/gift/index?search_LIKE_store="+gift.getGameId();
 	}
 	
@@ -417,7 +399,7 @@ public class GiftController extends BaseController{
 	    GIds g = new GIds();
 		g.setGiftIds(giftIds);
 		System.out.println(JSONObject.fromObject(g));
-		JSONObject res = HttpClientUts.doPost(del_url, JSONObject.fromObject(g));
+		JSONObject res = HttpClientUts.doPost(billing_url+"/api/gameserver/v1/gift/delete", JSONObject.fromObject(g));
 		System.out.println(res);
 		map.put("status", res.get("status"));
 		return map;
@@ -434,8 +416,8 @@ public class GiftController extends BaseController{
 	public Map<String,String> exportCode(@RequestParam(value="giftId") String giftId,RedirectAttributes redirectAttributes){
 		Map<String, String> m = new HashMap<String, String>();
 		try {
-			String gfcodes = HttpClientUts.doGet(export_url+"?giftId="+giftId, "utf-8");
-			String gf = HttpClientUts.doGet(searchgift_url+"?giftId="+giftId, "utf-8");
+			String gfcodes = HttpClientUts.doGet(billing_url+"/api/gameserver/v1/gift/export"+"?giftId="+giftId, "utf-8");
+			String gf = HttpClientUts.doGet(billing_url+"/api/gameserver/v1/gift/searchgift"+"?giftId="+giftId, "utf-8");
 			Gift gift = binder.fromJson(gf, Gift.class);
 			JsonFlattener parser = new JsonFlattener();
 	        CSVWriter writer = new CSVWriter();
@@ -496,7 +478,7 @@ public class GiftController extends BaseController{
 			status = Gift.STATUS_CHECKING;
 		}
 		try {
-			HttpClientUts.doGet(review_url+"?giftId="+giftId+"&status="+status, "utf-8");
+			HttpClientUts.doGet(billing_url+"/api/gameserver/v1/gift/review"+"?giftId="+giftId+"&status="+status, "utf-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
