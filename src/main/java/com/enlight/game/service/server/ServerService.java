@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import com.enlight.game.entity.Server;
 import com.enlight.game.entity.User;
 import com.enlight.game.repository.ServerDao;
 import com.enlight.game.service.account.AccountService;
+import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 
 @Component
 @Transactional
@@ -131,13 +133,19 @@ public class ServerService {
 			Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		User user = accountService.getUser(userId);
-		//ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		ShiroUser u = getCurrentUser();
 		if (!user.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			filters.put("status", new SearchFilter("status", Operator.EQ,Server.STATUS_VALIDE));
+			filters.put("storeId", new SearchFilter("storeId", Operator.EQ,u.getStoreId()));
 		}
 		filters.put("status", new SearchFilter("status", Operator.EQ,Server.STATUS_VALIDE));
 		Specification<Server> spec = DynamicSpecifications.bySearchFilter(filters.values(), Server.class);
 		return spec;
+	}
+	
+	public ShiroUser getCurrentUser() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user;
 	}
 	
 }
