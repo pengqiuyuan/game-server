@@ -169,7 +169,7 @@ public class RoleFunctionController extends BaseController{
 	public EnumCategory changGameId(@RequestParam("storeId") String storeId) {
 		if(!storeId.equals("")){
 			EnumCategory enumCategory = enumCategoryService.find(EnumCategory.ENUM_COUNT);
-			Set<EnumFunction> enumFunctions =  enumFunctionService.findByGameId(storeId);
+			Set<EnumFunction> enumFunctions =  enumFunctionService.findByGameIdAndcategoryId(storeId,enumCategory.getId().toString());
 			enumCategory.setEnumFunctions(enumFunctions);
 			return enumCategory;
 		}else{

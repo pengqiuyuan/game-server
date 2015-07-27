@@ -54,6 +54,10 @@ public class EnumFunctionService {
 		return enumFunctionDao.findByGameId(gameId);
 	}
 	
+	public Set<EnumFunction> findByGameIdAndcategoryId(String gameId,String categoryId){
+		return enumFunctionDao.findByGameIdAndCategoryId(gameId,categoryId);
+	}
+	
 	public void save(EnumFunction enumFunction){
 		enumFunction.setCrDate(new Date());
 		enumFunction.setUpdDate(new Date());
