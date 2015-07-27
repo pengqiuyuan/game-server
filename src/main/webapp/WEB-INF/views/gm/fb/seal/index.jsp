@@ -10,7 +10,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-	<title>禁言</title>
+	<title>封号</title>
 	<style type="text/css">
 		.form-ac {
 		  padding: 19px 20px 20px;
@@ -29,13 +29,13 @@
 	</script>
 	<div >
 		<div class="page-header">
-			<h2>禁言</h2>
+			<h2>封号</h2>
 		</div>
 		<div>
 			<c:if test="${not empty message}">
 				<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 			</c:if>
-			<form id="queryForm" class="form-horizontal"  method="get" action="${ctx}/manage/gm/fb/gag/index">
+			<form id="queryForm" class="form-horizontal"  method="get" action="${ctx}/manage/gm/fb/seal/index">
 				<div class="control-group">
 					<label class="control-label" for="gameId">选择游戏项目：</label>
 					<div class="controls">
@@ -82,29 +82,29 @@
 				<table class="table table-striped table-bordered table-condensed" id="table">
 					<thead>
 						<tr>
-		                    <th title="禁言guid">禁言guid</th>
-							<th title="禁言名称">禁言名称</th>
-							<th title="禁言account">禁言account器ID</th>
-							<th title="禁言渠道">禁言渠道</th>
-							<th title="禁言时间">禁言时间</th>
-							<th title="禁言开始时间">禁言开始时间</th>
-							<th title="禁言结束时间">禁言结束时间</th>
+		                    <th title="封号guid">封号guid</th>
+							<th title="封号名称">封号名称</th>
+							<th title="封号account">封号account器ID</th>
+							<th title="封号渠道">封号渠道</th>
+							<th title="封号时间">封号时间</th>
+							<th title="封号开始时间">封号开始时间</th>
+							<th title="封号结束时间">封号结束时间</th>
 						</tr>
 					</thead>
 					<tbody id="tbody">
-						<c:forEach items="${gag.content}" var="item" varStatus="s">
+						<c:forEach items="${seal.content}" var="item" varStatus="s">
 							<tr id="${item.guid}">
 								<td>${item.name}</td>
 								<td>${item.account}</td>
 								<td>${item.platForm}</td>
-								<td>${item.gagTime}</td>
-								<td>${item.gagStart}</td>
-								<td>${item.gagEnd}</td>
+								<td>${item.sealTime}</td>
+								<td>${item.sealStart}</td>
+								<td>${item.sealEnd}</td>
 			   					<td>
 									<div class="action-buttons">
 										<shiro:hasAnyRoles name="admin">
-											<a class="exportCode btn table-actions" onclick="updateGag('${item.guid}','${item.name}','${item.account}','${item.platForm}','${item.id}')"><i class="icon-ok"></i>修改</a>
-									    	<a class="exportCode btn table-actions" onclick="delGag('${item.id}')"><i class="icon-remove"></i>删除</a>
+											<a class="exportCode btn table-actions" onclick="updateSeal('${item.guid}','${item.name}','${item.account}','${item.platForm}','${item.id}')"><i class="icon-ok"></i>修改</a>
+									    	<a class="exportCode btn table-actions" onclick="delSeal('${item.id}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -112,14 +112,14 @@
 						</c:forEach>
 					</tbody>
 				</table>
-				<tags:pagination page="${gag}" paginationSize="5"/>
+				<tags:pagination page="${seal}" paginationSize="5"/>
 		</div>
 		
 
 
-		<form id="inputForm" method="post" Class="form-horizontal" action="<%=request.getContextPath()%>/manage/gm/fb/gag/update"   enctype="multipart/form-data"  style="display: none;">
+		<form id="inputForm" method="post" Class="form-horizontal" action="<%=request.getContextPath()%>/manage/gm/fb/seal/update"   enctype="multipart/form-data"  style="display: none;">
 			<div style="color:#3352CC;clear:both">
-			<br><hr style="background-color:#808080;height:1px;width:800px;margin:auto"><h4>修改禁言时间：</h4></div>
+			<br><hr style="background-color:#808080;height:1px;width:800px;margin:auto"><h4>修改封号时间：</h4></div>
 			<input type="hidden" name="id" id="id">
 			<div class="control-group">
 				<label class="control-label" for="">游戏:</label>
@@ -166,61 +166,61 @@
 			</div>	
 			<div
 				class="control-group">
-				<label class="control-label" for="guid">禁言guid：</label>
+				<label class="control-label" for="guid">封号guid：</label>
 				<div class="controls">
-					<input type="text" id="guid" name="guid" class="input-large"  placeholder="禁言guid"/ readonly="readonly">
+					<input type="text" id="guid" name="guid" class="input-large"  placeholder="封号guid"/ readonly="readonly">
 				</div>
 			</div>
 			<div
 				class="control-group">
-				<label class="control-label" for="name">禁言名称：</label>
+				<label class="control-label" for="name">封号名称：</label>
 				<div class="controls">
-					<input type="text" id="name" name="name" class="input-large"  placeholder="禁言名称"/ readonly="readonly">
+					<input type="text" id="name" name="name" class="input-large"  placeholder="封号名称"/ readonly="readonly">
 				</div>
 			</div>
 			<div
 				class="control-group">
-				<label class="control-label" for="account">禁言account：</label>
+				<label class="control-label" for="account">封号account：</label>
 				<div class="controls">
-					<input type="text" id="account" name="account" class="input-large"  placeholder="禁言account"/ readonly="readonly">
+					<input type="text" id="account" name="account" class="input-large"  placeholder="封号account"/ readonly="readonly">
 				</div>
 			</div>
 			<div class="control-group" id="selectDate">
-				<label class="control-label" for="gagTime">选择禁言时间：</label>
+				<label class="control-label" for="sealTime">选择封号时间：</label>
 				<div class="controls">
-					<select name="gagTime" id="gagTime">	
-						<option value="">请选择禁言时间</option>
+					<select name="sealTime" id="sealTime">	
+						<option value="">请选择封号时间</option>
 						<option value="1800">封禁半小时</option>	
 						<option value="43200">封禁12小时</option>	
 						<option value="86400">封禁1天</option>	
 						<option value="2592000">封禁1个月</option>	
 						<option value="31536000">封禁1年</option>	
-						<option value="－1">永久封禁</option>		
+						<option value="－1">永久封禁</option>		ga
 					</select>	
 				</div>
 			</div>
 			<div id="customDate" style="display: none;">
 				<div class="control-group">
-					<label class="control-label" for=gagStart>禁言开始时间：</label>
+					<label class="control-label" for=sealStart>封号开始时间：</label>
 					<div class="controls">
-						<input type="text" name="gagStart" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="gagStart"  placeholder="禁言开始时间"/>
+						<input type="text" name="sealStart" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="sealStart"  placeholder="封号开始时间"/>
 					</div>
 				</div>	
 				<div class="control-group">
-					<label class="control-label" for="gagEnd">禁言结束时间：</label>
+					<label class="control-label" for="sealEnd">封号结束时间：</label>
 					<div class="controls">
-						<input type="text" name="gagEnd" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="gagEnd" placeholder="禁言结束时间"/>
+						<input type="text" name="sealEnd" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="sealEnd" placeholder="封号结束时间"/>
 						<div id="time"  class="alert alert-danger" style="display: none;width: 20%; margin-top: 10px;"><button data-dismiss="alert" class="close">×</button>结束时间不能小于开始时间</div>
 					</div>
 				</div>
 			</div>
 			<div class="form-ac">
-				<button type="button" class="btn btn-success" onclick="customDate();">自定义禁言时间</button>
-				<button type="button" class="btn btn-info" onclick="cancelCustomDate();">取消自定义禁言</button>
+				<button type="button" class="btn btn-success" onclick="customDate();">自定义封号时间</button>
+				<button type="button" class="btn btn-info" onclick="cancelCustomDate();">取消自定义封号</button>
 			</div>
 			<shiro:hasAnyRoles name="admin">
 				<div class="form-actions" >
-					<input type="submit" class="btn btn-primary" value="修改禁言信息" />
+					<input type="submit" class="btn btn-primary" value="修改封号信息" />
 					<a class="btn btn-primary" id="cancel">取消</a>
 				</div>
 			</shiro:hasAnyRoles>	
@@ -234,12 +234,12 @@
 				$('.intro').tooltip();
 			});
 			
-			function updateGag(platForm,guid,name,account,id){
+			function updateSeal(platForm,guid,name,account,id){
 				$('#inputForm').show();
 				
-			    $("#gagTime").val("pxx");
-				$('#gagStart').attr('value','');
-				$('#gagEnd').attr('value','');
+			    $("#sealTime").val("pxx");
+				$('#sealStart').attr('value','');
+				$('#sealEnd').attr('value','');
 				
 				
 				$("#id").attr('value',id);
@@ -255,11 +255,11 @@
 				$("input#serverId").attr("disabled","disabled");  
 			}
 			
-			function delGag(id){
+			function delSeal(id){
 				if(confirm("该操作会删除。。。。！"))
 				    {
 							$.ajax({
-								url: '<%=request.getContextPath()%>/manage/gm/fb/gag/del?id=' + id, 
+								url: '<%=request.getContextPath()%>/manage/gm/fb/seal/del?id=' + id, 
 								type: 'DELETE',
 								contentType: "application/json;charset=UTF-8",
 								dataType: 'json',
@@ -283,20 +283,20 @@
 			
 			function customDate(){  
 				$('#customDate').show();
-				$("#gagStart").removeAttr("disabled");  
-				$("#gagEnd").removeAttr("disabled");  
-				$("#gagTime").attr("disabled","disabled");  
-			    $("#gagTime").val("pxx");
+				$("#sealStart").removeAttr("disabled");  
+				$("#sealEnd").removeAttr("disabled");  
+				$("#sealTime").attr("disabled","disabled");  
+			    $("#sealTime").val("pxx");
 				$('#selectDate').hide();
 			}	
 			function cancelCustomDate(){  
 				$('#selectDate').show();
-				$("#gagTime").removeAttr("disabled");  
+				$("#sealTime").removeAttr("disabled");  
 				
-				$("#gagStart").attr("disabled","disabled");  
-				$("#gagEnd").attr("disabled","disabled");  
-				$('#gagStart').attr('value','');
-				$('#gagEnd').attr('value','');
+				$("#sealStart").attr("disabled","disabled");  
+				$("#sealEnd").attr("disabled","disabled");  
+				$('#sealStart').attr('value','');
+				$('#sealEnd').attr('value','');
 				$('#customDate').hide();
 			
 			}	
@@ -379,24 +379,24 @@
 				
 				$("#inputForm").validate({
 					rules:{
-						gagTime:{
+						sealTime:{
 							required:true
 						},
-						gagStart:{
+						sealStart:{
 							required:true
 						},
-						gagEnd:{
+						sealEnd:{
 							required:true
 						}
 					},messages:{
-						gagTime:{
-							required:"禁言时间必须填写"
+						sealTime:{
+							required:"封号时间必须填写"
 						},
-						gagStart:{
-							required:"禁言开始时间必须填写"
+						sealStart:{
+							required:"封号开始时间必须填写"
 						},
-						gagEnd:{
-							required:"禁言结束时间必须填写"
+						sealEnd:{
+							required:"封号结束时间必须填写"
 						}
 					}
 				});			

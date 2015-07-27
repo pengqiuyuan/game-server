@@ -1,5 +1,6 @@
 package com.enlight.game.web.controller.mgr.fb.gm;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,16 +50,21 @@ import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.fb.gm.Category;
-import com.enlight.game.entity.fb.gm.Placard;
+import com.enlight.game.entity.fb.gm.Seal;
 import com.google.common.collect.Maps;
 
-@Controller("fbPlacardController")
-@RequestMapping("/manage/gm/fb/placard")
-public class FbPlacardController extends BaseController{
+/**
+ * 
+ * @author apple
+ * 封号
+ */
+@Controller("fbSealController")
+@RequestMapping("/manage/gm/fb/seal")
+public class FbSealController extends BaseController{
 
 	private static final String PAGE_SIZE = "10";
 
-	private static final Logger logger = LoggerFactory.getLogger(FbPlacardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(FbSealController.class);
 	
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	
@@ -73,7 +79,7 @@ public class FbPlacardController extends BaseController{
 	}
 
 	public static void setSortTypes(Map<String, String> sortTypes) {
-		FbPlacardController.sortTypes = sortTypes;
+		FbSealController.sortTypes = sortTypes;
 	}
 	
 	@Autowired
@@ -145,22 +151,22 @@ public class FbPlacardController extends BaseController{
 				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
 					storeId = user.getStoreId();
 				}
-				String gs = HttpClientUts.doGet(gm_url+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard, "utf-8");
+				String gs = HttpClientUts.doGet(gm_url+"/fbserver/seal/getAllSealAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.seal, "utf-8");
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<Placard> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Placard>>() {}); 
-		        PageImpl<Placard> placard = new PageImpl<Placard>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
-				model.addAttribute("placard", placard);
+		        List<Seal> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Seal>>() {}); 
+		        PageImpl<Seal> seal = new PageImpl<Seal>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
+				model.addAttribute("seal", seal);
 				
 				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_LIKE_storeId"));
 				model.addAttribute("servers", servers);
 	        }else{
-	        	List<Placard> beanList = new ArrayList<Placard>();
+	        	List<Seal> beanList = new ArrayList<Seal>();
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        PageImpl<Placard> placard = new PageImpl<Placard>(beanList, pageRequest, 0);
-				model.addAttribute("placard", placard);
+		        PageImpl<Seal> seal = new PageImpl<Seal>(beanList, pageRequest, 0);
+				model.addAttribute("seal", seal);
 				
 				Set<Server> servers = new HashSet<Server>();
 				model.addAttribute("servers", servers);
@@ -173,7 +179,7 @@ public class FbPlacardController extends BaseController{
 		model.addAttribute("sortTypes", sortTypes);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-		return "/gm/fb/placard/index";
+		return "/gm/fb/seal/index";
 	}
 	
 	/**
@@ -201,42 +207,43 @@ public class FbPlacardController extends BaseController{
 			model.addAttribute("stores", stores);
 			model.addAttribute("serverZones", serverZones);
 		}
-		return "/gm/fb/placard/add";
+		return "/gm/fb/seal/add";
 	}
 	
 	/**
 	 * 修改
+	 * @throws UnsupportedEncodingException 
 	 */
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
-	public String update(ServletRequest request,RedirectAttributes redirectAttributes){
+	public String update(ServletRequest request,RedirectAttributes redirectAttributes) throws UnsupportedEncodingException{
 		String id = request.getParameter("id");
 		String gameId = request.getParameter("search_LIKE_storeId");
 		String serverZoneId = request.getParameter("search_LIKE_serverZoneId");
-		String[] serverIds = request.getParameterValues("search_LIKE_serverId");
-		String version = request.getParameter("version");
-		String contents = request.getParameter("contents");
-		System.out.println(id +"  " + gameId + " "+ serverZoneId + "  "  + serverIds + " " + version + "  " + contents);
-		Placard placard = new Placard();
-		placard.setId(Integer.valueOf(id));
-		placard.setVersion(version);
-		placard.setContents(contents);
-		placard.setServerIds(serverIds);
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/updatePlacards" , JSONObject.fromObject(placard));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/fb/placard/index";
+		String serverId = request.getParameter("search_LIKE_serverId");
+		Seal seal = new Seal();
+		seal.setId(Integer.parseInt(id));
+		if(null != request.getParameter("sealTime")){
+			seal.setSealTime(request.getParameter("sealTime"));
+		}else if(null != request.getParameter("sealStart") && null != request.getParameter("sealEnd")){
+			seal.setSealStart(request.getParameter("sealStart"));
+			seal.setSealEnd(request.getParameter("sealEnd"));
+		}
+		
+		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/updateSealAccount" , JSONObject.fromObject(seal));
+		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
+		
+		return "redirect:/manage/gm/fb/seal/index?search_LIKE_storeId="+gameId+"&search_LIKE_serverZoneId="+serverZoneId+"&search_LIKE_serverId="+URLEncoder.encode(serverId, "utf-8");
 	}
-
 	
 	/**
 	 * 保存公告
 	 * @return
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
-	public String save(Placard placard,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "  "  +placard.getVersion() + "  "  + placard.getContents() );
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/addPlacards" , JSONObject.fromObject(placard));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/fb/placard/add";
+	public String save(Seal seal,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
+		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/addSealAccount" , JSONObject.fromObject(seal));
+		redirectAttributes.addFlashAttribute("message", "新增封号："+res.getString("message"));
+		return "redirect:/manage/gm/fb/seal/add";
 	}
 	
 	/**
@@ -249,7 +256,7 @@ public class FbPlacardController extends BaseController{
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String,Object> del(@RequestParam(value = "id")Long id) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/placard/delPlacardById"+"?id="+id, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/seal/delSealAccountById"+"?id="+id, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("success", dataJson.get("message"));
 		 return map;

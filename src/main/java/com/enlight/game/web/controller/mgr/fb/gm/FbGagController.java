@@ -53,6 +53,11 @@ import com.enlight.game.entity.fb.gm.Category;
 import com.enlight.game.entity.fb.gm.Gag;
 import com.google.common.collect.Maps;
 
+/**
+ * 
+ * @author apple
+ * 禁言
+ */
 @Controller("fbGagController")
 @RequestMapping("/manage/gm/fb/gag")
 public class FbGagController extends BaseController{
@@ -219,11 +224,9 @@ public class FbGagController extends BaseController{
 		gag.setId(Integer.parseInt(id));
 		if(null != request.getParameter("gagTime")){
 			gag.setGagTime(request.getParameter("gagTime"));
-			System.out.println("ttttttt    "   + id + "    "  +request.getParameter("gagTime"));
 		}else if(null != request.getParameter("gagStart") && null != request.getParameter("gagEnd")){
 			gag.setGagStart(request.getParameter("gagStart"));
 			gag.setGagEnd(request.getParameter("gagEnd"));
-			System.out.println("mmmmmmm    " +  id  +"   "+ request.getParameter("gagStart") +"   " + request.getParameter("gagEnd"));
 		}
 		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/updateGagAccount" , JSONObject.fromObject(gag));
@@ -233,14 +236,14 @@ public class FbGagController extends BaseController{
 	}
 	
 	/**
-	 * 保存公告
+	 * 保存
 	 * @return
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Gag gag,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/addGagAccount" , JSONObject.fromObject(gag));
-		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
-		return "redirect:/manage/gm/fb/placard/add";
+		redirectAttributes.addFlashAttribute("message", "新增禁言："+res.getString("message"));
+		return "redirect:/manage/gm/fb/gag/add";
 	}
 	
 	/**
