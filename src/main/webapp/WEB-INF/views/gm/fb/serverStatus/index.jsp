@@ -105,7 +105,7 @@
 					</select>	
 				</div>			
 			</div>
-			<shiro:hasAnyRoles name="admin,8">
+			<shiro:hasAnyRoles name="admin">
 				<div class="form-actions cStatus" style="display: none;">
 					<input type="submit" class="btn btn-primary" value="修改服务器信息" />
 				</div>

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletRequest;
 
@@ -15,6 +14,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,9 +30,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
-import com.enlight.game.entity.Gift;
-import com.enlight.game.entity.PlatForm;
-import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
@@ -47,7 +44,7 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
-import com.enlight.game.entity.EnumFunction;
+import com.enlight.game.entity.fb.gm.Category;
 import com.enlight.game.entity.fb.gm.ServerStatus;
 import com.enlight.game.entity.fb.gm.ServerStatusAccount;
 import com.enlight.game.entity.fb.gm.ServerStatusList;
@@ -98,6 +95,9 @@ public class FbServerStatusController extends BaseController{
 	@Autowired
 	private ServerService serverService;
 	
+	@Value("#{envProps.gm_url}")
+	private String gm_url;
+	
 	/**
 	 * @param pageNumber 当前	 
 	 * @param pageSize   显示条数
@@ -116,6 +116,7 @@ public class FbServerStatusController extends BaseController{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		String storeId = request.getParameter("search_LIKE_storeId");
 		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
+
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<Stores> stores = new ArrayList<Stores>();
@@ -137,24 +138,25 @@ public class FbServerStatusController extends BaseController{
 		}
 		
 		try {
-			/**
-			String gs = "[{\"id\":1,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"serverName\":\"Sample text\",\"status\":\"Sample text\"}"
-					+ ",{\"id\":2,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"serverName\":\"Sample text\",\"status\":\"Sample text\"}"
-					+ ",{\"id\":3,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"serverName\":\"Sample text\",\"status\":\"Sample text\"}"
-					+ ",{\"id\":4,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"serverName\":\"Sample text\",\"status\":\"Sample text\"}]";
-			**/
-			String gs = HttpClientUts.doGet("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/server/getAllServer"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-			String total = HttpClientUts.doGet("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId, "utf-8");
-			JSONObject dataJson=JSONObject.fromObject(total);
-			
-			PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-	        List<ServerStatus> beanList = binder.getMapper().readValue(gs, new TypeReference<List<ServerStatus>>() {}); 
-	        //分页显示部分 pageNumber第几页 pageSize每页条数
-	        //List<ServerStatus> List = beanList.subList((pageNumber-1)*pageSize, pageNumber*pageSize>beanList.size()? beanList.size():pageNumber*pageSize);
-	        PageImpl<ServerStatus> serverStatus = new PageImpl<ServerStatus>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
-			model.addAttribute("serverStatus", serverStatus);
+	        if(!searchParams.isEmpty()){
+				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
+					storeId = user.getStoreId();
+				}
+				String gs = HttpClientUts.doGet(gm_url+"/fbserver/server/getAllServer"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.server, "utf-8");
+				JSONObject dataJson=JSONObject.fromObject(total);			
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+		        List<ServerStatus> beanList = binder.getMapper().readValue(gs, new TypeReference<List<ServerStatus>>() {}); 
+		        PageImpl<ServerStatus> serverStatus = new PageImpl<ServerStatus>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
+				model.addAttribute("serverStatus", serverStatus);
+	        }else{
+	        	List<ServerStatus> beanList = new ArrayList<ServerStatus>();
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+		        PageImpl<ServerStatus> serverStatus = new PageImpl<ServerStatus>(beanList, pageRequest, 0);
+				model.addAttribute("serverStatus", serverStatus);
+	        }
+
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		model.addAttribute("sortType", sortType);
@@ -176,7 +178,7 @@ public class FbServerStatusController extends BaseController{
 		ServerStatusList list = new ServerStatusList();
 		list.setId(checkIds);
 		list.setStatus(checkStatus);
-		JSONObject res = HttpClientUts.doPost("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/server/updateServers" , JSONObject.fromObject(list));
+		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/updateServers" , JSONObject.fromObject(list));
 		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
 		return "redirect:/manage/gm/fb/serverStatus/index?search_LIKE_storeId="+gameId+"&search_LIKE_serverZoneId="+serverZoneId;
 	}
@@ -220,14 +222,24 @@ public class FbServerStatusController extends BaseController{
 					+ ",{\"id\":3,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"platFormId\":\"Sample text\",\"account\":\"Sample text\"}"
 					+ ",{\"id\":4,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"platFormId\":\"Sample text\",\"account\":\"Sample text\"}]";
 			**/
-			String gs = HttpClientUts.doGet("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/server/getAllGrayAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-			String total = HttpClientUts.doGet("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId, "utf-8");
-			JSONObject dataJson=JSONObject.fromObject(total);
-			
-			PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-	        List<ServerStatusAccount> beanList = binder.getMapper().readValue(gs, new TypeReference<List<ServerStatusAccount>>() {}); 
-	        PageImpl<ServerStatusAccount> serverStatusAccount = new PageImpl<ServerStatusAccount>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
-			model.addAttribute("serverStatusAccount", serverStatusAccount);
+	        if(!searchParams.isEmpty()){
+				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
+					storeId = user.getStoreId();
+				}
+				String gs = HttpClientUts.doGet(gm_url+"/fbserver/server/getAllGrayAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.account, "utf-8");
+				JSONObject dataJson=JSONObject.fromObject(total);
+				
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+		        List<ServerStatusAccount> beanList = binder.getMapper().readValue(gs, new TypeReference<List<ServerStatusAccount>>() {}); 
+		        PageImpl<ServerStatusAccount> serverStatusAccount = new PageImpl<ServerStatusAccount>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
+				model.addAttribute("serverStatusAccount", serverStatusAccount);
+	        }else{
+	        	List<ServerStatusAccount> beanList = new ArrayList<ServerStatusAccount>();
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+		        PageImpl<ServerStatusAccount> serverStatusAccount = new PageImpl<ServerStatusAccount>(beanList, pageRequest, 0);
+				model.addAttribute("serverStatusAccount", serverStatusAccount);
+	        }
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -273,7 +285,7 @@ public class FbServerStatusController extends BaseController{
 	@RequestMapping(value = "/accountSave",method=RequestMethod.POST)
 	public String accountSave(ServerStatusAccount ServerStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		System.out.println(ServerStatusAccount.getGameId() + "  "  + ServerStatusAccount.getServerZoneId()+ "  "  + ServerStatusAccount.getServerId()+ "  "  +ServerStatusAccount.getPlatFormId() + "  "  + ServerStatusAccount.getAccount() );
-		JSONObject res = HttpClientUts.doPost("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/server/addGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
+		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/addGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
 		redirectAttributes.addFlashAttribute("message", "新增"+res.getString("message"));
 		return "redirect:/manage/gm/fb/serverStatus/accountIndex?search_LIKE_storeId="+ServerStatusAccount.getGameId()+"&search_LIKE_serverZoneId="+ServerStatusAccount.getServerZoneId();
 	}
@@ -302,7 +314,7 @@ public class FbServerStatusController extends BaseController{
 		}
 		String account;
 		try {
-			account = HttpClientUts.doGet("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/server/getGrayAccountByAccountId"+"?id="+id, "utf-8");
+			account = HttpClientUts.doGet(gm_url+"/fbserver/server/getGrayAccountByAccountId"+"?id="+id, "utf-8");
 			ServerStatusAccount beanList = binder.getMapper().readValue(account, new TypeReference<ServerStatusAccount>() {}); 
 			model.addAttribute("account", beanList);
 		} catch (Exception e) {
@@ -318,7 +330,7 @@ public class FbServerStatusController extends BaseController{
 	 */
 	@RequestMapping(value = "/accountUpdate",method=RequestMethod.POST)
 	public String accountUpdate(ServerStatusAccount ServerStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		JSONObject res = HttpClientUts.doPost("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/server/updateGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
+		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/updateGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
 		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
 		return "redirect:/manage/gm/fb/serverStatus/accountIndex?search_LIKE_storeId="+ServerStatusAccount.getGameId()+"&search_LIKE_serverZoneId="+ServerStatusAccount.getServerZoneId();
 	}
@@ -333,7 +345,7 @@ public class FbServerStatusController extends BaseController{
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String,Object> accountDel(@RequestParam(value = "id")Long id) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet("http://playground.apistudio.io/try/346bf9ed-3939-4c88-bcfb-a24a7339abb2/fbserver/server/delGrayAccountById"+"?id="+id, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/server/delGrayAccountById"+"?id="+id, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("success", dataJson.get("message"));
 		 return map;

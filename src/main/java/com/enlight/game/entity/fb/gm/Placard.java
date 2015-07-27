@@ -4,7 +4,7 @@ package com.enlight.game.entity.fb.gm;
  * @author dell
  *
  */
-public class ServerStatus {
+public class Placard {
 	
 	private int id;
 	
@@ -12,11 +12,13 @@ public class ServerStatus {
 	
 	private String gameId;
 	
+	private String[] serverIds;
+	
 	private String serverId;
 	
-	private String serverName;
+	private String version;
 	
-	private String status;
+	private String contents;
 
 	public int getId() {
 		return id;
@@ -25,7 +27,7 @@ public class ServerStatus {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public String getServerZoneId() {
 		return serverZoneId;
 	}
@@ -42,6 +44,14 @@ public class ServerStatus {
 		this.gameId = gameId;
 	}
 
+	public String[] getServerIds() {
+		return serverIds;
+	}
+
+	public void setServerIds(String[] serverIds) {
+		this.serverIds = serverIds;
+	}
+
 	public String getServerId() {
 		return serverId;
 	}
@@ -50,22 +60,21 @@ public class ServerStatus {
 		this.serverId = serverId;
 	}
 
-	public String getServerName() {
-		return serverName;
+	public String getVersion() {
+		return version;
 	}
 
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getContents() {
+		return contents;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setContents(String contents) {
+		this.contents = contents;
 	}
-	
-	
+
 
 }

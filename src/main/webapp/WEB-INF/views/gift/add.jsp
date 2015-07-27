@@ -10,23 +10,26 @@
 	<title>新增礼品卡</title>
  	<link href="${ctx}/static/typeahead/examples.css" type="text/css" rel="stylesheet" />
     <script src="${ctx}/static/typeahead/typeahead.js" type="text/javascript"></script>
-<style type="text/css"> 
-.error{ 
-color:Red; 
-} 
-.checkbox.inline+.checkbox.inline {
-margin-left: 0px;
-}
-.radio.inline, .checkbox.inline {
-padding-top: 16px;
-}
-.radio, .checkbox {
-min-height: 20px;
-}
-label {
-line-height: 30px;
-}
-</style> 
+	<style type="text/css"> 
+			.error{ 
+			color:Red; 
+			} 
+			.checkbox.inline+.checkbox.inline {
+			margin-left: 0px;
+			}
+			.radio.inline, .checkbox.inline {
+			padding-top: 16px;
+			}
+			.radio, .checkbox {
+			min-height: 20px;
+			}
+			.form-ac {
+			  padding: 19px 20px 20px;
+			  margin-top: 20px;
+			  margin-bottom: 20px;
+			  padding-left: 180px;
+			}
+	</style> 
 </head>
 
 <body>
@@ -43,44 +46,44 @@ line-height: 30px;
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/gift/save"   enctype="multipart/form-data" >
 			<div class="container-fluid">
 				<div class="row-fluid">
-					<div class="span2">
-					  <div class="control-group">
-						<label for="gameId">选择游戏项目：</label>
-						<div >
-							<select name="gameId" id="gameId">	
-							    <option value="">请选择项目</option>	
-								<c:forEach items="${stores}" var="item" >
+					<div class="span3">
+						<div class="control-group">
+							<label class="control-label" for="gameId">选择游戏项目：</label>
+							<div class="controls">
+									<select name="gameId" id="gameId">	
+										<option value="">请选择项目</option>	
+										<c:forEach items="${stores}" var="item" >
+											<option value="${item.id }"  >
+													${item.name }
+											</option>
+										</c:forEach>
+									</select>	
+							</div>
+						</div>		
+						<div class="control-group">
+							<label class="control-label" for="serverZoneId">选择运营大区：</label>
+							<div class="controls">
+								<select name="serverZoneId" id="serverZoneId">	
+									<option value="">请选择项目</option>	
+									<c:forEach items="${serverZones}" var="item" >
 										<option value="${item.id }"  >
-										${item.name }
+											${item.serverName }
 										</option>
-								</c:forEach>
-							</select>	
+									</c:forEach>
+								</select>	
+							</div>
 						</div>
-					 </div>
-
-		 			 <div class="control-group">
-						<label for="serverZoneId">选择运营大区：</label>
-						<div >
-							<select name="serverZoneId" id="serverZoneId">	
-							    <option value="">请选择项目</option>	
-								<c:forEach items="${serverZones}" var="item" >
-										<option value="${item.id }"  >
-										${item.serverName }
-										</option>
-								</c:forEach>
-							</select>	
+						<div class="control-group">
+							<label class="control-label" for="">服务器列表：</label>
+							<div class="controls" id="serverDiv"></div>
 						</div>
-					 </div>
-					 <div class="control-group">
-						<label for="">服务器列表：</label>
-						<button type="button" class="btn btn-success" onclick="selectAll();">全选</button>
-						<button type="button" class="btn btn-info" onclick="selectAllNot();">反选</button>
-						<div id="serverDiv">
+						<div class="form-ac">
+							<button type="button" class="btn btn-success" onclick="selectAll();">全选</button>
+							<button type="button" class="btn btn-info" onclick="selectAllNot();">反选</button>
 						</div>
-					 </div>
 					</div>
 					
-					<div class="span10">
+					<div class="span9">
 						 <div
 							class="control-group">
 							<label class="control-label" for="playerId">限制Id：</label>
