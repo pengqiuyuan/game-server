@@ -195,7 +195,7 @@
 						<option value="86400">封禁1天</option>	
 						<option value="2592000">封禁1个月</option>	
 						<option value="31536000">封禁1年</option>	
-						<option value="－1">永久封禁</option>		ga
+						<option value="－1">永久封禁</option>		
 					</select>	
 				</div>
 			</div>
@@ -220,7 +220,7 @@
 			</div>
 			<shiro:hasAnyRoles name="admin">
 				<div class="form-actions" >
-					<input type="submit" class="btn btn-primary" value="修改封号信息" />
+					<input type="submit" class="btn btn-primary btnvali" value="修改封号信息" />
 					<a class="btn btn-primary" id="cancel">取消</a>
 				</div>
 			</shiro:hasAnyRoles>	
@@ -349,6 +349,26 @@
 							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 						});
 					}	
+					
+				});
+				
+				$(".btnvali").click(function(){
+					var doingDate=$("#beginD").val();
+			        var endDoingDate=$("#endD").val();
+			        var startTime = new Date(doingDate).getTime();
+			        var endTime = new Date(endDoingDate).getTime();
+			         if(endDoingDate.length!=0){
+			        	 if(startTime>endTime){
+			             	$("#time").show();
+			             	return false;
+			        	 }else{
+			        		 $("#time").hide();
+			        		 return true;
+			        	 }
+			        }else{
+			        	$("#time").hide();
+			        	return true;
+			        }
 					
 				});
 				

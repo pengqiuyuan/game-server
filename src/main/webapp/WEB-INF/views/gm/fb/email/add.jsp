@@ -7,7 +7,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-	<title>新增公告</title>
+	<title>新增邮件</title>
 	<style type="text/css">
 		.form-ac {
 		  padding: 19px 20px 20px;
@@ -21,12 +21,12 @@
 <body>
 	<script type="text/javascript" src="${ctx}/static/ckeditor/ckeditor.js"></script>
 	<div class="page-header">
-   		<h2>新增公告</h2>
+   		<h2>新增邮件</h2>
  	</div>
  	<c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
-	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/gm/fb/placard/save"   enctype="multipart/form-data" >
+	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/gm/fb/email/save"   enctype="multipart/form-data" >
 			<div class="control-group">
 				<label class="control-label" for="gameId">选择游戏项目：</label>
 				<div class="controls">
@@ -63,9 +63,16 @@
 			</div>
 			<div
 				class="control-group">
-				<label class="control-label" for="version">版本号：</label>
+				<label class="control-label" for="sender">发件人：</label>
 				<div class="controls">
-					<input type="text" name="version" class="input-large "  placeholder="版本号"/>
+					<input type="text" name="sender" class="input-large "  placeholder="发件人"/>
+				</div>
+			</div>	
+			<div
+				class="control-group">
+				<label class="control-label" for="title">标题：</label>
+				<div class="controls">
+					<input type="text" name="title" class="input-large "  placeholder="标题"/>
 				</div>
 			</div>	
 			<div class="control-group ">
@@ -74,6 +81,13 @@
 					<textarea path="contents" name="contents" cssClass="input-xlarge" value="" cols="200" rows="20" /></textarea>
 				</div>
 			</div>
+			
+			<div class="page-header" id="addmess">
+				<span id="addfield" class="btn btn-info">新加道具及数量</span>
+			</div>			
+			<div id="field">
+			</div>
+			
 			<shiro:hasAnyRoles name="admin">
 				<div class="form-actions">
 				  	<button type="submit" class="btn btn-primary" id="submit">保存</button>
@@ -81,6 +95,23 @@
 			</shiro:hasAnyRoles>
 	</form>
 <script type="text/javascript">
+	$("#addfield").click(function(){
+		var gameId = $("#gameId").val();
+		if(gameId!=""){
+			$("#message").remove();
+			$("#field").prepend("<div id='field_div'></div>");
+		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='itemNum' id='itemNum'  style='height: 20px;' class='input-large tt-query' value='' placeholder='道具数量，如:20' /></div></div>" );
+		    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='typeahead-wrapper controls'><input type='text' name='itemId' id='itemId' style='height: 20px;' class='states' value='' placeholder='道具Id，如:10:金币'/>&nbsp;<span id='delElememt' class='del btn btn-danger' style='margin-bottom: -6px;'>删除道具</span></div></div>" );
+		 	$("#delElememt").click(function(){
+			  		$(this).parent().parent().parent().remove();
+			}); 
+		}else{
+			$("#message").remove();
+			$("#inputForm").prev().prepend("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>请选择游戏项目</div>")
+		}
+	});
+
+
 	CKEDITOR.replace('contents');
 	function selectAll(){  
         $("input[id='serverId']").attr("checked", true);  
@@ -150,10 +181,19 @@
 				serverId:{
 					required:true
 				},
-				version:{
+				sender:{
+					required:true
+				},
+				title:{
 					required:true
 				},
 				contents:{
+					required:true
+				},
+				itemId:{
+					required:true
+				},
+				itemNum:{
 					required:true
 				}
 			},messages:{
@@ -166,11 +206,20 @@
 				serverId:{
 					required:"服务器必须填写"
 				},
-				version:{
-					required:"版本必须填写"
+				sender:{
+					required:"发送人必须填写"
+				},
+				title:{
+					required:"标题必须填写"
 				},
 				contents:{
 					required:"内容必须填写"
+				},
+				itemId:{
+					required:"道具Id必须填写"
+				},
+				itemNum:{
+					required:"道具数量必须填写"
 				}
 			}
 		});			

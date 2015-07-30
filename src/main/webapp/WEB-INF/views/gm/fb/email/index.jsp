@@ -10,7 +10,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-	<title>禁言</title>
+	<title>邮件</title>
 	<style type="text/css">
 		.form-ac {
 		  padding: 19px 20px 20px;
@@ -21,21 +21,17 @@
 	</style>
 </head>
 <body>
-	<script type="text/javascript" src="${ctx}/static/resources/date/My97DatePicker/My97DatePicker/WdatePicker.js"></script>
-	<script type="text/javascript">
- 	 function display(){   
-	  	WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',startDate:'2012-07-27'});
- 	 }
-	</script>
+	<script type="text/javascript" src="${ctx}/static/ckeditor/ckeditor.js"></script>
+
 	<div >
 		<div class="page-header">
-			<h2>禁言</h2>
+			<h2>邮件</h2>
 		</div>
 		<div>
 			<c:if test="${not empty message}">
 				<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 			</c:if>
-			<form id="queryForm" class="form-horizontal"  method="get" action="${ctx}/manage/gm/fb/gag/index">
+			<form id="queryForm" class="form-horizontal"  method="get" action="${ctx}/manage/gm/fb/email/index">
 				<div class="control-group">
 					<label class="control-label" for="gameId">选择游戏项目：</label>
 					<div class="controls">
@@ -55,20 +51,19 @@
 						<select name="search_LIKE_serverZoneId" id="serverZoneId">	
 							<option value="">请选择项目</option>	
 							<c:forEach items="${serverZones}" var="item" >
-								<option value="${item.id }"  ${param.search_LIKE_serverZoneId == item.id ? 'selected' : '' } >
+								<option value="${item.id }"  ${param.search_LIKE_serverZoneId == item.id ? 'selected' : '' }>
 									${item.serverName }
 								</option>
 							</c:forEach>
 						</select>	
 					</div>
 				</div>
-				
 				<div class="control-group">
 					<label class="control-label" for="">服务器列表：</label>
 					<div class="controls" id="serverDiv">
 						<c:forEach items="${servers}" var="item" >
-							<label class="radio inline" >
-								<input type="radio" id="serverId" name="search_LIKE_serverId"  value="${item.serverId }" ${param.search_LIKE_serverId == item.serverId? 'checked' : '' }/><span>${item.serverId}</span><br/>
+							<label class="radio inline">
+								<input type="radio" id="serverId" name="search_LIKE_serverId" value="${item.serverId }" ${param.search_LIKE_serverId == item.serverId? 'checked' : '' }/><span>${item.serverId}</span><br/>
 							</label>
 						</c:forEach>
 					</div>
@@ -82,29 +77,52 @@
 				<table class="table table-striped table-bordered table-condensed" id="table">
 					<thead>
 						<tr>
-		                    <th title="禁言guid">禁言guid</th>
-							<th title="禁言名称">禁言名称</th>
-							<th title="禁言account">禁言account器ID</th>
-							<th title="禁言渠道">禁言渠道</th>
-							<th title="禁言时间">禁言时间</th>
-							<th title="禁言开始时间">禁言开始时间</th>
-							<th title="禁言结束时间">禁言结束时间</th>
+		                    <th title="游戏ID">游戏ID</th>
+							<th title="运营大区ID">运营大区ID</th>
+							<th title="服务器ID">服务器ID</th>
+							<th title="发件人">发件人</th>
+							<th title="标题">标题</th>
+							<th title="内容">内容</th>
+							<th title="道具ID">道具ID</th>
+							<th title="道具数量">道具数量</th>
+							<th title="操作">操作</th>
 						</tr>
 					</thead>
 					<tbody id="tbody">
-						<c:forEach items="${gag.content}" var="item" varStatus="s">
-							<tr id="${item.guid}">
-								<td>${item.name}</td>
-								<td>${item.account}</td>
-								<td>${item.platForm}</td>
-								<td>${item.gagTime}</td>
-								<td>${item.gagStart}</td>
-								<td>${item.gagEnd}</td>
+						<c:forEach items="${email.content}" var="item" varStatus="s">
+							<tr id="${item.id}">
+								<td>${item.gameId}</td>
+								<td>${item.serverZoneId}</td>
+								<td>${item.serverId}</td>
+								<td>${item.sender}</td>
+								<td>${item.title}</td>
+								<td><a href="#"  class="intro" title="${item.contents}" >
+								<c:choose> 
+			    					<c:when test="${fn:length(item.contents)>3 }"> 
+			     						<c:out value="${fn:substring(item.contents,0,3) }..." /> 
+			    					</c:when> 
+			    					<c:otherwise> 
+			     						<c:out value="${item.contents }" /> 
+			    					</c:otherwise> 
+			   					</c:choose>
+			   					</a>
+			   					</td>
+			   					<td>
+				   					<c:forEach items="${item.annex}" var="ite" >
+										<span>${ite.itemId}</span>_
+									</c:forEach>
+			   					</td>
+								<td>
+									<c:forEach items="${item.annex}" var="ite">
+										<span>${ite.itemNum}</span>_
+									</c:forEach>
+								</td>
 			   					<td>
 									<div class="action-buttons">
-										<shiro:hasAnyRoles name="admin">
-											<a class="exportCode btn table-actions" onclick="updateGag('${item.guid}','${item.name}','${item.account}','${item.platForm}','${item.id}')"><i class="icon-ok"></i>修改</a>
-									    	<a class="exportCode btn table-actions" onclick="delGag('${item.id}')"><i class="icon-remove"></i>删除</a>
+										<shiro:hasAnyRoles name="admin"> 
+											<input type="hidden" name="annex" id="annex" value="${item.annex}">
+											<a class="exportCode btn table-actions" onclick="updateEmail('${item.sender}','${item.title}','${item.contents}','${item.id}')"><i class="icon-ok"></i>修改</a>
+									    	<a class="exportCode btn table-actions" onclick="delEmail('${item.id}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -112,14 +130,15 @@
 						</c:forEach>
 					</tbody>
 				</table>
-				<tags:pagination page="${gag}" paginationSize="5"/>
+				<tags:pagination page="${email}" paginationSize="5"/>
 		</div>
 		
 
 
-		<form id="inputForm" method="post" Class="form-horizontal" action="<%=request.getContextPath()%>/manage/gm/fb/gag/update"   enctype="multipart/form-data"  style="display: none;">
+		<form id="inputForm" method="post" Class="form-horizontal" action="<%=request.getContextPath()%>/manage/gm/fb/email/update"   enctype="multipart/form-data"  style="display: none;">
 			<div style="color:#3352CC;clear:both">
-			<br><hr style="background-color:#808080;height:1px;width:800px;margin:auto"><h4>修改禁言时间：</h4></div>
+			<br><hr style="background-color:#808080;height:1px;width:800px;margin:auto"><h4>修改邮件：</h4></div>
+			
 			<input type="hidden" name="id" id="id">
 			<div class="control-group">
 				<label class="control-label" for="">游戏:</label>
@@ -159,68 +178,32 @@
 			</div>
 			<div
 				class="control-group">
-				<label class="control-label" for="platForm">渠道：</label>
+				<label class="control-label" for="sender">发件人：</label>
 				<div class="controls">
-					<input type="text" id="platForm" name="platForm" class="input-large"  placeholder="渠道"/ readonly="readonly">
+					<input type="text" id="sender" name="sender" class="input-large"  placeholder="发件人"/>
 				</div>
 			</div>	
 			<div
 				class="control-group">
-				<label class="control-label" for="guid">禁言guid：</label>
+				<label class="control-label" for="title">标题：</label>
 				<div class="controls">
-					<input type="text" id="guid" name="guid" class="input-large"  placeholder="禁言guid"/ readonly="readonly">
+					<input type="text" id="title" name="title" class="input-large"  placeholder="标题"/>
 				</div>
-			</div>
-			<div
-				class="control-group">
-				<label class="control-label" for="name">禁言名称：</label>
+			</div>	
+			<div class="control-group ">
+				<label class="control-label" for="contents">公告内容：</label>
 				<div class="controls">
-					<input type="text" id="name" name="name" class="input-large"  placeholder="禁言名称"/ readonly="readonly">
+					<textarea path="contents" id="contents" name="contents" cssClass="input-xlarge" value="" cols="200" rows="20" /></textarea>
 				</div>
 			</div>
-			<div
-				class="control-group">
-				<label class="control-label" for="account">禁言account：</label>
-				<div class="controls">
-					<input type="text" id="account" name="account" class="input-large"  placeholder="禁言account"/ readonly="readonly">
-				</div>
-			</div>
-			<div class="control-group" id="selectDate">
-				<label class="control-label" for="gagTime">选择禁言时间：</label>
-				<div class="controls">
-					<select name="gagTime" id="gagTime">	
-						<option value="">请选择禁言时间</option>
-						<option value="1800">封禁半小时</option>	
-						<option value="43200">封禁12小时</option>	
-						<option value="86400">封禁1天</option>	
-						<option value="2592000">封禁1个月</option>	
-						<option value="31536000">封禁1年</option>	
-						<option value="－1">永久封禁</option>		
-					</select>	
-				</div>
-			</div>
-			<div id="customDate" style="display: none;">
-				<div class="control-group">
-					<label class="control-label" for=gagStart>禁言开始时间：</label>
-					<div class="controls">
-						<input type="text" name="gagStart" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="gagStart"  placeholder="禁言开始时间"/>
-					</div>
-				</div>	
-				<div class="control-group">
-					<label class="control-label" for="gagEnd">禁言结束时间：</label>
-					<div class="controls">
-						<input type="text" name="gagEnd" class="input-large " value="" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" id="gagEnd" placeholder="禁言结束时间"/>
-						<div id="time"  class="alert alert-danger" style="display: none;width: 20%; margin-top: 10px;"><button data-dismiss="alert" class="close">×</button>结束时间不能小于开始时间</div>
-					</div>
-				</div>
-			</div>
-			<div class="form-ac">
-				<button type="button" class="btn btn-success" onclick="customDate();">自定义禁言时间</button>
-				<button type="button" class="btn btn-info" onclick="cancelCustomDate();">取消自定义禁言</button>
+			<div class="page-header" id="addmess">
+				<span id="addfield" class="btn btn-info">新加道具及数量</span>
+			</div>			
+			<div id="field">
 			</div>
 			<shiro:hasAnyRoles name="admin">
 				<div class="form-actions" >
-					<input type="submit" class="btn btn-primary btnvali" value="修改禁言信息" />
+					<input type="submit" class="btn btn-primary" value="修改邮件" />
 					<a class="btn btn-primary" id="cancel">取消</a>
 				</div>
 			</shiro:hasAnyRoles>	
@@ -229,25 +212,60 @@
 
 	</div>
 	<script type="text/javascript">
+			CKEDITOR.replace('contents');	
 	
 			$(function(){
 				$('.intro').tooltip();
 			});
 			
-			function updateGag(platForm,guid,name,account,id){
+			$("#addfield").click(function(){
+				var gameId = $("#gameId").val();
+				if(gameId!=""){
+					$("#message").remove();
+					$("#field").prepend("<div id='field_div'></div>");
+				    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='itemNum' id='itemNum'  style='height: 20px;' class='input-large tt-query' value='' placeholder='道具数量，如:20' /></div></div>" );
+				    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='typeahead-wrapper controls'><input type='text' name='itemId' id='itemId' style='height: 20px;' class='states' value='' placeholder='道具Id，如:10:金币'/>&nbsp;<span id='delElememt' class='del btn btn-danger' style='margin-bottom: -6px;'>删除道具</span></div></div>" );
+				 	$("#delElememt").click(function(){
+					  		$(this).parent().parent().parent().remove();
+					}); 
+				}else{
+					$("#message").remove();
+					$("#inputForm").prev().prepend("<div id='message' class='alert alert-success'><button data-dismiss='alert' class='close'>×</button>请选择游戏项目</div>")
+				}
+			});
+			
+			function updateEmail(sender,title,contents,id){
+				$("#id").attr('value',id);
 				$('#inputForm').show();
 				
-			    $("#gagTime").val("pxx");
-				$('#gagStart').attr('value','');
-				$('#gagEnd').attr('value','');
+				$("#sender").attr('value','');
+				$("#title").attr('value','');
+				CKEDITOR.instances.contents.setData('')
 				
+				$("#sender").attr('value',sender);
+				$("#title").attr('value',title);
+				CKEDITOR.instances.contents.setData(contents)
 				
-				$("#id").attr('value',id);
-				$("#platForm").attr('value',platForm);
-				$("#guid").attr('value',guid);
-				$("#name").attr('value',name);
-				$("#account").attr('value',account);
-				
+				$.ajax({
+					url: '<%=request.getContextPath()%>/manage/gm/fb/email/findByEmailId?id=' + id, 
+					type: 'GET',
+					contentType: "application/json;charset=UTF-8",
+					dataType: 'json',
+					async: false,
+					success: function(data){
+						jQuery.each(data.annex, function(index, itemData) {
+							console.log(itemData.itemNum + "  "  + itemData.itemId  + "   "  + index);
+							$("#field").prepend("<div id='field_div'></div>");
+						    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具数量：</label><div class='controls'><input type='text' name='itemNum' id='itemNum'  style='height: 20px;' class='input-large tt-query' value='"+itemData.itemNum+"' placeholder='道具数量，如:20' /></div></div>" );
+						    $("#field_div").prepend( "<div class='control-group'><label class='control-label' for='name'>道具Id：</label><div class='typeahead-wrapper controls'><input type='text' name='itemId' id='itemId' style='height: 20px;' class='states' value='"+itemData.itemId+"' placeholder='道具Id，如:10:金币'/>&nbsp;<span id='delElememt' class='del btn btn-danger' style='margin-bottom: -6px;'>删除道具</span></div></div>" );
+						 	$("#delElememt").click(function(){
+							  		$(this).parent().parent().parent().remove();
+							}); 
+						});
+					},error:function(xhr){
+									
+					}
+				});
 				
 				$("#selBtn").attr("disabled","disabled");  
 				$("#gameId").attr("disabled","disabled");  
@@ -255,11 +273,11 @@
 				$("input#serverId").attr("disabled","disabled");  
 			}
 			
-			function delGag(id){
+			function delEmail(id){
 				if(confirm("该操作会删除。。。。！"))
 				    {
 							$.ajax({
-								url: '<%=request.getContextPath()%>/manage/gm/fb/gag/del?id=' + id, 
+								url: '<%=request.getContextPath()%>/manage/gm/fb/email/del?id=' + id, 
 								type: 'DELETE',
 								contentType: "application/json;charset=UTF-8",
 								dataType: 'json',
@@ -281,26 +299,7 @@
 				$("input#serverId").removeAttr("disabled"); 
 			});
 			
-			function customDate(){  
-				$('#customDate').show();
-				$("#gagStart").removeAttr("disabled");  
-				$("#gagEnd").removeAttr("disabled");  
-				$("#gagTime").attr("disabled","disabled");  
-			    $("#gagTime").val("pxx");
-				$('#selectDate').hide();
-			}	
-			function cancelCustomDate(){  
-				$('#selectDate').show();
-				$("#gagTime").removeAttr("disabled");  
-				
-				$("#gagStart").attr("disabled","disabled");  
-				$("#gagEnd").attr("disabled","disabled");  
-				$('#gagStart').attr('value','');
-				$('#gagEnd').attr('value','');
-				$('#customDate').hide();
 			
-			}	
-
 			$(function(){
 				$("#serverZoneId").change(function(e){
 					var serverZoneId = $("#serverZoneId").val();
@@ -352,26 +351,6 @@
 					
 				});
 				
-				$(".btnvali").click(function(){
-					var doingDate=$("#beginD").val();
-			        var endDoingDate=$("#endD").val();
-			        var startTime = new Date(doingDate).getTime();
-			        var endTime = new Date(endDoingDate).getTime();
-			         if(endDoingDate.length!=0){
-			        	 if(startTime>endTime){
-			             	$("#time").show();
-			             	return false;
-			        	 }else{
-			        		 $("#time").hide();
-			        		 return true;
-			        	 }
-			        }else{
-			        	$("#time").hide();
-			        	return true;
-			        }
-					
-				});
-				
 				$("#queryForm").validate({
 					rules:{
 						search_LIKE_storeId:{
@@ -399,24 +378,42 @@
 				
 				$("#inputForm").validate({
 					rules:{
-						gagTime:{
+						search_LIKE_serverId:{
 							required:true
 						},
-						gagStart:{
+						sender:{
 							required:true
 						},
-						gagEnd:{
+						title:{
+							required:true
+						},
+						contents:{
+							required:true
+						},
+						itemId:{
+							required:true
+						},
+						itemNum:{
 							required:true
 						}
 					},messages:{
-						gagTime:{
-							required:"禁言时间必须填写"
+						search_LIKE_serverId:{
+							required:"服务器必须填写"
 						},
-						gagStart:{
-							required:"禁言开始时间必须填写"
+						sender:{
+							required:"发送人必须填写"
 						},
-						gagEnd:{
-							required:"禁言结束时间必须填写"
+						title:{
+							required:"标题必须填写"
+						},
+						contents:{
+							required:"内容必须填写"
+						},
+						itemId:{
+							required:"道具ID必须填写"
+						},
+						itemNum:{
+							required:"道具数量必须填写"
 						}
 					}
 				});			

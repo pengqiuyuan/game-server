@@ -103,17 +103,17 @@
 			</div>
 			<shiro:hasAnyRoles name="admin">
 				<div class="form-actions">
-				  	<button type="submit" class="btn btn-primary" id="submit">保存</button>
+				  	<button type="submit" class="btn btn-primary btnvali" id="submit">保存</button>
 				</div>
 			</shiro:hasAnyRoles>
 	</form>
 <script type="text/javascript">
 
 	function selectAll(){  
-	    $("input[id='server']").attr("checked", true);  
+	    $("input[id='serverId']").attr("checked", true);  
 	}	
 	function selectAllNot(){
-		$("input[id='server']").attr("checked", false);  
+		$("input[id='serverId']").attr("checked", false);  
 	}	
 	function customDate(){  
 		$('#customDate').show();
@@ -148,7 +148,7 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='server' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
+						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverId' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
@@ -182,6 +182,26 @@
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
 			}	
+			
+		});
+		
+		$(".btnvali").click(function(){
+			var doingDate=$("#beginD").val();
+	        var endDoingDate=$("#endD").val();
+	        var startTime = new Date(doingDate).getTime();
+	        var endTime = new Date(endDoingDate).getTime();
+	         if(endDoingDate.length!=0){
+	        	 if(startTime>endTime){
+	             	$("#time").show();
+	             	return false;
+	        	 }else{
+	        		 $("#time").hide();
+	        		 return true;
+	        	 }
+	        }else{
+	        	$("#time").hide();
+	        	return true;
+	        }
 			
 		});
 		
