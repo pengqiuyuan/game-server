@@ -9,6 +9,14 @@
 <html>
 <head>
 <title>灰度账号信息</title>
+	<style type="text/css">
+		.form-ac {
+		  padding: 19px 20px 20px;
+		  margin-top: 20px;
+		  margin-bottom: 20px;
+		  padding-left: 180px;
+		}
+	</style>
 </head>
 <body>
 	<div >
@@ -16,30 +24,40 @@
 			<h2>灰度账号信息</h2>
 		</div>
 		<div>
-		 <c:if test="${not empty message}">
-		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
-		</c:if>
-				<form id="queryForm" class="well form-inline"  method="get" action="${ctx}/manage/gm/fb/serverStatus/accountIndex">
-					<label>游戏项目：</label> 
-					<select name="search_LIKE_storeId">		
-						<option value="">选择游戏项目</option>
-						<c:forEach items="${stores}" var="item" >
-							<option value="${item.id}"  ${param.search_LIKE_storeId == item.id ? 'selected' : '' }>
-								${item.name}
-							</option>	
-						</c:forEach>
-					</select>
-					<label>运营大区：</label> 
-					<select name="search_LIKE_serverZoneId">		
-						<option value="">选择运营大区</option>
-						<c:forEach items="${serverZones}" var="item" >
-							<option value="${item.id}"  ${param.search_LIKE_serverZoneId == item.id ? 'selected' : '' }>
-								${item.serverName}
-							</option>	
-						</c:forEach>
-					</select>
-					<input type="submit" class="btn" value="查 找" />
-				</form>
+			<c:if test="${not empty message}">
+				<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
+			</c:if>
+			<form id="queryForm" class="form-horizontal"  method="get" action="${ctx}/manage/gm/fb/serverStatus/accountIndex">
+				<div class="control-group">
+					<label class="control-label" for="gameId">选择游戏项目：</label>
+					<div class="controls">
+							<select name="search_LIKE_storeId" id="gameId">	
+								<option value="">请选择项目</option>	
+								<c:forEach items="${stores}" var="item" >
+									<option value="${item.id }"   ${param.search_LIKE_storeId == item.id ? 'selected' : '' }>
+											${item.name }
+									</option>
+								</c:forEach>
+							</select>	
+					</div>
+				</div>		
+				<div class="control-group">
+					<label class="control-label" for="serverZoneId">选择运营大区：</label>
+					<div class="controls">
+						<select name="search_LIKE_serverZoneId" id="serverZoneId">	
+							<option value="">请选择项目</option>	
+							<c:forEach items="${serverZones}" var="item" >
+								<option value="${item.id }"  ${param.search_LIKE_serverZoneId == item.id ? 'selected' : '' }>
+									${item.serverName }
+								</option>
+							</c:forEach>
+						</select>	
+					</div>
+				</div>	
+				<div class="form-ac">
+					<input type="submit" class="btn btn-primary" id="selBtn" value="查 找"/>
+				</div>
+			</form>
 		</div>
 		<table class="table table-striped table-bordered table-condensed" id="table">
 			<thead>
@@ -111,6 +129,23 @@
 					});
 			     }
 			});
+			$("#queryForm").validate({
+				rules:{
+					search_LIKE_storeId:{
+						required:true
+					},
+					search_LIKE_serverZoneId:{
+						required:true
+					}
+				},messages:{
+					search_LIKE_storeId:{
+						required:"游戏项目"
+					},
+					search_LIKE_serverZoneId:{
+						required:"运营必须填写"
+					}
+				}
+			});	
 		});
 	</script> 	
 </body>

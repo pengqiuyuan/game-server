@@ -77,6 +77,7 @@
 			<shiro:hasAnyRoles name="admin">
 				<div class="form-actions">
 				  	<button type="submit" class="btn btn-primary" id="submit">保存</button>
+				  	<a href="${ctx}/manage/gm/fb/placard/index" class="btn btn-primary">返回</a>
 				</div>
 			</shiro:hasAnyRoles>
 	</form>

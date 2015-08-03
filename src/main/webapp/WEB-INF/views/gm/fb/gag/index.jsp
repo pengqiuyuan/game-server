@@ -227,7 +227,7 @@
 		</form>
 
 
-	</div>
+	</div> 
 	<script type="text/javascript">
 	
 			$(function(){
@@ -353,8 +353,8 @@
 				});
 				
 				$(".btnvali").click(function(){
-					var doingDate=$("#beginD").val();
-			        var endDoingDate=$("#endD").val();
+					var doingDate=$("#gagStart").val();
+			        var endDoingDate=$("#gagEnd").val();
 			        var startTime = new Date(doingDate).getTime();
 			        var endTime = new Date(endDoingDate).getTime();
 			         if(endDoingDate.length!=0){

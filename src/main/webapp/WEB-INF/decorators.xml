@@ -5,19 +5,6 @@
 		<pattern>/static/*</pattern>
 		<pattern>/api/*</pattern>
 		<pattern>/*detail*</pattern>
-		<pattern>/*product/left*</pattern>
-		<pattern>/*product/main*</pattern>
-	    <pattern>/*product/add*</pattern>
-	    <pattern>/*product/edit*</pattern>
-	    <pattern>/*product/queryProduct*</pattern>
- 	    <pattern>/*manage/orders/findProducts*</pattern>
-	    <pattern>/*manage/baiduPush/queryCommonMembers*</pattern>
- 	    <pattern>/*manage/orders/findOrderStores*</pattern>
-	    <pattern>/*manage/orderStores/findOrderStores*</pattern>
-	    <pattern>/*manage/product/pic*</pattern>
-	    <pattern>/*manage/member/queryMember*</pattern>
-	    <pattern>/*manage/brands/store*</pattern>
-	    <pattern>/*manage/floor/brand*</pattern>
 	    <pattern>/*manage/activity/products/query*</pattern>
 	    <pattern>/*manage/count/countuser*</pattern>
 <!--         <pattern>/*kibana*</pattern> -->

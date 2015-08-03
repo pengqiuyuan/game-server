@@ -20,6 +20,7 @@
 
 <body>
 	<script type="text/javascript" src="${ctx}/static/ckeditor/ckeditor.js"></script>
+	<script type="text/javascript" src="${ctx}/static/resources/date/My97DatePicker/My97DatePicker/WdatePicker.js"></script>
 	<div class="page-header">
    		<h2>新增禁言</h2>
  	</div>
@@ -104,6 +105,7 @@
 			<shiro:hasAnyRoles name="admin">
 				<div class="form-actions">
 				  	<button type="submit" class="btn btn-primary btnvali" id="submit">保存</button>
+				  	<a href="${ctx}/manage/gm/fb/gag/index" class="btn btn-primary">返回</a>
 				</div>
 			</shiro:hasAnyRoles>
 	</form>
@@ -186,11 +188,11 @@
 		});
 		
 		$(".btnvali").click(function(){
-			var doingDate=$("#beginD").val();
-	        var endDoingDate=$("#endD").val();
+			var doingDate=$("#gagStart").val();
+	        var endDoingDate=$("#gagEnd").val();
 	        var startTime = new Date(doingDate).getTime();
 	        var endTime = new Date(endDoingDate).getTime();
-	         if(endDoingDate.length!=0){
+	         if(endDoingDate!="" && doingDate!=""){
 	        	 if(startTime>endTime){
 	             	$("#time").show();
 	             	return false;

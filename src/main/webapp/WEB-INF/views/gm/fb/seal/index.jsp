@@ -353,8 +353,8 @@
 				});
 				
 				$(".btnvali").click(function(){
-					var doingDate=$("#beginD").val();
-			        var endDoingDate=$("#endD").val();
+					var doingDate=$("#sealStart").val();
+			        var endDoingDate=$("#sealEnd").val();
 			        var startTime = new Date(doingDate).getTime();
 			        var endTime = new Date(endDoingDate).getTime();
 			         if(endDoingDate.length!=0){
