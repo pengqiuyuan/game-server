@@ -49,18 +49,25 @@ margin: 0px 0 0;
 		<div class="control-group" id="category">
 			<c:forEach items="${cateAndFunctions}" var="item" varStatus="i">
 				<div>
-				<label class="control-label">${item.categoryName}<input type="checkbox" id="${item.id}" onclick="selectAll(${item.id});" class="box" />：</label>
-				<div class="controls">
-					       <c:forEach items="${item.enumFunctions}" var="ite" varStatus="j">
-								   <input type="checkbox" id="${item.id}" name="functions" value="${ite.enumRole}" class="box" />
-						           	<span>${ite.enumRole}、${ite.enumName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						         <c:if test="${(j.index+1)%2 == 0}">
-								<br/>
-								<br/>
-								</c:if>
-							</c:forEach>
+					<label class="control-label">${item.categoryName}<input type="checkbox" id="${item.id}" onclick="selectAll(${item.id});" class="box" />：</label>
+					<div class="controls" id="categoryItem">
+						<div>
+						       <c:forEach items="${item.enumFunctions}" var="ite" varStatus="j">
+									   <input type="checkbox" id="${ite.id}" name="functions" value="${ite.enumRole}" class="box" />
+							           	<span>${ite.enumRole}、${ite.enumName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							         <c:if test="${(j.index+1)%5 == 0}">
+									<br/>
+									<br/>
+									</c:if>
+								</c:forEach>
+						</div>
+						</br>
+						<div id="category_${item.id}">
+						
+						</div>			
+					</div>
 				</div>
-				</div>
+				</br>
 			</c:forEach>
 		</div>
 		
@@ -125,14 +132,29 @@ $(function(){
 				success: function(data){	
 					if(data!="" && data!=null){
 		 				 var parsedJson = $.parseJSON(data);
-		 				 $("#divCategory").remove(); 
-		 				 $("#category").append("<div id='divCategory'><label class='control-label'>"+parsedJson.categoryName+"<input type='checkbox' id='"+parsedJson.id+"' onclick='selectAll("+parsedJson.id+");' class='box' />：</label><div class='controls' id='functions'></div></div>"); 
-						 jQuery.each(parsedJson.enumFunctions, function(index, itemData) {
-							 $("#functions").append("<input type='checkbox' id='"+parsedJson.id+"' name='functions' value='"+itemData.enumRole+"' class='box'/> <span>"+itemData.enumRole+"、"+itemData.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");			
-						 	 if((index+1)%2==0){
-						 		$("#functions").append("<br/><br/>");
-						 	 }
-						 }); 
+		 				 jQuery.each(parsedJson, function(ind, data) {
+							 if(data.id=='10000'){// gm
+								 $("#category_"+data.id).remove(); 
+								 $("#categoryItem").append("<div id='category_"+data.id+"'></div>");
+								 jQuery.each(data.enumFunctions, function(index, itemData) {
+									 $("#category_"+data.id).append("<input type='checkbox' id='"+itemData.id+"' name='functions' value='"+itemData.enumRole+"' class='box'/> <span>"+itemData.enumRole+"、"+itemData.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");			
+								 	 if((index+1)%5==0){
+									 	$("#category_"+data.id).append("<br/><br/>");
+									 }
+								 });
+							 }else if(data.id=='10001'){ //礼品卡
+								 	
+							 }else if(data.id=='10002'){ //统计
+				 				 $("#divCategory").remove(); 
+				 				 $("#category").append("<div id='divCategory'><label class='control-label'>"+data.categoryName+"<input type='checkbox' id='"+data.id+"' onclick='selectAll("+data.id+");' class='box' />：</label><div class='controls' id='functions'></div></div>"); 
+								 jQuery.each(data.enumFunctions, function(index, itemData) {
+									 $("#functions").append("<input type='checkbox' id='"+itemData.id+"' name='functions' value='"+itemData.enumRole+"' class='box'/> <span>"+itemData.enumRole+"、"+itemData.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");			
+								 	 if((index+1)%5==0){
+								 		$("#functions").append("<br/><br/>");
+								 	 }
+								 });
+							 }
+		 				 });
 					}else{
 		 				 $("#divCategory").remove(); 
 					}

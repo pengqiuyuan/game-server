@@ -46,13 +46,13 @@ public class EnumFunctionService {
 		return enumFunctionDao.findByEnumRole(enumRole);
 	}
 	
-	public Set<EnumFunction> findByCategoryId(String categoryId){
-		return enumFunctionDao.findByCategoryId(categoryId);
+	public Set<EnumFunction> findByCategoryIdTongYong(String categoryId){
+		return enumFunctionDao.findByCategoryIdTongYong(categoryId);
 	}
-	
-	public Set<EnumFunction> findByGameId(String gameId){
-		return enumFunctionDao.findByGameId(gameId);
-	}
+//	
+//	public Set<EnumFunction> findByGameId(String gameId){
+//		return enumFunctionDao.findByGameId(gameId);
+//	}
 	
 	public Set<EnumFunction> findByGameIdAndcategoryId(String gameId,String categoryId){
 		return enumFunctionDao.findByGameIdAndCategoryId(gameId,categoryId);

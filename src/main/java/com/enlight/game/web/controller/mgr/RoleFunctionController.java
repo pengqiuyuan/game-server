@@ -154,7 +154,7 @@ public class RoleFunctionController extends BaseController{
 		}
 		List<EnumCategory> cateAndFunctions = enumCategoryService.findAllNotCount();
 		for (EnumCategory enumCategory : cateAndFunctions) {
-			Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryId(enumCategory.getId().toString());
+			Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryIdTongYong(enumCategory.getId().toString());
 			enumCategory.setEnumFunctions(enumFunctions);
 		}
 		model.addAttribute("cateAndFunctions", cateAndFunctions);
@@ -166,12 +166,24 @@ public class RoleFunctionController extends BaseController{
 	 */
 	@RequestMapping(value = "/changGameId")
 	@ResponseBody
-	public EnumCategory changGameId(@RequestParam("storeId") String storeId) {
+	public List<EnumCategory> changGameId(@RequestParam("storeId") String storeId) {
 		if(!storeId.equals("")){
-			EnumCategory enumCategory = enumCategoryService.find(EnumCategory.ENUM_COUNT);
-			Set<EnumFunction> enumFunctions =  enumFunctionService.findByGameIdAndcategoryId(storeId,enumCategory.getId().toString());
-			enumCategory.setEnumFunctions(enumFunctions);
-			return enumCategory;
+			List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
+			for (EnumCategory enumCategory : cateAndFunctions) {
+				if(enumCategory.getId().equals(EnumCategory.ENUM_COUNT)){
+					Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryIdTongYong(enumCategory.getId().toString()); //通用
+					Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameIdAndcategoryId(storeId.toString(),EnumCategory.ENUM_COUNT.toString());
+					enumFunctions.addAll(enumFuncs);
+					enumCategory.setEnumFunctions(enumFunctions);
+				}else if(enumCategory.getId().equals(EnumCategory.ENUM_GIFT)){
+					Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameIdAndcategoryId(storeId.toString(),EnumCategory.ENUM_GIFT.toString()); //某项目
+					enumCategory.setEnumFunctions(enumFuncs);
+				}else if(enumCategory.getId().equals(EnumCategory.ENUM_GM)){
+					Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameIdAndcategoryId(storeId.toString(),EnumCategory.ENUM_GM.toString()); //某项目
+					enumCategory.setEnumFunctions(enumFuncs);
+				}
+			}
+			return cateAndFunctions;
 		}else{
 			return null;
 		}
@@ -272,10 +284,19 @@ public class RoleFunctionController extends BaseController{
 		List<EnumCategory> cateAndFunctions = enumCategoryService.findAll();
 		for (EnumCategory enumCategory : cateAndFunctions) {
 			if(enumCategory.getId().equals(EnumCategory.ENUM_COUNT)){
-				Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameId(roleFunction.getGameId().toString());
-				enumCategory.setEnumFunctions(enumFuncs);
-			}else{
-				Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryId(enumCategory.getId().toString());
+				Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryIdTongYong(enumCategory.getId().toString()); //通用
+				Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameIdAndcategoryId(roleFunction.getGameId().toString(),EnumCategory.ENUM_COUNT.toString());
+				enumFunctions.addAll(enumFuncs);
+				enumCategory.setEnumFunctions(enumFunctions);
+			}else if(enumCategory.getId().equals(EnumCategory.ENUM_GIFT)){
+				Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryIdTongYong(enumCategory.getId().toString()); //通用
+				Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameIdAndcategoryId(roleFunction.getGameId().toString(),EnumCategory.ENUM_GIFT.toString()); //某项目
+				enumFunctions.addAll(enumFuncs);
+				enumCategory.setEnumFunctions(enumFunctions);
+			}else if(enumCategory.getId().equals(EnumCategory.ENUM_GM)){
+				Set<EnumFunction> enumFunctions =  enumFunctionService.findByCategoryIdTongYong(enumCategory.getId().toString()); //通用
+				Set<EnumFunction> enumFuncs =  enumFunctionService.findByGameIdAndcategoryId(roleFunction.getGameId().toString(),EnumCategory.ENUM_GM.toString()); //某项目
+				enumFunctions.addAll(enumFuncs);
 				enumCategory.setEnumFunctions(enumFunctions);
 			}
 		}

@@ -18,7 +18,10 @@ public interface EnumFunctionDao extends PagingAndSortingRepository<EnumFunction
 	
 	EnumFunction findByEnumRole(String enumRole);
 	
-	Set<EnumFunction> findByCategoryId(String categoryId);
+	//查询通用功能
+	@Modifying
+	@Query("from EnumFunction enumFunction where enumFunction.gameId=0 And enumFunction.categoryId=?1")
+	Set<EnumFunction> findByCategoryIdTongYong(String categoryId);
 	
 	@Modifying
 	@Query("from EnumFunction enumFunction where enumFunction.status=1 And enumFunction.gameId=?1")

@@ -55,12 +55,13 @@ margin: 0px 0 0;
 					       <c:forEach items="${item.enumFunctions}" var="ite" varStatus="j">
 								   <input type="checkbox" name="functions" id="${item.id}" value="${ite.enumRole}" <c:forEach var="itvalue" items="${enumFusHas}"><c:if test="${itvalue.enumRole == ite.enumRole }">checked="checked" </c:if></c:forEach> class="box" />
 						           	<span>${ite.enumRole}、${ite.enumName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						         <c:if test="${(j.index+1)%2 == 0}">
+						         <c:if test="${(j.index+1)%5 == 0}">
 								<br/>
 								<br/>
 								</c:if>
 							</c:forEach>
 				</div>
+				</br>
 			</c:forEach>
 		</div>
 		
