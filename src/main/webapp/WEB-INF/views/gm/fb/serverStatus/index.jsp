@@ -54,9 +54,11 @@
 						</select>	
 					</div>
 				</div>	
-				<div class="form-ac">
-					<input type="submit" class="btn btn-primary" id="selBtn" value="查 找"/>
-				</div>
+				<shiro:hasAnyRoles name="admin,fb_gm_server_select">
+					<div class="form-ac">
+						<input type="submit" class="btn btn-primary" id="selBtn" value="查 找"/>
+					</div>
+				</shiro:hasAnyRoles>
 			</form>
 		</div>
 		
@@ -123,7 +125,7 @@
 					</select>	
 				</div>			
 			</div>
-			<shiro:hasAnyRoles name="admin">
+			<shiro:hasAnyRoles name="admin,fb_gm_server_edit">
 				<div class="form-actions cStatus" style="display: none;">
 					<input type="submit" class="btn btn-primary" value="修改服务器信息" />
 				</div>

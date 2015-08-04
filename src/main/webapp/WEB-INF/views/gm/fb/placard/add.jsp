@@ -74,12 +74,13 @@
 					<textarea path="contents" name="contents" cssClass="input-xlarge" value="" cols="200" rows="20" /></textarea>
 				</div>
 			</div>
-			<shiro:hasAnyRoles name="admin">
-				<div class="form-actions">
+
+			<div class="form-actions">
+				<shiro:hasAnyRoles name="admin,fb_gm_placard_add">
 				  	<button type="submit" class="btn btn-primary" id="submit">保存</button>
-				  	<a href="${ctx}/manage/gm/fb/placard/index" class="btn btn-primary">返回</a>
-				</div>
-			</shiro:hasAnyRoles>
+				</shiro:hasAnyRoles>
+				<a href="${ctx}/manage/gm/fb/placard/index" class="btn btn-primary">返回</a>
+			</div>
 	</form>
 <script type="text/javascript">
 	CKEDITOR.replace('contents');

@@ -68,9 +68,11 @@
 						</c:forEach>
 					</div>
 				</div>
-				<div class="form-ac">
-					<input type="submit" class="btn btn-primary" id="selBtn" value="查 找" />
-				</div>
+				<shiro:hasAnyRoles name="admin,fb_gm_email_select">
+					<div class="form-ac">
+						<input type="submit" class="btn btn-primary" id="selBtn" value="查 找" />
+					</div>
+				</shiro:hasAnyRoles>
 			</form>
 		</div>
 		<div class="control-group">
@@ -119,9 +121,11 @@
 								</td>
 			   					<td>
 									<div class="action-buttons">
-										<shiro:hasAnyRoles name="admin"> 
+										<shiro:hasAnyRoles name="admin,fb_gm_email_update"> 
 											<input type="hidden" name="annex" id="annex" value="${item.annex}">
 											<a class="exportCode btn table-actions" onclick="updateEmail('${item.sender}','${item.title}','${item.contents}','${item.id}')"><i class="icon-ok"></i>修改</a>
+										</shiro:hasAnyRoles>
+										<shiro:hasAnyRoles name="admin,fb_gm_email_delete"> 
 									    	<a class="exportCode btn table-actions" onclick="delEmail('${item.id}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
@@ -201,12 +205,12 @@
 			</div>			
 			<div id="field">
 			</div>
-			<shiro:hasAnyRoles name="admin">
-				<div class="form-actions" >
+			<div class="form-actions" >
+				<shiro:hasAnyRoles name="admin,fb_gm_email_update">
 					<input type="submit" class="btn btn-primary" value="修改邮件" />
-					<a class="btn btn-primary" id="cancel">取消</a>
-				</div>
-			</shiro:hasAnyRoles>	
+				</shiro:hasAnyRoles>	
+				<a class="btn btn-primary" id="cancel">取消</a>
+			</div>
 		</form>
 
 

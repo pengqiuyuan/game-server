@@ -68,9 +68,11 @@
 						</c:forEach>
 					</div>
 				</div>
-				<div class="form-ac">
-					<input type="submit" class="btn btn-primary" value="查 找" />
-				</div>
+				<shiro:hasAnyRoles name="admin,fb_gm_placard_select">
+					<div class="form-ac">
+						<input type="submit" class="btn btn-primary" value="查 找" />
+					</div>
+				</shiro:hasAnyRoles>
 			</form>
 		</div>
 		<div class="control-group">
@@ -105,8 +107,10 @@
 			   					</td>
 			   					<td>
 									<div class="action-buttons">
-										<shiro:hasAnyRoles name="admin">
+										<shiro:hasAnyRoles name="admin,fb_gm_placard_update">
 											<a class="exportCode btn table-actions" onclick="updatePlacard('${item.version}','${item.contents}','${item.id}')"><i class="icon-ok"></i>修改</a>
+										</shiro:hasAnyRoles>
+										<shiro:hasAnyRoles name="admin,fb_gm_placard_delete">
 									    	<a class="exportCode btn table-actions" onclick="delPlacard('${item.id}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
@@ -176,12 +180,12 @@
 				<button type="button" class="btn btn-success" onclick="selectAll();">全选</button>
 				<button type="button" class="btn btn-info" onclick="selectAllNot();">反选</button>
 			</div>
-			<shiro:hasAnyRoles name="admin">
-				<div class="form-actions" >
+			<div class="form-actions" >
+				<shiro:hasAnyRoles name="admin,fb_gm_placard_update">
 					<input type="submit" class="btn btn-primary" value="修改服务器公告" />
-					<a class="btn btn-primary" id="cancel">取消</a>
-				</div>
-			</shiro:hasAnyRoles>	
+				</shiro:hasAnyRoles>	
+				<a class="btn btn-primary" id="cancel">取消</a>
+			</div>
 		</form>
 
 

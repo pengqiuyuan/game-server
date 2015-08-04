@@ -102,12 +102,13 @@
 				<button type="button" class="btn btn-success" onclick="customDate();">自定义封号时间</button>
 				<button type="button" class="btn btn-info" onclick="cancelCustomDate();">取消自定义封号</button>
 			</div>
-			<shiro:hasAnyRoles name="admin">
-				<div class="form-actions">
-				  	<button type="submit" class="btn btn-primary btnvali" id="submit">保存</button>
-				  	<a href="${ctx}/manage/gm/fb/seal/index" class="btn btn-primary">返回</a>
-				</div>
-			</shiro:hasAnyRoles>
+
+			<div class="form-actions">
+				<shiro:hasAnyRoles name="admin,fb_gm_seal_add">
+					<button type="submit" class="btn btn-primary btnvali" id="submit">保存</button>
+				</shiro:hasAnyRoles>
+				<a href="${ctx}/manage/gm/fb/seal/index" class="btn btn-primary">返回</a>
+			</div>
 	</form>
 <script type="text/javascript">
 

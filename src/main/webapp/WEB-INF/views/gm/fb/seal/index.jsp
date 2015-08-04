@@ -73,9 +73,11 @@
 						</c:forEach>
 					</div>
 				</div>
-				<div class="form-ac">
-					<input type="submit" class="btn btn-primary" id="selBtn" value="查 找" />
-				</div>
+				<shiro:hasAnyRoles name="admin,fb_gm_seal_select">
+					<div class="form-ac">
+						<input type="submit" class="btn btn-primary" id="selBtn" value="查 找" />
+					</div>
+				</shiro:hasAnyRoles>
 			</form>
 		</div>
 		<div class="control-group">
@@ -102,8 +104,10 @@
 								<td>${item.sealEnd}</td>
 			   					<td>
 									<div class="action-buttons">
-										<shiro:hasAnyRoles name="admin">
+										<shiro:hasAnyRoles name="admin,fb_gm_seal_update">
 											<a class="exportCode btn table-actions" onclick="updateSeal('${item.guid}','${item.name}','${item.account}','${item.platForm}','${item.id}')"><i class="icon-ok"></i>修改</a>
+										</shiro:hasAnyRoles>
+										<shiro:hasAnyRoles name="admin,fb_gm_seal_delete">
 									    	<a class="exportCode btn table-actions" onclick="delSeal('${item.id}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
@@ -218,7 +222,7 @@
 				<button type="button" class="btn btn-success" onclick="customDate();">自定义封号时间</button>
 				<button type="button" class="btn btn-info" onclick="cancelCustomDate();">取消自定义封号</button>
 			</div>
-			<shiro:hasAnyRoles name="admin">
+			<shiro:hasAnyRoles name="admin,fb_gm_seal_update">
 				<div class="form-actions" >
 					<input type="submit" class="btn btn-primary btnvali" value="修改封号信息" />
 					<a class="btn btn-primary" id="cancel">取消</a>

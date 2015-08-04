@@ -183,12 +183,13 @@
 					<input type="text" name="showLevel" class="input-large "  placeholder="显示优先级"/>
 				</div>
 			</div>
-			<shiro:hasAnyRoles name="admin">
-				<div class="form-actions">
-				  	<button type="submit" class="btn btn-primary" id="submit">保存</button>
-				  	<a href="${ctx}/manage/gm/fb/product/index" class="btn btn-primary">返回</a>
-				</div>
-			</shiro:hasAnyRoles>
+
+			<div class="form-actions">
+				<shiro:hasAnyRoles name="admin,fb_gm_product_add">
+				 	<button type="submit" class="btn btn-primary" id="submit">保存</button>
+				</shiro:hasAnyRoles>
+				<a href="${ctx}/manage/gm/fb/product/index" class="btn btn-primary">返回</a>
+			</div>
 	</form>
 <script type="text/javascript">
 	function selectAll(){  

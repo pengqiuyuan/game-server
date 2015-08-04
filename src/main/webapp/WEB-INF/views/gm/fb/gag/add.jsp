@@ -102,12 +102,13 @@
 				<button type="button" class="btn btn-success" onclick="customDate();">自定义禁言时间</button>
 				<button type="button" class="btn btn-info" onclick="cancelCustomDate();">取消自定义禁言</button>
 			</div>
-			<shiro:hasAnyRoles name="admin">
-				<div class="form-actions">
-				  	<button type="submit" class="btn btn-primary btnvali" id="submit">保存</button>
-				  	<a href="${ctx}/manage/gm/fb/gag/index" class="btn btn-primary">返回</a>
-				</div>
-			</shiro:hasAnyRoles>
+			<div class="form-actions">
+				<shiro:hasAnyRoles name="admin,fb_gm_gag_add">
+					<button type="submit" class="btn btn-primary btnvali" id="submit">保存</button>
+				</shiro:hasAnyRoles>
+				<a href="${ctx}/manage/gm/fb/gag/index" class="btn btn-primary">返回</a>
+			</div>
+
 	</form>
 <script type="text/javascript">
 

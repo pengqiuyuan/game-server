@@ -54,9 +54,11 @@
 						</select>	
 					</div>
 				</div>	
-				<div class="form-ac">
-					<input type="submit" class="btn btn-primary" id="selBtn" value="查 找"/>
-				</div>
+				<shiro:hasAnyRoles name="admin,fb_gm_account_select">
+					<div class="form-ac">
+						<input type="submit" class="btn btn-primary" id="selBtn" value="查 找"/>
+					</div>
+				</shiro:hasAnyRoles>
 			</form>
 		</div>
 		<table class="table table-striped table-bordered table-condensed" id="table">
@@ -78,10 +80,10 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
-									<shiro:hasAnyRoles name="admin">
+									<shiro:hasAnyRoles name="admin,fb_gm_account_update">
 										<li><a href="<%=request.getContextPath()%>/manage/gm/fb/serverStatus/accountEdit?id=${item.id}"><i class="icon-edit"></i>修改</a></li>
 									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin">
+									<shiro:hasAnyRoles name="admin,fb_gm_account_delete">
 										<c:if test="${item.id == 0 ? false : true}">
 											<li><a href="javascript:void(0);" rel="${item.id}" class="del"><i class="icon-th"></i>删除 </a></li>
 										</c:if>
@@ -99,7 +101,7 @@
 		</table>
 		<tags:pagination page="${serverStatusAccount}" paginationSize="5"/>
 		
-		<shiro:hasAnyRoles name="admin">
+		<shiro:hasAnyRoles name="admin,fb_gm_account_add">
 			<div class="form-actions">
 				<a href="<%=request.getContextPath()%>/manage/gm/fb/serverStatus/accountAdd" class="btn btn-primary">新增灰度用户账户</a>	
 			</div>

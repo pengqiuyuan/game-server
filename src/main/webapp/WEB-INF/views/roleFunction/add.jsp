@@ -131,7 +131,7 @@ $(function(){
 				dataType: 'text',
 				success: function(data){	
 					if(data!="" && data!=null){
-		 				 var parsedJson = $.parseJSON(data);
+		 				 var parsedJson = $.parseJSON(data); 
 		 				 jQuery.each(parsedJson, function(ind, data) {
 							 if(data.id=='10000'){// gm
 								 $("#category_"+data.id).remove(); 

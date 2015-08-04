@@ -73,10 +73,12 @@
 					<div class="controls">
 						<input name="search_LIKE_itemId" id="itemDiv" type="text" value="${param.search_LIKE_itemId}" class="input-large "  placeholder="道具ID"/> 
 					</div>
-				</div>	
-				<div class="form-ac">
-					<input type="submit" class="btn btn-primary" id="selBtn" value="查 找"/>
 				</div>
+				<shiro:hasAnyRoles name="admin,fb_gm_product_select">	
+					<div class="form-ac">
+						<input type="submit" class="btn btn-primary" id="selBtn" value="查 找"/>
+					</div>
+				</shiro:hasAnyRoles>
 			</form>
 		</div>
 
@@ -132,13 +134,15 @@
 								<td>${item.showLevel}</td>
 			   					<td>
 									<div class="action-buttons">
-										<shiro:hasAnyRoles name="admin">
+										<shiro:hasAnyRoles name="admin,fb_gm_product_update">
 											<a class="exportCode btn table-actions" onclick="updateProduct(${item.id},'${item.itemId}','${item.num}','${item.prodcutStoreId}'
 											,'${item.storeLocation}','${item.isRandom}','${item.randomProbability}'
 											,'${item.comsumeType}','${item.comsumeNum}','${item.discount}'
 											,'${item.levelLimit}','${item.levelCap}','${item.discountStartDate}'
 											,'${item.discountContinueDate}','${item.discountCycleDate}','${item.productPostDate}','${item.productDownDate}','${item.showLevel}')"><i class="icon-ok"></i>修改</a>
-									    	<a class="exportCode btn table-actions" onclick="delProduct('${item.id}')"><i class="icon-remove"></i>删除</a>
+										</shiro:hasAnyRoles>
+										<shiro:hasAnyRoles name="admin,fb_gm_product_delete">
+											<a class="exportCode btn table-actions" onclick="delProduct('${item.id}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -312,13 +316,12 @@
 					<input type="text" name="showLevel" id ="showLevel"  class="input-large "  placeholder="显示优先级"/>
 				</div>
 			</div>
-																		
-			<shiro:hasAnyRoles name="admin">
-				<div class="form-actions" >
+			<div class="form-actions" >
+				<shiro:hasAnyRoles name="admin,fb_gm_product_update">
 					<input type="submit" class="btn btn-primary" value="修改服务器公告" />
-					<a class="btn btn-primary" id="cancel">取消</a>
-				</div>
-			</shiro:hasAnyRoles>	
+				</shiro:hasAnyRoles>	
+				<a class="btn btn-primary" id="cancel">取消</a>
+			</div>
 		</form>
 
 

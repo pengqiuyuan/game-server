@@ -61,6 +61,122 @@
 							</ul>
 						</li>
 					</shiro:hasAnyRoles>
+						
+					<shiro:hasAnyRoles name="admin,10000">
+						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">项目GM<b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<shiro:hasAnyRoles name="admin,fb_gm_server_select,fb_gm_account_select,fb_gm_placard_select,fb_gm_email_select,fb_gm_gag_select,fb_gm_seal_select,fb_gm_product_select">
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">《FB》项目GM</a>
+											<ul class="dropdown-menu">
+												<li class="dropdown-submenu">
+													<shiro:hasAnyRoles name="admin,fb_gm_server_select,fb_gm_server_add">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">服务器状态设置</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<shiro:hasAnyRoles name="admin,fb_gm_server_select">
+																		<li><a href="${ctx}/manage/gm/fb/serverStatus/index">服务器状态</a></li>
+																	</shiro:hasAnyRoles>
+																	<shiro:hasAnyRoles name="admin,fb_gm_server_add">
+																	</shiro:hasAnyRoles>
+																<li>
+															</ul>
+														</li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,fb_gm_account_select,fb_gm_account_add">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">灰度账号管理</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<shiro:hasAnyRoles name="admin,fb_gm_account_select">
+																		<li><a href="${ctx}/manage/gm/fb/serverStatus/accountIndex">灰度账号管理</a></li>
+																	</shiro:hasAnyRoles>
+																	<shiro:hasAnyRoles name="admin,fb_gm_account_add">
+																		<li><a href="${ctx}/manage/gm/fb/serverStatus/accountAdd">灰度账号管理新增</a></li>
+																	</shiro:hasAnyRoles>
+																<li>
+															</ul>
+														</li>														
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,fb_gm_placard_select,fb_gm_placard_add">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">公告</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<shiro:hasAnyRoles name="admin,fb_gm_placard_select">
+																		<li><a href="${ctx}/manage/gm/fb/placard/index">公告</a></li>
+																	</shiro:hasAnyRoles>
+																	<shiro:hasAnyRoles name="admin,fb_gm_placard_add">
+																		<li><a href="${ctx}/manage/gm/fb/placard/add">公告新增</a></li>
+																	</shiro:hasAnyRoles>
+																<li>
+															</ul>
+														</li>															
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,fb_gm_email_select,fb_gm_email_add">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">邮件</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<shiro:hasAnyRoles name="admin,fb_gm_email_select">
+																		<li><a href="${ctx}/manage/gm/fb/email/index">邮件</a></li>
+																	</shiro:hasAnyRoles>
+																	<shiro:hasAnyRoles name="admin,fb_gm_email_add">
+																		<li><a href="${ctx}/manage/gm/fb/email/add">邮件新增</a></li>
+																	</shiro:hasAnyRoles>
+																<li>
+															</ul>
+														</li>												
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,fb_gm_gag_select,fb_gm_gag_add">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">禁言</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<shiro:hasAnyRoles name="admin,fb_gm_gag_select">
+																		<li><a href="${ctx}/manage/gm/fb/gag/index">禁言</a></li>
+																	</shiro:hasAnyRoles>
+																	<shiro:hasAnyRoles name="admin,fb_gm_gag_add">	
+																		<li><a href="${ctx}/manage/gm/fb/gag/add">禁言新增</a></li>
+																	</shiro:hasAnyRoles>
+																<li>
+															</ul>
+														</li>												
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,fb_gm_seal_select,fb_gm_seal_add">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">封号</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<shiro:hasAnyRoles name="admin,fb_gm_seal_select">
+																		<li><a href="${ctx}/manage/gm/fb/seal/index">封号</a></li>
+																	</shiro:hasAnyRoles>
+																	<shiro:hasAnyRoles name="admin,fb_gm_seal_add">
+																		<li><a href="${ctx}/manage/gm/fb/seal/add">封号新增</a></li>
+																	</shiro:hasAnyRoles>
+																<li>
+															</ul>
+														</li>														
+													</shiro:hasAnyRoles>
+												    <shiro:hasAnyRoles name="admin,fb_gm_product_select,fb_gm_product_add">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">商店商品</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<shiro:hasAnyRoles name="admin,fb_gm_product_select">
+																		<li><a href="${ctx}/manage/gm/fb/product/index">商店商品</a></li>
+																	</shiro:hasAnyRoles>
+																	<shiro:hasAnyRoles name="admin,fb_gm_product_add">
+																		<li><a href="${ctx}/manage/gm/fb/product/add">商店商品新增</a></li>
+																	</shiro:hasAnyRoles>
+																<li>
+															</ul>
+														</li>														    
+												    </shiro:hasAnyRoles>
+													<li class="divider"></li>
+													<li><a href="#">sample</a></li>
+												<li>	
+											</ul>
+										</li>
+									</shiro:hasAnyRoles>
+									<li class="divider"></li>
+									<li><a href="#">sample</a></li>
+								</ul>
+						</li>	
+					</shiro:hasAnyRoles>
 					
 					<shiro:hasAnyRoles name="admin,10001">
 						<li class="dropdown"><a href="#" class="dropdown-toggle"

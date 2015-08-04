@@ -65,7 +65,9 @@
 				</div>
 			</div>	
  			<div class="form-actions">
-  			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
+ 				 <shiro:hasAnyRoles name="admin,fb_gm_account_add">
+  			     	<button type="submit" class="btn btn-primary" id="submit">保存</button>
+  			     </shiro:hasAnyRoles>
 				 <a href="<%=request.getContextPath()%>/manage/gm/fb/serverStatus/accountIndex" class="btn btn-primary">返回</a>
 	        </div>
 	</form>
