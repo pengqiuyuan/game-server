@@ -21,8 +21,6 @@ import org.elasticsearch.search.aggregations.metrics.sum.Sum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.EsUtil;
 
 /**
@@ -63,9 +61,6 @@ public class KunPayPenetrationScheduled {
 	private static final Integer pfsize = 300; //渠道
 	
 	private static final Integer srsize = 300; //服务器
-	
-	@Autowired
-	private StoreService storeService;
 	
 	EsUtil esUtilTest = new EsUtil();
 	
