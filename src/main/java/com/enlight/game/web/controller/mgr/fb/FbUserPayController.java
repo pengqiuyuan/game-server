@@ -35,9 +35,7 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
-import com.enlight.game.service.es.UserAddServer;
 import com.enlight.game.service.es.UserPayServer;
-import com.enlight.game.service.es.UserTotalServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -129,6 +127,7 @@ public class FbUserPayController extends BaseController{
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
+			sZones.add("所有运营大区");
 		}else{
 		    if(sZone != null && sZone.length>0){
 				for (int i = 0; i < sZone.length; i++) {

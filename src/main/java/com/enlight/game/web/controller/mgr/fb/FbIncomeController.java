@@ -107,8 +107,6 @@ public class FbIncomeController extends BaseController{
 		Map<String, Map<String,String>> count = new HashMap<String, Map<String,String>>();
 		Map<String, Map<String,String>> peoplenum = new HashMap<String, Map<String,String>>();
 
-		Map<String, Map<String, Object>> n = new HashMap<String, Map<String, Object>>();
-		
 		List<String> sZones = new ArrayList<String>();
 		List<String> pForms = new ArrayList<String>();
 		List<String> svs = new ArrayList<String>();
@@ -124,6 +122,7 @@ public class FbIncomeController extends BaseController{
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
+			sZones.add("所有运营大区");
 		}else{
 		    if(sZone != null && sZone.length>0){
 				for (int i = 0; i < sZone.length; i++) {

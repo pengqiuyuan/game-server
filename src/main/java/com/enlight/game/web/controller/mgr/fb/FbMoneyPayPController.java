@@ -36,8 +36,6 @@ import com.enlight.game.entity.Stores;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.es.MoneyPayPServer;
-import com.enlight.game.service.es.UserActiveServer;
-import com.enlight.game.service.es.UserIncomeServer;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -111,8 +109,6 @@ public class FbMoneyPayPController extends BaseController{
 		Map<String, Map<String,String>> arppuday = new HashMap<String, Map<String,String>>();
 		Map<String, Map<String,String>> arppumouth = new HashMap<String, Map<String,String>>();
 
-		Map<String, Map<String, Object>> n = new HashMap<String, Map<String, Object>>();
-		
 		List<String> sZones = new ArrayList<String>();
 		List<String> pForms = new ArrayList<String>();
 		List<String> svs = new ArrayList<String>();
@@ -129,6 +125,7 @@ public class FbMoneyPayPController extends BaseController{
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
+			sZones.add("所有运营大区");
 		}else{
 		    if(sZone != null && sZone.length>0){
 				for (int i = 0; i < sZone.length; i++) {

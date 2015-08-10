@@ -458,16 +458,16 @@
 											<ul class="dropdown-menu">
 												<li class="dropdown-submenu">
 													<shiro:hasAnyRoles name="admin,KUN_USER">
-														<li><a href="${ctx}/manage/kunRetained/kun/userRetained">用户留存</a></li>
-														<li><a href="${ctx}/manage/kunUserAdd/kun/userAdd">用户新增</a></li>
-														<li><a href="${ctx}/manage/kunActive/kun/userActive">活跃用户</a></li>
+														<li><a href="${ctx}/manage/kunRetained/kun/userRetained?serverZone=all">用户留存</a></li>
+														<li><a href="${ctx}/manage/kunUserAdd/kun/userAdd?serverZone=all">用户新增</a></li>
+														<li><a href="${ctx}/manage/kunActive/kun/userActive?serverZone=all">活跃用户</a></li>
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
-																	<li><a href="${ctx}/manage/kunUserPay/kun/userPay">新增付费用户</a></li>
-																	<li><a href="${ctx}/manage/kunUserPay/kun/userDay">当日付费率</a></li>
-																	<li><a href="${ctx}/manage/kunUserPay/kun/userWeek">当周付费率</a></li>
-																	<li><a href="${ctx}/manage/kunUserPay/kun/userMouth">当月付费率</a></li>
+																	<li><a href="${ctx}/manage/kunUserPay/kun/userPay?serverZone=all">新增付费用户</a></li>
+																	<li><a href="${ctx}/manage/kunUserPay/kun/userDay?serverZone=all">当日付费率</a></li>
+																	<li><a href="${ctx}/manage/kunUserPay/kun/userWeek?serverZone=all">当周付费率</a></li>
+																	<li><a href="${ctx}/manage/kunUserPay/kun/userMouth?serverZone=all">当月付费率</a></li>
 																<li>
 															</ul>
 														</li>
@@ -476,8 +476,8 @@
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
-																		<li><a href="${ctx}/manage/kunIncome/kun/userIncome">收入分析</a></li>
-																		<li><a href="${ctx}/manage/kunMoneyPayP/kun/moneyPayP">ARPU与ARPPU</a></li>
+																		<li><a href="${ctx}/manage/kunIncome/kun/userIncome?serverZone=all">收入分析</a></li>
+																		<li><a href="${ctx}/manage/kunMoneyPayP/kun/moneyPayP?serverZone=all">ARPU与ARPPU</a></li>
 																	<li>
 																</ul>
 														</li>
@@ -491,16 +491,16 @@
 											<ul class="dropdown-menu">
 												<li class="dropdown-submenu">
 													<shiro:hasAnyRoles name="admin,KDS_USER">
-														<li><a href="${ctx}/manage/kdsRetained/kds/userRetained">用户留存</a></li>
-														<li><a href="${ctx}/manage/kdsUserAdd/kds/userAdd">用户新增</a></li>
-														<li><a href="${ctx}/manage/kdsActive/kds/userActive">活跃用户</a></li>
+														<li><a href="${ctx}/manage/kdsRetained/kds/userRetained?serverZone=all">用户留存</a></li>
+														<li><a href="${ctx}/manage/kdsUserAdd/kds/userAdd?serverZone=all">用户新增</a></li>
+														<li><a href="${ctx}/manage/kdsActive/kds/userActive?serverZone=all">活跃用户</a></li>
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
-																	<li><a href="${ctx}/manage/kdsUserPay/kds/userPay">新增付费用户</a></li>
-																	<li><a href="${ctx}/manage/kdsUserPay/kds/userDay">当日付费率</a></li>
-																	<li><a href="${ctx}/manage/kdsUserPay/kds/userWeek">当周付费率</a></li>
-																	<li><a href="${ctx}/manage/kdsUserPay/kds/userMouth">当月付费率</a></li>
+																	<li><a href="${ctx}/manage/kdsUserPay/kds/userPay?serverZone=all">新增付费用户</a></li>
+																	<li><a href="${ctx}/manage/kdsUserPay/kds/userDay?serverZone=all">当日付费率</a></li>
+																	<li><a href="${ctx}/manage/kdsUserPay/kds/userWeek?serverZone=all">当周付费率</a></li>
+																	<li><a href="${ctx}/manage/kdsUserPay/kds/userMouth?serverZone=all">当月付费率</a></li>
 																<li>
 															</ul>
 														</li>
@@ -509,8 +509,8 @@
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
-																		<li><a href="${ctx}/manage/kdsIncome/kds/userIncome">收入分析</a></li>
-																		<li><a href="${ctx}/manage/kdsMoneyPayP/kds/moneyPayP">ARPU与ARPPU</a></li>
+																		<li><a href="${ctx}/manage/kdsIncome/kds/userIncome?serverZone=all">收入分析</a></li>
+																		<li><a href="${ctx}/manage/kdsMoneyPayP/kds/moneyPayP?serverZone=all">ARPU与ARPPU</a></li>
 																	<li>
 																</ul>
 														</li>
@@ -524,16 +524,16 @@
 											<ul class="dropdown-menu">
 												<li class="dropdown-submenu">
 													<shiro:hasAnyRoles name="admin,FB_USER">
-														<li><a href="${ctx}/manage/fbRetained/fb/userRetained">用户留存</a></li>
-														<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd">用户新增</a></li>
-														<li><a href="${ctx}/manage/fbActive/fb/userActive">活跃用户</a></li>
+														<li><a href="${ctx}/manage/fbRetained/fb/userRetained?serverZone=all">用户留存</a></li>
+														<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd?serverZone=all">用户新增</a></li>
+														<li><a href="${ctx}/manage/fbActive/fb/userActive?serverZone=all">活跃用户</a></li>
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
-																	<li><a href="${ctx}/manage/fbUserPay/fb/userPay">新增付费用户</a></li>
-																	<li><a href="${ctx}/manage/fbUserPay/fb/userDay">当日付费率</a></li>
-																	<li><a href="${ctx}/manage/fbUserPay/fb/userWeek">当周付费率</a></li>
-																	<li><a href="${ctx}/manage/fbUserPay/fb/userMouth">当月付费率</a></li>
+																	<li><a href="${ctx}/manage/fbUserPay/fb/userPay?serverZone=all">新增付费用户</a></li>
+																	<li><a href="${ctx}/manage/fbUserPay/fb/userDay?serverZone=all">当日付费率</a></li>
+																	<li><a href="${ctx}/manage/fbUserPay/fb/userWeek?serverZone=all">当周付费率</a></li>
+																	<li><a href="${ctx}/manage/fbUserPay/fb/userMouth?serverZone=all">当月付费率</a></li>
 																<li>
 															</ul>
 														</li>
@@ -542,8 +542,8 @@
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
-																		<li><a href="${ctx}/manage/fbIncome/fb/userIncome">收入分析</a></li>
-																		<li><a href="${ctx}/manage/fbMoneyPayP/fb/moneyPayP">ARPU与ARPPU</a></li>
+																		<li><a href="${ctx}/manage/fbIncome/fb/userIncome?serverZone=all">收入分析</a></li>
+																		<li><a href="${ctx}/manage/fbMoneyPayP/fb/moneyPayP?serverZone=all">ARPU与ARPPU</a></li>
 																	<li>
 																</ul>
 														</li>
@@ -556,8 +556,6 @@
 								</ul>
 						</li>									
 				    </shiro:hasAnyRoles>	
-					
-
 				</ul>
 				<shiro:user>
 					<ul class="nav navbar-nav navbar-right">
@@ -573,9 +571,6 @@
 				</shiro:user>
 			</div>
 		</shiro:hasAnyRoles>
-			
-			<!--/.nav-collapse -->
-
 		</div>
 	</div>
 </div>

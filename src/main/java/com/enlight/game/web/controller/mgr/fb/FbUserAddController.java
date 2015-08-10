@@ -1,7 +1,6 @@
 package com.enlight.game.web.controller.mgr.fb;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -127,6 +125,7 @@ public class FbUserAddController extends BaseController{
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
+			sZones.add("所有运营大区");
 		}else{
 		    if(sZone != null && sZone.length>0){
 				for (int i = 0; i < sZone.length; i++) {

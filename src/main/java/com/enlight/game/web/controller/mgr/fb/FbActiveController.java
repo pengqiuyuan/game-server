@@ -106,8 +106,6 @@ public class FbActiveController extends BaseController{
 		Map<String, Map<String,String>> seven = new HashMap<String, Map<String,String>>();
 		Map<String, Map<String,String>> thirty = new HashMap<String, Map<String,String>>();
 
-		Map<String, Map<String, Object>> n = new HashMap<String, Map<String, Object>>();
-		
 		List<String> sZones = new ArrayList<String>();
 		List<String> pForms = new ArrayList<String>();
 		List<String> svs = new ArrayList<String>();
@@ -119,6 +117,7 @@ public class FbActiveController extends BaseController{
 			next.put("所有运营大区", userActiveServer.searchAllUserDay(index, type_active_day, dateFrom, dateTo));
 			seven.put("所有运营大区", userActiveServer.searchAllUserWeek(index, type_active_week, dateFrom, dateTo));
 			thirty.put("所有运营大区", userActiveServer.searchAllUserMouth(index, type_active_mouth, dateFrom, dateTo));
+			sZones.add("所有运营大区");
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
