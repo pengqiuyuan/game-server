@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.EnumCategory;
 import com.enlight.game.entity.EnumFunction;
-import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;

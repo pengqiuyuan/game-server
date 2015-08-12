@@ -78,6 +78,13 @@
 
     <import resource="classpath:/applicationContext-scheduling.xml"/>     			  
 		
+		<!-- Jcaptcha相关的配置 -->   
+    <bean id="captchaService" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService">   
+		<property name="captchaEngine">
+			<bean class="com.enlight.game.jcaptcha.GMailEngine"></bean>
+		</property>
+    </bean>
+    	
 	<!-- production环境 -->
  	<beans profile="production">
  		<context:property-placeholder ignore-unresolvable="true"

@@ -46,20 +46,39 @@
 
 		</div>
 		
-		
-		<div class="control-group">
-			<div class="controls">
-				<label class="checkbox" for="rememberMe"><input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
-				<input id="submit_btn" class="btn btn-primary" type="submit" value="登录"/> 
-				<!-- 
-			 	<span class="help-block">(管理员: <b>admin/admin</b>, 普通用户: <b>user/user</b>)</span>
-			 -->
-			</div>
-		</div>
+									<div class="control-group">
+								<label class="control-label" for="j_captcha">验证码：</label>
+								<div class="controls">
+									<input class="input-xlarge" name="j_captcha" id="j_captcha" type="text" value="">
+									<span class="help-inline">请输入验证码.</span></p></p>
+									<div class="control-group"> 
+										<img id="captchaImg" src="<c:url value="/jcaptcha.jpg"/>" /> 
+									</div>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<div class="controls">
+									<input class="input-xlarge" name="_spring_security_remember_me" id="_spring_security_remember_me" type="checkbox" value="">
+									两周内记住我
+									<span style="margin-left: 25px">
+										<a href="javascript:refreshCaptcha()">看不清楚换一张</a>    
+                                    </span>
+								</div>
+							</div>
+							<div class="form-actions">
+								<button type="submit" class="btn btn-primary">确定登录</button>
+							</div>
 		</fieldset>
 	</form>
 
 	<script>
+		function refreshCaptcha() {  
+				 $('#captchaImg').hide().attr(  
+	       		'src',  
+	      			'<c:url value="/jcaptcha.jpg"/>' + '?' + Math  
+	               		.floor(Math.random() * 100)).fadeIn();  
+		}  
 		$(document).ready(function() {
 			$("#loginForm").validate();
 			

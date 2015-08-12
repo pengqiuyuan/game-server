@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -35,6 +36,7 @@ import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.userRole.UserRoleService;
 import com.google.common.base.Objects;
+import com.octo.captcha.service.CaptchaService;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 	
@@ -47,6 +49,10 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	
 	@Autowired
 	private StoreService storeService;
+	
+	@Autowired
+    private CaptchaService captchaService; 
+	
 	/**
 	 * 认证回调函数,登录时调用.
 	 */
@@ -57,52 +63,65 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		ServletRequest request = ((WebSubject)SecurityUtils.getSubject()).getServletRequest();
 		String passw= request.getParameter("password");
 		
-		String storeName = null;
-		if(request.getParameter("password") != null){
-			logger.debug("正常登陆...");
-			String storeId = request.getParameter("storeId");
-			String categoryId = request.getParameter("categoryId");
-			if(storeId!="" && storeId!=null){
-				storeName = storeService.findById(Integer.valueOf(storeId)).getName();
-			}else{
-				storeName = null;
-			}
-			if (user != null) {
-				if(isNomal(user))
-				{
-				byte[] salt = Encodes.decodeHex(user.getSalt());
-				return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId,categoryId,storeName,passw),
-						user.getPassword(), ByteSource.Util.bytes(salt), getName());
+		HttpServletRequest trequest = (HttpServletRequest) request;   
+		String captchaID = trequest.getSession().getId();     
+		Boolean flag = false;
+		flag = captchaService.validateResponseForID(captchaID, request.getParameter("j_captcha"));   
+		
+	    if (flag.booleanValue()) { 
+	    	logger.debug("验证码正确");
+			String storeName = null;
+			if(request.getParameter("password") != null){
+				logger.debug("正常登陆...");
+				String storeId = request.getParameter("storeId");
+				String categoryId = request.getParameter("categoryId");
+				if(storeId!="" && storeId!=null){
+					storeName = storeService.findById(Integer.valueOf(storeId)).getName();
+				}else{
+					storeName = null;
 				}
-				return null;
-			} else {
-				return null;
-			}
-		}else if(request.getParameter("password") == null){
-			logger.debug("切换登陆...");
-			String storeId = (String) request.getAttribute("storeId");
-			String categoryId = (String) request.getAttribute("categoryId");
-			String password = (String) request.getAttribute("password");
-			if(storeId!="" && storeId!=null){
-				storeName = storeService.findById(Integer.valueOf(storeId)).getName();
-			}else{
-				storeName = null;
-			}
-			if (user != null) {
-				if(isNomal(user))
-				{
-				byte[] salt = Encodes.decodeHex(user.getSalt());
-				return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId,categoryId,storeName,password),
-						user.getPassword(), ByteSource.Util.bytes(salt), getName());
+				if (user != null) {
+					if(isNomal(user))
+					{
+					byte[] salt = Encodes.decodeHex(user.getSalt());
+					return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId,categoryId,storeName,passw),
+							user.getPassword(), ByteSource.Util.bytes(salt), getName());
+					}
+					return null;
+				} else {
+					return null;
 				}
-				return null;
-			} else {
+			}else if(request.getParameter("password") == null){
+				logger.debug("切换登陆...");
+				String storeId = (String) request.getAttribute("storeId");
+				String categoryId = (String) request.getAttribute("categoryId");
+				String password = (String) request.getAttribute("password");
+				if(storeId!="" && storeId!=null){
+					storeName = storeService.findById(Integer.valueOf(storeId)).getName();
+				}else{
+					storeName = null;
+				}
+				if (user != null) {
+					if(isNomal(user))
+					{
+					byte[] salt = Encodes.decodeHex(user.getSalt());
+					return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId,categoryId,storeName,password),
+							user.getPassword(), ByteSource.Util.bytes(salt), getName());
+					}
+					return null;
+				} else {
+					return null;
+				}
+			}else{
 				return null;
 			}
-		}else{
-			return null;
-		}
+	    	
+	    }else{
+	    	logger.debug("验证码错误");
+	    	return null;
+	    } 
 	}
+	
 	private boolean isNomal(User user)
 	{
 		if(user.getStatus().equals(User.STATUS_VALIDE))
