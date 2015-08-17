@@ -137,7 +137,7 @@ $(function(){
 								 $("#category_"+data.id).remove(); 
 								 $("#categoryItem").append("<div id='category_"+data.id+"'></div>");
 								 jQuery.each(data.enumFunctions, function(index, itemData) {
-									 $("#category_"+data.id).append("<input type='checkbox' id='"+itemData.id+"' name='functions' value='"+itemData.enumRole+"' class='box'/> <span>"+itemData.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");			
+									 $("#category_"+data.id).append("<input type='checkbox' id='"+data.id+"' name='functions' value='"+itemData.enumRole+"' class='box'/> <span>"+itemData.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");			
 								 	 if((index+1)%5==0){
 									 	$("#category_"+data.id).append("<br/><br/>");
 									 }
@@ -148,7 +148,7 @@ $(function(){
 				 				 $("#divCategory").remove(); 
 				 				 $("#category").append("<div id='divCategory'><label class='control-label'>"+data.categoryName+"<input type='checkbox' id='"+data.id+"' onclick='selectAll("+data.id+");' class='box' />：</label><div class='controls' id='functions'></div></div>"); 
 								 jQuery.each(data.enumFunctions, function(index, itemData) {
-									 $("#functions").append("<input type='checkbox' id='"+itemData.id+"' name='functions' value='"+itemData.enumRole+"' class='box'/> <span>"+itemData.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");			
+									 $("#functions").append("<input type='checkbox' id='"+data.id+"' name='functions' value='"+itemData.enumRole+"' class='box'/> <span>"+itemData.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");			
 								 	 if((index+1)%5==0){
 								 		$("#functions").append("<br/><br/>");
 								 	 }
