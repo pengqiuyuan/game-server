@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
-import com.enlight.game.entity.fb.gm.ServerStatus;
+import com.enlight.game.entity.gm.fb.ServerStatus;
 import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 

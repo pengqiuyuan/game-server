@@ -48,9 +48,9 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
-import com.enlight.game.entity.fb.gm.Annex;
-import com.enlight.game.entity.fb.gm.Category;
-import com.enlight.game.entity.fb.gm.Email;
+import com.enlight.game.entity.gm.fb.Annex;
+import com.enlight.game.entity.gm.fb.Category;
+import com.enlight.game.entity.gm.fb.Email;
 import com.google.common.collect.Maps;
 
 @Controller("fbEmailController")

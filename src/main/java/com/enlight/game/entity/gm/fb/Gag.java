@@ -1,10 +1,10 @@
-package com.enlight.game.entity.fb.gm;
+package com.enlight.game.entity.gm.fb;
 
 /**
  * @author dell
  * 禁言
  */
-public class Seal {
+public class Gag {
 	
 	private int id;
 	
@@ -22,11 +22,11 @@ public class Seal {
 	
 	private String account;
 	
-	private String sealTime;
+	private String gagTime;
 	
-	private String sealStart;
+	private String gagStart;
 	
-	private String sealEnd;
+	private String gagEnd;
 
 	public int getId() {
 		return id;
@@ -92,28 +92,28 @@ public class Seal {
 		this.account = account;
 	}
 
-	public String getSealTime() {
-		return sealTime;
+	public String getGagTime() {
+		return gagTime;
 	}
 
-	public void setSealTime(String sealTime) {
-		this.sealTime = sealTime;
+	public void setGagTime(String gagTime) {
+		this.gagTime = gagTime;
 	}
 
-	public String getSealStart() {
-		return sealStart;
+	public String getGagStart() {
+		return gagStart;
 	}
 
-	public void setSealStart(String sealStart) {
-		this.sealStart = sealStart;
+	public void setGagStart(String gagStart) {
+		this.gagStart = gagStart;
 	}
 
-	public String getSealEnd() {
-		return sealEnd;
+	public String getGagEnd() {
+		return gagEnd;
 	}
 
-	public void setSealEnd(String sealEnd) {
-		this.sealEnd = sealEnd;
+	public void setGagEnd(String gagEnd) {
+		this.gagEnd = gagEnd;
 	}
 
 }

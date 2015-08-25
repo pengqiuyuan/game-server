@@ -49,8 +49,8 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
-import com.enlight.game.entity.fb.gm.Category;
-import com.enlight.game.entity.fb.gm.Product;
+import com.enlight.game.entity.gm.fb.Category;
+import com.enlight.game.entity.gm.fb.Product;
 import com.google.common.collect.Maps;
 
 /**

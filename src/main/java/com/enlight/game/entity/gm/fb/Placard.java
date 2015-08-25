@@ -1,12 +1,10 @@
-package com.enlight.game.entity.fb.gm;
-
-import java.util.List;
+package com.enlight.game.entity.gm.fb;
 
 /**
  * @author dell
- * 邮件
+ *
  */
-public class Email {
+public class Placard {
 	
 	private int id;
 	
@@ -14,15 +12,13 @@ public class Email {
 	
 	private String gameId;
 	
+	private String[] serverIds;
+	
 	private String serverId;
 	
-	private String sender;
-	
-	private String title;
+	private String version;
 	
 	private String contents;
-	
-	private List<Annex> annex;
 
 	public int getId() {
 		return id;
@@ -48,6 +44,14 @@ public class Email {
 		this.gameId = gameId;
 	}
 
+	public String[] getServerIds() {
+		return serverIds;
+	}
+
+	public void setServerIds(String[] serverIds) {
+		this.serverIds = serverIds;
+	}
+
 	public String getServerId() {
 		return serverId;
 	}
@@ -56,20 +60,12 @@ public class Email {
 		this.serverId = serverId;
 	}
 
-	public String getSender() {
-		return sender;
+	public String getVersion() {
+		return version;
 	}
 
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	public String getContents() {
@@ -80,13 +76,5 @@ public class Email {
 		this.contents = contents;
 	}
 
-	public List<Annex> getAnnex() {
-		return annex;
-	}
 
-	public void setAnnex(List<Annex> annex) {
-		this.annex = annex;
-	}
-
-	
 }

@@ -44,10 +44,10 @@ import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
-import com.enlight.game.entity.fb.gm.Category;
-import com.enlight.game.entity.fb.gm.ServerStatus;
-import com.enlight.game.entity.fb.gm.ServerStatusAccount;
-import com.enlight.game.entity.fb.gm.ServerStatusList;
+import com.enlight.game.entity.gm.fb.Category;
+import com.enlight.game.entity.gm.fb.ServerStatus;
+import com.enlight.game.entity.gm.fb.ServerStatusAccount;
+import com.enlight.game.entity.gm.fb.ServerStatusList;
 import com.google.common.collect.Maps;
 
 @Controller("fbServerStatusController")

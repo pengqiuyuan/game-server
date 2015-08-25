@@ -1,4 +1,4 @@
-package com.enlight.game.entity.fb.gm;
+package com.enlight.game.entity.gm.fb;
 
 /**
  * @author dell

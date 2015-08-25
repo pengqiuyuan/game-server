@@ -63,16 +63,17 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		ServletRequest request = ((WebSubject)SecurityUtils.getSubject()).getServletRequest();
 		String passw= request.getParameter("password");
 		
-		HttpServletRequest trequest = (HttpServletRequest) request;   
-		String captchaID = trequest.getSession().getId();     
-		Boolean flag = false;
-		flag = captchaService.validateResponseForID(captchaID, request.getParameter("j_captcha"));   
-		
-	    if (flag.booleanValue()) { 
-	    	logger.debug("验证码正确");
-			String storeName = null;
-			if(request.getParameter("password") != null){
-				logger.debug("正常登陆...");
+		String storeName = null;
+		if(request.getParameter("password") != null){
+			logger.debug("正常登陆...");
+			
+			HttpServletRequest trequest = (HttpServletRequest) request;   
+			String captchaID = trequest.getSession().getId();     
+			Boolean flag = false;
+			flag = captchaService.validateResponseForID(captchaID, request.getParameter("j_captcha"));   
+			
+		    if (flag.booleanValue()) { 
+		    	logger.debug("验证码正确");
 				String storeId = request.getParameter("storeId");
 				String categoryId = request.getParameter("categoryId");
 				if(storeId!="" && storeId!=null){
@@ -91,35 +92,36 @@ public class ShiroDbRealm extends AuthorizingRealm {
 				} else {
 					return null;
 				}
-			}else if(request.getParameter("password") == null){
-				logger.debug("切换登陆...");
-				String storeId = (String) request.getAttribute("storeId");
-				String categoryId = (String) request.getAttribute("categoryId");
-				String password = (String) request.getAttribute("password");
-				if(storeId!="" && storeId!=null){
-					storeName = storeService.findById(Integer.valueOf(storeId)).getName();
-				}else{
-					storeName = null;
-				}
-				if (user != null) {
-					if(isNomal(user))
-					{
-					byte[] salt = Encodes.decodeHex(user.getSalt());
-					return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId,categoryId,storeName,password),
-							user.getPassword(), ByteSource.Util.bytes(salt), getName());
-					}
-					return null;
-				} else {
-					return null;
-				}
+		    }else{
+		    	logger.debug("验证码错误");
+		    	return null;
+		    } 
+		}else if(request.getParameter("password") == null){
+			logger.debug("切换登陆...");
+			String storeId = (String) request.getAttribute("storeId");
+			String categoryId = (String) request.getAttribute("categoryId");
+			String password = (String) request.getAttribute("password");
+			if(storeId!="" && storeId!=null){
+				storeName = storeService.findById(Integer.valueOf(storeId)).getName();
 			}else{
+				storeName = null;
+			}
+			if (user != null) {
+				if(isNomal(user))
+				{
+				byte[] salt = Encodes.decodeHex(user.getSalt());
+				return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName(),storeId,categoryId,storeName,password),
+						user.getPassword(), ByteSource.Util.bytes(salt), getName());
+				}
+				return null;
+			} else {
 				return null;
 			}
-	    	
-	    }else{
-	    	logger.debug("验证码错误");
-	    	return null;
-	    } 
+		}else{
+			return null;
+		}
+	    
+	    
 	}
 	
 	private boolean isNomal(User user)

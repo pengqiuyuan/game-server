@@ -449,6 +449,8 @@
 
 										</li>
 									</shiro:hasAnyRoles>
+									<li class="divider"></li>
+									<li><a href="#">sample</a></li>
 								</ul>
 						</li>
 					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">离线统计日志<b class="caret"></b></a>
@@ -553,6 +555,8 @@
 
 										</li>
 									</shiro:hasAnyRoles>
+									<li class="divider"></li>
+									<li><a href="#">sample</a></li>
 								</ul>
 						</li>									
 				    </shiro:hasAnyRoles>	
