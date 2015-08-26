@@ -30,17 +30,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
-import com.enlight.game.entity.ServerZone;
-import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoServerZoneService;
+import com.enlight.game.service.go.GoStoreService;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
-import com.enlight.game.service.serverZone.ServerZoneService;
-import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
@@ -48,6 +46,8 @@ import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.ServerStatus;
 import com.enlight.game.entity.gm.fb.ServerStatusAccount;
 import com.enlight.game.entity.gm.fb.ServerStatusList;
+import com.enlight.game.entity.go.GoServerZone;
+import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.Maps;
 
 @Controller("fbServerStatusController")
@@ -80,11 +80,7 @@ public class FbServerStatusController extends BaseController{
 	@Autowired
 	private EnumFunctionService enumFunctionService;
 	
-	@Autowired
-	private StoreService storeService;
-	
-	@Autowired
-	private ServerZoneService serverZoneService;
+
 	
 	@Autowired
 	private EnumCategoryService enumCategoryService;
@@ -94,6 +90,12 @@ public class FbServerStatusController extends BaseController{
 	
 	@Autowired
 	private ServerService serverService;
+	
+	@Autowired
+	private GoStoreService goStoreService;
+	
+	@Autowired
+	private GoServerZoneService  goServerZoneService;
 	
 	@Value("#{envProps.gm_url}")
 	private String gm_url;
@@ -116,25 +118,28 @@ public class FbServerStatusController extends BaseController{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		String storeId = request.getParameter("search_LIKE_storeId");
 		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
-
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			List<Stores> stores = new ArrayList<Stores>();
-			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
-			stores.add(sto);
-			List<ServerZone> serverZones = new ArrayList<ServerZone>();
-			List<String> s = u.getServerZoneList();
-			for (String str : s) {
-				ServerZone server = serverZoneService.findById(Long.valueOf(str));
-				serverZones.add(server);
+			List<GoStore> goStores = new ArrayList<GoStore>();
+			GoStore goStore = goStoreService.findByStoreId(Integer.valueOf(user.getStoreId()));
+			if(goStore!=null){
+				goStores.add(goStore);
 			}
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {	
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				if(goServerZone!=null){
+					goServerZones.add(goServerZone);
+				}
+			}
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}else{
-			List<Stores> stores =  storeService.findList();
-			List<ServerZone> serverZones = serverZoneService.findAll();
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoStore> goStores = goStoreService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}
 		
 		try {
@@ -197,22 +202,26 @@ public class FbServerStatusController extends BaseController{
 		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			List<Stores> stores = new ArrayList<Stores>();
-			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
-			stores.add(sto);
-			List<ServerZone> serverZones = new ArrayList<ServerZone>();
-			List<String> s = u.getServerZoneList();
-			for (String str : s) {
-				ServerZone server = serverZoneService.findById(Long.valueOf(str));
-				serverZones.add(server);
+			List<GoStore> goStores = new ArrayList<GoStore>();
+			GoStore goStore = goStoreService.findByStoreId(Integer.valueOf(user.getStoreId()));
+			if(goStore!=null){
+				goStores.add(goStore);
 			}
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {	
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				if(goServerZone!=null){
+					goServerZones.add(goServerZone);
+				}
+			}
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}else{
-			List<Stores> stores =  storeService.findList();
-			List<ServerZone> serverZones = serverZoneService.findAll();
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoStore> goStores = goStoreService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}
 		
 		try {
@@ -259,23 +268,28 @@ public class FbServerStatusController extends BaseController{
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			List<Stores> stores = new ArrayList<Stores>();
-			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
-			stores.add(sto);
-			List<ServerZone> serverZones = new ArrayList<ServerZone>();
-			List<String> s = u.getServerZoneList();
-			for (String str : s) {
-				ServerZone server = serverZoneService.findById(Long.valueOf(str));
-				serverZones.add(server);
+			List<GoStore> goStores = new ArrayList<GoStore>();
+			GoStore goStore = goStoreService.findByStoreId(Integer.valueOf(user.getStoreId()));
+			if(goStore!=null){
+				goStores.add(goStore);
 			}
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {	
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				if(goServerZone!=null){
+					goServerZones.add(goServerZone);
+				}
+			}
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}else{
-			List<Stores> stores =  storeService.findList();
-			List<ServerZone> serverZones = serverZoneService.findAll();
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoStore> goStores = goStoreService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}
+		
 		return "/gm/fb/serverStatus/accountAdd";
 	}
 	
@@ -295,23 +309,28 @@ public class FbServerStatusController extends BaseController{
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			List<Stores> stores = new ArrayList<Stores>();
-			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
-			stores.add(sto);
-			List<ServerZone> serverZones = new ArrayList<ServerZone>();
-			List<String> s = u.getServerZoneList();
-			for (String str : s) {
-				ServerZone server = serverZoneService.findById(Long.valueOf(str));
-				serverZones.add(server);
+			List<GoStore> goStores = new ArrayList<GoStore>();
+			GoStore goStore = goStoreService.findByStoreId(Integer.valueOf(user.getStoreId()));
+			if(goStore!=null){
+				goStores.add(goStore);
 			}
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {	
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				if(goServerZone!=null){
+					goServerZones.add(goServerZone);
+				}
+			}
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}else{
-			List<Stores> stores =  storeService.findList();
-			List<ServerZone> serverZones = serverZoneService.findAll();
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoStore> goStores = goStoreService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}
+		
 		String account;
 		try {
 			account = HttpClientUts.doGet(gm_url+"/fbserver/server/getGrayAccountByAccountId"+"?id="+id, "utf-8");

@@ -3,7 +3,7 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
-
+<%@ taglib prefix="huake" uri="/huake"%>
 <%@ page session="false"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
@@ -34,8 +34,8 @@
 							<select name="search_LIKE_storeId" id="gameId">	
 								<option value="">请选择项目</option>	
 								<c:forEach items="${stores}" var="item" >
-									<option value="${item.id }"   ${param.search_LIKE_storeId == item.id ? 'selected' : '' }>
-											${item.name }
+									<option value="${item.storeId }"   ${param.search_LIKE_storeId == item.storeId ? 'selected' : '' }>
+										<huake:getGoStoreNameTag id="${item.storeId }"></huake:getGoStoreNameTag>
 									</option>
 								</c:forEach>
 							</select>	
@@ -47,8 +47,8 @@
 						<select name="search_LIKE_serverZoneId" id="serverZoneId">	
 							<option value="">请选择项目</option>	
 							<c:forEach items="${serverZones}" var="item" >
-								<option value="${item.id }"  ${param.search_LIKE_serverZoneId == item.id ? 'selected' : '' }>
-									${item.serverName }
+								<option value="${item.serverZoneId }"  ${param.search_LIKE_serverZoneId == item.serverZoneId ? 'selected' : '' }>
+									<huake:getGoServerZoneNameTag id="${item.serverZoneId }"></huake:getGoServerZoneNameTag>
 								</option>
 							</c:forEach>
 						</select>	

@@ -36,6 +36,34 @@
 		</attribute>
 	</tag>
 	
+			<tag>
+		<description>
+			数据字典格式标签
+		</description>
+		<name>getGoStoreNameTag</name>
+		<tag-class>com.enlight.game.tags.GetGoStoreNameTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+			<tag>
+		<description>
+			数据字典格式标签
+		</description>
+		<name>getGoServerZoneNameTag</name>
+		<tag-class>com.enlight.game.tags.GetGoServerZoneNameTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
 				<tag>
 		<description>
 			数据字典格式标签

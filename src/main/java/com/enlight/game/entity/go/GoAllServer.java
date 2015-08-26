@@ -3,7 +3,11 @@ package com.enlight.game.entity.go;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * @author dell
@@ -12,6 +16,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name="game_go_all_server")
 public class GoAllServer {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	
 	private int serverZoneId;
 	
@@ -24,9 +32,18 @@ public class GoAllServer {
 	private String port;
 	
 	private String status;
-	
-	private List<Integer> platForms;
 
+	@Transient
+	private List<String> platForms;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public int getServerZoneId() {
 		return serverZoneId;
 	}
@@ -75,11 +92,12 @@ public class GoAllServer {
 		this.status = status;
 	}
 
-	public List<Integer> getPlatForms() {
+	@Transient
+	public List<String> getPlatForms() {
 		return platForms;
 	}
 
-	public void setPlatForms(List<Integer> platForms) {
+	public void setPlatForms(List<String> platForms) {
 		this.platForms = platForms;
 	}
 	

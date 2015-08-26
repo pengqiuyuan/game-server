@@ -34,23 +34,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.Server;
-import com.enlight.game.entity.ServerZone;
-import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoServerZoneService;
+import com.enlight.game.service.go.GoStoreService;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
-import com.enlight.game.service.serverZone.ServerZoneService;
-import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Annex;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.Email;
+import com.enlight.game.entity.go.GoServerZone;
+import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.Maps;
 
 @Controller("fbEmailController")
@@ -84,12 +84,6 @@ public class FbEmailController extends BaseController{
 	private EnumFunctionService enumFunctionService;
 	
 	@Autowired
-	private StoreService storeService;
-	
-	@Autowired
-	private ServerZoneService serverZoneService;
-	
-	@Autowired
 	private EnumCategoryService enumCategoryService;
 	
 	@Autowired
@@ -97,6 +91,12 @@ public class FbEmailController extends BaseController{
 	
 	@Autowired
 	private ServerService serverService;
+	
+	@Autowired
+	private GoStoreService goStoreService;
+	
+	@Autowired
+	private GoServerZoneService  goServerZoneService;
 	
 	@Value("#{envProps.gm_url}")
 	private String gm_url;
@@ -123,23 +123,28 @@ public class FbEmailController extends BaseController{
 		String serverId = request.getParameter("search_LIKE_serverId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			List<Stores> stores = new ArrayList<Stores>();
-			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
-			stores.add(sto);
-			List<ServerZone> serverZones = new ArrayList<ServerZone>();
-			List<String> s = u.getServerZoneList();
-			for (String str : s) {
-				ServerZone server = serverZoneService.findById(Long.valueOf(str));
-				serverZones.add(server);
+			List<GoStore> goStores = new ArrayList<GoStore>();
+			GoStore goStore = goStoreService.findByStoreId(Integer.valueOf(user.getStoreId()));
+			if(goStore!=null){
+				goStores.add(goStore);
 			}
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {	
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				if(goServerZone!=null){
+					goServerZones.add(goServerZone);
+				}
+			}
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}else{
-			List<Stores> stores =  storeService.findList();
-			List<ServerZone> serverZones = serverZoneService.findAll();
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoStore> goStores = goStoreService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}
+		
 		
 		try {
 	        if(!searchParams.isEmpty() && null != request.getParameter("search_LIKE_serverId")){
@@ -183,23 +188,28 @@ public class FbEmailController extends BaseController{
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			List<Stores> stores = new ArrayList<Stores>();
-			Stores sto=  storeService.findById(Long.valueOf(user.getStoreId()));
-			stores.add(sto);
-			List<ServerZone> serverZones = new ArrayList<ServerZone>();
-			List<String> s = u.getServerZoneList();
-			for (String str : s) {
-				ServerZone server = serverZoneService.findById(Long.valueOf(str));
-				serverZones.add(server);
+			List<GoStore> goStores = new ArrayList<GoStore>();
+			GoStore goStore = goStoreService.findByStoreId(Integer.valueOf(user.getStoreId()));
+			if(goStore!=null){
+				goStores.add(goStore);
 			}
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
+			List<String> s = u.getServerZoneList();
+			for (String str : s) {	
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				if(goServerZone!=null){
+					goServerZones.add(goServerZone);
+				}
+			}
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}else{
-			List<Stores> stores =  storeService.findList();
-			List<ServerZone> serverZones = serverZoneService.findAll();
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+			List<GoStore> goStores = goStoreService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			model.addAttribute("stores", goStores);
+			model.addAttribute("serverZones", goServerZones);
 		}
+		
 		return "/gm/fb/email/add";
 	}
 	

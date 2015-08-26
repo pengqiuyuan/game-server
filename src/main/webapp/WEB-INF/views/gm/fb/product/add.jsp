@@ -36,8 +36,8 @@
 						<select name="gameId" id="gameId">	
 							<option value="">请选择项目</option>	
 							<c:forEach items="${stores}" var="item" >
-								<option value="${item.id }"  >
-										${item.name }
+								<option value="${item.storeId }"  >
+									<huake:getGoStoreNameTag id="${item.storeId }"></huake:getGoStoreNameTag>
 								</option>
 							</c:forEach>
 						</select>	
@@ -49,8 +49,8 @@
 					<select name="serverZoneId" id="serverZoneId">	
 						<option value="">请选择项目</option>	
 						<c:forEach items="${serverZones}" var="item" >
-							<option value="${item.id }"  >
-								${item.serverName }
+							<option value="${item.serverZoneId }"  >
+								<huake:getGoServerZoneNameTag id="${item.serverZoneId }"></huake:getGoServerZoneNameTag>
 							</option>
 						</c:forEach>
 					</select>	

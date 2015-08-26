@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="huake" uri="/huake"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
@@ -23,8 +24,8 @@
 					<select name="gameId">		
 						<option value="">选择游戏项目</option>
 						<c:forEach items="${stores}" var="item" >
-							<option value="${item.id}"  ${account.gameId == item.id ? 'selected' : '' }>
-								${item.name}
+							<option value="${item.storeId}"  ${account.gameId == item.storeId ? 'selected' : '' }>
+								<huake:getGoStoreNameTag id="${item.storeId }"></huake:getGoStoreNameTag>
 							</option>	
 						</c:forEach>
 					</select>
@@ -36,8 +37,8 @@
 					<select name="serverZoneId">		
 						<option value="">选择运营大区</option>
 						<c:forEach items="${serverZones}" var="item" >
-							<option value="${item.id}"  ${account.serverZoneId == item.id ? 'selected' : '' }>
-								${item.serverName}
+							<option value="${item.serverZoneId}"  ${account.serverZoneId == item.serverZoneId ? 'selected' : '' }>
+								<huake:getGoServerZoneNameTag id="${item.serverZoneId }"></huake:getGoServerZoneNameTag>
 							</option>	
 						</c:forEach>
 					</select>

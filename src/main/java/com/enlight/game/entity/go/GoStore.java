@@ -1,6 +1,9 @@
 package com.enlight.game.entity.go;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -11,6 +14,8 @@ import javax.persistence.Table;
 @Table(name="game_go_store")
 public class GoStore{
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	private int storeId;
