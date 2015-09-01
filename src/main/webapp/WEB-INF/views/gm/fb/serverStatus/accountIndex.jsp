@@ -31,10 +31,10 @@
 				<div class="control-group">
 					<label class="control-label" for="gameId">选择游戏项目：</label>
 					<div class="controls">
-							<select name="search_LIKE_storeId" id="gameId">	
+							<select name="search_EQ_storeId" id="gameId">	
 								<option value="">请选择项目</option>	
 								<c:forEach items="${stores}" var="item" >
-									<option value="${item.storeId }"   ${param.search_LIKE_storeId == item.storeId ? 'selected' : '' }>
+									<option value="${item.storeId }"   ${param.search_EQ_storeId == item.storeId ? 'selected' : '' }>
 										<huake:getGoStoreNameTag id="${item.storeId }"></huake:getGoStoreNameTag>
 									</option>
 								</c:forEach>
@@ -44,10 +44,10 @@
 				<div class="control-group">
 					<label class="control-label" for="serverZoneId">选择运营大区：</label>
 					<div class="controls">
-						<select name="search_LIKE_serverZoneId" id="serverZoneId">	
+						<select name="search_EQ_serverZoneId" id="serverZoneId">	
 							<option value="">请选择项目</option>	
 							<c:forEach items="${serverZones}" var="item" >
-								<option value="${item.serverZoneId }"  ${param.search_LIKE_serverZoneId == item.serverZoneId ? 'selected' : '' }>
+								<option value="${item.serverZoneId }"  ${param.search_EQ_serverZoneId == item.serverZoneId ? 'selected' : '' }>
 									<huake:getGoServerZoneNameTag id="${item.serverZoneId }"></huake:getGoServerZoneNameTag>
 								</option>
 							</c:forEach>
@@ -133,17 +133,17 @@
 			});
 			$("#queryForm").validate({
 				rules:{
-					search_LIKE_storeId:{
+					search_EQ_storeId:{
 						required:true
 					},
-					search_LIKE_serverZoneId:{
+					search_EQ_serverZoneId:{
 						required:true
 					}
 				},messages:{
-					search_LIKE_storeId:{
+					search_EQ_storeId:{
 						required:"游戏项目"
 					},
-					search_LIKE_serverZoneId:{
+					search_EQ_serverZoneId:{
 						required:"运营必须填写"
 					}
 				}

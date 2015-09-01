@@ -123,9 +123,9 @@ public class FbGagController extends BaseController{
 		User u = accountService.getUser(user.id);
 		
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-		String storeId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
-		String serverId = request.getParameter("search_LIKE_serverId");
+		String storeId = request.getParameter("search_EQ_storeId");
+		String serverZoneId =  request.getParameter("search_EQ_serverZoneId");
+		String serverId = request.getParameter("search_EQ_serverId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<GoStore> goStores = new ArrayList<GoStore>();
@@ -151,7 +151,7 @@ public class FbGagController extends BaseController{
 		}
 		
 		try {
-	        if(!searchParams.isEmpty() && null != request.getParameter("search_LIKE_serverId")){
+	        if(!searchParams.isEmpty() && null != request.getParameter("search_EQ_serverId")){
 				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
 					storeId = user.getStoreId();
 				}
@@ -164,7 +164,7 @@ public class FbGagController extends BaseController{
 		        PageImpl<Gag> gag = new PageImpl<Gag>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("gag", gag);
 				
-				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_LIKE_storeId"));
+				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_EQ_storeId"));
 				model.addAttribute("servers", servers);
 	        }else{
 	        	List<Gag> beanList = new ArrayList<Gag>();
@@ -225,9 +225,9 @@ public class FbGagController extends BaseController{
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
 	public String update(ServletRequest request,RedirectAttributes redirectAttributes) throws UnsupportedEncodingException{
 		String id = request.getParameter("id");
-		String gameId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId = request.getParameter("search_LIKE_serverZoneId");
-		String serverId = request.getParameter("search_LIKE_serverId");
+		String gameId = request.getParameter("search_EQ_storeId");
+		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
+		String serverId = request.getParameter("search_EQ_serverId");
 		Gag gag = new Gag();
 		gag.setId(Integer.parseInt(id));
 		if(null != request.getParameter("gagTime")){
@@ -240,7 +240,7 @@ public class FbGagController extends BaseController{
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/updateGagAccount" , JSONObject.fromObject(gag));
 		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
 		
-		return "redirect:/manage/gm/fb/gag/index?search_LIKE_storeId="+gameId+"&search_LIKE_serverZoneId="+serverZoneId+"&search_LIKE_serverId="+URLEncoder.encode(serverId, "utf-8");
+		return "redirect:/manage/gm/fb/gag/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+URLEncoder.encode(serverId, "utf-8");
 	}
 	
 	/**

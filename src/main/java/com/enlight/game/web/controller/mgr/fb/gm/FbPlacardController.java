@@ -25,6 +25,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.SocketUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +40,7 @@ import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.go.GoServerZoneService;
 import com.enlight.game.service.go.GoStoreService;
 import com.enlight.game.service.platForm.PlatFormService;
@@ -48,6 +50,7 @@ import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.Placard;
+import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.Maps;
@@ -97,6 +100,9 @@ public class FbPlacardController extends BaseController{
 	@Autowired
 	private GoServerZoneService  goServerZoneService;
 	
+	@Autowired
+	private GoAllServerService goAllServerService;
+	
 	@Value("#{envProps.gm_url}")
 	private String gm_url;
 
@@ -117,9 +123,9 @@ public class FbPlacardController extends BaseController{
 		User u = accountService.getUser(user.id);
 		
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-		String storeId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
-		String serverId = request.getParameter("search_LIKE_serverId");
+		String storeId = request.getParameter("search_EQ_storeId");
+		String serverZoneId =  request.getParameter("search_EQ_serverZoneId");
+		String serverId = request.getParameter("search_EQ_serverId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<GoStore> goStores = new ArrayList<GoStore>();
@@ -145,12 +151,17 @@ public class FbPlacardController extends BaseController{
 		}
 		
 		try {
-	        if(!searchParams.isEmpty() && null != request.getParameter("search_LIKE_serverId")){
+	        if(!searchParams.isEmpty() && null != request.getParameter("search_EQ_serverId")){
 				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
 					storeId = user.getStoreId();
 				}
-				String gs = HttpClientUts.doGet(gm_url+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard, "utf-8");
+				
+				GoAllServer goAllServer =  goAllServerService.findByServerId(serverId);
+				//String gs = HttpClientUts.doGet(gm_url+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
+				//String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard, "utf-8");
+				String gs = HttpClientUts.doGet("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
+				String total = HttpClientUts.doGet("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard, "utf-8");
+				
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
@@ -158,7 +169,7 @@ public class FbPlacardController extends BaseController{
 		        PageImpl<Placard> placard = new PageImpl<Placard>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("placard", placard);
 				
-				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_LIKE_storeId"));
+				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
 				model.addAttribute("servers", servers);
 	        }else{
 	        	List<Placard> beanList = new ArrayList<Placard>();
@@ -166,7 +177,7 @@ public class FbPlacardController extends BaseController{
 		        PageImpl<Placard> placard = new PageImpl<Placard>(beanList, pageRequest, 0);
 				model.addAttribute("placard", placard);
 				
-				Set<Server> servers = new HashSet<Server>();
+				List<GoAllServer> servers = new ArrayList<GoAllServer>();
 				model.addAttribute("servers", servers);
 	        }
 		} catch (Exception e) {
@@ -218,9 +229,9 @@ public class FbPlacardController extends BaseController{
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
 	public String update(ServletRequest request,RedirectAttributes redirectAttributes){
 		String id = request.getParameter("id");
-		String gameId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId = request.getParameter("search_LIKE_serverZoneId");
-		String[] serverIds = request.getParameterValues("search_LIKE_serverId");
+		String gameId = request.getParameter("search_EQ_storeId");
+		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
+		String[] serverIds = request.getParameterValues("search_EQ_serverId");
 		String version = request.getParameter("version");
 		String contents = request.getParameter("contents");
 		System.out.println(id +"  " + gameId + " "+ serverZoneId + "  "  + serverIds + " " + version + "  " + contents);
@@ -242,9 +253,16 @@ public class FbPlacardController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Placard placard,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "  "  +placard.getVersion() + "  "  + placard.getContents() );
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/addPlacards" , JSONObject.fromObject(placard));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/fb/placard/add";
+
+        if(null != placard.getServerId()){
+    		System.out.println(JSONObject.fromObject(placard));
+    		JSONObject res = HttpClientUts.doPost("http://127.0.0.1:8899/fbserver/placard/addPlacards"  , JSONObject.fromObject(placard));
+    		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+    		return "redirect:/manage/gm/fb/placard/add";
+        }else{
+        	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
+        	return "redirect:/manage/gm/fb/placard/add";
+        }
 	}
 	
 	/**

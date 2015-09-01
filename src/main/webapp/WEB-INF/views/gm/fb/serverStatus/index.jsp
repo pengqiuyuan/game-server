@@ -32,10 +32,10 @@
 				<div class="control-group">
 					<label class="control-label" for="gameId">选择游戏项目：</label>
 					<div class="controls">
-							<select name="search_LIKE_storeId" id="gameId">	
+							<select name="search_EQ_storeId" id="gameId">	
 								<option value="">请选择项目</option>	
 								<c:forEach items="${stores}" var="item" >
-									<option value="${item.storeId }"   ${param.search_LIKE_storeId == item.storeId ? 'selected' : '' }>
+									<option value="${item.storeId }"   ${param.search_EQ_storeId == item.storeId ? 'selected' : '' }>
 										<huake:getGoStoreNameTag id="${item.storeId }"></huake:getGoStoreNameTag>
 									</option>
 								</c:forEach>
@@ -45,10 +45,10 @@
 				<div class="control-group">
 					<label class="control-label" for="serverZoneId">选择运营大区：</label>
 					<div class="controls">
-						<select name="search_LIKE_serverZoneId" id="serverZoneId">	
+						<select name="search_EQ_serverZoneId" id="serverZoneId">	
 							<option value="">请选择项目</option>	
 							<c:forEach items="${serverZones}" var="item" >
-								<option value="${item.serverZoneId }"  ${param.search_LIKE_serverZoneId == item.serverZoneId ? 'selected' : '' }>
+								<option value="${item.serverZoneId }"  ${param.search_EQ_serverZoneId == item.serverZoneId ? 'selected' : '' }>
 									<huake:getGoServerZoneNameTag id="${item.serverZoneId }"></huake:getGoServerZoneNameTag>
 								</option>
 							</c:forEach>
@@ -71,18 +71,39 @@
 							<th class="check-header hidden-xs">
 		                      <label><input id="checkAll" name="checkAll" type="checkbox"><span></span></label>
 		                    </th>
-							<th title="服务器ID">服务器ID</th>
-							<th title="服务器名称">服务器名称</th>
-							<th title="状态">状态</th>
+		                    <th title="storeId">游戏</th>
+		                    <th title="serverZoneId">运营大区</th>
+							<th title="serverId">服务器Id</th>
+							<th title="ip">服务器Ip</th>
+							<th title="port">服务器port</th>
+							<th title="status">状态</th>
 						</tr>
 					</thead>
 					<tbody id="tbody">
 						<c:forEach items="${serverStatus.content}" var="item" varStatus="s">
 							<tr id="${item.id}">
-								<td><label><input  type="checkbox" class="checkbox" name="checkId" value="${item.id}"><span></span></label></td>
+								<td><label><input  type="checkbox" class="checkbox" name="checkId" value="${item.serverId}"><span></span></label></td>
+								<td><huake:getGoStoreNameTag id="${item.storeId }"></huake:getGoStoreNameTag></td>
+								<td><huake:getGoServerZoneNameTag id="${item.serverZoneId }"></huake:getGoServerZoneNameTag></td>
 								<td>${item.serverId}</td>
-								<td>${item.serverName}</td>
-								<td>${item.status}</td>
+								<td>${item.ip}</td>
+								<td>${item.port}</td>
+								<td>
+									<c:choose>
+										<c:when  test="${item.status eq '1'}">
+											<span>维护</span>
+										</c:when >
+										<c:when  test="${item.status eq '2'}">
+											<span>新区</span>
+										</c:when >
+										<c:when  test="${item.status eq '3'}">
+											<span>良好</span>
+										</c:when >
+										<c:when  test="${item.status eq '4'}">
+											<span>爆满</span>
+										</c:when >
+									</c:choose>
+								</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -92,10 +113,10 @@
 			<div class="control-group " style="display: none;"  >
 				<label class="control-label">游戏项目：</label> 
 				<div class="controls">	
-				<select name="search_LIKE_storeId">		
+				<select name="search_EQ_storeId">		
 						<option value="">选择游戏项目</option>
 						<c:forEach items="${stores}" var="item" >
-							<option value="${item.storeId}"  ${param.search_LIKE_storeId == item.storeId ? 'selected' : '' }>
+							<option value="${item.storeId}"  ${param.search_EQ_storeId == item.storeId ? 'selected' : '' }>
 								<huake:getGoStoreNameTag id="${item.storeId }"></huake:getGoStoreNameTag>
 							</option>	
 						</c:forEach>
@@ -105,10 +126,10 @@
 		    <div class="control-group " style="display: none;"  >		
 				<label class="control-label">运营大区：</label> 
 				<div class="controls">	
-				<select  name="search_LIKE_serverZoneId">		
+				<select  name="search_EQ_serverZoneId">		
 						<option value="">选择运营大区</option>
 						<c:forEach items="${serverZones}" var="item" >
-							<option value="${item.serverZoneId}"  ${param.search_LIKE_serverZoneId == item.serverZoneId ? 'selected' : '' }>
+							<option value="${item.serverZoneId}"  ${param.search_EQ_serverZoneId == item.serverZoneId ? 'selected' : '' }>
 								<huake:getGoServerZoneNameTag id="${item.serverZoneId }"></huake:getGoServerZoneNameTag>
 							</option>	
 						</c:forEach>
@@ -150,17 +171,17 @@
 			});
 			$("#queryForm").validate({
 				rules:{
-					search_LIKE_storeId:{
+					search_EQ_storeId:{
 						required:true
 					},
-					search_LIKE_serverZoneId:{
+					search_EQ_serverZoneId:{
 						required:true
 					}
 				},messages:{
-					search_LIKE_storeId:{
+					search_EQ_storeId:{
 						required:"游戏项目"
 					},
-					search_LIKE_serverZoneId:{
+					search_EQ_serverZoneId:{
 						required:"运营必须填写"
 					}
 				}

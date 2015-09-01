@@ -13,6 +13,10 @@ public interface GoAllServerDao extends PagingAndSortingRepository<GoAllServer, 
 
 	@Modifying
 	@Query("from GoAllServer goAllServer where goAllServer.storeId=?1 and goAllServer.serverZoneId=?2")
-	List<GoAllServer> findAllByPlatFormIdAndStoreIdAndServerZoneId(Integer storeId,Integer serverZoneId);
+	List<GoAllServer> findAllByStoreIdAndServerZoneId(Integer storeId,Integer serverZoneId);
+	
+	GoAllServer findById(Integer Id);
+	
+	GoAllServer findByServerId(String serverId);
 	
 }

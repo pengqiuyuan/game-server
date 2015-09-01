@@ -126,10 +126,10 @@ public class FbProductController extends BaseController{
 		User u = accountService.getUser(user.id);
 		
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-		String storeId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
-		String serverId = request.getParameter("search_LIKE_serverId");
-		String itemId = request.getParameter("search_LIKE_itemId");
+		String storeId = request.getParameter("search_EQ_storeId");
+		String serverZoneId =  request.getParameter("search_EQ_serverZoneId");
+		String serverId = request.getParameter("search_EQ_serverId");
+		String itemId = request.getParameter("search_EQ_itemId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<GoStore> goStores = new ArrayList<GoStore>();
@@ -155,7 +155,7 @@ public class FbProductController extends BaseController{
 		}
 		
 		try {
-	        if(!searchParams.isEmpty() && null != request.getParameter("search_LIKE_serverId")){
+	        if(!searchParams.isEmpty() && null != request.getParameter("search_EQ_serverId")){
 				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
 					storeId = user.getStoreId();
 				}
@@ -168,7 +168,7 @@ public class FbProductController extends BaseController{
 		        PageImpl<Product> product = new PageImpl<Product>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("product", product);
 				
-				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_LIKE_storeId"));
+				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_EQ_storeId"));
 				model.addAttribute("servers", servers);
 	        }else{
 	        	List<Product> beanList = new ArrayList<Product>();
@@ -228,9 +228,9 @@ public class FbProductController extends BaseController{
 	 */
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
 	public String update(Product product,ServletRequest request,RedirectAttributes redirectAttributes) throws UnsupportedEncodingException{
-		String gameId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId = request.getParameter("search_LIKE_serverZoneId");
-		String serverId = request.getParameter("search_LIKE_serverId");		
+		String gameId = request.getParameter("search_EQ_storeId");
+		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
+		String serverId = request.getParameter("search_EQ_serverId");		
 		String itemId = request.getParameter("itemId");
 
 		product.setGameId(gameId);
@@ -239,7 +239,7 @@ public class FbProductController extends BaseController{
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/product/updateProduct" , JSONObject.fromObject(product));
 		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
 		
-		return "redirect:/manage/gm/fb/product/index?search_LIKE_storeId="+gameId+"&search_LIKE_serverZoneId="+serverZoneId+"&search_LIKE_serverId="+URLEncoder.encode(serverId, "utf-8")+"&search_LIKE_itemId="+URLEncoder.encode(itemId.replaceAll(" ",""), "utf-8");
+		return "redirect:/manage/gm/fb/product/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+URLEncoder.encode(serverId, "utf-8")+"&search_EQ_itemId="+URLEncoder.encode(itemId.replaceAll(" ",""), "utf-8");
 	}
 	
 	/**

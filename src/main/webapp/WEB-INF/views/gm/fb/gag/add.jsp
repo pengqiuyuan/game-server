@@ -145,7 +145,7 @@
 				var gameId = $("#gameId").val();
 				$("#serverDiv").empty();
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/gift/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
+					url: '<%=request.getContextPath()%>/manage/gm/fb/serverStatus/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -174,7 +174,7 @@
 				var serverZoneId = $("#serverZoneId").val();
 				$("#serverDiv").empty();
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/gift/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
+					url: '<%=request.getContextPath()%>/manage/gm/fb/serverStatus/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',

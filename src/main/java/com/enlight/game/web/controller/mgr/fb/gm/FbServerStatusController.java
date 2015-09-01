@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,11 +32,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
+import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.go.GoServerZoneService;
 import com.enlight.game.service.go.GoStoreService;
 import com.enlight.game.service.platForm.PlatFormService;
@@ -43,9 +47,9 @@ import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
-import com.enlight.game.entity.gm.fb.ServerStatus;
 import com.enlight.game.entity.gm.fb.ServerStatusAccount;
 import com.enlight.game.entity.gm.fb.ServerStatusList;
+import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.Maps;
@@ -80,8 +84,6 @@ public class FbServerStatusController extends BaseController{
 	@Autowired
 	private EnumFunctionService enumFunctionService;
 	
-
-	
 	@Autowired
 	private EnumCategoryService enumCategoryService;
 	
@@ -97,6 +99,9 @@ public class FbServerStatusController extends BaseController{
 	@Autowired
 	private GoServerZoneService  goServerZoneService;
 	
+	@Autowired
+	private GoAllServerService goAllServerService;
+	
 	@Value("#{envProps.gm_url}")
 	private String gm_url;
 	
@@ -105,7 +110,7 @@ public class FbServerStatusController extends BaseController{
 	 * @param pageSize   显示条数
 	 * @param sortType  排序
 	 * @param model   返回对象
-	 * @param request  封装的请	
+	 * @param request  封装的请求	
 	 */
 	@RequestMapping(value = "index", method = RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
@@ -116,8 +121,8 @@ public class FbServerStatusController extends BaseController{
 		User u = accountService.getUser(user.id);
 		
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-		String storeId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
+		String storeId = request.getParameter("search_EQ_storeId");
+		String serverZoneId =  request.getParameter("search_EQ_serverZoneId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<GoStore> goStores = new ArrayList<GoStore>();
@@ -144,6 +149,20 @@ public class FbServerStatusController extends BaseController{
 		
 		try {
 	        if(!searchParams.isEmpty()){
+	        	Page<GoAllServer> serverStatus = goAllServerService.findGoAllServerByCondition(user.id,searchParams, pageNumber, pageSize, sortType);
+				model.addAttribute("serverStatus", serverStatus);
+	        }else{
+	        	List<GoAllServer> beanList = new ArrayList<GoAllServer>();
+				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+		        PageImpl<GoAllServer> serverStatus = new PageImpl<GoAllServer>(beanList, pageRequest, 0);
+				model.addAttribute("serverStatus", serverStatus);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		/*
+		try {
+	        if(!searchParams.isEmpty()){
 				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
 					storeId = user.getStoreId();
 				}
@@ -164,6 +183,7 @@ public class FbServerStatusController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
@@ -178,14 +198,22 @@ public class FbServerStatusController extends BaseController{
 	public String update(ServletRequest request,RedirectAttributes redirectAttributes){
 		String[] checkIds = request.getParameterValues("checkId");
 		String checkStatus = request.getParameter("checkStatus");
-		String gameId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId = request.getParameter("search_LIKE_serverZoneId");
-		ServerStatusList list = new ServerStatusList();
-		list.setId(checkIds);
-		list.setStatus(checkStatus);
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/updateServers" , JSONObject.fromObject(list));
-		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
-		return "redirect:/manage/gm/fb/serverStatus/index?search_LIKE_storeId="+gameId+"&search_LIKE_serverZoneId="+serverZoneId;
+		String gameId = request.getParameter("search_EQ_storeId");
+		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
+		
+		for (String sId : checkIds) {
+			GoAllServer goAllServer =  goAllServerService.findByServerId(sId);
+			String[] serverId = new String[1];
+			serverId[0] = goAllServer.getServerId();
+			
+			ServerStatusList list = new ServerStatusList();
+			list.setId(serverId);
+			list.setStatus(checkStatus);
+			
+			HttpClientUts.doPost("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/server/updateServers" , JSONObject.fromObject(list));
+			//HttpClientUts.doPost(gm_url+"/fbserver/server/updateServers" , JSONObject.fromObject(list));
+		}
+		return "redirect:/manage/gm/fb/serverStatus/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId;
 	}
 
 	
@@ -198,8 +226,8 @@ public class FbServerStatusController extends BaseController{
 		User u = accountService.getUser(user.id);
 		
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-		String storeId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
+		String storeId = request.getParameter("search_EQ_storeId");
+		String serverZoneId =  request.getParameter("search_EQ_serverZoneId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<GoStore> goStores = new ArrayList<GoStore>();
@@ -301,7 +329,7 @@ public class FbServerStatusController extends BaseController{
 		System.out.println(ServerStatusAccount.getGameId() + "  "  + ServerStatusAccount.getServerZoneId()+ "  "  + ServerStatusAccount.getServerId()+ "  "  +ServerStatusAccount.getPlatFormId() + "  "  + ServerStatusAccount.getAccount() );
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/addGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
 		redirectAttributes.addFlashAttribute("message", "新增"+res.getString("message"));
-		return "redirect:/manage/gm/fb/serverStatus/accountIndex?search_LIKE_storeId="+ServerStatusAccount.getGameId()+"&search_LIKE_serverZoneId="+ServerStatusAccount.getServerZoneId();
+		return "redirect:/manage/gm/fb/serverStatus/accountIndex?search_EQ_storeId="+ServerStatusAccount.getGameId()+"&search_EQ_serverZoneId="+ServerStatusAccount.getServerZoneId();
 	}
 	
 	@RequestMapping(value="/accountEdit",method=RequestMethod.GET)
@@ -351,7 +379,7 @@ public class FbServerStatusController extends BaseController{
 	public String accountUpdate(ServerStatusAccount ServerStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/updateGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
 		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
-		return "redirect:/manage/gm/fb/serverStatus/accountIndex?search_LIKE_storeId="+ServerStatusAccount.getGameId()+"&search_LIKE_serverZoneId="+ServerStatusAccount.getServerZoneId();
+		return "redirect:/manage/gm/fb/serverStatus/accountIndex?search_EQ_storeId="+ServerStatusAccount.getGameId()+"&search_EQ_serverZoneId="+ServerStatusAccount.getServerZoneId();
 	}
 	
 	/**
@@ -368,6 +396,16 @@ public class FbServerStatusController extends BaseController{
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("success", dataJson.get("message"));
 		 return map;
+	}
+	
+	
+	@RequestMapping(value="/findServers",method=RequestMethod.GET)	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<GoAllServer> findServers(@RequestParam(value="serverZoneId") String serverZoneId
+			,@RequestParam(value="gameId") String gameId) throws AppBizException{
+		List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
+		return servers;
 	}
 	
 	/**

@@ -118,9 +118,9 @@ public class FbEmailController extends BaseController{
 		User u = accountService.getUser(user.id);
 		
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-		String storeId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId =  request.getParameter("search_LIKE_serverZoneId");
-		String serverId = request.getParameter("search_LIKE_serverId");
+		String storeId = request.getParameter("search_EQ_storeId");
+		String serverZoneId =  request.getParameter("search_EQ_serverZoneId");
+		String serverId = request.getParameter("search_EQ_serverId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<GoStore> goStores = new ArrayList<GoStore>();
@@ -147,7 +147,7 @@ public class FbEmailController extends BaseController{
 		
 		
 		try {
-	        if(!searchParams.isEmpty() && null != request.getParameter("search_LIKE_serverId")){
+	        if(!searchParams.isEmpty() && null != request.getParameter("search_EQ_serverId")){
 				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
 					storeId = user.getStoreId();
 				}
@@ -158,7 +158,7 @@ public class FbEmailController extends BaseController{
 		        List<Email> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Email>>() {}); 
 		        PageImpl<Email> email = new PageImpl<Email>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("email", email);
-				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_LIKE_storeId"));
+				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_EQ_storeId"));
 				model.addAttribute("servers", servers);
 	        }else{
 	        	List<Email> beanList = new ArrayList<Email>();
@@ -219,9 +219,9 @@ public class FbEmailController extends BaseController{
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
 	public String update(ServletRequest request,RedirectAttributes redirectAttributes){
 		String id = request.getParameter("id");
-		String gameId = request.getParameter("search_LIKE_storeId");
-		String serverZoneId = request.getParameter("search_LIKE_serverZoneId");
-		String serverIds = request.getParameter("search_LIKE_serverId");
+		String gameId = request.getParameter("search_EQ_storeId");
+		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
+		String serverIds = request.getParameter("search_EQ_serverId");
 		String sender = request.getParameter("sender");
 		String title = request.getParameter("title");
 		String contents = request.getParameter("contents");

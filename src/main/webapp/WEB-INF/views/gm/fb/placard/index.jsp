@@ -35,10 +35,10 @@
 				<div class="control-group">
 					<label class="control-label" for="gameId">选择游戏项目：</label>
 					<div class="controls">
-							<select name="search_LIKE_storeId" id="gameId">	
+							<select name="search_EQ_storeId" id="gameId">	
 								<option value="">请选择项目</option>	
 								<c:forEach items="${stores}" var="item" >
-									<option value="${item.storeId }"   ${param.search_LIKE_storeId == item.storeId ? 'selected' : '' }>
+									<option value="${item.storeId }"   ${param.search_EQ_storeId == item.storeId ? 'selected' : '' }>
 										<huake:getGoStoreNameTag id="${item.storeId }"></huake:getGoStoreNameTag>
 									</option>
 								</c:forEach>
@@ -48,10 +48,10 @@
 				<div class="control-group">
 					<label class="control-label" for="serverZoneId">选择运营大区：</label>
 					<div class="controls">
-						<select name="search_LIKE_serverZoneId" id="serverZoneId">	
+						<select name="search_EQ_serverZoneId" id="serverZoneId">	
 							<option value="">请选择项目</option>	
 							<c:forEach items="${serverZones}" var="item" >
-								<option value="${item.serverZoneId }"  ${param.search_LIKE_serverZoneId == item.serverZoneId ? 'selected' : '' }>
+								<option value="${item.serverZoneId }"  ${param.search_EQ_serverZoneId == item.serverZoneId ? 'selected' : '' }>
 									<huake:getGoServerZoneNameTag id="${item.serverZoneId }"></huake:getGoServerZoneNameTag>
 								</option>
 							</c:forEach>
@@ -63,7 +63,7 @@
 					<div class="controls" id="serverDiv">
 						<c:forEach items="${servers}" var="item" >
 							<label class="radio inline">
-								<input type="radio" name="search_LIKE_serverId" value="${item.serverId }" ${param.search_LIKE_serverId == item.serverId? 'checked' : '' }/><span>${item.serverId}</span><br/>
+								<input type="radio" name="search_EQ_serverId" value="${item.serverId }" ${param.search_EQ_serverId == item.serverId? 'checked' : '' }/><span>${item.serverId}</span><br/>
 							</label>
 						</c:forEach>
 					</div>
@@ -132,24 +132,24 @@
 			<div class="control-group">
 				<label class="control-label" for="">游戏:</label>
 				<div class="controls">
-					<c:if test="${not empty param.search_LIKE_serverZoneId}">
-						<input type="text" value='<huake:getStoreNameTag id="${param.search_LIKE_storeId}"></huake:getStoreNameTag>' disabled="disabled"/>
-						<input type="text" value='${param.search_LIKE_storeId}'  name="search_LIKE_storeId" style="display: none;"/>
+					<c:if test="${not empty param.search_EQ_serverZoneId}">
+						<input type="text" value='<huake:getStoreNameTag id="${param.search_EQ_storeId}"></huake:getStoreNameTag>' disabled="disabled"/>
+						<input type="text" value='${param.search_EQ_storeId}'  name="search_EQ_storeId" style="display: none;"/>
 					</c:if>
-					<c:if test="${empty param.search_LIKE_serverZoneId}">
-						<input type="text"  readonly="readonly" name="search_LIKE_storeId"/>
+					<c:if test="${empty param.search_EQ_serverZoneId}">
+						<input type="text"  readonly="readonly" name="search_EQ_storeId"/>
 					</c:if>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="">运营大区:</label>
 				<div class="controls">
-					<c:if test="${not empty param.search_LIKE_serverZoneId}">
-						<input type="text" value="<huake:getServerZoneNameTag id="${param.search_LIKE_serverZoneId}"></huake:getServerZoneNameTag>"   disabled="disabled"/>
-						<input type="text" value="${param.search_LIKE_serverZoneId}"  name="search_LIKE_serverZoneId" style="display: none;"/>
+					<c:if test="${not empty param.search_EQ_serverZoneId}">
+						<input type="text" value="<huake:getServerZoneNameTag id="${param.search_EQ_serverZoneId}"></huake:getServerZoneNameTag>"   disabled="disabled"/>
+						<input type="text" value="${param.search_EQ_serverZoneId}"  name="search_EQ_serverZoneId" style="display: none;"/>
 					</c:if>		
-					<c:if test="${empty param.search_LIKE_serverZoneId}">
-						<input type="text"  readonly="readonly" name="search_LIKE_serverZoneId"/>
+					<c:if test="${empty param.search_EQ_serverZoneId}">
+						<input type="text"  readonly="readonly" name="search_EQ_serverZoneId"/>
 					</c:if>		
 				</div>
 			</div>
@@ -171,7 +171,7 @@
 				<div class="controls" id="serverDivCheckbox">
 					<c:forEach items="${servers}" var="item" >
 						<label class="checkbox inline">
-							<input type="checkbox" id="serverId_checkbox" name="search_LIKE_serverId" value="${item.serverId }"/><span>${item.serverId}</span><br/>
+							<input type="checkbox" id="serverId_checkbox" name="search_EQ_serverId" value="${item.serverId }"/><span>${item.serverId}</span><br/>
 						</label>
 					</c:forEach>
 				</div>
@@ -254,14 +254,14 @@
 						var gameId = $("#gameId").val();
 						$("#serverDiv").empty();
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/gift/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
+							url: '<%=request.getContextPath()%>/manage/gm/fb/serverStatus/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
 							success: function(data){
 								var parsedJson = $.parseJSON(data);
 								jQuery.each(parsedJson, function(index, itemData) {
-								$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='radio inline'><input type='radio' id='serverId' name='search_LIKE_serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
+								$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='radio inline'><input type='radio' id='serverId' name='search_EQ_serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
 								});
 							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 						});
@@ -283,14 +283,14 @@
 						var serverZoneId = $("#serverZoneId").val();
 						$("#serverDiv").empty();
 						$.ajax({                                               
-							url: '<%=request.getContextPath()%>/manage/gift/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
+							url: '<%=request.getContextPath()%>/manage/gm/fb/serverStatus/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
 							type: 'GET',
 							contentType: "application/json;charset=UTF-8",		
 							dataType: 'text',
 							success: function(data){
 								var parsedJson = $.parseJSON(data);
 								jQuery.each(parsedJson, function(index, itemData) {
-								$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='radio inline'><input type='radio' id='serverId' name='search_LIKE_serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
+								$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='radio inline'><input type='radio' id='serverId' name='search_EQ_serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
 								});
 							},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 						});
@@ -300,23 +300,23 @@
 				
 				$("#queryForm").validate({
 					rules:{
-						search_LIKE_storeId:{
+						search_EQ_storeId:{
 							required:true
 						},
-						search_LIKE_serverZoneId:{
+						search_EQ_serverZoneId:{
 							required:true
 						},
-						search_LIKE_serverId:{
+						search_EQ_serverId:{
 							required:true
 						}
 					},messages:{
-						search_LIKE_storeId:{
+						search_EQ_storeId:{
 							required:"游戏项目"
 						},
-						search_LIKE_serverZoneId:{
+						search_EQ_serverZoneId:{
 							required:"运营必须填写"
 						},
-						search_LIKE_serverId:{
+						search_EQ_serverId:{
 							required:"服务器必须填写"
 						}
 					}
@@ -325,7 +325,7 @@
 				
 				$("#inputForm").validate({
 					rules:{
-						search_LIKE_serverId:{
+						search_EQ_serverId:{
 							required:true
 						},
 						version:{
@@ -335,7 +335,7 @@
 							required:true
 						}
 					},messages:{
-						search_LIKE_serverId:{
+						search_EQ_serverId:{
 							required:"服务器必须填写"
 						},
 						version:{
