@@ -160,7 +160,7 @@ public class FbProductController extends BaseController{
 					storeId = user.getStoreId();
 				}
 				String gs = HttpClientUts.doGet(gm_url+"/fbserver/product/getAllProducts"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&itemId="+itemId+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.product, "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.product+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);

@@ -160,7 +160,7 @@ public class FbPlacardController extends BaseController{
 				//String gs = HttpClientUts.doGet(gm_url+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
 				//String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard, "utf-8");
 				String gs = HttpClientUts.doGet("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard, "utf-8");
+				String total = HttpClientUts.doGet("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
@@ -252,9 +252,9 @@ public class FbPlacardController extends BaseController{
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Placard placard,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "  "  +placard.getVersion() + "  "  + placard.getContents() );
+		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "   " + placard.getServerIds() + "  "  +placard.getVersion() + "  "  + placard.getContents() );
 
-        if(null != placard.getServerId()){
+        if(placard.getServerIds().length != 0){
     		System.out.println(JSONObject.fromObject(placard));
     		JSONObject res = HttpClientUts.doPost("http://127.0.0.1:8899/fbserver/placard/addPlacards"  , JSONObject.fromObject(placard));
     		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));

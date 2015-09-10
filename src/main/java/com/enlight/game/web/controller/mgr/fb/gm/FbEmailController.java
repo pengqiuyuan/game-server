@@ -152,7 +152,7 @@ public class FbEmailController extends BaseController{
 					storeId = user.getStoreId();
 				}
 				String gs = HttpClientUts.doGet(gm_url+"/fbserver/email/getAllEmails"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.email, "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.email+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				JSONObject dataJson=JSONObject.fromObject(total);
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
 		        List<Email> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Email>>() {}); 
