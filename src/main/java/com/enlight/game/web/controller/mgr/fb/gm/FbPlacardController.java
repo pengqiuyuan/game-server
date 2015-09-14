@@ -3,10 +3,8 @@ package com.enlight.game.web.controller.mgr.fb.gm;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
@@ -25,7 +23,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.SocketUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
-import com.enlight.game.entity.Server;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
@@ -156,11 +152,8 @@ public class FbPlacardController extends BaseController{
 					storeId = user.getStoreId();
 				}
 				
-				GoAllServer goAllServer =  goAllServerService.findByServerId(serverId);
-				//String gs = HttpClientUts.doGet(gm_url+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				//String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard, "utf-8");
-				String gs = HttpClientUts.doGet("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
+				String gs = HttpClientUts.doGet(gm_url+"/fbserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
@@ -256,7 +249,7 @@ public class FbPlacardController extends BaseController{
 
         if(placard.getServerIds().length != 0){
     		System.out.println(JSONObject.fromObject(placard));
-    		JSONObject res = HttpClientUts.doPost("http://127.0.0.1:8899/fbserver/placard/addPlacards"  , JSONObject.fromObject(placard));
+    		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/addPlacards"  , JSONObject.fromObject(placard));
     		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
     		return "redirect:/manage/gm/fb/placard/add";
         }else{
@@ -273,9 +266,13 @@ public class FbPlacardController extends BaseController{
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> del(@RequestParam(value = "id")Long id) throws Exception{
+	public Map<String,Object> del(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/placard/delPlacardById"+"?id="+id, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/placard/delPlacardById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("success", dataJson.get("message"));
 		 return map;
