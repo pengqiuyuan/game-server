@@ -14,7 +14,7 @@ public interface GoAllPlatFormDao extends PagingAndSortingRepository<GoAllPlatFo
 	
 	@Modifying
 	@Query("select distinct goAllPlatForm.platFormId from GoAllPlatForm goAllPlatForm where goAllPlatForm.storeId=?1 and goAllPlatForm.serverZoneId=?2")
-	List<Integer> findPlatFormId(Integer storeId,Integer serverZoneId);
+	List<String> findPlatFormId(Integer storeId,Integer serverZoneId);
 	
 	@Modifying
 	@Query("from GoAllPlatForm goAllPlatForm where goAllPlatForm.storeId=?1 and goAllPlatForm.serverZoneId=?2 and goAllPlatForm.platFormId=?3")

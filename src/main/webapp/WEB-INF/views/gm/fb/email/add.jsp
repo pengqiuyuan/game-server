@@ -58,6 +58,10 @@
 				<label class="control-label" for="">服务器列表：</label>
 				<div class="controls" id="serverDiv"></div>
 			</div>
+			<div class="control-group">
+				<label class="control-label" for="">渠道列表：</label>
+				<div class="controls" id="platFormDiv"></div>
+			</div>
 			<div class="form-ac">
 				<button type="button" class="btn btn-success" onclick="selectAll();">全选</button>
 				<button type="button" class="btn btn-info" onclick="selectAllNot();">反选</button>
@@ -139,6 +143,21 @@
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
+				
+				$("#platFormDiv").empty();
+				$.ajax({                                               
+					url: '<%=request.getContextPath()%>/manage/gm/fb/serverStatus/findPlatForms?serverZoneId='+serverZoneId+'&gameId='+gameId, 
+					type: 'GET',
+					contentType: "application/json;charset=UTF-8",		
+					dataType: 'text',
+					success: function(data){
+						var parsedJson = $.parseJSON(data);
+						jQuery.each(parsedJson, function(index, itemData) {
+						$("#platFormDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='platFormId' name='platFormId' value='"+itemData+"'/><span><huake:getPlatFormNameTag id='"+itemData+"'></huake:getPlatFormNameTag></span><br/></label></c:forEach>"); 
+						});
+					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+				});
+				
 			}
 		});
 		
@@ -164,7 +183,21 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverId' name='server' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
+						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverId' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
+						});
+					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
+				});
+				
+				$("#platFormDiv").empty();
+				$.ajax({                                               
+					url: '<%=request.getContextPath()%>/manage/gm/fb/serverStatus/findServers?serverZoneId='+serverZoneId+'&gameId='+gameId, 
+					type: 'GET',
+					contentType: "application/json;charset=UTF-8",		
+					dataType: 'text',
+					success: function(data){
+						var parsedJson = $.parseJSON(data);
+						jQuery.each(parsedJson, function(index, itemData) {
+						$("#platFormDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='platFormId' name='platFormId' value='"+itemData+"'/><span><huake:getPlatFormNameTag id='"+itemData+"'></huake:getPlatFormNameTag></span><br/></label>&nbsp;</c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});

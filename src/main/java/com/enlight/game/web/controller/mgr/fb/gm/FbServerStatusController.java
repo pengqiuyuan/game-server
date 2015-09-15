@@ -38,6 +38,7 @@ import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoAllPlatFormService;
 import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.go.GoServerZoneService;
 import com.enlight.game.service.go.GoStoreService;
@@ -49,6 +50,7 @@ import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.ServerStatusAccount;
 import com.enlight.game.entity.gm.fb.ServerStatusList;
+import com.enlight.game.entity.go.GoAllPlatForm;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
@@ -101,6 +103,10 @@ public class FbServerStatusController extends BaseController{
 	
 	@Autowired
 	private GoAllServerService goAllServerService;
+	
+	@Autowired
+	private GoAllPlatFormService goAllPlatFormService;
+	
 	
 	@Value("#{envProps.gm_url}")
 	private String gm_url;
@@ -405,6 +411,15 @@ public class FbServerStatusController extends BaseController{
 	public List<GoAllServer> findServers(@RequestParam(value="serverZoneId") String serverZoneId
 			,@RequestParam(value="gameId") String gameId) throws AppBizException{
 		List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
+		return servers;
+	}
+	
+	@RequestMapping(value="/findPlatForms",method=RequestMethod.GET)	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<String> findPlatForms(@RequestParam(value="serverZoneId") String serverZoneId
+			,@RequestParam(value="gameId") String gameId) throws AppBizException{
+		List<String> servers = goAllPlatFormService.findPlatFormIds(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
 		return servers;
 	}
 	

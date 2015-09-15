@@ -40,6 +40,7 @@ import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.go.GoServerZoneService;
 import com.enlight.game.service.go.GoStoreService;
 import com.enlight.game.service.platForm.PlatFormService;
@@ -49,6 +50,7 @@ import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.Seal;
+import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.Maps;
@@ -102,6 +104,9 @@ public class FbSealController extends BaseController{
 	
 	@Autowired
 	private GoServerZoneService  goServerZoneService;
+	
+	@Autowired
+	private GoAllServerService goAllServerService;
 	
 	@Value("#{envProps.gm_url}")
 	private String gm_url;
@@ -164,7 +169,7 @@ public class FbSealController extends BaseController{
 		        PageImpl<Seal> seal = new PageImpl<Seal>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("seal", seal);
 				
-				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_EQ_storeId"));
+				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
 				model.addAttribute("servers", servers);
 	        }else{
 	        	List<Seal> beanList = new ArrayList<Seal>();
@@ -228,8 +233,13 @@ public class FbSealController extends BaseController{
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
 		String serverId = request.getParameter("search_EQ_serverId");
+		String guid = request.getParameter("guid");
 		Seal seal = new Seal();
 		seal.setId(Integer.parseInt(id));
+		seal.setGameId(gameId);
+		seal.setServerZoneId(serverZoneId);
+		seal.setServerId(serverId);
+		seal.setGuid(guid);
 		if(null != request.getParameter("sealTime")){
 			seal.setSealTime(request.getParameter("sealTime"));
 		}else if(null != request.getParameter("sealStart") && null != request.getParameter("sealEnd")){
@@ -237,20 +247,25 @@ public class FbSealController extends BaseController{
 			seal.setSealEnd(request.getParameter("sealEnd"));
 		}
 		
+		logger.debug("id : " + id +" serverZoneid: " + serverZoneId + " gameId:  " + gameId  + " serverId: " + serverId  + " guid: " + guid 
+				+ " sealTime: " + request.getParameter("sealTime") 
+				+ " sealStart " + request.getParameter("sealStart")
+				+ " sealEnd " + request.getParameter("sealEnd"));
+		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/updateSealAccount" , JSONObject.fromObject(seal));
-		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "修改封号" +seal.getGuid() + ":"+res.getString("message"));
 		
 		return "redirect:/manage/gm/fb/seal/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+URLEncoder.encode(serverId, "utf-8");
 	}
 	
 	/**
-	 * 保存公告
+	 * 保存
 	 * @return
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Seal seal,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/addSealAccount" , JSONObject.fromObject(seal));
-		redirectAttributes.addFlashAttribute("message", "新增封号："+res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "新增封号"+seal.getGuid()+":" +res.getString("message"));
 		return "redirect:/manage/gm/fb/seal/add";
 	}
 	
@@ -262,9 +277,13 @@ public class FbSealController extends BaseController{
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> del(@RequestParam(value = "id")Long id) throws Exception{
+	public Map<String,Object> del(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/seal/delSealAccountById"+"?id="+id, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/seal/delSealAccount?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("success", dataJson.get("message"));
 		 return map;

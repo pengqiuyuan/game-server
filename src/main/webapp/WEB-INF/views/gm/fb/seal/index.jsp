@@ -86,7 +86,7 @@
 						<tr>
 		                    <th title="封号guid">封号guid</th>
 							<th title="封号名称">封号名称</th>
-							<th title="封号account">封号account器ID</th>
+							<th title="封号account">封号account</th>
 							<th title="封号渠道">封号渠道</th>
 							<th title="封号时间">封号时间</th>
 							<th title="封号开始时间">封号开始时间</th>
@@ -108,7 +108,7 @@
 											<a class="exportCode btn table-actions" onclick="updateSeal('${item.guid}','${item.name}','${item.account}','${item.platForm}','${item.id}')"><i class="icon-ok"></i>修改</a>
 										</shiro:hasAnyRoles>
 										<shiro:hasAnyRoles name="admin,fb_gm_seal_delete">
-									    	<a class="exportCode btn table-actions" onclick="delSeal('${item.id}')"><i class="icon-remove"></i>删除</a>
+									    	<a class="exportCode btn table-actions" onclick="delSeal('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -259,11 +259,11 @@
 				$("input#serverId").attr("disabled","disabled");  
 			}
 			
-			function delSeal(id){
+			function delSeal(id,gameId,serverZoneId,serverId){
 				if(confirm("该操作会删除。。。。！"))
 				    {
 							$.ajax({
-								url: '<%=request.getContextPath()%>/manage/gm/fb/seal/del?id=' + id, 
+								url: '<%=request.getContextPath()%>/manage/gm/fb/seal/del?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId, 
 								type: 'DELETE',
 								contentType: "application/json;charset=UTF-8",
 								dataType: 'json',

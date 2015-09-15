@@ -35,24 +35,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.Server;
-import com.enlight.game.entity.ServerZone;
-import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.go.GoServerZoneService;
 import com.enlight.game.service.go.GoStoreService;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
-import com.enlight.game.service.serverZone.ServerZoneService;
-import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.Product;
+import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.Maps;
@@ -96,6 +94,9 @@ public class FbProductController extends BaseController{
 	
 	@Autowired
 	private GoServerZoneService  goServerZoneService;
+	
+	@Autowired
+	private GoAllServerService goAllServerService;
 	
 	@Autowired
 	private EnumCategoryService enumCategoryService;
@@ -168,7 +169,7 @@ public class FbProductController extends BaseController{
 		        PageImpl<Product> product = new PageImpl<Product>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("product", product);
 				
-				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_EQ_storeId"));
+				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
 				model.addAttribute("servers", servers);
 	        }else{
 	        	List<Product> beanList = new ArrayList<Product>();
@@ -232,10 +233,13 @@ public class FbProductController extends BaseController{
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
 		String serverId = request.getParameter("search_EQ_serverId");		
 		String itemId = request.getParameter("itemId");
-
+		
 		product.setGameId(gameId);
 		product.setServerZoneId(serverZoneId);
 		product.setServerId(serverId);
+		product.setItemId(itemId);
+
+		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/product/updateProduct" , JSONObject.fromObject(product));
 		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
 		
@@ -261,9 +265,13 @@ public class FbProductController extends BaseController{
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> del(@RequestParam(value = "id")Long id) throws Exception{
+	public Map<String,Object> del(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/product/delProductById"+"?id="+id, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/product/delProductById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 System.out.println(dataJson);
 		 map.put("success", dataJson.get("message"));

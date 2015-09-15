@@ -14,7 +14,7 @@ public class GoAllPlatFormService {
 	@Autowired
 	private GoAllPlatFormDao goAllPlatFormDao;
 	
-	public List<Integer> findPlatFormIds(Integer storeId , Integer serverZoneId){
+	public List<String> findPlatFormIds(Integer storeId , Integer serverZoneId){
 		return goAllPlatFormDao.findPlatFormId(storeId, serverZoneId);
 	}
 	

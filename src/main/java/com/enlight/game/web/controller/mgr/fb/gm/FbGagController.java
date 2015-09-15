@@ -40,6 +40,7 @@ import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.go.GoServerZoneService;
 import com.enlight.game.service.go.GoStoreService;
 import com.enlight.game.service.platForm.PlatFormService;
@@ -49,6 +50,7 @@ import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.Gag;
+import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.Maps;
@@ -93,6 +95,9 @@ public class FbGagController extends BaseController{
 	
 	@Autowired
 	private GoServerZoneService  goServerZoneService;
+	
+	@Autowired
+	private GoAllServerService goAllServerService;
 	
 	@Autowired
 	private EnumCategoryService enumCategoryService;
@@ -164,7 +169,7 @@ public class FbGagController extends BaseController{
 		        PageImpl<Gag> gag = new PageImpl<Gag>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("gag", gag);
 				
-				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_EQ_storeId"));
+				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
 				model.addAttribute("servers", servers);
 	        }else{
 	        	List<Gag> beanList = new ArrayList<Gag>();
@@ -228,8 +233,13 @@ public class FbGagController extends BaseController{
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
 		String serverId = request.getParameter("search_EQ_serverId");
+		String guid = request.getParameter("guid");
 		Gag gag = new Gag();
 		gag.setId(Integer.parseInt(id));
+		gag.setGameId(gameId);
+		gag.setServerZoneId(serverZoneId);
+		gag.setServerId(serverId);
+		gag.setGuid(guid);
 		if(null != request.getParameter("gagTime")){
 			gag.setGagTime(request.getParameter("gagTime"));
 		}else if(null != request.getParameter("gagStart") && null != request.getParameter("gagEnd")){
@@ -238,7 +248,7 @@ public class FbGagController extends BaseController{
 		}
 		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/updateGagAccount" , JSONObject.fromObject(gag));
-		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "修改禁言"+guid+":" +res.getString("message"));
 		
 		return "redirect:/manage/gm/fb/gag/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+URLEncoder.encode(serverId, "utf-8");
 	}
@@ -250,7 +260,7 @@ public class FbGagController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Gag gag,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/addGagAccount" , JSONObject.fromObject(gag));
-		redirectAttributes.addFlashAttribute("message", "新增禁言："+res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "新增禁言"+gag.getGuid()+":"+res.getString("message"));
 		return "redirect:/manage/gm/fb/gag/add";
 	}
 	
@@ -262,9 +272,13 @@ public class FbGagController extends BaseController{
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> del(@RequestParam(value = "id")Long id) throws Exception{
+	public Map<String,Object> del(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/gag/delGagAccountById"+"?id="+id, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/gag/delGagAccountById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("success", dataJson.get("message"));
 		 return map;

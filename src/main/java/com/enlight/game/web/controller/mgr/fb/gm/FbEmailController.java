@@ -39,6 +39,7 @@ import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.go.GoServerZoneService;
 import com.enlight.game.service.go.GoStoreService;
 import com.enlight.game.service.platForm.PlatFormService;
@@ -49,6 +50,7 @@ import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Annex;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.Email;
+import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.Maps;
@@ -97,6 +99,9 @@ public class FbEmailController extends BaseController{
 	
 	@Autowired
 	private GoServerZoneService  goServerZoneService;
+	
+	@Autowired
+	private GoAllServerService goAllServerService;
 	
 	@Value("#{envProps.gm_url}")
 	private String gm_url;
@@ -158,7 +163,7 @@ public class FbEmailController extends BaseController{
 		        List<Email> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Email>>() {}); 
 		        PageImpl<Email> email = new PageImpl<Email>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("email", email);
-				Set<Server> servers = serverService.findByServerZoneIdAndStoreId(serverZoneId,request.getParameter("search_EQ_storeId"));
+				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
 				model.addAttribute("servers", servers);
 	        }else{
 	        	List<Email> beanList = new ArrayList<Email>();
