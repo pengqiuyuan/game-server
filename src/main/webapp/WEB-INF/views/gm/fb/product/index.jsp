@@ -142,7 +142,7 @@
 											,'${item.discountContinueDate}','${item.discountCycleDate}','${item.productPostDate}','${item.productDownDate}','${item.showLevel}')"><i class="icon-ok"></i>修改</a>
 										</shiro:hasAnyRoles>
 										<shiro:hasAnyRoles name="admin,fb_gm_product_delete">
-											<a class="exportCode btn table-actions" onclick="delProduct('${item.id}')"><i class="icon-remove"></i>删除</a>
+											<a class="exportCode btn table-actions" onclick="delProduct('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -377,11 +377,11 @@
 				$("input#serverId").attr("disabled","disabled");  
 			}
 			
-			function delProduct(id){
+			function delProduct(id,gameId,serverZoneId,serverId){
 				if(confirm("该操作会删除。。。。！"))
 				    {
 							$.ajax({
-								url: '<%=request.getContextPath()%>/manage/gm/fb/product/del?id=' + id, 
+								url: '<%=request.getContextPath()%>/manage/gm/fb/product/del?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId, 
 								type: 'DELETE',
 								contentType: "application/json;charset=UTF-8",
 								dataType: 'json',

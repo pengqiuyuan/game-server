@@ -23,6 +23,8 @@ public class Email {
 	private String contents;
 	
 	private List<Annex> annex;
+	
+	private String platFormId;
 
 	public int getId() {
 		return id;
@@ -86,6 +88,14 @@ public class Email {
 
 	public void setAnnex(List<Annex> annex) {
 		this.annex = annex;
+	}
+
+	public String getPlatFormId() {
+		return platFormId;
+	}
+
+	public void setPlatFormId(String platFormId) {
+		this.platFormId = platFormId;
 	}
 
 	

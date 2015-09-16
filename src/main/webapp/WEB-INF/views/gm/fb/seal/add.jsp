@@ -114,7 +114,7 @@
 		$("#sealStart").removeAttr("disabled");  
 		$("#sealEnd").removeAttr("disabled");  
 		$("#sealTime").attr("disabled","disabled");  
-	    $("#sealTime").val("pxx");
+	    $("#sealTime").val("");
 		$('#selectDate').hide();
 	}	
 	function cancelCustomDate(){  

@@ -12,6 +12,7 @@ import javax.servlet.ServletRequest;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
+import com.enlight.game.service.go.GoAllPlatFormService;
 import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.go.GoServerZoneService;
 import com.enlight.game.service.go.GoStoreService;
@@ -53,6 +55,7 @@ import com.enlight.game.entity.gm.fb.Email;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 @Controller("fbEmailController")
@@ -102,6 +105,9 @@ public class FbEmailController extends BaseController{
 	
 	@Autowired
 	private GoAllServerService goAllServerService;
+	
+	@Autowired
+	private GoAllPlatFormService goAllPlatFormService;
 	
 	@Value("#{envProps.gm_url}")
 	private String gm_url;
@@ -258,6 +264,19 @@ public class FbEmailController extends BaseController{
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Email email,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
+		
+		if(email.getPlatFormId()!=null){
+			Set<String>  set=new HashSet<String>();
+			List<String> pfIds =  ImmutableList.copyOf(StringUtils.split(email.getPlatFormId(), ","));
+			for (String platFormId : pfIds) {
+				List<String> serverIds =  goAllPlatFormService.findAllByPlatFormIdAndStoreIdAndServerZoneId(Integer.valueOf(email.getGameId()), Integer.valueOf(email.getServerZoneId()), platFormId);
+				set.addAll(serverIds);
+			}
+			String serverId = "";
+			serverId = StringUtils.join(set.toArray(), ","); // 根据不同切割符返回字符串
+			email.setServerId(serverId);
+		}
+			
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/email/addEmail" , JSONObject.fromObject(email));
 		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
 		return "redirect:/manage/gm/fb/email/add";
@@ -271,9 +290,13 @@ public class FbEmailController extends BaseController{
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> del(@RequestParam(value = "id")Long id) throws Exception{
+	public Map<String,Object> del(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/email/delEmailById"+"?id="+id, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/email/delEmailById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("success", dataJson.get("message"));
 		 return map;
@@ -287,8 +310,12 @@ public class FbEmailController extends BaseController{
 	@RequestMapping(value = "findByEmailId", method = RequestMethod.GET)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Email findByEmailId(@RequestParam(value = "id")Long id) throws Exception{
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/email/getEmailById"+"?id="+id, "utf-8");
+	public Email findByEmailId(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/email/getEmailById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 Email email = binder.fromJson(account, Email.class);
 		 return email;
 	}

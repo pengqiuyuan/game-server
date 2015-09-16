@@ -123,10 +123,10 @@
 									<div class="action-buttons">
 										<shiro:hasAnyRoles name="admin,fb_gm_email_update"> 
 											<input type="hidden" name="annex" id="annex" value="${item.annex}">
-											<a class="exportCode btn table-actions" onclick="updateEmail('${item.sender}','${item.title}','${item.contents}','${item.id}')"><i class="icon-ok"></i>修改</a>
+											<a class="exportCode btn table-actions" onclick="updateEmail('${item.sender}','${item.title}','${item.contents}','${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-ok"></i>修改</a>
 										</shiro:hasAnyRoles>
 										<shiro:hasAnyRoles name="admin,fb_gm_email_delete"> 
-									    	<a class="exportCode btn table-actions" onclick="delEmail('${item.id}')"><i class="icon-remove"></i>删除</a>
+									    	<a class="exportCode btn table-actions" onclick="delEmail('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -238,7 +238,7 @@
 				}
 			});
 			
-			function updateEmail(sender,title,contents,id){
+			function updateEmail(sender,title,contents,id,gameId,serverZoneId,serverId){
 				$("#id").attr('value',id);
 				$('#inputForm').show();
 				
@@ -251,7 +251,7 @@
 				CKEDITOR.instances.contents.setData(contents)
 				
 				$.ajax({
-					url: '<%=request.getContextPath()%>/manage/gm/fb/email/findByEmailId?id=' + id, 
+					url: '<%=request.getContextPath()%>/manage/gm/fb/email/findByEmailId?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId, 
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",
 					dataType: 'json',
@@ -277,11 +277,11 @@
 				$("input#serverId").attr("disabled","disabled");  
 			}
 			
-			function delEmail(id){
+			function delEmail(id,gameId,serverZoneId,serverId){
 				if(confirm("该操作会删除。。。。！"))
 				    {
 							$.ajax({
-								url: '<%=request.getContextPath()%>/manage/gm/fb/email/del?id=' + id, 
+								url: '<%=request.getContextPath()%>/manage/gm/fb/email/del?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId, 
 								type: 'DELETE',
 								contentType: "application/json;charset=UTF-8",
 								dataType: 'json',

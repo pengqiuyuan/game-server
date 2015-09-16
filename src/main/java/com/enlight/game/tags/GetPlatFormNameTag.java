@@ -50,14 +50,10 @@ public class GetPlatFormNameTag extends TagSupport {
 		try {
 			WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(pageContext.getServletContext());//获取SPRING的上下文
 			PlatFormService platFormService = (PlatFormService) ctx.getBean("platFormService");
-System.out.println("1111111   "  + id);
 			PlatForm platForm = platFormService.findByPfId(id);
-			
 			if(platForm!=null){
-				System.out.println("2222222222");
 				pageContext.getOut().write(platForm.getPfName()+" ");
 			}else{
-				System.out.println("23333333333333");
 				pageContext.getOut().write(id);
 			}
 

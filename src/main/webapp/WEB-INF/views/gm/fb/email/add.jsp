@@ -54,15 +54,16 @@
 					</select>	
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="control-group" id="sDiv">
 				<label class="control-label" for="">服务器列表：</label>
 				<div class="controls" id="serverDiv"></div>
 			</div>
-			<div class="control-group">
+			<div class="control-group" id="pDiv" style="display: none;">
 				<label class="control-label" for="">渠道列表：</label>
 				<div class="controls" id="platFormDiv"></div>
 			</div>
 			<div class="form-ac">
+				<button type="button" class="btn btn-primary" onclick="selectCheck();">切换列表</button>
 				<button type="button" class="btn btn-success" onclick="selectAll();">全选</button>
 				<button type="button" class="btn btn-info" onclick="selectAllNot();">反选</button>
 			</div>
@@ -117,13 +118,35 @@
 		}
 	});
 
-
 	CKEDITOR.replace('contents');
+	function selectCheck(){  
+		var temp = $("#sDiv").is(":hidden"); //是否隐藏
+		if(temp == true){
+			$('#sDiv').show();
+			$('#pDiv').hide();
+			$("input[id='platFormId']").attr("checked", false);  
+		}else{
+			$('#pDiv').show();
+			$('#sDiv').hide();
+			$("input[id='serverId']").attr("checked", false);  
+		}
+	}
 	function selectAll(){  
-        $("input[id='serverId']").attr("checked", true);  
+		var temp = $("#sDiv").is(":hidden"); //是否隐藏
+		if(temp == true){
+			$("input[id='platFormId']").attr("checked", true);  
+		}else{
+			$("input[id='serverId']").attr("checked", true);  
+		}
+       
 	}	
 	function selectAllNot(){
-    	$("input[id='serverId']").attr("checked", false);  
+		var temp = $("#sDiv").is(":hidden"); //是否隐藏
+		if(temp == true){
+			$("input[id='platFormId']").attr("checked", false);  
+		}else{
+			$("input[id='serverId']").attr("checked", false);  
+		}
 	}	
 	$(function(){
 		$("#serverZoneId").change(function(e){
@@ -153,7 +176,7 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#platFormDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='platFormId' name='platFormId' value='"+itemData+"'/><span><huake:getPlatFormNameTag id='"+itemData+"'></huake:getPlatFormNameTag></span><br/></label></c:forEach>"); 
+						$("#platFormDiv").append("<c:forEach items='"+index+"' var='ite' varStatus='j'><label class='checkbox inline' ><input type='checkbox' id='platFormId' name='platFormId' value='"+index+"'/><span>"+itemData+"</span><br/></label></c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
@@ -195,9 +218,9 @@
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
 					success: function(data){
-						var parsedJson = $.parseJSON(data);
+						var parsedJson = $.parseJSON(data);	
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#platFormDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='platFormId' name='platFormId' value='"+itemData+"'/><span><huake:getPlatFormNameTag id='"+itemData+"'></huake:getPlatFormNameTag></span><br/></label>&nbsp;</c:forEach>"); 
+						$("#platFormDiv").append("<c:forEach items='"+index+"' var='ite' varStatus='j'><label class='checkbox inline' ><input type='checkbox' id='platFormId' name='platFormId' value='"+index+"'/><span>"+itemData+"</span><br/></label>&nbsp;</c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
@@ -214,6 +237,9 @@
 					required:true
 				},
 				serverId:{
+					required:true
+				},
+				platFormId:{
 					required:true
 				},
 				sender:{
@@ -240,6 +266,9 @@
 				},
 				serverId:{
 					required:"服务器必须填写"
+				},
+				platFormId:{
+					required:"渠道必须填写"
 				},
 				sender:{
 					required:"发送人必须填写"

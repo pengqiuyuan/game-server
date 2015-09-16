@@ -33,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.enlight.game.base.AppBizException;
+import com.enlight.game.entity.PlatForm;
 import com.enlight.game.entity.User;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
@@ -417,10 +418,19 @@ public class FbServerStatusController extends BaseController{
 	@RequestMapping(value="/findPlatForms",method=RequestMethod.GET)	
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<String> findPlatForms(@RequestParam(value="serverZoneId") String serverZoneId
+	public Map<String, String> findPlatForms(@RequestParam(value="serverZoneId") String serverZoneId
 			,@RequestParam(value="gameId") String gameId) throws AppBizException{
 		List<String> servers = goAllPlatFormService.findPlatFormIds(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
-		return servers;
+		Map<String, String> map = new HashMap<String, String>();
+		for (String s : servers) {
+			PlatForm platForm = platFormService.findByPfId(s);
+			if(platForm!=null){
+				map.put(s, platForm.getPfName());
+			}else{
+				map.put(s,s);
+			}
+		}
+		return map;
 	}
 	
 	/**
