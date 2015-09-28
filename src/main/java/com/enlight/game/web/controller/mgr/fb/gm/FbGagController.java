@@ -248,7 +248,7 @@ public class FbGagController extends BaseController{
 		}
 		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/updateGagAccount" , JSONObject.fromObject(gag));
-		redirectAttributes.addFlashAttribute("message", "修改禁言"+guid+":" +res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "修改禁言Guid:"+guid+":" +res.getString("message"));
 		
 		return "redirect:/manage/gm/fb/gag/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+URLEncoder.encode(serverId, "utf-8");
 	}
@@ -260,7 +260,7 @@ public class FbGagController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Gag gag,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/addGagAccount" , JSONObject.fromObject(gag));
-		redirectAttributes.addFlashAttribute("message", "新增禁言"+gag.getGuid()+":"+res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "新增禁言Guid:"+gag.getGuid()+":"+res.getString("message"));
 		return "redirect:/manage/gm/fb/gag/add";
 	}
 	

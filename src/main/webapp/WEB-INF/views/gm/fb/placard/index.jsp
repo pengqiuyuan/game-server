@@ -63,14 +63,14 @@
 					<div class="controls" id="serverDiv">
 						<c:forEach items="${servers}" var="item" >
 							<label class="radio inline">
-								<input type="radio" name="search_EQ_serverId" value="${item.serverId }" ${param.search_EQ_serverId == item.serverId? 'checked' : '' }/><span>${item.serverId}</span><br/>
+								<input type="radio" id="serverId"  name="search_EQ_serverId" value="${item.serverId }" ${param.search_EQ_serverId == item.serverId? 'checked' : '' }/><span>${item.serverId}</span><br/>
 							</label>
 						</c:forEach>
 					</div>
 				</div>
 				<shiro:hasAnyRoles name="admin,fb_gm_placard_select">
 					<div class="form-ac">
-						<input type="submit" class="btn btn-primary" value="查 找" />
+						<input type="submit" class="btn btn-primary" id="selBtn" value="查 找" />
 					</div>
 				</shiro:hasAnyRoles>
 			</form>
@@ -171,7 +171,7 @@
 				<div class="controls" id="serverDivCheckbox">
 					<c:forEach items="${servers}" var="item" >
 						<label class="checkbox inline">
-							<input type="checkbox" id="serverId_checkbox" name="search_EQ_serverId" value="${item.serverId }"/><span>${item.serverId}</span><br/>
+							<input type="checkbox" id="serverId_checkbox" name="serverId" value="${item.serverId }"/><span>${item.serverId}</span><br/>
 						</label>
 					</c:forEach>
 				</div>
@@ -205,6 +205,12 @@
 				
 				$("#version").attr('value',version);
 				CKEDITOR.instances.contents.setData(contents)
+				
+				$("#selBtn").attr("disabled","disabled");  
+				$("#gameId").attr("disabled","disabled");  
+				$("#serverZoneId").attr("disabled","disabled");  
+				$("#itemDiv").attr("disabled","disabled"); 
+				$("input#serverId").attr("disabled","disabled");  
 			}
 			
 			function delPlacard(id,gameId,serverZoneId,serverId){
@@ -226,6 +232,12 @@
 			
 			$("#cancel").click(function(){
 				$('#inputForm').hide();
+				
+				$("#selBtn").removeAttr("disabled"); 
+				$("#gameId").removeAttr("disabled"); 
+				$("#serverZoneId").removeAttr("disabled"); 
+				$("#itemDiv").removeAttr("disabled"); 
+				$("input#serverId").removeAttr("disabled"); 
 			});
 			
 			$("#checkAll").click(function(){
@@ -325,7 +337,7 @@
 				
 				$("#inputForm").validate({
 					rules:{
-						search_EQ_serverId:{
+						serverId:{
 							required:true
 						},
 						version:{
@@ -335,7 +347,7 @@
 							required:true
 						}
 					},messages:{
-						search_EQ_serverId:{
+						serverId:{
 							required:"服务器必须填写"
 						},
 						version:{

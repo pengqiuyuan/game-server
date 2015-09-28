@@ -62,7 +62,7 @@
 					<div class="controls" id="serverDiv">
 						<c:forEach items="${servers}" var="item" >
 							<label class="radio inline">
-								<input type="radio" name="search_EQ_serverId" value="${item.serverId }" ${param.search_EQ_serverId == item.serverId? 'checked' : '' }/><span>${item.serverId}</span><br/>
+								<input type="radio" id="serverId" name="search_EQ_serverId" value="${item.serverId }" ${param.search_EQ_serverId == item.serverId? 'checked' : '' }/><span>${item.serverId}</span><br/>
 							</label>
 						</c:forEach>
 					</div>
@@ -157,7 +157,7 @@
 
 		<form id="inputForm" method="post" Class="form-horizontal" action="<%=request.getContextPath()%>/manage/gm/fb/product/update"   enctype="multipart/form-data"  style="display: none;">
 			<div style="color:#3352CC;clear:both">
-			<br><hr style="background-color:#808080;height:1px;width:800px;margin:auto"><h4>修改公告：</h4></div>
+			<br><hr style="background-color:#808080;height:1px;width:800px;margin:auto"><h4>修改商品：</h4></div>
 			
 			<input type="hidden" name="id" id="id">
 			<div class="control-group">
@@ -201,7 +201,13 @@
 				class="control-group">
 				<label class="control-label" for="itemId">道具ID：</label>
 				<div class="controls">
-					<input type="text" name="itemId" id="itemId" class="input-large "  placeholder="道具ID" readonly="readonly"/>
+					<c:if test="${not empty param.search_EQ_itemId}">
+						<input type="text" value="${param.search_EQ_itemId}"  disabled="disabled" />
+						<input type="text" value="${param.search_EQ_itemId}"  name="search_EQ_itemId" style="display: none;"/>
+					</c:if>		
+					<c:if test="${empty param.search_EQ_itemId}">
+						<input type="text"  readonly="readonly" name="search_EQ_itemId"/>
+					</c:if>		
 				</div>
 			</div>	
 			<div
@@ -334,7 +340,6 @@
 				$("#id").attr('value',id);
 				$('#inputForm').show();
 				
-				$("#itemId").attr('value','');
 				$("#num").attr('value','');
 				$("#prodcutStoreId").attr('value','');
 				$("#storeLocation").attr('value','');
@@ -352,7 +357,6 @@
 				$("#productDownDate").attr('value','');
 				$("#showLevel").attr('value','');
 				
-				$("#itemId").attr('value',itemId);
 				$("#num").attr('value',num);
 				$("#prodcutStoreId").attr('value',prodcutStoreId);
 				$("#storeLocation").attr('value',storeLocation);

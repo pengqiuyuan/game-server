@@ -124,7 +124,7 @@
 		if(temp == true){
 			$('#sDiv').show();
 			$('#pDiv').hide();
-			$("input[id='platFormId']").attr("checked", false);  
+			$("input[id='platForm']").attr("checked", false);  
 		}else{
 			$('#pDiv').show();
 			$('#sDiv').hide();
@@ -134,7 +134,7 @@
 	function selectAll(){  
 		var temp = $("#sDiv").is(":hidden"); //是否隐藏
 		if(temp == true){
-			$("input[id='platFormId']").attr("checked", true);  
+			$("input[id='platForm']").attr("checked", true);  
 		}else{
 			$("input[id='serverId']").attr("checked", true);  
 		}
@@ -143,7 +143,7 @@
 	function selectAllNot(){
 		var temp = $("#sDiv").is(":hidden"); //是否隐藏
 		if(temp == true){
-			$("input[id='platFormId']").attr("checked", false);  
+			$("input[id='platForm']").attr("checked", false);  
 		}else{
 			$("input[id='serverId']").attr("checked", false);  
 		}
@@ -176,7 +176,7 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#platFormDiv").append("<c:forEach items='"+index+"' var='ite' varStatus='j'><label class='checkbox inline' ><input type='checkbox' id='platFormId' name='platFormId' value='"+index+"'/><span>"+itemData+"</span><br/></label></c:forEach>"); 
+						$("#platFormDiv").append("<c:forEach items='"+index+"' var='ite' varStatus='j'><label class='checkbox inline' ><input type='checkbox' id='platForm' name='platForm' value='"+index+"'/><span>"+itemData+"</span><br/></label></c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
@@ -220,7 +220,7 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);	
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#platFormDiv").append("<c:forEach items='"+index+"' var='ite' varStatus='j'><label class='checkbox inline' ><input type='checkbox' id='platFormId' name='platFormId' value='"+index+"'/><span>"+itemData+"</span><br/></label>&nbsp;</c:forEach>"); 
+						$("#platFormDiv").append("<c:forEach items='"+index+"' var='ite' varStatus='j'><label class='checkbox inline' ><input type='checkbox' id='platForm' name='platForm' value='"+index+"'/><span>"+itemData+"</span><br/></label>&nbsp;</c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
@@ -239,7 +239,7 @@
 				serverId:{
 					required:true
 				},
-				platFormId:{
+				platForm:{
 					required:true
 				},
 				sender:{
@@ -267,7 +267,7 @@
 				serverId:{
 					required:"服务器必须填写"
 				},
-				platFormId:{
+				platForm:{
 					required:"渠道必须填写"
 				},
 				sender:{

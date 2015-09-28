@@ -33074,8 +33074,14 @@ Host.prototype.makeUrl = function (params) {
   // build the port
   var port = '';
   if (this.port !== Host.defaultPorts[this.protocol]) {
-    // add an actual port
+
+	//没有使用nginx 使用9200
     port = ':' + this.port;
+
+	//使用nginx port 替代9200
+	//port = '/port';
+	//this.host = '182.92.69.21';
+
   }
 
   // build the path
@@ -33095,7 +33101,6 @@ Host.prototype.makeUrl = function (params) {
   } else if (this.auth) {
     auth = this.auth + '@';
   }
-
   if (this.host) {
     return this.protocol + '://' + auth + this.host + port + path + (query ? '?' + query : '');
   } else {

@@ -53,9 +53,9 @@
 			</div>	
 			<div
 				class="control-group">
-				<label class="control-label" for="platFormId">渠道ID：</label>
+				<label class="control-label" for="platForm">渠道ID：</label>
 				<div class="controls">
-					<input type="text" name="platFormId" class="input-large "  />
+					<input type="text" name="platForm" class="input-large "  />
 				</div>
 			</div>	
 			<div
@@ -86,7 +86,7 @@ $(function(){
 			serverId:{
 				required:true
 			},
-			platFormId:{
+			platForm:{
 				required:true
 			},
 			account:{
@@ -102,7 +102,7 @@ $(function(){
 			serverId:{
 				required:"必须填写"
 			},
-			platFormId:{
+			platForm:{
 				required:"必须填写"
 			},
 			account:{

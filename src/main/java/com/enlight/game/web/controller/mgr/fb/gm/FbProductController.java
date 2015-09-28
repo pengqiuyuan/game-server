@@ -232,7 +232,7 @@ public class FbProductController extends BaseController{
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
 		String serverId = request.getParameter("search_EQ_serverId");		
-		String itemId = request.getParameter("itemId");
+		String itemId = request.getParameter("search_EQ_itemId");
 		
 		product.setGameId(gameId);
 		product.setServerZoneId(serverZoneId);
@@ -241,7 +241,7 @@ public class FbProductController extends BaseController{
 
 		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/product/updateProduct" , JSONObject.fromObject(product));
-		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "修改商品到:"+res.getString("choose")+"个服务器，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
 		
 		return "redirect:/manage/gm/fb/product/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+URLEncoder.encode(serverId, "utf-8")+"&search_EQ_itemId="+URLEncoder.encode(itemId.replaceAll(" ",""), "utf-8");
 	}
@@ -253,7 +253,7 @@ public class FbProductController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Product product,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/product/addProduct" , JSONObject.fromObject(product));
-		redirectAttributes.addFlashAttribute("message", "新增商品："+res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "新增商品到:"+res.getString("choose")+"个服务器，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
 		return "redirect:/manage/gm/fb/product/add";
 	}
 	

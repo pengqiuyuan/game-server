@@ -1,10 +1,10 @@
 package com.enlight.game.web.controller.mgr.fb.gm;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
+import org.apache.commons.lang3.StringUtils;
 
 import com.enlight.game.base.AppBizException;
 import com.enlight.game.entity.PlatForm;
@@ -51,7 +52,6 @@ import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.ServerStatusAccount;
 import com.enlight.game.entity.gm.fb.ServerStatusList;
-import com.enlight.game.entity.go.GoAllPlatForm;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
@@ -167,30 +167,6 @@ public class FbServerStatusController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		/*
-		try {
-	        if(!searchParams.isEmpty()){
-				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
-					storeId = user.getStoreId();
-				}
-				String gs = HttpClientUts.doGet(gm_url+"/fbserver/server/getAllServer"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.server, "utf-8");
-				JSONObject dataJson=JSONObject.fromObject(total);			
-				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<ServerStatus> beanList = binder.getMapper().readValue(gs, new TypeReference<List<ServerStatus>>() {}); 
-		        PageImpl<ServerStatus> serverStatus = new PageImpl<ServerStatus>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
-				model.addAttribute("serverStatus", serverStatus);
-	        }else{
-	        	List<ServerStatus> beanList = new ArrayList<ServerStatus>();
-				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        PageImpl<ServerStatus> serverStatus = new PageImpl<ServerStatus>(beanList, pageRequest, 0);
-				model.addAttribute("serverStatus", serverStatus);
-	        }
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		*/
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
@@ -207,19 +183,12 @@ public class FbServerStatusController extends BaseController{
 		String checkStatus = request.getParameter("checkStatus");
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
-		
-		for (String sId : checkIds) {
-			GoAllServer goAllServer =  goAllServerService.findByServerId(sId);
-			String[] serverId = new String[1];
-			serverId[0] = goAllServer.getServerId();
-			
-			ServerStatusList list = new ServerStatusList();
-			list.setId(serverId);
-			list.setStatus(checkStatus);
-			
-			HttpClientUts.doPost("http://"+goAllServer.getIp()+":"+goAllServer.getPort()+"/fbserver/server/updateServers" , JSONObject.fromObject(list));
-			//HttpClientUts.doPost(gm_url+"/fbserver/server/updateServers" , JSONObject.fromObject(list));
-		}
+		String s = StringUtils.join(checkIds,",");
+		ServerStatusList list = new ServerStatusList();
+		list.setServerId(s);
+		list.setStatus(checkStatus);
+		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/updateServers" , JSONObject.fromObject(list));
+		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
 		return "redirect:/manage/gm/fb/serverStatus/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId;
 	}
 
@@ -235,6 +204,7 @@ public class FbServerStatusController extends BaseController{
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		String storeId = request.getParameter("search_EQ_storeId");
 		String serverZoneId =  request.getParameter("search_EQ_serverZoneId");
+		String serverId = request.getParameter("search_EQ_serverId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<GoStore> goStores = new ArrayList<GoStore>();
@@ -260,24 +230,21 @@ public class FbServerStatusController extends BaseController{
 		}
 		
 		try {
-			/**
-			String gs = "[{\"id\":1,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"platFormId\":\"Sample text\",\"account\":\"Sample text\"}"
-					+ ",{\"id\":2,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"platFormId\":\"Sample text\",\"account\":\"Sample text\"}"
-					+ ",{\"id\":3,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"platFormId\":\"Sample text\",\"account\":\"Sample text\"}"
-					+ ",{\"id\":4,\"serverzoneId\":\"Sample text\",\"gameId\":\"Sample text\",\"serverId\":\"Sample text\",\"platFormId\":\"Sample text\",\"account\":\"Sample text\"}]";
-			**/
-	        if(!searchParams.isEmpty()){
+	        if(!searchParams.isEmpty() && null != request.getParameter("search_EQ_serverId")){
 				if(!u.getRoles().equals(User.USER_ROLE_ADMIN)){
 					storeId = user.getStoreId();
 				}
-				String gs = HttpClientUts.doGet(gm_url+"/fbserver/server/getAllGrayAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.account, "utf-8");
+				String gs = HttpClientUts.doGet(gm_url+"/fbserver/server/getAllGrayAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.account+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
 		        List<ServerStatusAccount> beanList = binder.getMapper().readValue(gs, new TypeReference<List<ServerStatusAccount>>() {}); 
 		        PageImpl<ServerStatusAccount> serverStatusAccount = new PageImpl<ServerStatusAccount>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("serverStatusAccount", serverStatusAccount);
+				
+				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
+				model.addAttribute("servers", servers);
 	        }else{
 	        	List<ServerStatusAccount> beanList = new ArrayList<ServerStatusAccount>();
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
@@ -333,49 +300,10 @@ public class FbServerStatusController extends BaseController{
 	 */
 	@RequestMapping(value = "/accountSave",method=RequestMethod.POST)
 	public String accountSave(ServerStatusAccount ServerStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		System.out.println(ServerStatusAccount.getGameId() + "  "  + ServerStatusAccount.getServerZoneId()+ "  "  + ServerStatusAccount.getServerId()+ "  "  +ServerStatusAccount.getPlatFormId() + "  "  + ServerStatusAccount.getAccount() );
+		System.out.println(ServerStatusAccount.getGameId() + "  "  + ServerStatusAccount.getServerZoneId()+ "  "  + ServerStatusAccount.getServerId()+ "  "  +ServerStatusAccount.getPlatForm() + "  "  + ServerStatusAccount.getAccount() );
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/addGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
-		redirectAttributes.addFlashAttribute("message", "新增"+res.getString("message"));
-		return "redirect:/manage/gm/fb/serverStatus/accountIndex?search_EQ_storeId="+ServerStatusAccount.getGameId()+"&search_EQ_serverZoneId="+ServerStatusAccount.getServerZoneId();
-	}
-	
-	@RequestMapping(value="/accountEdit",method=RequestMethod.GET)
-	public String accountEdit(@RequestParam(value="id")long id,Model model){
-		ShiroUser user = getCurrentUser();
-		User u = accountService.getUser(user.id);
-		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
-			List<GoStore> goStores = new ArrayList<GoStore>();
-			GoStore goStore = goStoreService.findByStoreId(Integer.valueOf(user.getStoreId()));
-			if(goStore!=null){
-				goStores.add(goStore);
-			}
-			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
-			List<String> s = u.getServerZoneList();
-			for (String str : s) {	
-				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
-				if(goServerZone!=null){
-					goServerZones.add(goServerZone);
-				}
-			}
-			model.addAttribute("stores", goStores);
-			model.addAttribute("serverZones", goServerZones);
-		}else{
-			List<GoStore> goStores = goStoreService.findAll();
-			List<GoServerZone> goServerZones = goServerZoneService.findAll();
-			model.addAttribute("stores", goStores);
-			model.addAttribute("serverZones", goServerZones);
-		}
-		
-		String account;
-		try {
-			account = HttpClientUts.doGet(gm_url+"/fbserver/server/getGrayAccountByAccountId"+"?id="+id, "utf-8");
-			ServerStatusAccount beanList = binder.getMapper().readValue(account, new TypeReference<ServerStatusAccount>() {}); 
-			model.addAttribute("account", beanList);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "/gm/fb/serverStatus/accountEdit";
+		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+		return "redirect:/manage/gm/fb/serverStatus/accountAdd";
 	}
 	
 	
@@ -383,10 +311,14 @@ public class FbServerStatusController extends BaseController{
 	 * 更新
 	 */
 	@RequestMapping(value = "/accountUpdate",method=RequestMethod.POST)
-	public String accountUpdate(ServerStatusAccount ServerStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/updateGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
-		redirectAttributes.addFlashAttribute("message", "修改"+res.getString("message"));
-		return "redirect:/manage/gm/fb/serverStatus/accountIndex?search_EQ_storeId="+ServerStatusAccount.getGameId()+"&search_EQ_serverZoneId="+ServerStatusAccount.getServerZoneId();
+	public String accountUpdate(ServerStatusAccount serverStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
+		String gameId = request.getParameter("search_EQ_storeId");
+		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
+		serverStatusAccount.setGameId(gameId);
+		serverStatusAccount.setServerZoneId(serverZoneId);		
+		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/updateGrayAccount" , JSONObject.fromObject(serverStatusAccount));
+		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+		return "redirect:/manage/gm/fb/serverStatus/accountIndex";
 	}
 	
 	/**
@@ -397,9 +329,13 @@ public class FbServerStatusController extends BaseController{
 	@RequestMapping(value = "accountDel", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> accountDel(@RequestParam(value = "id")Long id) throws Exception{
+	public Map<String,Object> del(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/server/delGrayAccountById"+"?id="+id, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/server/delGrayAccountById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("success", dataJson.get("message"));
 		 return map;

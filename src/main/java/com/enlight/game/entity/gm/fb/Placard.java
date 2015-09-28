@@ -12,7 +12,7 @@ public class Placard {
 	
 	private String gameId;
 	
-	private String[] serverIds;
+	//private String[] serverIds;
 	
 	private String serverId;
 	
@@ -44,13 +44,13 @@ public class Placard {
 		this.gameId = gameId;
 	}
 
-	public String[] getServerIds() {
-		return serverIds;
-	}
-
-	public void setServerIds(String[] serverIds) {
-		this.serverIds = serverIds;
-	}
+//	public String[] getServerIds() {
+//		return serverIds;
+//	}
+//
+//	public void setServerIds(String[] serverIds) {
+//		this.serverIds = serverIds;
+//	}
 
 	public String getServerId() {
 		return serverId;

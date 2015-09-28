@@ -6,16 +6,16 @@ package com.enlight.game.entity.gm.fb;
  */
 public class ServerStatusList {
 	
-	private String[] id;
+	private String serverId;
 	
 	private String status;
 
-	public String[] getId() {
-		return id;
+	public String getServerId() {
+		return serverId;
 	}
 
-	public void setId(String[] id) {
-		this.id = id;
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
 	}
 
 	public String getStatus() {

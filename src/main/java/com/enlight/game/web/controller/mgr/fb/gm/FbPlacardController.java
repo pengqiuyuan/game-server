@@ -220,19 +220,14 @@ public class FbPlacardController extends BaseController{
 	 * 修改
 	 */
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
-	public String update(ServletRequest request,RedirectAttributes redirectAttributes){
-		String id = request.getParameter("id");
+	public String update(Placard placard,ServletRequest request,RedirectAttributes redirectAttributes){
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
-		String[] serverIds = request.getParameterValues("search_EQ_serverId");
-		String version = request.getParameter("version");
-		String contents = request.getParameter("contents");
-		System.out.println(id +"  " + gameId + " "+ serverZoneId + "  "  + serverIds + " " + version + "  " + contents);
-		Placard placard = new Placard();
-		placard.setId(Integer.valueOf(id));
-		placard.setVersion(version);
-		placard.setContents(contents);
-		placard.setServerIds(serverIds);
+
+		placard.setGameId(gameId);
+		placard.setServerZoneId(serverZoneId);
+		System.out.println(placard.getId() +"  " + placard.getGameId() + " "+ placard.getServerZoneId() + "  "  + placard.getServerId() + " " + placard.getVersion() + "  " + placard.getContents());
+
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/updatePlacards" , JSONObject.fromObject(placard));
 		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
 		return "redirect:/manage/gm/fb/placard/index";
@@ -245,9 +240,9 @@ public class FbPlacardController extends BaseController{
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Placard placard,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "   " + placard.getServerIds() + "  "  +placard.getVersion() + "  "  + placard.getContents() );
+		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "  "  +placard.getVersion() + "  "  + placard.getContents() );
 
-        if(placard.getServerIds().length != 0){
+        if(placard.getServerId() != null){
     		System.out.println(JSONObject.fromObject(placard));
     		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/addPlacards"  , JSONObject.fromObject(placard));
     		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));

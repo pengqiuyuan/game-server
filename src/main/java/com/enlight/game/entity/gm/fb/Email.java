@@ -24,7 +24,7 @@ public class Email {
 	
 	private List<Annex> annex;
 	
-	private String platFormId;
+	private String platForm;
 
 	public int getId() {
 		return id;
@@ -90,13 +90,12 @@ public class Email {
 		this.annex = annex;
 	}
 
-	public String getPlatFormId() {
-		return platFormId;
+	public String getPlatForm() {
+		return platForm;
 	}
 
-	public void setPlatFormId(String platFormId) {
-		this.platFormId = platFormId;
+	public void setPlatForm(String platForm) {
+		this.platForm = platForm;
 	}
 
-	
 }

@@ -253,7 +253,7 @@ public class FbSealController extends BaseController{
 				+ " sealEnd " + request.getParameter("sealEnd"));
 		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/updateSealAccount" , JSONObject.fromObject(seal));
-		redirectAttributes.addFlashAttribute("message", "修改封号" +seal.getGuid() + ":"+res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "修改封号Guid:" +seal.getGuid() + ":"+res.getString("message"));
 		
 		return "redirect:/manage/gm/fb/seal/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+URLEncoder.encode(serverId, "utf-8");
 	}
@@ -265,7 +265,7 @@ public class FbSealController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Seal seal,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/addSealAccount" , JSONObject.fromObject(seal));
-		redirectAttributes.addFlashAttribute("message", "新增封号"+seal.getGuid()+":" +res.getString("message"));
+		redirectAttributes.addFlashAttribute("message", "新增封号Guid: "+seal.getGuid()+":" +res.getString("message"));
 		return "redirect:/manage/gm/fb/seal/add";
 	}
 	

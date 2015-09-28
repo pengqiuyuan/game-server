@@ -86,10 +86,10 @@
 <script type="text/javascript">
 	CKEDITOR.replace('contents');
 	function selectAll(){  
-        $("input[id='serverIds']").attr("checked", true);  
+        $("input[id='serverId']").attr("checked", true);  
 	}	
 	function selectAllNot(){
-    	$("input[id='serverIds']").attr("checked", false);  
+    	$("input[id='serverId']").attr("checked", false);  
 	}	
 	$(function(){
 		$("#serverZoneId").change(function(e){
@@ -105,7 +105,7 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverIds' name='serverIds' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
+						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverId' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
@@ -134,7 +134,7 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverIds' name='serverIds' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
+						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverId' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});

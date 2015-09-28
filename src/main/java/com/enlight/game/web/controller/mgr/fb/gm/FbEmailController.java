@@ -228,14 +228,11 @@ public class FbEmailController extends BaseController{
 	 * 修改
 	 */
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
-	public String update(ServletRequest request,RedirectAttributes redirectAttributes){
-		String id = request.getParameter("id");
+	public String update(Email email,ServletRequest request,RedirectAttributes redirectAttributes){
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
-		String serverIds = request.getParameter("search_EQ_serverId");
-		String sender = request.getParameter("sender");
-		String title = request.getParameter("title");
-		String contents = request.getParameter("contents");
+		String serverId = request.getParameter("search_EQ_serverId");
+
 		String[] itemId = request.getParameterValues("itemId");
 		String[] itemNum = request.getParameterValues("itemNum");
 		List<Annex> annexs  = new ArrayList<Annex>();
@@ -245,11 +242,9 @@ public class FbEmailController extends BaseController{
 			annex.setItemNum(itemNum[i]);
 			annexs.add(annex);
 		}
-		Email email = new Email();
-		email.setId(Integer.valueOf(id));
-		email.setSender(sender);
-		email.setTitle(title);
-		email.setContents(contents);
+		email.setServerZoneId(serverZoneId);
+		email.setServerId(serverId);
+		email.setGameId(gameId);
 		email.setAnnex(annexs);
 
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/email/updateEmail" , JSONObject.fromObject(email));
@@ -265,9 +260,23 @@ public class FbEmailController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Email email,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		
-		if(email.getPlatFormId()!=null){
+		String[] itemId = request.getParameterValues("itemId");
+		String[] itemNum = request.getParameterValues("itemNum");
+		if(itemId!=null && itemNum!=null){
+			List<Annex> annexs  = new ArrayList<Annex>();
+			for (int i = 0; i < itemId.length; i++) {
+				Annex annex = new Annex();
+				annex.setItemId(itemId[i]);
+				annex.setItemNum(itemNum[i]);
+				annexs.add(annex);
+			}
+			email.setAnnex(annexs);
+		}
+
+		//按渠道发送，最终也要找出渠道对应服务器
+		if(email.getPlatForm()!=null){
 			Set<String>  set=new HashSet<String>();
-			List<String> pfIds =  ImmutableList.copyOf(StringUtils.split(email.getPlatFormId(), ","));
+			List<String> pfIds =  ImmutableList.copyOf(StringUtils.split(email.getPlatForm(), ","));
 			for (String platFormId : pfIds) {
 				List<String> serverIds =  goAllPlatFormService.findAllByPlatFormIdAndStoreIdAndServerZoneId(Integer.valueOf(email.getGameId()), Integer.valueOf(email.getServerZoneId()), platFormId);
 				set.addAll(serverIds);
@@ -278,7 +287,7 @@ public class FbEmailController extends BaseController{
 		}
 			
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/email/addEmail" , JSONObject.fromObject(email));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+		redirectAttributes.addFlashAttribute("message", "选择渠道: "+ email.getPlatForm() +",有服务器"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
 		return "redirect:/manage/gm/fb/email/add";
 	}
 	

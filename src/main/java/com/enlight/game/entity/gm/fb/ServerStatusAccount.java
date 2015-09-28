@@ -14,7 +14,7 @@ public class ServerStatusAccount {
 	
 	private String serverId;
 	
-	private String platFormId;
+	private String platForm;
 	
 	private String account;
 
@@ -50,12 +50,12 @@ public class ServerStatusAccount {
 		this.serverId = serverId;
 	}
 
-	public String getPlatFormId() {
-		return platFormId;
+	public String getPlatForm() {
+		return platForm;
 	}
 
-	public void setPlatFormId(String platFormId) {
-		this.platFormId = platFormId;
+	public void setPlatForm(String platForm) {
+		this.platForm = platForm;
 	}
 
 	public String getAccount() {
