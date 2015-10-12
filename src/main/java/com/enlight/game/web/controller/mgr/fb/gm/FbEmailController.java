@@ -286,9 +286,14 @@ public class FbEmailController extends BaseController{
 			email.setServerId(serverId);
 		}
 			
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/email/addEmail" , JSONObject.fromObject(email));
-		redirectAttributes.addFlashAttribute("message", "选择渠道: "+ email.getPlatForm() +",有服务器"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/fb/email/add";
+        if(email.getServerId() != null){
+    		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/email/addEmail" , JSONObject.fromObject(email));
+    		redirectAttributes.addFlashAttribute("message", "选择渠道: "+ email.getPlatForm() +",有服务器"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+    		return "redirect:/manage/gm/fb/email/add";
+        }else{
+        	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
+    		return "redirect:/manage/gm/fb/email/add";
+        }
 	}
 	
 	/**

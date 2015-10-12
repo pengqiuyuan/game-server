@@ -45,6 +45,10 @@ public class GoAllServerService {
 		return goAllServerDao.findAllByStoreIdAndServerZoneId(storeId, serverZoneId);
 	}
 	
+	public List<GoAllServer> findAll(){
+		return goAllServerDao.findAll();
+	}
+	
 	/**
 	 * 分页查询
 	 * 

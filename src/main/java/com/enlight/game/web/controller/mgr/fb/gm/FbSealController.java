@@ -264,9 +264,14 @@ public class FbSealController extends BaseController{
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Seal seal,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/addSealAccount" , JSONObject.fromObject(seal));
-		redirectAttributes.addFlashAttribute("message", "新增封号Guid: "+seal.getGuid()+":" +res.getString("message"));
-		return "redirect:/manage/gm/fb/seal/add";
+        if(seal.getServerId() != null){
+    		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/addSealAccount" , JSONObject.fromObject(seal));
+    		redirectAttributes.addFlashAttribute("message", "新增封号Guid: "+seal.getGuid()+":" +res.getString("message"));
+    		return "redirect:/manage/gm/fb/seal/add";
+        }else{
+        	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
+    		return "redirect:/manage/gm/fb/seal/add";
+        }
 	}
 	
 	/**

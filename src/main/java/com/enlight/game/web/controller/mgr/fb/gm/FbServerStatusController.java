@@ -128,8 +128,6 @@ public class FbServerStatusController extends BaseController{
 		User u = accountService.getUser(user.id);
 		
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-		String storeId = request.getParameter("search_EQ_storeId");
-		String serverZoneId =  request.getParameter("search_EQ_serverZoneId");
 		
 		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {
 			List<GoStore> goStores = new ArrayList<GoStore>();
@@ -276,20 +274,25 @@ public class FbServerStatusController extends BaseController{
 				goStores.add(goStore);
 			}
 			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
+			//List<GoAllServer> goAllServers = new ArrayList<GoAllServer>();
 			List<String> s = u.getServerZoneList();
 			for (String str : s) {	
 				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				//List<GoAllServer> gs= goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(user.getStoreId()), Integer.valueOf(str));
 				if(goServerZone!=null){
 					goServerZones.add(goServerZone);
 				}
 			}
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
+			//model.addAttribute("servers", gs);
 		}else{
 			List<GoStore> goStores = goStoreService.findAll();
 			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			//List<GoAllServer> goAllServers = goAllServerService.findAll();
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
+			//model.addAttribute("servers", goAllServers);
 		}
 		
 		return "/gm/fb/serverStatus/accountAdd";
@@ -299,11 +302,16 @@ public class FbServerStatusController extends BaseController{
 	 * 新增
 	 */
 	@RequestMapping(value = "/accountSave",method=RequestMethod.POST)
-	public String accountSave(ServerStatusAccount ServerStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		System.out.println(ServerStatusAccount.getGameId() + "  "  + ServerStatusAccount.getServerZoneId()+ "  "  + ServerStatusAccount.getServerId()+ "  "  +ServerStatusAccount.getPlatForm() + "  "  + ServerStatusAccount.getAccount() );
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/addGrayAccount" , JSONObject.fromObject(ServerStatusAccount));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/fb/serverStatus/accountAdd";
+	public String accountSave(ServerStatusAccount serverStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
+		System.out.println(serverStatusAccount.getGameId() + "  "  + serverStatusAccount.getServerZoneId()+ "  "  + serverStatusAccount.getServerId()+ "  "  +serverStatusAccount.getPlatForm() + "  "  + serverStatusAccount.getAccount() );
+		if(serverStatusAccount.getServerId() != null){
+			JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/server/addGrayAccount" , JSONObject.fromObject(serverStatusAccount));
+			redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+			return "redirect:/manage/gm/fb/serverStatus/accountAdd";
+	    }else{
+	        redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
+	        return "redirect:/manage/gm/fb/serverStatus/accountAdd";
+	    }
 	}
 	
 	

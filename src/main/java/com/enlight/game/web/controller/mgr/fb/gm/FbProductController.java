@@ -252,9 +252,14 @@ public class FbProductController extends BaseController{
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Product product,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/product/addProduct" , JSONObject.fromObject(product));
-		redirectAttributes.addFlashAttribute("message", "新增商品到:"+res.getString("choose")+"个服务器，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/fb/product/add";
+        if(product.getServerId() != null){
+    		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/product/addProduct" , JSONObject.fromObject(product));
+    		redirectAttributes.addFlashAttribute("message", "新增商品到:"+res.getString("choose")+"个服务器，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+    		return "redirect:/manage/gm/fb/product/add";
+        }else{
+        	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
+    		return "redirect:/manage/gm/fb/product/add";
+        }
 	}
 	
 	/**

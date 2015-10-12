@@ -259,9 +259,14 @@ public class FbGagController extends BaseController{
 	 */
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Gag gag,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/addGagAccount" , JSONObject.fromObject(gag));
-		redirectAttributes.addFlashAttribute("message", "新增禁言Guid:"+gag.getGuid()+":"+res.getString("message"));
-		return "redirect:/manage/gm/fb/gag/add";
+        if(gag.getServerId() != null){
+    		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/addGagAccount" , JSONObject.fromObject(gag));
+    		redirectAttributes.addFlashAttribute("message", "新增禁言Guid:"+gag.getGuid()+":"+res.getString("message"));
+    		return "redirect:/manage/gm/fb/gag/add";
+        }else{
+        	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
+        	return "redirect:/manage/gm/fb/gag/add";
+        }
 	}
 	
 	/**

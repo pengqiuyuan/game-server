@@ -164,8 +164,8 @@
 				<button type="button" class="btn btn-info" onclick="selectAllNot();">反选</button>
 			</div>
 			<div class="form-actions" >
-				<shiro:hasAnyRoles name="admin,fb_gm_placard_update">
-					<input type="submit" class="btn btn-primary" value="修改服务器公告" />
+				<shiro:hasAnyRoles name="admin,fb_gm_account_update">
+					<input type="submit" class="btn btn-primary" value="修改灰度账号" />
 				</shiro:hasAnyRoles>	
 				<a class="btn btn-primary" id="cancel">取消</a>
 			</div>
