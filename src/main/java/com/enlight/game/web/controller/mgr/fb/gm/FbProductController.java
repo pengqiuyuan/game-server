@@ -64,6 +64,8 @@ import com.google.common.collect.Maps;
 public class FbProductController extends BaseController{
 
 	private static final String PAGE_SIZE = "10";
+	
+	private static final Integer FB = 1; //数据库、excel表 ，fb项目storeId为1
 
 	private static final Logger logger = LoggerFactory.getLogger(FbProductController.class);
 	
@@ -149,7 +151,11 @@ public class FbProductController extends BaseController{
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}else{
-			List<GoStore> goStores = goStoreService.findAll();
+			List<GoStore> goStores = new ArrayList<GoStore>();
+			GoStore goStore = goStoreService.findByStoreId(FB);
+			if(goStore!=null){
+				goStores.add(goStore);
+			}
 			List<GoServerZone> goServerZones = goServerZoneService.findAll();
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
@@ -215,7 +221,11 @@ public class FbProductController extends BaseController{
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}else{
-			List<GoStore> goStores = goStoreService.findAll();
+			List<GoStore> goStores = new ArrayList<GoStore>();
+			GoStore goStore = goStoreService.findByStoreId(FB);
+			if(goStore!=null){
+				goStores.add(goStore);
+			}
 			List<GoServerZone> goServerZones = goServerZoneService.findAll();
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);

@@ -81,7 +81,7 @@
           },
           "auto_int": true,
           "resolution": 100,
-          "interval": "10m",
+          "interval": "1h",
           "intervals": [
             "auto",
             "1s",
@@ -149,7 +149,6 @@
             "日志分类关键字",
             "增加的游戏币数量",
             "获得途径",
-            "二级获得途径",
             "人物等级"
           ],
           "highlight": [],
@@ -185,7 +184,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
+          "size": 20,
           "order": "count",
           "style": {
             "font-size": "10pt"
@@ -218,7 +217,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
+          "size": 20,
           "order": "count",
           "style": {
             "font-size": "10pt"
@@ -251,8 +250,8 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
-          "order": "count",
+          "size": 20,
+          "order": "total",
           "style": {
             "font-size": "10pt"
           },
@@ -260,7 +259,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "table",
+          "chart": "pie",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -269,10 +268,10 @@
               0
             ]
           },
-          "tmode": "terms",
+          "tmode": "terms_stats",
           "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［人物等级］"
+          "valuefield": "增加的游戏币数量",
+          "title": "游戏币获取总值［人物等级］"
         },
         {
           "error": false,
@@ -284,7 +283,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
+          "size": 20,
           "order": "total",
           "style": {
             "font-size": "10pt"
@@ -293,7 +292,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "table",
+          "chart": "bar",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -317,7 +316,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
+          "size": 1120,
           "order": "count",
           "style": {
             "font-size": "10pt"
@@ -350,7 +349,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
+          "size": 20,
           "order": "count",
           "style": {
             "font-size": "10pt"
@@ -383,40 +382,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［获得途径］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "获得途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
+          "size": 20,
           "order": "total",
           "style": {
             "font-size": "10pt"
@@ -425,7 +391,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "table",
+          "chart": "pie",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -445,110 +411,11 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "二级获得途径",
+          "field": "获得途径",
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［二级获得途径］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级获得途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［二级获得途径］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级获得途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "table",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［二级获得途径］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "二级获得途径",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
+          "size": 20,
           "order": "total",
           "style": {
             "font-size": "10pt"
@@ -557,7 +424,7 @@
           "tilt": false,
           "labels": true,
           "arrangement": "horizontal",
-          "chart": "table",
+          "chart": "bar",
           "counter_pos": "above",
           "spyable": true,
           "queries": {
@@ -569,77 +436,11 @@
           "tmode": "terms_stats",
           "tstat": "total",
           "valuefield": "增加的游戏币数量",
-          "title": "游戏币获取总值［二级获得途径］"
+          "title": "游戏币获取总值［获得途径］"
         },
         {
           "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "运营大区ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［运营大区］"
-        },
-        {
-          "error": false,
-          "span": 3,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -672,7 +473,7 @@
         },
         {
           "error": false,
-          "span": 3,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -705,73 +506,7 @@
         },
         {
           "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "渠道ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［渠道］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "渠道ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［渠道］"
-        },
-        {
-          "error": false,
-          "span": 3,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -804,7 +539,7 @@
         },
         {
           "error": false,
-          "span": 3,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -837,73 +572,7 @@
         },
         {
           "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "服务器ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "pie",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［服务器］"
-        },
-        {
-          "error": false,
-          "span": 3,
-          "editable": true,
-          "type": "terms",
-          "loadingEditor": false,
-          "field": "服务器ID",
-          "exclude": [],
-          "missing": false,
-          "other": false,
-          "size": 10,
-          "order": "count",
-          "style": {
-            "font-size": "10pt"
-          },
-          "donut": false,
-          "tilt": false,
-          "labels": true,
-          "arrangement": "horizontal",
-          "chart": "bar",
-          "counter_pos": "above",
-          "spyable": true,
-          "queries": {
-            "mode": "all",
-            "ids": [
-              0
-            ]
-          },
-          "tmode": "terms",
-          "tstat": "total",
-          "valuefield": "",
-          "title": "游戏币获取次数［服务器］"
-        },
-        {
-          "error": false,
-          "span": 3,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
@@ -936,7 +605,7 @@
         },
         {
           "error": false,
-          "span": 3,
+          "span": 2,
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
