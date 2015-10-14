@@ -7,8 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "game_enum_category")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)   // 二级缓存
 public class EnumCategory extends BaseEntry{
 	
 	/**

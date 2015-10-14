@@ -142,7 +142,10 @@ color:Red;
 					 jQuery.each(parsedJson, function(index, itemData) {
 						 jQuery.each(itemData.roleAndEnums, function(i, its) {
 					     	th.append("<input type='checkbox' onclick='return false' name='functions' value='"+its.enumRole+"' checked='checked' class='box' /><span>"+its.enumRole+"、"+its.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
-						 }); 
+							 	if((i+1)%7==0){
+									th.append("<br/><br/>");
+								}
+							}); 
 					 }); 
 				},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 			});

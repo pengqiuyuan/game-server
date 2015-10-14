@@ -3,6 +3,9 @@ package com.enlight.game.entity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * 
  * @author dell
@@ -10,6 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "game_enum")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)   // 二级缓存
 public class EnumFunction extends BaseEntry{
 	/**
 	 * 道具日志 数据库对应enum_role字段

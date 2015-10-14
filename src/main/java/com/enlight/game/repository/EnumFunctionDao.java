@@ -3,9 +3,12 @@ package com.enlight.game.repository;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.QueryHint;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.enlight.game.entity.EnumFunction;
@@ -16,6 +19,7 @@ public interface EnumFunctionDao extends PagingAndSortingRepository<EnumFunction
 	@Query("from EnumFunction enumFunction where enumFunction.status=1")
 	List<EnumFunction> findList();
 	
+	@QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })  
 	EnumFunction findByEnumRole(String enumRole);
 	
 	//查询通用功能

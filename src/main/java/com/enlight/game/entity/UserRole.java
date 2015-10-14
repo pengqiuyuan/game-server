@@ -8,12 +8,15 @@ import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
 
 @Entity
 @Table(name = "game_user_role")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)   // 二级缓存
 public class UserRole extends BaseEntry{
 	/**
 	 * 有效

@@ -6,8 +6,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name="game_tag")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)   // 二级缓存
 public class Tag {
 	
 	//道具 获得途径

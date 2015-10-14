@@ -37,7 +37,7 @@
       ]
     }
   },
-   "rows": [
+ "rows": [
     {
       "title": "当前在线人数",
       "height": "350px",
@@ -179,7 +179,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
+          "size": 20,
           "order": "mean",
           "style": {
             "font-size": "10pt"
@@ -212,7 +212,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
+          "size": 20,
           "order": "mean",
           "style": {
             "font-size": "10pt"
@@ -245,7 +245,7 @@
           "exclude": [],
           "missing": false,
           "other": false,
-          "size": 10,
+          "size": 20,
           "order": "mean",
           "style": {
             "font-size": "10pt"

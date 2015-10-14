@@ -2,9 +2,12 @@ package com.enlight.game.repository;
 
 import java.util.List;
 
+import javax.persistence.QueryHint;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.enlight.game.entity.Tag;
@@ -15,6 +18,7 @@ public interface TagDao extends PagingAndSortingRepository<Tag, Long>,JpaSpecifi
 	
 	List<Tag> findByTagIdAndCategoryAndStoreName(Long tagId,String category,String storeName);
 	
+	@QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })  
 	List<Tag> findByCategoryAndStoreName(String category,String storeName);
 	
 	List<Tag> findByTagNameAndCategoryAndStoreId(String tagName,String category,String storeId);

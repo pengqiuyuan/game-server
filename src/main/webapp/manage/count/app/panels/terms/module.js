@@ -305,12 +305,16 @@ function (angular, app, _, $, kbn) {
             			slice = { label : '人民币',  name : v.term, data : [[k,v.count]], actions: true};
             		  }else if(v.term=='2'){
             			slice = { label : '美元',  name : v.term, data : [[k,v.count]], actions: true};
-            		  }
+            		  }else{
+              			slice = { label : v.term,  name : v.term, data : [[k,v.count]], actions: true};
+              		  }
             	  }else if(scope.panel.field==="登录设备系统"){
             		  if(v.term=='1'){
               			slice = { label : 'android',  name : v.term, data : [[k,v.count]], actions: true};
               		  }else if(v.term=='2'){
               			slice = { label : 'ios',  name : v.term, data : [[k,v.count]], actions: true};
+              		  }else{
+              			slice = { label : v.term,  name : v.term, data : [[k,v.count]], actions: true};
               		  }
               	  }
             	  else{
@@ -338,13 +342,17 @@ function (angular, app, _, $, kbn) {
 	              			slice = { label : '人民币',  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
 	              		  }else if(v.term=='2'){
 	              			slice = { label : '美元',  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
-	              	  }
+	              	  }else{
+              			slice = { label : v.term,  name : v.term, data : [[k,v.count]], actions: true};
+              		  }
 	              }else if(scope.panel.field==="登录设备系统"){
             		  if(v.term=='1'){
                 			slice = { label : 'android',  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
                 		  }else if(v.term=='2'){
                 			slice = { label : 'ios',  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
-                		  }
+                		  }else{
+                    			slice = { label : v.term,  name : v.term, data : [[k,v.count]], actions: true};
+                  		  }
                   }
             	  else{
                     slice = { label : v.term,  name : v.term, data : [[k,v[scope.panel.tstat]]], actions: true};
