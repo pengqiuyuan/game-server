@@ -44,15 +44,7 @@ public class UserIncomeServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
-			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type_income_sum)
-			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .setQuery(builder)
-			        .addSort("date", SortOrder.ASC)
-			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-			        .execute()
-			        .actionGet();		
-			return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchAllIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
@@ -61,15 +53,7 @@ public class UserIncomeServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_count)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_count, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchAllIncomepeoplenum(String index ,String type_income_peoplenum ,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
@@ -78,15 +62,7 @@ public class UserIncomeServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_peoplenum)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_peoplenum, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerZoneIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -96,15 +72,7 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_sum)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerZoneIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -114,15 +82,7 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_count)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_count, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerZoneIncomepeoplenum(String index ,String type_income_peoplenum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -132,15 +92,7 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_peoplenum)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_peoplenum, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchPlatFormIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -150,16 +102,7 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_sum)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchPlatFormIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -169,16 +112,7 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_count)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_count, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchPlatFormIncomepeople(String index ,String type_income_peoplenum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -188,16 +122,7 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_peoplenum)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_peoplenum, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -207,16 +132,7 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_sum)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -226,16 +142,7 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_count)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_count, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerIncomepeoplenum(String index ,String type_income_peoplenum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -245,16 +152,26 @@ public class UserIncomeServer {
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_income_peoplenum)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type_income_peoplenum, dateFrom, dateTo);
+	}
+	
+	public Map<String,String> esSearch(FilteredQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+		try {
+			SearchResponse response = client.prepareSearch(index)
+			        .setTypes(type)
+			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+			        .setQuery(builder)
+			        .addSort("date", SortOrder.ASC)
+			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+			        .execute()
+			        .actionGet();
+			
+			return retained(response,dateFrom,dateTo);
+		} catch (Exception e) {
+			// TODO: handle exception
+			Map<String, String> map = new LinkedHashMap<String, String>();
+			return map;
+		}
 	}
 	
 	public Map<String, String> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{

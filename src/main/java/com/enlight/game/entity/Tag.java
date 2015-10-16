@@ -11,7 +11,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name="game_tag")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)   // 二级缓存
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)   // 二级缓存
 public class Tag {
 	
 	//道具 获得途径

@@ -47,15 +47,7 @@ public class MoneyPayPServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
-			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type_money_arpu_day)
-			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .setQuery(builder)
-			        .addSort("date", SortOrder.ASC)
-			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-			        .execute()
-			        .actionGet();		
-			return retained(response,dateFrom,dateTo);
+		return esSearchD(builder, index, type_money_arpu_day, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchAllArpuMouth(String index ,String type_money_arpu_mouth,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
@@ -64,15 +56,7 @@ public class MoneyPayPServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return mouthre(response,dateFrom,dateTo);
+		return esSearchM(builder, index, type_money_arpu_mouth, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchAllArppuDay(String index ,String type_money_arppu_day,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
@@ -81,15 +65,7 @@ public class MoneyPayPServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_day)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearchD(builder, index, type_money_arppu_day, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchAllArppuMouth(String index ,String type_money_arppu_mouth,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
@@ -98,20 +74,8 @@ public class MoneyPayPServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return mouthre(response,dateFrom,dateTo);
+		return esSearchM(builder, index, type_money_arppu_mouth, dateFrom, dateTo);
 	}
-	
-	
-	
-	
 	
 	public Map<String, String> searchServerZoneArpuDay(String index ,String type_money_arpu_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -120,15 +84,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_day)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearchD(builder, index, type_money_arpu_day, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerZoneArpuMouth(String index ,String type_money_arpu_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -137,16 +93,8 @@ public class MoneyPayPServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom.substring(0,7)).to(dateTo.substring(0,7)),
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
-                		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return mouthre(response,dateFrom,dateTo);
+                		);	
+		return esSearchM(builder, index, type_money_arpu_mouth, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerZoneArppuDay(String index ,String type_money_arppu_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -156,15 +104,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_day)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearchD(builder, index, type_money_arppu_day, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerZoneArppuMouth(String index ,String type_money_arppu_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -174,17 +114,8 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return mouthre(response,dateFrom,dateTo);
+		return esSearchM(builder, index, type_money_arppu_mouth, dateFrom, dateTo);
 	}
-	
 	
 	
 	
@@ -195,16 +126,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_day)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearchD(builder, index, type_money_arpu_day, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchPlatFormArpuMouth(String index ,String type_money_arpu_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -214,16 +136,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return mouthre(response,dateFrom,dateTo);
+		return esSearchM(builder, index, type_money_arpu_mouth, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchPlatFormArppuDay(String index ,String type_money_arppu_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -233,16 +146,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_day)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearchD(builder, index, type_money_arppu_day, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchPlatFormArppuMouth(String index ,String type_money_arppu_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -252,16 +156,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return mouthre(response,dateFrom,dateTo);
+		return esSearchM(builder, index, type_money_arppu_mouth, dateFrom, dateTo);
 	}
 	
 	
@@ -272,16 +167,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_day)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearchD(builder, index, type_money_arpu_day, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerArpuMouth(String index ,String type_money_arpu_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -291,16 +177,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arpu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return mouthre(response,dateFrom,dateTo);
+		return esSearchM(builder, index, type_money_arpu_mouth, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerArppuDay(String index ,String type_money_arppu_day,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -310,16 +187,7 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_day)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearchD(builder, index, type_money_arppu_day, dateFrom, dateTo);
 	}
 	
 	public Map<String, String> searchServerArppuMouth(String index ,String type_money_arppu_mouth,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -329,17 +197,45 @@ public class MoneyPayPServer {
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type_money_arppu_mouth)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.ASC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return mouthre(response,dateFrom,dateTo);
+		return esSearchM(builder, index, type_money_arppu_mouth, dateFrom, dateTo);
 	}
+	
+	public Map<String,String> esSearchD(FilteredQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+		try {
+			SearchResponse response = client.prepareSearch(index)
+			        .setTypes(type)
+			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+			        .setQuery(builder)
+			        .addSort("date", SortOrder.ASC)
+			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+			        .execute()
+			        .actionGet();
+			return retained(response,dateFrom,dateTo);
+		} catch (Exception e) {
+			// TODO: handle exception
+			Map<String, String> map = new LinkedHashMap<String, String>();
+			return map;
+		}
+	}
+	
+	public Map<String,String> esSearchM(FilteredQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+		try {
+			SearchResponse response = client.prepareSearch(index)
+			        .setTypes(type)
+			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+			        .setQuery(builder)
+			        .addSort("date", SortOrder.ASC)
+			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+			        .execute()
+			        .actionGet();
+			return mouthre(response,dateFrom,dateTo);
+		} catch (Exception e) {
+			// TODO: handle exception
+			Map<String, String> map = new LinkedHashMap<String, String>();
+			return map;
+		}
+	}
+	
 	
 	public Map<String, String> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
 			Map<String, String> map = new LinkedHashMap<String, String>();

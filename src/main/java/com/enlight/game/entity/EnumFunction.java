@@ -13,7 +13,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "game_enum")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)   // 二级缓存
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)   // 二级缓存
 public class EnumFunction extends BaseEntry{
 	/**
 	 * 道具日志 数据库对应enum_role字段

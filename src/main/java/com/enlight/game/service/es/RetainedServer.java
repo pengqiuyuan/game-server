@@ -41,15 +41,7 @@ public class RetainedServer {
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
                 		FilterBuilders.termFilter("key", "all"))
                 		);
-			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type)
-			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .setQuery(builder)
-			        .addSort("date", SortOrder.DESC)
-			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-			        .execute()
-			        .actionGet();		
-			return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	
 	public Map<String, Map<String, Object>> searchServerZoneRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -59,15 +51,7 @@ public class RetainedServer {
                 		FilterBuilders.termFilter("key", "serverZone"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.DESC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	public Map<String, Map<String, Object>> searchPlatFormRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -76,15 +60,7 @@ public class RetainedServer {
                 		FilterBuilders.termFilter("key", "platForm"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.DESC)
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	
 	public Map<String, Map<String, Object>> searchServerRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
@@ -94,17 +70,27 @@ public class RetainedServer {
                 		FilterBuilders.termFilter("key", "server"),
                 		FilterBuilders.termFilter("value", value))
                 		);
-		SearchResponse response = client.prepareSearch(index)
-		        .setTypes(type)
-		        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-		        .setQuery(builder)
-		        .addSort("date", SortOrder.DESC)		
-		        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-		        .execute()
-		        .actionGet();
-		
-		return retained(response,dateFrom,dateTo);
+		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
+	
+	public Map<String, Map<String, Object>> esSearch(FilteredQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+		try {
+			SearchResponse response = client.prepareSearch(index)
+			        .setTypes(type)
+			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+			        .setQuery(builder)
+			        .addSort("date", SortOrder.DESC)		
+			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+			        .execute()
+			        .actionGet();
+			return retained(response,dateFrom,dateTo);
+		} catch (Exception e) {
+			// TODO: handle exception
+			Map<String, Map<String, Object>> map = new HashMap<String, Map<String, Object>>();
+			return map;
+		}
+	}
+	
 	
 	public Map<String, Map<String, Object>> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
 		Map<String, Map<String, Object>> m = new HashMap<String, Map<String, Object>>();

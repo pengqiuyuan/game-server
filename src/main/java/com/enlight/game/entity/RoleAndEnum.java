@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * 权限表、功能表的中间表 
  * @author dell
@@ -12,6 +15,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "game_role_and_enum")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)   // 二级缓存
 public class RoleAndEnum extends BaseEntry{
 	
 	public final static String STATUS_VALIDE="1";

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "game_stores")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)   // 二级缓存
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)   // 二级缓存
 public class Stores {
 	
 	/**
