@@ -169,10 +169,7 @@
             "玩家登陆ip",
             "登录设备系统",
             "日志分类关键字",
-            "人物等级",
-            "geoip.country_name",
-            "geoip.city_name",
-            "geoip.real_region_name"
+            "人物等级"
           ],
           "highlight": [],
           "sortable": true,

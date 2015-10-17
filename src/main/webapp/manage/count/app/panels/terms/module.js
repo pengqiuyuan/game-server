@@ -283,7 +283,7 @@ function (angular, app, _, $, kbn) {
 			  async : false,
 			  success: function(dat){
 			  	 map = eval(dat);
-			  },error:function(xhr){alert('错误了\n\n')}//回调看看是否有出错
+			  },error:function(xhr){}//回调看看是否有出错
 		  });
           _.each(scope.results.facets.terms.terms, function(v) {
             var slice;

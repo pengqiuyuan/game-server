@@ -168,9 +168,6 @@
             "人物等级",
             "支付金额",
             "支付货币",
-            "geoip.city_name",
-            "geoip.country_name",
-            "geoip.real_region_name",
             "增加的充值币数量"
           ],
           "highlight": [],

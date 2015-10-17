@@ -96,10 +96,10 @@
             "1w",
             "1y"
           ],
-          "lines": true,
+          "lines": false,
           "fill": 0,
           "linewidth": 3,
-          "points": false,
+          "points": true,
           "pointradius": 5,
           "bars": false,
           "stack": false,
