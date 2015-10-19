@@ -1,71 +1,35 @@
 package com.enlight.game.es;
 
-import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.admin.indices.exists.types.TypesExistsResponse;
-import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
-import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.Requests;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeFilterBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.filter.Filter;
-import org.elasticsearch.search.aggregations.bucket.filters.Filters;
-import org.elasticsearch.search.aggregations.bucket.global.Global;
-import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogram;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.metrics.MetricsAggregationBuilder;
-import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
-import org.elasticsearch.search.aggregations.metrics.sum.Sum;
-import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
-
-import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
-import static org.elasticsearch.search.aggregations.AggregationBuilders.cardinality;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
-import com.enlight.game.entity.analysis.UserAdd;
-import com.enlight.game.entity.analysis.UserRetained;
-import com.enlight.game.service.platForm.PlatFormService;
-import com.enlight.game.service.server.ServerService;
-import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.util.EsUtil;
-import com.enlight.game.util.JsonBinder;
 
 /**
  * 测试Elasticsearch 连接
@@ -81,7 +45,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 	//项目名称
 	private static final String game = "FB";
 	
-	private static final String index = "logstash-fb-*";
+	private static final String index = "logstash-fb-user*";
 	
 	private static final String type = "fb_user.log";
 	
@@ -102,6 +66,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 	@Autowired
 	private StoreService storeService;
 
+	@Test
 	public void esAll() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		//新增用户
@@ -110,6 +75,13 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        )).execute().actionGet();
+		SearchResponse srs = client.prepareSearch(index).setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+				FilterBuilders.andFilter(
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+		        		FilterBuilders.termFilter("日志分类关键字", "create"))
+		        )).execute().actionGet();
+		System.out.println("111111111  "  + sr);
+		System.out.println("222222222  "  + srs);
 		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();

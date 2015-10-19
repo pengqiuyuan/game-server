@@ -62,7 +62,6 @@ public class FbUserScheduled {
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        )).execute().actionGet();
-		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)

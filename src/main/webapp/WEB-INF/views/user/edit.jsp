@@ -195,7 +195,10 @@ $(function(){
 		  		  						 jQuery.each(parsedJson.roleFunctions, function(index, itemData) {
 		  		  							jQuery.each(itemData.roleAndEnums, function(i, its) {
 		  		  						 		th.append("<input type='checkbox' onclick='return false' name='functions' value='"+its.enumRole+"' checked='checked' class='box' /><span>"+its.enumRole+"、"+its.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
-		  		  						 	}); 
+		  									 	if((i+1)%5==0){
+		  											th.append("<br/><br/>");
+		  										}
+		  		  							}); 
 		  		  						 }); 
 		 		  		  	 		     window.location.href="<%=request.getContextPath()%>/manage/user/edit?id="+userId;
 		  		  					}
@@ -231,6 +234,9 @@ $(function(){
 					jQuery.each(parsedJson.roleFunctions, function(index, itemData) {
 	  					jQuery.each(itemData.roleAndEnums, function(i, its) {
 	  						th.append("<input type='checkbox' onclick='return false' name='functions' value='"+its.enumRole+"' checked='checked' class='box' /><span>"+its.enumRole+"、"+its.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
+							if((i+1)%5==0){
+								th.append("<br/><br/>");
+							}
 	  					}); 
 	  				}); 
 				}
