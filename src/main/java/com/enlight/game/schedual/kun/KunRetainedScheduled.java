@@ -15,6 +15,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,8 @@ public class KunRetainedScheduled {
 	
 	@Autowired
 	public Client client;
+	
+	public static final Logger logger = LoggerFactory.getLogger(KunRetainedScheduled.class);
 	
 	//项目名称
 	private static final String game = "KUN";
@@ -112,7 +116,7 @@ public class KunRetainedScheduled {
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false))
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(num)
 			    ).execute().actionGet();
-		System.out.println("----------------esAll---------------");
+		logger.debug("----------------esAll---------------");
 		
 	    UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
@@ -215,7 +219,7 @@ public class KunRetainedScheduled {
 			    						)
 			    				)
 			    ).execute().actionGet();
-		System.out.println("-------------esServerZone-------------");
+		logger.debug("-------------esServerZone-------------");
 
     	UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
@@ -323,7 +327,7 @@ public class KunRetainedScheduled {
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
 			    		.subAggregation(AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
 			    ).execute().actionGet();
-		System.out.println("------------esPlatForm--------------");
+		logger.debug("------------esPlatForm--------------");
 
     	UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
@@ -428,7 +432,7 @@ public class KunRetainedScheduled {
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
 			    		.subAggregation(AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
 			    ).execute().actionGet();
-		System.out.println("-----------esServer---------------");
+		logger.debug("-----------esServer---------------");
 
 		UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
@@ -518,12 +522,36 @@ public class KunRetainedScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		System.out.println("----------------用户留存了 retained 调度开始");
-		esAll();
-		esServerZone();
-		esPlatForm();
-		esServer();
-		System.out.println("----------------用户留存了 retained 调度结束");
+		logger.debug("----------------kun 用户留存了 retained 调度开始");
+		try {
+			esAll();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun all 用户留存 计算失败");
+		}
+		
+		try {
+			esServerZone();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun serverZone 用户留存 计算失败");
+		}
+		
+		try {
+			esPlatForm();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun platForm 用户留存 计算失败");
+		}
+		
+		try {
+			esServer();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun server 用户留存 计算失败");
+		}
+
+		logger.debug("----------------kun 用户留存了 retained 调度结束");
 	}
 	
 

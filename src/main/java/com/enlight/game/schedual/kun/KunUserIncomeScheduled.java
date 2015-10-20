@@ -15,6 +15,8 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
 import org.elasticsearch.search.aggregations.metrics.sum.Sum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,8 @@ public class KunUserIncomeScheduled {
 	
 	@Autowired
 	private Client client;
+	
+	private static final Logger logger = LoggerFactory.getLogger(KunUserIncomeScheduled.class);
 	
 	//项目名称
 	private static final String game = "KUN";
@@ -428,7 +432,6 @@ public class KunUserIncomeScheduled {
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
 			    ).execute().actionGet();
-		System.out.println(peoplenum);
 		Terms genders = peoplenum.getAggregations().get("server");	
 		for (Terms.Bucket e : genders.getBuckets()) {
 			Cardinality agg = e.getAggregations().get("agg");
@@ -453,19 +456,22 @@ public class KunUserIncomeScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		System.out.println("----------------收入金额 充值次数 充值人数 income 调度开始");
-		test1();
-		test1serverZone();
-		test1platForm();
-		test1server();
-		test2();
-		test2serverZone();
-		test2platForm();
-		test2server();
-		test3();
-		test3serverZone();
-		test3platForm();
-		test3server();
-		System.out.println("----------------收入金额 充值次数 充值人数 income 调度结束");
+		logger.debug("----------------kun 收入金额 充值次数 充值人数 income 调度开始");
+		try {test1();} catch (Exception e) {logger.debug("kun all 收入金额 计算失败");}
+		try {test1serverZone();} catch (Exception e) {logger.debug("kun serverZone 收入金额 计算失败");}
+		try {test1platForm();} catch (Exception e) {logger.debug("kun platForm 收入金额 计算失败");}
+		try {test1server();} catch (Exception e) {logger.debug("kun server 收入金额 计算失败");}
+		
+		try {test2();} catch (Exception e) {logger.debug("kun all 充值次数 计算失败");}
+		try {test2serverZone();} catch (Exception e) {logger.debug("kun serverZone 充值次数 计算失败");}
+		try {test2platForm();} catch (Exception e) {logger.debug("kun platForm 充值次数 计算失败");}
+		try {test2server();} catch (Exception e) {logger.debug("kun server 充值次数 计算失败");}
+		
+		try {test3();} catch (Exception e) {logger.debug("kun all 充值人数 计算失败");}
+		try {test3serverZone();} catch (Exception e) {logger.debug("kun serverZone 充值人数 计算失败");}
+		try {test3platForm();} catch (Exception e) {logger.debug("kun platForm 充值人数 计算失败");}
+		try {test3server();} catch (Exception e) {logger.debug("kun server 充值人数 计算失败");}
+
+		logger.debug("----------------kun 收入金额 充值次数 充值人数 income 调度结束");
 	}
 }

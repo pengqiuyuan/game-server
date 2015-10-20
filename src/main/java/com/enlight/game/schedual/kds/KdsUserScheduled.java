@@ -17,6 +17,8 @@ import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ public class KdsUserScheduled {
 	
 	@Autowired
 	public Client client;
+	
+	private static final Logger logger = LoggerFactory.getLogger(KdsUserScheduled.class);
 	
 	//项目名称
 	private static final String game = "KDS";
@@ -73,66 +77,9 @@ public class KdsUserScheduled {
 	                    .endObject()
 		                  )
 		        );
-		System.out.println("昨天新增用户all："+sr.getHits().totalHits());
+		logger.debug("昨天新增用户all："+sr.getHits().totalHits());
 		//累计用户
-		/**
-		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
-		boolean ty = false;
-		if(responseindex.isExists()){
-			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index).setTypes(bulk_type_total).execute().actionGet(); 
-			if(responsetype.isExists()){
-				ty = true;
-			}
-		}
-		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
-			System.out.println("存在");
-			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(
-							FilterBuilders.termFilter("key", "all"),
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()))
-			        )).execute().actionGet();
-			long s  = 0L;
-			for (SearchHit searchHit : srTotal.getHits()) {
-				Map<String, Object> source = searchHit.getSource();
-				s = Long.valueOf(source.get("userTotal").toString());
-			}
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", s+sr.getHits().totalHits())
-		                        .field("key", "all")
-		                        .field("ts_total",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println(s+sr.getHits().totalHits());
-			System.out.println("历史累计用户all："+s+sr.getHits().totalHits()  +",前天累计用户："+s+",昨天新增用户："+ sr.getHits().totalHits());
-		}else{
-			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
-					QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-									FilterBuilders.termFilter("日志分类关键字", "create")
-									))
-							).execute().actionGet();
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
-		                        .field("gameId", game)
-		                        .field("userTotal", srTotal.getHits().totalHits())
-		                        .field("key", "all")
-		                        .field("ts_total",ts.toString())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			System.out.println("历史累计用户all："+srTotal.getHits().totalHits());
-		}
-		**/
+
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
@@ -152,7 +99,7 @@ public class KdsUserScheduled {
 	                    .endObject()
 		                  )
 		        );
-		System.out.println("历史累计用户all："+srTotal.getHits().totalHits());
+		logger.debug("历史累计用户all："+srTotal.getHits().totalHits());
 		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
 		}
@@ -190,60 +137,11 @@ public class KdsUserScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("昨天新增用户serverZone："+e.getDocCount()  +" " + e.getKey());
+			logger.debug("昨天新增用户serverZone："+e.getDocCount()  +" " + e.getKey());
 		}
 		
 		//运营大区用户累计
-		/**
-		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
-		boolean ty = false;
-		if(responseindex.isExists()){
-			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index).setTypes(bulk_type_total).execute().actionGet(); 
-			if(responsetype.isExists()){
-				ty = true;
-			}
-		}
-		Terms gendersTotal = null;
-		Map<String, Long> map = new HashMap<String, Long>();
-		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
-			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).
-					setQuery(
-							QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-									FilterBuilders.andFilter(
-									        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
-							        		FilterBuilders.termFilter("key", "serverZone"))
-					        ))
-					.execute().actionGet();
-			
-			for (SearchHit searchHit : srTotal.getHits()) {
-				Map<String, Object> source = searchHit.getSource();
-				long s = Long.valueOf(source.get("userTotal").toString());
-				map.put(source.get("value").toString(), s);
-			}
-			
-			for (Terms.Bucket e : genders.getBuckets()) {
-				if(map.containsKey(e.getKey())){
-					map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
-				}else{
-					map.put(e.getKey(), e.getDocCount());
-				}
-			}
-		}else{
-			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
-					.setQuery(
-							QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-									FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
-					        ))
-					.addAggregation(
-				    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
-				    )
-					.setSize(szsize).execute().actionGet();
-			gendersTotal = srTotal.getAggregations().get("serverZone");
-			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-				map.put(entry.getKey(), entry.getDocCount());
-			}
-		}
-		**/
+		
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
@@ -274,7 +172,7 @@ public class KdsUserScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
+			logger.debug("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
 		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
@@ -311,56 +209,10 @@ public class KdsUserScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("昨天新增用户platForm："+e.getDocCount()  +" " + e.getKey());
+			logger.debug("昨天新增用户platForm："+e.getDocCount()  +" " + e.getKey());
 		}
 
 		//渠道用户累计
-		/**
-		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
-		boolean ty = false;
-		if(responseindex.isExists()){
-			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index).setTypes(bulk_type_total).execute().actionGet(); 
-			if(responsetype.isExists()){
-				ty = true;
-			}
-		}
-		Terms gendersTotal = null;
-		Map<String, Long> map = new HashMap<String, Long>();
-		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
-			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
-			        		FilterBuilders.termFilter("key", "platForm"))
-			        ))
-					.addAggregation(
-				    		AggregationBuilders.terms("platForm").field("value").size(pfsize)
-				    )
-					.setSize(pfsize).execute().actionGet();
-			for (SearchHit searchHit : srTotal.getHits()) {
-				Map<String, Object> source = searchHit.getSource();
-				long s = Long.valueOf(source.get("userTotal").toString());
-				map.put(source.get("value").toString(), s);
-			}
-			for (Terms.Bucket e : genders.getBuckets()) {
-				if(map.containsKey(e.getKey())){
-					map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
-				}else{
-					map.put(e.getKey(), e.getDocCount());
-				}
-			}
-		}else{
-			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
-			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
-					.addAggregation(
-				    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
-				    )
-					.setSize(pfsize).execute().actionGet();
-			gendersTotal = srTotal.getAggregations().get("platForm");
-			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-				map.put(entry.getKey(), entry.getDocCount());
-			}
-		}
-		**/
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
 		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
@@ -388,7 +240,7 @@ public class KdsUserScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("历史累计用户platForm："+entry.getValue().toString()  +"  " +entry.getKey());
+			logger.debug("历史累计用户platForm："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
 		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
@@ -424,56 +276,11 @@ public class KdsUserScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("昨天新增用户server："+e.getDocCount()  +" " + e.getKey());
+			logger.debug("昨天新增用户server："+e.getDocCount()  +" " + e.getKey());
 		}
 		
 		//服务器用户累计
-		/**
-		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index).execute().actionGet(); 
-		boolean ty = false;
-		if(responseindex.isExists()){
-			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index).setTypes(bulk_type_total).execute().actionGet(); 
-			if(responsetype.isExists()){
-				ty = true;
-			}
-		}
-		Terms gendersTotal = null;
-		Map<String, Long> map = new HashMap<String, Long>();
-		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
-			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
-			        		FilterBuilders.termFilter("key", "server"))
-			        ))
-					.addAggregation(
-				    		AggregationBuilders.terms("server").field("value").size(srsize)
-				    )
-					.setSize(srsize).execute().actionGet();
-			for (SearchHit searchHit : srTotal.getHits()) {
-				Map<String, Object> source = searchHit.getSource();
-				long s = Long.valueOf(source.get("userTotal").toString());
-				map.put(source.get("value").toString(), s);
-			}
-			for (Terms.Bucket e : genders.getBuckets()) {
-				if(map.containsKey(e.getKey())){
-					map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
-				}else{
-					map.put(e.getKey(), e.getDocCount());
-				}
-			}
-		}else{
-			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
-					.addAggregation(
-				    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
-				    )
-					.setSize(srsize).execute().actionGet();
-			gendersTotal = srTotal.getAggregations().get("server");
-			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-				map.put(entry.getKey(), entry.getDocCount());
-			}
-		}
-		**/
+
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -501,7 +308,7 @@ public class KdsUserScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("历史累计用户server："+entry.getValue().toString()  +"  " +entry.getKey());
+			logger.debug("历史累计用户server："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
 		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
@@ -510,12 +317,36 @@ public class KdsUserScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		System.out.println("----------------用户 useradd  usertotal 调度开始");
-		esAll();
-		esServerZone();
-		esPlatForm();
-		esServer();
-		System.out.println("----------------用户 useradd  usertotal 调度结束");
+		logger.debug("----------------kds 用户 useradd  usertotal 调度开始");
+		try {
+			esAll();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kds all 用户增加、累计 计算失败");
+		}
+		
+		try {
+			esServerZone();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kds serverZone 用户增加、累计 计算失败");
+		}
+		
+		try {
+			esPlatForm();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kds platForm 用户增加、累计 计算失败");
+		}
+		
+		try {
+			esServer();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kds server 用户增加、累计 计算失败");
+		}
+		
+		logger.debug("----------------kds 用户 useradd  usertotal 调度结束");
 	}
 	
 

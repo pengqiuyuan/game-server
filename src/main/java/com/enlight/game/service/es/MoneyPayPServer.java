@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.admin.indices.exists.types.TypesExistsResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
@@ -202,15 +203,21 @@ public class MoneyPayPServer {
 	
 	public Map<String,String> esSearchD(FilteredQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		try {
-			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type)
-			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .setQuery(builder)
-			        .addSort("date", SortOrder.ASC)
-			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-			        .execute()
-			        .actionGet();
-			return retained(response,dateFrom,dateTo);
+			TypesExistsResponse typeEx = client.admin().indices() .prepareTypesExists(index).setTypes(type).execute().actionGet(); 
+			if( typeEx.isExists() == true){
+				SearchResponse response = client.prepareSearch(index)
+				        .setTypes(type)
+				        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+				        .setQuery(builder)
+				        .addSort("date", SortOrder.ASC)
+				        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+				        .execute()
+				        .actionGet();
+				return retained(response,dateFrom,dateTo);
+			}else{
+				Map<String, String> map = new LinkedHashMap<String, String>();
+				return map;
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			Map<String, String> map = new LinkedHashMap<String, String>();
@@ -220,15 +227,21 @@ public class MoneyPayPServer {
 	
 	public Map<String,String> esSearchM(FilteredQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		try {
-			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type)
-			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .setQuery(builder)
-			        .addSort("date", SortOrder.ASC)
-			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-			        .execute()
-			        .actionGet();
-			return mouthre(response,dateFrom,dateTo);
+			TypesExistsResponse typeEx = client.admin().indices() .prepareTypesExists(index).setTypes(type).execute().actionGet(); 
+			if( typeEx.isExists() == true){
+				SearchResponse response = client.prepareSearch(index)
+				        .setTypes(type)
+				        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+				        .setQuery(builder)
+				        .addSort("date", SortOrder.ASC)
+				        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+				        .execute()
+				        .actionGet();
+				return mouthre(response,dateFrom,dateTo);
+			}else{
+				Map<String, String> map = new LinkedHashMap<String, String>();
+				return map;
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			Map<String, String> map = new LinkedHashMap<String, String>();

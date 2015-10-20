@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.admin.indices.exists.types.TypesExistsResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
@@ -384,15 +385,21 @@ public class UserPayServer {
 	
 	public Map<String,String> esSearch(FilteredQueryBuilder builder,String index,String type,String dateFrom,String dateTo,String k) throws IOException, ElasticsearchException, ParseException{
 		try {
-			SearchResponse response = client.prepareSearch(index)
-			        .setTypes(type)
-			        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-			        .setQuery(builder)
-			        .addSort("date", SortOrder.ASC)
-			        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
-			        .execute()
-			        .actionGet();
-			return retained(response,dateFrom,dateTo,k);
+			TypesExistsResponse typeEx = client.admin().indices() .prepareTypesExists(index).setTypes(type).execute().actionGet(); 
+			if( typeEx.isExists() == true){
+				SearchResponse response = client.prepareSearch(index)
+				        .setTypes(type)
+				        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+				        .setQuery(builder)
+				        .addSort("date", SortOrder.ASC)
+				        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+				        .execute()
+				        .actionGet();
+				return retained(response,dateFrom,dateTo,k);
+			}else{
+				Map<String, String> map = new LinkedHashMap<String, String>();
+				return map;
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			Map<String, String> map = new LinkedHashMap<String, String>();
@@ -410,6 +417,8 @@ public class UserPayServer {
 					map.put(source.get("date").toString(), source.get("allpayuser").toString());
 				}else if(k.equals(key_day) || k.equals(key_week) || k.equals(key_mouth) ){
 					map.put(source.get("date").toString(), source.get("payofrate").toString());
+				}else if(k.equals(key_day_num) || k.equals(key_week_num) || k.equals(key_mouth_num) ){
+					map.put(source.get("date").toString(), source.get("paynum").toString());
 				}
 			}
 			Map<String, String> m = new LinkedHashMap<String, String>();

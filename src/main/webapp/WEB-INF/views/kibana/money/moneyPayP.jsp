@@ -465,7 +465,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '¥{value}'
                         },
                         splitArea : {show : true}
                     }
@@ -513,7 +513,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '¥{value}'
                         },
                         splitArea : {show : true}
                     }
@@ -561,7 +561,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '¥{value}'
                         },
                         splitArea : {show : true}
                     }
@@ -609,7 +609,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '¥{value}'
                         },
                         splitArea : {show : true}
                     }

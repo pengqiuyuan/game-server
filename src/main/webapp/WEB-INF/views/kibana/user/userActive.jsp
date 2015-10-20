@@ -442,7 +442,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '{value}人'
                         },
                         splitArea : {show : true}
                     }
@@ -490,7 +490,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '{value}人'
                         },
                         splitArea : {show : true}
                     }
@@ -538,7 +538,7 @@
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value}'
+                            formatter: '{value}人'
                         },
                         splitArea : {show : true}
                     }

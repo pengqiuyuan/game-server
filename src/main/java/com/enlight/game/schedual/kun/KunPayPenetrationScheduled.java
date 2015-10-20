@@ -18,9 +18,12 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
 import org.elasticsearch.search.aggregations.metrics.sum.Sum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.enlight.game.util.EsUtil;
 
 /**
@@ -33,6 +36,8 @@ public class KunPayPenetrationScheduled {
 	
 	@Autowired
 	private Client client;
+	
+	private static final Logger logger = LoggerFactory.getLogger(KunPayPenetrationScheduled.class);
 	
 	//项目名称
 	private static final String game = "KUN";
@@ -487,7 +492,7 @@ public class KunPayPenetrationScheduled {
 			t = pays.getValue()/ac.getValue();
 		}
 		
-		System.out.println(df.format(s) + "        "  + df.format(t));
+		logger.debug(df.format(s) + "        "  + df.format(t));
 		
 		//arpu 月
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_arpumouth,esUtilTest.lastmouth()+"_all")
@@ -817,16 +822,64 @@ public class KunPayPenetrationScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		System.out.println("----------------ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) 开始");
-		testdayall();
-		testdayserverzone();
-		testdayplatform();
-		testdayserver();
-		testmouthall();
-		testmouthserverzone();
-		testmouthplatform();
-		testmouthserver();
-		System.out.println("----------------ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) 调度结束");
+		logger.debug("----------------kun ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) 开始");
+		try {
+			testdayall();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun all ARPU(日) ARPPU(日) 计算失败");
+		}
+		
+		try {
+			testdayserverzone();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun serverZone ARPU(日) ARPPU(日) 计算失败");
+		}
+		
+		try {
+			testdayplatform();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun platForm ARPU(日) ARPPU(日) 计算失败");
+		}
+		
+		try {
+			testdayserver();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun server ARPU(日) ARPPU(日) 计算失败");
+		}
+		
+		try {
+			testmouthall();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun all ARPU(月)  ARPPU(月) 计算失败");
+		}
+		
+		try {
+			testmouthserverzone();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun serverZone ARPU(月)  ARPPU(月) 计算失败");
+		}
+		
+		try {
+			testmouthplatform();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun platForm ARPU(月)  ARPPU(月) 计算失败");
+		}
+		
+		try {
+			testmouthserver();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("kun server ARPU(月)  ARPPU(月) 计算失败");
+		}
+
+		logger.debug("----------------kun ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) 调度结束");
 	}
 	
 }

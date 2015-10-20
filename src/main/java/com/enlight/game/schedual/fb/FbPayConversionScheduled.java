@@ -17,6 +17,8 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ public class FbPayConversionScheduled {
 	
 	@Autowired
 	public Client client;
+	
+	private static final Logger logger = LoggerFactory.getLogger(FbPayConversionScheduled.class);
 	
 	//项目名称
 	private static final String fb_game = "FB";
@@ -57,7 +61,6 @@ public class FbPayConversionScheduled {
 
 	public void esAll() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'"); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -79,44 +82,9 @@ public class FbPayConversionScheduled {
 	                    .endObject()
 		                  )
 		        );
-		System.out.println("新增付费用户："+newpayuser);
+		logger.debug("新增付费用户："+newpayuser);
 		//累计付费用户
-		/**
-		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index_money).execute().actionGet(); 
-		boolean ty = false;
-		if(responseindex.isExists()){
-			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index_money).setTypes(bulk_type_money_all).execute().actionGet(); 
-			if(responsetype.isExists()){
-				ty = true;
-			}
-		}
-		long allpayuser  = 0L;
-		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
-			System.out.println("存在");
-			SearchResponse srTotal = client.prepareSearch(bulk_index_money).setTypes(bulk_type_money_all).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(
-							FilterBuilders.termFilter("key", "all"),
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()))
-			        )).execute().actionGet();
-			for (SearchHit searchHit : srTotal.getHits()) {
-				Map<String, Object> source = searchHit.getSource();
-				allpayuser = Long.valueOf(source.get("allpayuser").toString());
-			}
-			allpayuser = allpayuser+newpayuser;
-			System.out.println("历史累计付费用户all："+allpayuser  +",昨天新增付费用户："+ newpayuser);
-		}else{
-			SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-					QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-							        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-					        		FilterBuilders.termFilter("是否首次充值", "1")
-									))
-							).execute().actionGet();
-			allpayuser  = srTotal.getHits().totalHits();
-			System.out.println("历史累计付费用户all："+allpayuser);
-		}
-		**/
+	
 		long allpayuser  = 0L;
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -127,7 +95,7 @@ public class FbPayConversionScheduled {
 								))
 						).execute().actionGet();
 		allpayuser  = srTotal.getHits().totalHits();
-		System.out.println("历史累计付费用户all："+allpayuser);
+		logger.debug("历史累计付费用户all："+allpayuser);
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
@@ -260,7 +228,6 @@ public class FbPayConversionScheduled {
 	
 	public void esServerZone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'");
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -287,59 +254,11 @@ public class FbPayConversionScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("昨天新增付费用户serverZone："+e.getDocCount()  +" " + e.getKey());
+			logger.debug("昨天新增付费用户serverZone："+e.getDocCount()  +" " + e.getKey());
 			//bulkRequest.execute().actionGet();
 		}
 		//累计付费用户
-		/**
-		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index_money).execute().actionGet(); 
-		boolean ty = false;
-		if(responseindex.isExists()){
-			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index_money).setTypes(bulk_type_money_all).execute().actionGet(); 
-			if(responsetype.isExists()){
-				ty = true;
-			}
-		}
 		
-		Map<String, Long> map = new HashMap<String, Long>();
-		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
-			System.out.println("存在");
-			SearchResponse srTotal = client.prepareSearch(bulk_index_money).setTypes(bulk_type_money_all).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(
-							FilterBuilders.termFilter("key", "serverZone"),
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()))
-			        )).execute().actionGet();
-			for (SearchHit searchHit : srTotal.getHits()) {
-				Map<String, Object> source = searchHit.getSource();
-				long s = Long.valueOf(source.get("allpayuser").toString());
-				map.put(source.get("value").toString(), s);
-			}
-			for (Terms.Bucket e : genders.getBuckets()) {
-				if(map.containsKey(e.getKey())){
-					map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
-				}else{
-					map.put(e.getKey(), e.getDocCount());
-				}
-			}
-		}else{
-			SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-					QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-							        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-					        		FilterBuilders.termFilter("是否首次充值", "1")
-									))
-							)
-							.addAggregation(
-						    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
-						    )
-							.setSize(10).execute().actionGet();
-			Terms gendersTotal = srTotal.getAggregations().get("serverZone");
-			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-				map.put(entry.getKey(), entry.getDocCount());
-			}
-		}
-		**/
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -371,7 +290,7 @@ public class FbPayConversionScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
+			logger.debug("历史累计用户serverZone："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
 		
 		//首日付费率、首日付费数
@@ -584,57 +503,10 @@ public class FbPayConversionScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("昨天新增付费用户platForm："+e.getDocCount()  +" " + e.getKey());
+			logger.debug("昨天新增付费用户platForm："+e.getDocCount()  +" " + e.getKey());
 		}
 		//累计付费用户
-		/**
-		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index_money).execute().actionGet(); 
-		boolean ty = false;
-		if(responseindex.isExists()){
-			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index_money).setTypes(bulk_type_money_all).execute().actionGet(); 
-			if(responsetype.isExists()){
-				ty = true;
-			}
-		}
-		Map<String, Long> map = new HashMap<String, Long>();
-		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
-			System.out.println("存在");
-			SearchResponse srTotal = client.prepareSearch(bulk_index_money).setTypes(bulk_type_money_all).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(
-							FilterBuilders.termFilter("key", "platForm"),
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()))
-			        )).execute().actionGet();
-			for (SearchHit searchHit : srTotal.getHits()) {
-				Map<String, Object> source = searchHit.getSource();
-				long s = Long.valueOf(source.get("allpayuser").toString());
-				map.put(source.get("value").toString(), s);
-			}
-			for (Terms.Bucket e : genders.getBuckets()) {
-				if(map.containsKey(e.getKey())){
-					map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
-				}else{
-					map.put(e.getKey(), e.getDocCount());
-				}
-			}
-		}else{
-			SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-					QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-							        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-					        		FilterBuilders.termFilter("是否首次充值", "1")
-									))
-							)
-							.addAggregation(
-									AggregationBuilders.terms("platForm").field("渠道ID").size(300)
-						    )
-							.setSize(300).execute().actionGet();
-			Terms gendersTotal = srTotal.getAggregations().get("platForm");
-			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-				map.put(entry.getKey(), entry.getDocCount());
-			}
-		}
-		**/
+		
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -665,7 +537,7 @@ public class FbPayConversionScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("历史累计用户platForm："+entry.getValue().toString()  +"  " +entry.getKey());
+			logger.debug("历史累计用户platForm："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
 		
 		//首日付费率、首日付费数
@@ -879,57 +751,10 @@ public class FbPayConversionScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("昨天新增付费用户server："+e.getDocCount()  +" " + e.getKey());
+			logger.debug("昨天新增付费用户server："+e.getDocCount()  +" " + e.getKey());
 		}
 		//累计付费用户
-		/**
-		IndicesExistsResponse responseindex = client.admin().indices().prepareExists(bulk_index_money).execute().actionGet(); 
-		boolean ty = false;
-		if(responseindex.isExists()){
-			TypesExistsResponse responsetype = client.admin().indices() .prepareTypesExists(bulk_index_money).setTypes(bulk_type_money_all).execute().actionGet(); 
-			if(responsetype.isExists()){
-				ty = true;
-			}
-		}
-		Map<String, Long> map = new HashMap<String, Long>();
-		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
-			System.out.println("存在");
-			SearchResponse srTotal = client.prepareSearch(bulk_index_money).setTypes(bulk_type_money_all).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(
-							FilterBuilders.termFilter("key", "server"),
-					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoFrom()))
-			        )).execute().actionGet();
-			for (SearchHit searchHit : srTotal.getHits()) {
-				Map<String, Object> source = searchHit.getSource();
-				long s = Long.valueOf(source.get("allpayuser").toString());
-				map.put(source.get("value").toString(), s);
-			}
-			for (Terms.Bucket e : genders.getBuckets()) {
-				if(map.containsKey(e.getKey())){
-					map.put(e.getKey(), map.get(e.getKey())+e.getDocCount());
-				}else{
-					map.put(e.getKey(), e.getDocCount());
-				}
-			}
-		}else{
-			SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-					QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-							        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-					        		FilterBuilders.termFilter("是否首次充值", "1")
-									))
-							)
-							.addAggregation(
-									AggregationBuilders.terms("server").field("服务器ID").size(300)
-						    )
-							.setSize(300).execute().actionGet();
-			Terms gendersTotal = srTotal.getAggregations().get("server");
-			for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-				map.put(entry.getKey(), entry.getDocCount());
-			}
-		}
-		**/
+		
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -960,7 +785,7 @@ public class FbPayConversionScheduled {
 		                    .endObject()
 			                  )
 			        );
-			System.out.println("历史累计用户server："+entry.getValue().toString()  +"  " +entry.getKey());
+			logger.debug("历史累计用户server："+entry.getValue().toString()  +"  " +entry.getKey());
 		}
 		
 		//首日付费率、首日付费数
@@ -1146,12 +971,36 @@ public class FbPayConversionScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		System.out.println("----------------用户 付费率 开始");
-		esAll();
-		esServerZone();
-		esPlatForm();
-		esServer();
-		System.out.println("----------------用户 付费率 调度结束");
+		logger.debug("----------------fb用户 付费率 开始");
+		try {
+			esAll();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("fb all付费率计算失败");
+		}
+
+		try {
+			esServerZone();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("fb serverZone付费率计算失败");
+		}
+		
+		try {
+			esPlatForm();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("fb platForm付费率计算失败");
+		}
+		
+		try {
+			esServer();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("fb server付费率计算失败");
+		}
+
+		logger.debug("----------------fb用户 付费率 调度结束");
 	}
 	
 

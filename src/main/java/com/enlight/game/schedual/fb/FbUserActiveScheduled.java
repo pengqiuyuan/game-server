@@ -13,6 +13,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ public class FbUserActiveScheduled {
 	
 	@Autowired
 	public Client client;
+	
+	private static final Logger logger = LoggerFactory.getLogger(FbUserActiveScheduled.class);
 	
 	//项目名称
 	private static final String game = "FB";
@@ -56,7 +60,7 @@ public class FbUserActiveScheduled {
 	//all
 	public void esAll() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		System.out.println("###############  all 活跃玩家");
+		logger.debug("###############  all 活跃玩家");
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
@@ -139,7 +143,7 @@ public class FbUserActiveScheduled {
 	//serverzone
 	public void esServerZone() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		System.out.println("###############  serverzone 活跃玩家");
+		logger.debug("###############  serverzone 活跃玩家");
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
@@ -238,7 +242,7 @@ public class FbUserActiveScheduled {
 	//platform
 	public void esPlatForm() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		System.out.println("###############  platform 活跃玩家");
+		logger.debug("###############  platform 活跃玩家");
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
@@ -337,7 +341,7 @@ public class FbUserActiveScheduled {
 	//server
 	public void esServer() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		System.out.println("###############  server 活跃玩家");
+		logger.debug("###############  server 活跃玩家");
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
@@ -436,11 +440,34 @@ public class FbUserActiveScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		System.out.println("----------------活跃用户 active 调度开始");
-		esAll();
-		esServerZone();
-		esPlatForm();
-		esServer();
-		System.out.println("----------------活跃用户 active 调度结束");
+		logger.debug("----------------fb 活跃用户 active 调度开始");
+		try {
+			esAll();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("fb all 活跃用户 计算失败");
+		}
+		
+		try {
+			esServerZone();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("fb serverZone 活跃用户 计算失败");
+		}
+		
+		try {
+			esPlatForm();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("fb platForm 活跃用户 计算失败");
+		}
+		
+		try {
+			esServer();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug("fb server 活跃用户 计算失败");
+		}
+		logger.debug("----------------fb 活跃用户 active 调度结束");
 	}
 }
