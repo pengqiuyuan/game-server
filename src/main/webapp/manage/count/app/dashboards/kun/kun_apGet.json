@@ -7,7 +7,7 @@
       "list": {
         "0": {
           "query": "ap_get",
-          "alias": "",
+          "alias": "获得体力次数",
           "color": "#7EB26D",
           "id": 0,
           "pin": false,

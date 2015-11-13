@@ -26,7 +26,7 @@
     <script src="${ctx}/static/jquery-validation/1.11.1/jquery.validate.min.js" type="text/javascript"></script>
     
     <link href="<%=request.getContextPath()%>/static/echarts/css/echartsHome.css" rel="stylesheet">
-
+</head>
   <body>
 	<div id="wrapper">
 		<div class="wrapper wrapper-content animated fadeInRight">

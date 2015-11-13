@@ -7,7 +7,7 @@
       "list": {
         "0": {
           "query": "coin_get",
-          "alias": "",
+          "alias": "获得游戏币次数",
           "color": "#7EB26D",
           "id": 0,
           "pin": false,
@@ -17,7 +17,7 @@
         "1": {
           "id": 1,
           "color": "#EAB839",
-          "alias": "",
+          "alias": "消耗游戏币次数",
           "pin": false,
           "type": "lucene",
           "enable": true,

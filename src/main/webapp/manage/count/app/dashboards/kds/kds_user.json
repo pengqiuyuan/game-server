@@ -7,7 +7,7 @@
       "list": {
         "0": {
           "query": "create",
-          "alias": "",
+          "alias": "创建人数",
           "color": "#7EB26D",
           "id": 0,
           "pin": false,
@@ -17,7 +17,7 @@
         "1": {
           "id": 1,
           "color": "#EAB839",
-          "alias": "",
+          "alias": "登陆人数",
           "pin": false,
           "type": "lucene",
           "enable": true,
@@ -27,7 +27,7 @@
         "2": {
           "id": 2,
           "color": "rgb(239, 132, 60)",
-          "alias": "",
+          "alias": "在线",
           "pin": false,
           "type": "lucene",
           "enable": true,
@@ -37,7 +37,7 @@
         "3": {
           "id": 3,
           "color": "rgb(110, 208, 224)",
-          "alias": "",
+          "alias": "新手引导次数",
           "pin": false,
           "type": "lucene",
           "enable": true,

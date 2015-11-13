@@ -8,7 +8,7 @@
         "0": {
           "id": 0,
           "color": "#7EB26D",
-          "alias": "",
+          "alias": "消耗游戏币次数",
           "pin": false,
           "type": "lucene",
           "enable": true,

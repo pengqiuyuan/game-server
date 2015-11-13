@@ -8,7 +8,7 @@
         "0": {
           "id": 0,
           "color": "#7EB26D",
-          "alias": "",
+          "alias": "在线人数",
           "pin": false,
           "type": "lucene",
           "enable": true,
@@ -37,7 +37,7 @@
       ]
     }
   },
- "rows": [
+  "rows": [
     {
       "title": "当前在线人数",
       "height": "350px",
@@ -79,9 +79,9 @@
               "desc"
             ]
           },
-          "auto_int": true,
+          "auto_int": false,
           "resolution": 100,
-          "interval": "10m",
+          "interval": "2m",
           "intervals": [
             "auto",
             "1s",
@@ -96,12 +96,12 @@
             "1w",
             "1y"
           ],
-          "lines": false,
+          "lines": true,
           "fill": 0,
           "linewidth": 3,
           "points": false,
           "pointradius": 5,
-          "bars": true,
+          "bars": false,
           "stack": false,
           "threshold": false,
           "spyable": true,
@@ -131,7 +131,7 @@
           "pages": 20,
           "offset": 0,
           "sort": [
-            "当前在线人数",
+            "@timestamp",
             "desc"
           ],
           "overflow": "height",
@@ -175,7 +175,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "日期",
+          "field": "日期字符串",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -208,7 +208,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "日期",
+          "field": "日期字符串",
           "exclude": [],
           "missing": false,
           "other": false,
@@ -241,7 +241,7 @@
           "editable": true,
           "type": "terms",
           "loadingEditor": false,
-          "field": "日期",
+          "field": "日期字符串",
           "exclude": [],
           "missing": false,
           "other": false,
