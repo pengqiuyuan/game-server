@@ -318,36 +318,36 @@ public class FbUserScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------fb 用户 useradd  usertotal 调度开始");
+		logger.info("----------------fb useradd usertotal begin----------------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb all 用户增加、累计 计算失败");
+			logger.error("fb all useradd usertotal error "+e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb serverZone 用户增加、累计 计算失败");
+			logger.error("fb serverZone useradd usertotal error "+e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb platForm 用户增加、累计 计算失败");
+			logger.error("fb platForm useradd usertotal error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb server 用户增加、累计 计算失败");
+			logger.error("fb server useradd usertotal error "+e);
 		}
 		
-		logger.debug("----------------fb 用户 useradd  usertotal 调度结束");
+		logger.info("----------------fb useradd usertotal end-----------------");
 	}
 	
 

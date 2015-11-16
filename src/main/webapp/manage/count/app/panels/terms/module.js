@@ -288,7 +288,6 @@ function (angular, app, _, $, kbn) {
           _.each(scope.results.facets.terms.terms, function(v) {
             var slice;
             if(scope.panel.tmode === 'terms') {
-            	console.log(scope.panel.field);
             	  if(scope.panel.field==="运营大区ID" ||scope.panel.field==="渠道ID" ||scope.panel.field==="获得途径" ||scope.panel.field==="消耗途径" || scope.panel.field==="日志道具id" || scope.panel.field==="功能编号" || scope.panel.field==="注册渠道"){
 	              		slice = { label : map[v.term] , name : v.term, data : [[k,v.count]], actions: true};
             	  }else if(scope.panel.field==="服务器ID"){
@@ -310,7 +309,6 @@ function (angular, app, _, $, kbn) {
               			slice = { label : v.term,  name : v.term, data : [[k,v.count]], actions: true};
               		  }
             	  }else if(scope.panel.field==="登录设备系统"){
-            		  console.log("222");
             		  if(v.term=='1'){
               			slice = { label : 'android',  name : v.term, data : [[k,v.count]], actions: true};
               		  }else if(v.term=='2'){
@@ -321,7 +319,6 @@ function (angular, app, _, $, kbn) {
               			slice = { label : v.term,  name : v.term, data : [[k,v.count]], actions: true};
               		  }
               	  }else if(scope.panel.field==="是否首次登录"){
-              		console.log("1111");
             		  if(v.term=='0'){
                 			slice = { label : '老用户',  name : v.term, data : [[k,v.count]], actions: true};
             		  }else if(v.term=='1'){

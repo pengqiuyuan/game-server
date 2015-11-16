@@ -993,36 +993,36 @@ public class FbPayConversionScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------fb用户 付费率 开始");
+		logger.info("----------------fb pay conversion begin---------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb all付费率计算失败");
+			logger.error("fb all pay conversion error "+e);
 		}
 
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb serverZone付费率计算失败");
+			logger.error("fb serverZone pay conversion error "+e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb platForm付费率计算失败");
+			logger.error("fb platForm pay conversion error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb server付费率计算失败");
+			logger.error("fb server pay conversion error "+e);
 		}
 
-		logger.debug("----------------fb用户 付费率 调度结束");
+		logger.info("----------------fb pay conversion end------------");
 	}
 	
 

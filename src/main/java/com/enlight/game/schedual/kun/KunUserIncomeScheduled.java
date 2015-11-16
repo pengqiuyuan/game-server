@@ -589,22 +589,22 @@ public class KunUserIncomeScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kun 收入金额 充值次数 充值人数 income 调度开始");
-		try {test1();} catch (Exception e) {logger.debug("kun all 收入金额 计算失败");}
-		try {test1serverZone();} catch (Exception e) {logger.debug("kun serverZone 收入金额 计算失败");}
-		try {test1platForm();} catch (Exception e) {logger.debug("kun platForm 收入金额 计算失败");}
-		try {test1server();} catch (Exception e) {logger.debug("kun server 收入金额 计算失败");}
+		logger.info("----------------kun income begin--------------");
+		try {test1();} catch (Exception e) {logger.error("kun all sumtotal error " + e);}
+		try {test1serverZone();} catch (Exception e) {logger.error("kun serverZone sumtotal error " + e);}
+		try {test1platForm();} catch (Exception e) {logger.error("kun platForm sumtotal error " + e);}
+		try {test1server();} catch (Exception e) {logger.error("kun server sumtotal error " + e);}
 		
-		try {test2();} catch (Exception e) {logger.debug("kun all 充值次数 计算失败");}
-		try {test2serverZone();} catch (Exception e) {logger.debug("kun serverZone 充值次数 计算失败");}
-		try {test2platForm();} catch (Exception e) {logger.debug("kun platForm 充值次数 计算失败");}
-		try {test2server();} catch (Exception e) {logger.debug("kun server 充值次数 计算失败");}
+		try {test2();} catch (Exception e) {logger.error("kun all count error " + e);}
+		try {test2serverZone();} catch (Exception e) {logger.error("kun serverZone count error " + e);}
+		try {test2platForm();} catch (Exception e) {logger.error("kun platForm count error " + e);}
+		try {test2server();} catch (Exception e) {logger.error("kun server count error " + e);}
 		
-		try {test3();} catch (Exception e) {logger.debug("kun all 充值人数 计算失败");}
-		try {test3serverZone();} catch (Exception e) {logger.debug("kun serverZone 充值人数 计算失败");}
-		try {test3platForm();} catch (Exception e) {logger.debug("kun platForm 充值人数 计算失败");}
-		try {test3server();} catch (Exception e) {logger.debug("kun server 充值人数 计算失败");}
+		try {test3();} catch (Exception e) {logger.error("kun all peoplenum error " + e);}
+		try {test3serverZone();} catch (Exception e) {logger.error("kun serverZone peoplenum error " + e);}
+		try {test3platForm();} catch (Exception e) {logger.error("kun platForm peoplenum error " + e);}
+		try {test3server();} catch (Exception e) {logger.error("kun server peoplenum error " + e);}
 
-		logger.debug("----------------kun 收入金额 充值次数 充值人数 income 调度结束");
+		logger.info("----------------kun income end--------------");
 	}
 }

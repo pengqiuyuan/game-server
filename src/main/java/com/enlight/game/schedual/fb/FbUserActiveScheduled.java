@@ -440,34 +440,34 @@ public class FbUserActiveScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------fb 活跃用户 active 调度开始");
+		logger.info("----------------fb active begin-----------------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb all 活跃用户 计算失败");
+			logger.error("fb all active error " + e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb serverZone 活跃用户 计算失败");
+			logger.error("fb serverZone active error " + e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb platForm 活跃用户 计算失败");
+			logger.error("fb platForm active error " + e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb server 活跃用户 计算失败");
+			logger.error("fb server active error " + e);
 		}
-		logger.debug("----------------fb 活跃用户 active 调度结束");
+		logger.info("----------------fb active end-------------------");
 	}
 }

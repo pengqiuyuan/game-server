@@ -840,64 +840,64 @@ public class KunPayPenetrationScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kun ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) 开始");
+		logger.info("----------------kun ARPU(day) ARPU(month) ARPPU(day) ARPPU(month) begin---------------");
 		try {
 			testdayall();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun all ARPU(日) ARPPU(日) 计算失败");
+			logger.debug("kun all ARPU(day) ARPPU(day) error " + e);
 		}
 		
 		try {
 			testdayserverzone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun serverZone ARPU(日) ARPPU(日) 计算失败");
+			logger.debug("kun serverZone ARPU(day) ARPPU(day) error " +e);
 		}
 		
 		try {
 			testdayplatform();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun platForm ARPU(日) ARPPU(日) 计算失败");
+			logger.debug("kun platForm ARPU(day) ARPPU(day) error " +e);
 		}
 		
 		try {
 			testdayserver();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun server ARPU(日) ARPPU(日) 计算失败");
+			logger.debug("kun server ARPU(day) ARPPU(day) error "+e);
 		}
 		
 		try {
 			testmouthall();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun all ARPU(月)  ARPPU(月) 计算失败");
+			logger.debug("kun all ARPU(month)  ARPPU(month) error " +e);
 		}
 		
 		try {
 			testmouthserverzone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun serverZone ARPU(月)  ARPPU(月) 计算失败");
+			logger.debug("kun serverZone ARPU(month)  ARPPU(month) error " + e);
 		}
 		
 		try {
 			testmouthplatform();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun platForm ARPU(月)  ARPPU(月) 计算失败");
+			logger.debug("kun platForm ARPU(month)  ARPPU(month) error " + e );
 		}
 		
 		try {
 			testmouthserver();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun server ARPU(月)  ARPPU(月) 计算失败");
+			logger.debug("kun server ARPU(month)  ARPPU(month) error " +e);
 		}
 
-		logger.debug("----------------kun ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) 调度结束");
+		logger.info("----------------kun ARPU(day) ARPU(month) ARPPU(day) ARPPU(month) end--------------");
 	}
 	
 }

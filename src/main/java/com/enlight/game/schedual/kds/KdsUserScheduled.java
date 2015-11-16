@@ -317,36 +317,36 @@ public class KdsUserScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kds 用户 useradd  usertotal 调度开始");
+		logger.info("----------------kds useradd usertotal begin----------------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds all 用户增加、累计 计算失败");
+			logger.error("kds all useradd usertotal error "+e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds serverZone 用户增加、累计 计算失败");
+			logger.error("kds serverZone useradd usertotal error "+e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds platForm 用户增加、累计 计算失败");
+			logger.error("kds platForm useradd usertotal error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds server 用户增加、累计 计算失败");
+			logger.error("kds server useradd usertotal error "+e);
 		}
 		
-		logger.debug("----------------kds 用户 useradd  usertotal 调度结束");
+		logger.info("----------------kds useradd usertotal end-----------------");
 	}
 	
 

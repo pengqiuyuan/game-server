@@ -993,36 +993,36 @@ public class KdsPayConversionScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kds用户 付费率 开始");
+		logger.info("----------------kds pay conversion begin----------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds all付费率计算失败");
+			logger.error("kds all pay conversion error "+e);
 		}
 
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds serverZone付费率计算失败");
+			logger.error("kds serverZone pay conversion error "+e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds platForm付费率计算失败");
+			logger.error("kds platForm pay conversion error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds server付费率计算失败");
+			logger.error("kds server pay conversion error "+e);
 		}
 
-		logger.debug("----------------kds用户 付费率 调度结束");
+		logger.info("----------------kds pay conversion end------------------ ");
 	}
 	
 

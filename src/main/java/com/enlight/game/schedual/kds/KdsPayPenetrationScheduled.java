@@ -840,64 +840,64 @@ public class KdsPayPenetrationScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kds ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) 开始");
+		logger.info("----------------kds ARPU(day) ARPU(month) ARPPU(day) ARPPU(month) begin---------------");
 		try {
 			testdayall();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds all ARPU(日) ARPPU(日) 计算失败");
+			logger.debug("kds all ARPU(day) ARPPU(day) error " + e);
 		}
 		
 		try {
 			testdayserverzone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds serverZone ARPU(日) ARPPU(日) 计算失败");
+			logger.debug("kds serverZone ARPU(day) ARPPU(day) error " +e);
 		}
 		
 		try {
 			testdayplatform();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds platForm ARPU(日) ARPPU(日) 计算失败");
+			logger.debug("kds platForm ARPU(day) ARPPU(day) error " +e);
 		}
 		
 		try {
 			testdayserver();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds server ARPU(日) ARPPU(日) 计算失败");
+			logger.debug("kds server ARPU(day) ARPPU(day) error "+e);
 		}
 		
 		try {
 			testmouthall();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds all ARPU(月)  ARPPU(月) 计算失败");
+			logger.debug("kds all ARPU(month)  ARPPU(month) error " +e);
 		}
 		
 		try {
 			testmouthserverzone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds serverZone ARPU(月)  ARPPU(月) 计算失败");
+			logger.debug("kds serverZone ARPU(month)  ARPPU(month) error " + e);
 		}
 		
 		try {
 			testmouthplatform();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds platForm ARPU(月)  ARPPU(月) 计算失败");
+			logger.debug("kds platForm ARPU(month)  ARPPU(month) error " + e );
 		}
 		
 		try {
 			testmouthserver();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds server ARPU(月)  ARPPU(月) 计算失败");
+			logger.debug("kds server ARPU(month)  ARPPU(month) error " +e);
 		}
 
-		logger.debug("----------------kds ARPU(日) ARPU(月) ARPPU(日) ARPPU(月) 调度结束");
+		logger.info("----------------kds ARPU(day) ARPU(month) ARPPU(day) ARPPU(month) end--------------");
 	}
 	
 }

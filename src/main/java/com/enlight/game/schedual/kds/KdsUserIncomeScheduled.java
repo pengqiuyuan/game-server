@@ -590,22 +590,22 @@ public class KdsUserIncomeScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kds 收入金额 充值次数 充值人数 income 调度开始");
-		try {test1();} catch (Exception e) {logger.debug("kds all 收入金额 计算失败");}
-		try {test1serverZone();} catch (Exception e) {logger.debug("kds serverZone 收入金额 计算失败");}
-		try {test1platForm();} catch (Exception e) {logger.debug("kds platForm 收入金额 计算失败");}
-		try {test1server();} catch (Exception e) {logger.debug("kds server 收入金额 计算失败");}
+		logger.info("----------------kds income begin--------------");
+		try {test1();} catch (Exception e) {logger.error("kds all sumtotal error " + e);}
+		try {test1serverZone();} catch (Exception e) {logger.error("kds serverZone sumtotal error " + e);}
+		try {test1platForm();} catch (Exception e) {logger.error("kds platForm sumtotal error " + e);}
+		try {test1server();} catch (Exception e) {logger.error("kds server sumtotal error " + e);}
 		
-		try {test2();} catch (Exception e) {logger.debug("kds all 充值次数 计算失败");}
-		try {test2serverZone();} catch (Exception e) {logger.debug("kds serverZone 充值次数 计算失败");}
-		try {test2platForm();} catch (Exception e) {logger.debug("kds platForm 充值次数 计算失败");}
-		try {test2server();} catch (Exception e) {logger.debug("kds server 充值次数 计算失败");}
+		try {test2();} catch (Exception e) {logger.error("kds all count error " + e);}
+		try {test2serverZone();} catch (Exception e) {logger.error("kds serverZone count error " + e);}
+		try {test2platForm();} catch (Exception e) {logger.error("kds platForm count error " + e);}
+		try {test2server();} catch (Exception e) {logger.error("kds server count error " + e);}
 		
-		try {test3();} catch (Exception e) {logger.debug("kds all 充值人数 计算失败");}
-		try {test3serverZone();} catch (Exception e) {logger.debug("kds serverZone 充值人数 计算失败");}
-		try {test3platForm();} catch (Exception e) {logger.debug("kds platForm 充值人数 计算失败");}
-		try {test3server();} catch (Exception e) {logger.debug("kds server 充值人数 计算失败");}
+		try {test3();} catch (Exception e) {logger.error("kds all peoplenum error " + e);}
+		try {test3serverZone();} catch (Exception e) {logger.error("kds serverZone peoplenum error " + e);}
+		try {test3platForm();} catch (Exception e) {logger.error("kds platForm peoplenum error " + e);}
+		try {test3server();} catch (Exception e) {logger.error("kds server peoplenum error " + e);}
 
-		logger.debug("----------------kds 收入金额 充值次数 充值人数 income 调度结束");
+		logger.info("----------------kds income end--------------");
 	}
 }

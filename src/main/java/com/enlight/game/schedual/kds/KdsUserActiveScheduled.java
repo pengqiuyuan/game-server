@@ -440,34 +440,34 @@ public class KdsUserActiveScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kds 活跃用户 active 调度开始");
+		logger.info("----------------kds active begin-----------------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds all 活跃用户 计算失败");
+			logger.error("kds all active error " + e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds serverZone 活跃用户 计算失败");
+			logger.error("kds serverZone active error " + e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds platForm 活跃用户 计算失败");
+			logger.error("kds platForm active error " + e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds server 活跃用户 计算失败");
+			logger.error("kds server active error " + e);
 		}
-		logger.debug("----------------kds 活跃用户 active 调度结束");
+		logger.info("----------------kds active end-------------------");
 	}
 }

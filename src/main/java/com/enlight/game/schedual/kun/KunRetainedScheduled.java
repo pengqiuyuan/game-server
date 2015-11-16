@@ -497,36 +497,36 @@ public class KunRetainedScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kun 用户留存了 retained 调度开始");
+		logger.info("----------------kun retained begin-----------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun all 用户留存 计算失败");
+			logger.error("kun all retained error " + e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun serverZone 用户留存 计算失败");
+			logger.error("kun serverZone retained error " +e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun platForm 用户留存 计算失败");
+			logger.error("kun platForm retained error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun server 用户留存 计算失败");
+			logger.error("kun server retained error "+e);
 		}
 
-		logger.debug("----------------kun 用户留存了 retained 调度结束");
+		logger.info("----------------kun retained end-------------");
 	}
 	
 

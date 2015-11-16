@@ -497,36 +497,36 @@ public class KdsRetainedScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kds 用户留存了 retained 调度开始");
+		logger.info("----------------kds retained begin-----------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds all 用户留存 计算失败");
+			logger.error("kds all retained error " + e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds serverZone 用户留存 计算失败");
+			logger.error("kds serverZone retained error " +e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds platForm 用户留存 计算失败");
+			logger.error("kds platForm retained error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kds server 用户留存 计算失败");
+			logger.error("kds server retained error "+e);
 		}
 
-		logger.debug("----------------kds 用户留存了 retained 调度结束");
+		logger.info("----------------kds retained end-------------");
 	}
 	
 

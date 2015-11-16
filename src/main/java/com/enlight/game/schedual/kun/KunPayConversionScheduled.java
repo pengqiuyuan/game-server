@@ -991,36 +991,36 @@ public class KunPayConversionScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kun用户 付费率 开始");
+		logger.info("----------------kun pay conversion begin--------------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun all付费率计算失败");
+			logger.error("kun all pay conversion error "+e);
 		}
 
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun serverZone付费率计算失败");
+			logger.error("kun serverZone pay conversion error "+e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun platForm付费率计算失败");
+			logger.error("kun platForm pay conversion error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun server付费率计算失败");
+			logger.error("kun server pay conversion error "+e);
 		}
 
-		logger.debug("----------------kun用户 付费率 调度结束");
+		logger.info("----------------kun pay conversion end----------------- ");
 	}
 	
 

@@ -591,22 +591,22 @@ public class FbUserIncomeScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------fb 收入金额 充值次数 充值人数 income 调度开始");
-		try {test1();} catch (Exception e) {logger.debug("fb all 收入金额 计算失败");}
-		try {test1serverZone();} catch (Exception e) {logger.debug("fb serverZone 收入金额 计算失败");}
-		try {test1platForm();} catch (Exception e) {logger.debug("fb platForm 收入金额 计算失败");}
-		try {test1server();} catch (Exception e) {logger.debug("fb server 收入金额 计算失败");}
+		logger.info("----------------fb income begin--------------");
+		try {test1();} catch (Exception e) {logger.error("fb all sumtotal error " + e);}
+		try {test1serverZone();} catch (Exception e) {logger.error("fb serverZone sumtotal error " + e);}
+		try {test1platForm();} catch (Exception e) {logger.error("fb platForm sumtotal error " + e);}
+		try {test1server();} catch (Exception e) {logger.error("fb server sumtotal error " + e);}
 		
-		try {test2();} catch (Exception e) {logger.debug("fb all 充值次数 计算失败");}
-		try {test2serverZone();} catch (Exception e) {logger.debug("fb serverZone 充值次数 计算失败");}
-		try {test2platForm();} catch (Exception e) {logger.debug("fb platForm 充值次数 计算失败");}
-		try {test2server();} catch (Exception e) {logger.debug("fb server 充值次数 计算失败");}
+		try {test2();} catch (Exception e) {logger.error("fb all count error " + e);}
+		try {test2serverZone();} catch (Exception e) {logger.error("fb serverZone count error " + e);}
+		try {test2platForm();} catch (Exception e) {logger.error("fb platForm count error " + e);}
+		try {test2server();} catch (Exception e) {logger.error("fb server count error " + e);}
 		
-		try {test3();} catch (Exception e) {logger.debug("fb all 充值人数 计算失败");}
-		try {test3serverZone();} catch (Exception e) {logger.debug("fb serverZone 充值人数 计算失败");}
-		try {test3platForm();} catch (Exception e) {logger.debug("fb platForm 充值人数 计算失败");}
-		try {test3server();} catch (Exception e) {logger.debug("fb server 充值人数 计算失败");}
+		try {test3();} catch (Exception e) {logger.error("fb all peoplenum error " + e);}
+		try {test3serverZone();} catch (Exception e) {logger.error("fb serverZone peoplenum error " + e);}
+		try {test3platForm();} catch (Exception e) {logger.error("fb platForm peoplenum error " + e);}
+		try {test3server();} catch (Exception e) {logger.error("fb server peoplenum error " + e);}
 
-		logger.debug("----------------fb 收入金额 充值次数 充值人数 income 调度结束");
+		logger.info("----------------fb income end--------------");
 	}
 }

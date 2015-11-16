@@ -497,36 +497,36 @@ public class FbRetainedScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------fb 用户留存了 retained 调度开始");
+		logger.info("----------------fb retained begin-----------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb all 用户留存 计算失败");
+			logger.error("fb all retained error " + e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb serverZone 用户留存 计算失败");
+			logger.error("fb serverZone retained error " +e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb platForm 用户留存 计算失败");
+			logger.error("fb platForm retained error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("fb server 用户留存 计算失败");
+			logger.error("fb server retained error "+e);
 		}
 
-		logger.debug("----------------fb 用户留存了 retained 调度结束");
+		logger.info("----------------fb retained end-------------");
 	}
 	
 

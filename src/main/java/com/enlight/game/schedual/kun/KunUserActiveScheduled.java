@@ -440,34 +440,34 @@ public class KunUserActiveScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.debug("----------------kun 活跃用户 active 调度开始");
+		logger.info("----------------kun active begin-----------------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun all 活跃用户 计算失败");
+			logger.error("kun all active error " + e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun serverZone 活跃用户 计算失败");
+			logger.error("kun serverZone active error " + e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun platForm 活跃用户 计算失败");
+			logger.error("kun platForm active error " + e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.debug("kun server 活跃用户 计算失败");
+			logger.error("kun server active error " + e);
 		}
-		logger.debug("----------------kun 活跃用户 active 调度结束");
+		logger.info("----------------kun active end-------------------");
 	}
 }
