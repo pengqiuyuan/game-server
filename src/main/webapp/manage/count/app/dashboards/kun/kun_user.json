@@ -108,7 +108,7 @@
             "size": 20,
             "field": "_type",
             "sort": [
-              "_score",
+              "@timestamp",
               "desc"
             ]
           },

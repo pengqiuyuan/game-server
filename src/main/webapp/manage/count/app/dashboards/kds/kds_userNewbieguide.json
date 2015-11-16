@@ -132,7 +132,7 @@
           "pages": 5,
           "offset": 0,
           "sort": [
-            "_score",
+            "@timestamp",
             "desc"
           ],
           "overflow": "min-height",

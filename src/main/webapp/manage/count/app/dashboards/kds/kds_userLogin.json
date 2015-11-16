@@ -150,7 +150,7 @@
           "pages": 20,
           "offset": 0,
           "sort": [
-            "time",
+            "@timestamp",
             "desc"
           ],
           "overflow": "height",

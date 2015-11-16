@@ -54,28 +54,11 @@
 <body>
 	
 	<%@ include file="/WEB-INF/layouts/nav.jsp"%>
-	<div class="container" style="width: 100%;padding-top: 20px">
-		<div id="content" style="width: 95%;margin-left:50px;padding-top: 0px">
-			<div class="page-header">
-				<div class="error-container">
-					<div class="well">
-						<h2 class="grey lighter smaller">
-							<span class="blue bigger-125">500</span> 没有此功能权限
-						</h2>
-						<hr />
-						<div class="space"></div>
-						<div class="center">
-							<a href="${ctx}/manage/index" class="btn btn-grey">
-								<i class="icon-arrow-left"></i>返回
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
-	</div>
-		<script src="${ctx}/static/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
+		<div style="height: 300px">
+            <font style="font-size: 14px">&nbsp;&nbsp;&nbsp;没有权限！</font>
+        </div>
+	<%@ include file="/WEB-INF/layouts/footer.jsp"%>
+	<script src="${ctx}/static/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
 	
 </body>
 </html>

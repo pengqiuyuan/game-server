@@ -108,7 +108,7 @@
             "size": 20,
             "field": "_type",
             "sort": [
-              "_score",
+              "@timestamp",
               "desc"
             ]
           },
@@ -164,7 +164,7 @@
           "pages": 20,
           "offset": 0,
           "sort": [
-            "time",
+            "@timestamp",
             "desc"
           ],
           "overflow": "min-height",
