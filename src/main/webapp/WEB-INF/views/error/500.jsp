@@ -47,10 +47,14 @@
 <body>
 	
 	<%@ include file="/WEB-INF/layouts/nav.jsp"%>
-		<div style="height: 300px">
-            <font style="font-size: 14px">&nbsp;&nbsp;&nbsp;系统错误！</font>
-        </div>
-	<%@ include file="/WEB-INF/layouts/footer.jsp"%>
+	<div class="container" style="width: 100%;padding-top: 20px">
+		<div id="content" style="width: 95%;margin-left:50px;padding-top: 0px">
+			<div style="height: 300px">
+	            <font style="font-size: 14px">&nbsp;&nbsp;&nbsp;系统错误！</font>
+	        </div>			
+		</div>
+		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
+	</div>
 	<script src="${ctx}/static/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
 	
 </body>
