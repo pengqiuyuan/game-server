@@ -23,8 +23,13 @@ function (Settings) {
      * the same host. By default this will attempt to reach ES at the same host you have
      * kibana installed on. You probably want to set it to the FQDN of your
      * elasticsearch host
+     * elasticsearch: "http://"+window.location.hostname+":9200",
      */
-    elasticsearch: "http://10.0.29.152:9200",
+	 //测试使用
+	 elasticsearch: "http://"+window.location.hostname+":9200",
+	 
+	 //线上使用 nginx 80 port 代理9200 
+	 //elasticsearch: "http://"+window.location.hostname+"/port",
     
     /** @scratch /configuration/config.js/5
      *
