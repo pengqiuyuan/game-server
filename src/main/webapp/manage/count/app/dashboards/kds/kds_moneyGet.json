@@ -504,7 +504,7 @@
           "missing": false,
           "other": false,
           "size": 30,
-          "order": "count",
+          "order": "total",
           "style": {
             "font-size": "10pt"
           },
@@ -537,7 +537,7 @@
           "missing": false,
           "other": false,
           "size": 30,
-          "order": "count",
+          "order": "total",
           "style": {
             "font-size": "10pt"
           },
@@ -570,7 +570,7 @@
           "missing": false,
           "other": false,
           "size": 15,
-          "order": "count",
+          "order": "total",
           "style": {
             "font-size": "10pt"
           },

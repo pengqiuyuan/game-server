@@ -429,7 +429,7 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: 'ARPU（日）',
+                    text: 'ARPU（日，人民币）',
                     subtext: '当日每活跃玩家平均收入（收入/活跃玩家）。'
                 },
                 tooltip : {
@@ -477,7 +477,7 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: 'ARPU（月）',
+                    text: 'ARPU（月，人民币）',
                     subtext: '某自然月每活跃玩家平均收入（收入/月排重活跃玩家）。'
                 },
                 tooltip : {
@@ -525,7 +525,7 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: 'ARPPU（日）',
+                    text: 'ARPPU（日，人民币）',
                     subtext: '当日每付费玩家平均收入（收入/付费玩家数）。'
                 },
                 tooltip : {
@@ -573,7 +573,7 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: 'ARPPU（月）',
+                    text: 'ARPPU（月，人民币）',
                     subtext: '某自然月每付费玩家平均收入（收入/月排重付费玩家数）。'
                 },
                 tooltip : {

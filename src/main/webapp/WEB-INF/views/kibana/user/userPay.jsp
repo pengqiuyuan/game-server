@@ -201,7 +201,7 @@
 				<div class="span12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
-							<div id="mainAdd"
+							<div id="mainTotal"
 								style="height: 500px; border: 0px solid #ccc; padding: 10px;"></div>
 						</div>
 					</div>
@@ -212,12 +212,14 @@
 				<div class="span12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
-							<div id="mainTotal"
+							<div id="mainAdd"
 								style="height: 500px; border: 0px solid #ccc; padding: 10px;"></div>
 						</div>
 					</div>
 				</div>
 			</div>
+			
+
 
 		</div>
 	</div>

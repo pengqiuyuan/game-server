@@ -403,7 +403,7 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '收入金额',
+                    text: '收入金额(人民币)',
                     subtext: '所选时期每日玩家充值的货币总额。'
                 },
                 tooltip : {
