@@ -57,6 +57,8 @@ public class KunPayConversionScheduled {
 	
 	private static final String bulk_type_money_mouth = "kun_money_mouth";
 	
+	private static final String paytype = "1"; //货币类型，人民币1 ，美元2 ，离线部分只统计了1 
+	
 	EsUtil esUtilTest = new EsUtil();
 
 	public void esAll() throws IOException, ParseException {	
@@ -67,7 +69,8 @@ public class KunPayConversionScheduled {
 				FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-		        		FilterBuilders.termFilter("是否首次充值", "1")
+		        		FilterBuilders.termFilter("是否首次充值", "1"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 						))
 		        ).execute().actionGet();
 		Long newpayuser = sr.getHits().totalHits();
@@ -91,7 +94,8 @@ public class KunPayConversionScheduled {
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						).execute().actionGet();
 		allpayuser  = srTotal.getHits().totalHits();
@@ -122,7 +126,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						).execute().actionGet();
 		Double day;
@@ -160,7 +165,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						).execute().actionGet();
 		
@@ -199,7 +205,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						).execute().actionGet();
 		Double mouth;
@@ -234,7 +241,8 @@ public class KunPayConversionScheduled {
 				FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-		        		FilterBuilders.termFilter("是否首次充值", "1")
+		        		FilterBuilders.termFilter("是否首次充值", "1"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 						))
 		        ).addAggregation(
 			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
@@ -265,7 +273,8 @@ public class KunPayConversionScheduled {
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -316,7 +325,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -375,7 +385,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -434,7 +445,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -481,7 +493,8 @@ public class KunPayConversionScheduled {
 				FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-		        		FilterBuilders.termFilter("是否首次充值", "1")
+		        		FilterBuilders.termFilter("是否首次充值", "1"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 						))
 		        ).addAggregation(
 		        		AggregationBuilders.terms("platForm").field("渠道ID").size(300)
@@ -511,7 +524,8 @@ public class KunPayConversionScheduled {
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -562,7 +576,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -621,7 +636,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -680,7 +696,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -728,7 +745,8 @@ public class KunPayConversionScheduled {
 				FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-		        		FilterBuilders.termFilter("是否首次充值", "1")
+		        		FilterBuilders.termFilter("是否首次充值", "1"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 						))
 		        ).addAggregation(
 		        		AggregationBuilders.terms("server").field("服务器ID").size(300)
@@ -758,7 +776,8 @@ public class KunPayConversionScheduled {
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -810,7 +829,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -869,7 +889,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(
@@ -928,7 +949,8 @@ public class KunPayConversionScheduled {
 								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1")
+				        		FilterBuilders.termFilter("是否首次充值", "1"),
+						        FilterBuilders.termFilter("支付货币", paytype)
 								))
 						)
 						.addAggregation(

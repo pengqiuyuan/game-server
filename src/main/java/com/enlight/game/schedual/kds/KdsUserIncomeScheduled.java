@@ -57,6 +57,8 @@ public class KdsUserIncomeScheduled {
 	
 	private static final Integer srsize = 300; //服务器
 	
+	private static final String paytype = "1"; //货币类型，人民币1 ，美元2 ，离线部分只统计了1 
+	
 	EsUtil esUtilTest = new EsUtil();
 	
 	//收入金额
@@ -65,7 +67,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -94,7 +97,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -129,7 +133,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -164,7 +169,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -201,7 +207,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .execute().actionGet();
@@ -226,7 +233,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -259,7 +267,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -291,7 +300,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -324,7 +334,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -354,7 +365,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -389,7 +401,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
@@ -424,7 +437,8 @@ public class KdsUserIncomeScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
 						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get")
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
 		        .addAggregation(
