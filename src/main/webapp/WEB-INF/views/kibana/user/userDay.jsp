@@ -382,8 +382,8 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '当日付费率',
-                    subtext: '所选时期的新增玩家中，在新增当日即进行充值的玩家数和其占比。'
+                    text: '首日付费率',
+                    subtext: '所选时期（当日）的新增玩家中，在新增当日即进行充值的玩家数和其占比。'
                 },
                 tooltip : {
                     trigger: 'axis'
@@ -430,8 +430,8 @@
             myChart.setTheme('macarons');
             myChart.setOption({
                 title : {
-                    text: '当日新增付费用户数',
-                    subtext: '当日新增加的付费玩家帐户数'
+                    text: '当日新增加的玩家，在一天（当天）内付费的帐户数（去重）',
+                    subtext: '例：2015-10-19日新增的玩家中，有3人当天内付费'
                 },
                 tooltip : {
                     trigger: 'axis'
