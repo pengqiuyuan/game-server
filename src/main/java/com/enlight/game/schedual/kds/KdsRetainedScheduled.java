@@ -118,7 +118,6 @@ public class KdsRetainedScheduled {
 			    ).execute().actionGet();
 		logger.debug("----------------esAll---------------");
 		
-	    UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
 			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
@@ -133,64 +132,56 @@ public class KdsRetainedScheduled {
 			    }else{
 				    RetentionTwo = (double)aggcount*100/createCount(esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 			    }
-
-
-			    userRetained.setDate(esUtilTest.twoDayAgoFrom());
-			    userRetained.setGameId(game);
-			    userRetained.setKey(UserRetained.KEY_ALL);
-			    userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
-			    userRetained.setRetained(df.format(RetentionTwo));
-			    userRetained.setTs(entry.getKey());
-
+    
+				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+				        .setSource(jsonBuilder()
+					           	 .startObject()
+			                        .field("date", esUtilTest.twoDayAgoFrom().split("T")[0])
+			                        .field("gameId", game)
+			                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+			                        .field("retained", df.format(RetentionTwo))
+			                        .field("key", UserRetained.KEY_ALL)
+			                        .field("@timestamp", new Date())
+			                    .endObject()
+				                  )
+				        );
 			}else if(dateBucket.equals(esUtilTest.eightDayAgoFrom())){
 			    Cardinality agg = entry.getAggregations().get("agg");
 			    Long aggcount = agg.getValue();
 			    Double RetentionEight ;
-
-				RetentionEight = (double)aggcount*100/createCount(esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
-			    userRetained.setDate(esUtilTest.eightDayAgoFrom());
-			    userRetained.setGameId(game);
-			    userRetained.setKey(UserRetained.KEY_ALL);
-			    userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
-			    userRetained.setRetained(df.format(RetentionEight));
-			    userRetained.setTs(entry.getKey());
-			    	
+				RetentionEight = (double)aggcount*100/createCount(esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());			 
+				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+				        .setSource(jsonBuilder()
+					           	 .startObject()
+			                        .field("date", esUtilTest.eightDayAgoFrom().split("T")[0])
+			                        .field("gameId", game)
+			                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+			                        .field("retained", df.format(RetentionEight))
+			                        .field("key", UserRetained.KEY_ALL)
+			                        .field("@timestamp", new Date())
+			                    .endObject()
+				                  )
+				        );
 			}else if(dateBucket.equals(esUtilTest.thirtyOneDayAgoFrom())){
 			    Cardinality agg = entry.getAggregations().get("agg");
 			    Long aggcount = agg.getValue();
 			    Double RetentionThirty ;
-
 			    RetentionThirty = (double)aggcount*100/createCount(esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
-			    userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-			    userRetained.setGameId(game);
-			    userRetained.setKey(UserRetained.KEY_ALL);
-			    userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
-			    userRetained.setRetained(df.format(RetentionThirty));
-			    userRetained.setTs(entry.getKey());
-
-
+				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+				        .setSource(jsonBuilder()
+					           	 .startObject()
+			                        .field("date", esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
+			                        .field("gameId", game)
+			                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+			                        .field("retained", df.format(RetentionThirty))
+			                        .field("key", UserRetained.KEY_ALL)
+			                        .field("@timestamp", new Date())
+			                    .endObject()
+				                  )
+				        );
 			}
 		}
-
 		if(bulkRequest.numberOfActions()!=0){
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", userRetained.getDate().split("T")[0])
-		                        .field("gameId", userRetained.getGameId())
-		                        .field("ctRetained", userRetained.getCtRetained())
-		                        .field("retained", userRetained.getRetained())
-		                        .field("key", userRetained.getKey())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			bulkRequest.execute().actionGet();	
-		}else{
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
-			        .setSource(
-			                  )
-			        );
 			bulkRequest.execute().actionGet();	
 		}
 	}	
@@ -221,7 +212,6 @@ public class KdsRetainedScheduled {
 			    ).execute().actionGet();
 		logger.debug("-------------esServerZone-------------");
 
-    	UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
 			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
@@ -240,14 +230,19 @@ public class KdsRetainedScheduled {
 				    	RetentionTwo = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    }
 				    
-
-				    	userRetained.setDate(esUtilTest.twoDayAgoFrom());
-				    	userRetained.setGameId(game);
-				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
-				    	userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
-				    	userRetained.setRetained(df.format(RetentionTwo));
-				    	userRetained.setValue(e.getKey());
-				    	userRetained.setTs(entry.getKey());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date", esUtilTest.twoDayAgoFrom().split("T")[0])
+				                        .field("gameId",game)
+				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("retained", df.format(RetentionTwo))
+				                        .field("key", UserRetained.KEY_SEVSERZONE)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );			    	
 				}
 			}else if(dateBucket.equals(esUtilTest.eightDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("serverZone");
@@ -255,14 +250,20 @@ public class KdsRetainedScheduled {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionEight ;
-					    RetentionEight = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
-				    	userRetained.setDate(esUtilTest.eightDayAgoFrom());
-				    	userRetained.setGameId(game);
-				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
-				    	userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
-				    	userRetained.setRetained(df.format(RetentionEight));
-				    	userRetained.setValue(e.getKey());
-				    	userRetained.setTs(entry.getKey());
+					RetentionEight = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date", esUtilTest.eightDayAgoFrom().split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("retained", df.format(RetentionEight))
+				                        .field("key", UserRetained.KEY_SEVSERZONE)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
 				}
 			}else if(dateBucket.equals(esUtilTest.thirtyOneDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("serverZone");
@@ -270,40 +271,25 @@ public class KdsRetainedScheduled {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionThirty ;
-				    	RetentionThirty = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
-				    	userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-				    	userRetained.setGameId(game);
-				    	userRetained.setKey(UserRetained.KEY_SEVSERZONE);
-				    	userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
-				    	userRetained.setRetained(df.format(RetentionThirty));
-				    	userRetained.setValue(e.getKey());
-				    	userRetained.setTs(entry.getKey());
-
+				    RetentionThirty = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
+				    
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date", esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("retained", df.format(RetentionThirty))
+				                        .field("key", UserRetained.KEY_SEVSERZONE)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
 				}
-
 			}
 		}
 		if(bulkRequest.numberOfActions()!=0){
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", userRetained.getDate().split("T")[0])
-		                        .field("gameId", userRetained.getGameId())
-		                        .field("ctRetained", userRetained.getCtRetained())
-		                        .field("retained", userRetained.getRetained())
-		                        .field("key", userRetained.getKey())
-		                        .field("ts","["+userRetained.getTs()+","+userRetained.getRetained()+"]")
-		                        .field("value", userRetained.getValue())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			bulkRequest.execute().actionGet();	
-		}else{
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
-			        .setSource(
-			                  )
-			        );
 			bulkRequest.execute().actionGet();	
 		}
 	}
@@ -329,7 +315,6 @@ public class KdsRetainedScheduled {
 			    ).execute().actionGet();
 		logger.debug("------------esPlatForm--------------");
 
-    	UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
 			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
@@ -347,14 +332,19 @@ public class KdsRetainedScheduled {
 				    	RetentionTwo = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    }
 				    
-
-			    	userRetained.setDate(esUtilTest.twoDayAgoFrom());
-			    	userRetained.setGameId(game);
-			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
-			    	userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
-			    	userRetained.setRetained(df.format(RetentionTwo));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",esUtilTest.twoDayAgoFrom().split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("retained", df.format(RetentionTwo))
+				                        .field("key", UserRetained.KEY_PLATFORM)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
 				}
 			}else if(dateBucket.equals(esUtilTest.eightDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("platForm");
@@ -362,15 +352,20 @@ public class KdsRetainedScheduled {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionEight ;
-				    
 				    RetentionEight = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
-			    	userRetained.setDate(esUtilTest.eightDayAgoFrom());
-			    	userRetained.setGameId(game);
-			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
-			    	userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
-			    	userRetained.setRetained(df.format(RetentionEight));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",esUtilTest.eightDayAgoFrom().split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("retained", df.format(RetentionEight))
+				                        .field("key", UserRetained.KEY_PLATFORM)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
 				}
 			}else if(dateBucket.equals(esUtilTest.thirtyOneDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("platForm");
@@ -378,38 +373,24 @@ public class KdsRetainedScheduled {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionThirty ;
-				    
 			    	RetentionThirty = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
-			    	userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-			    	userRetained.setGameId(game);
-			    	userRetained.setKey(UserRetained.KEY_PLATFORM);
-			    	userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
-			    	userRetained.setRetained(df.format(RetentionThirty));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("retained", df.format(RetentionThirty))
+				                        .field("key", UserRetained.KEY_PLATFORM)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
 				}
 			}
 		}
 		if(bulkRequest.numberOfActions()!=0){
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", userRetained.getDate().split("T")[0])
-		                        .field("gameId", userRetained.getGameId())
-		                        .field("ctRetained", userRetained.getCtRetained())
-		                        .field("retained", userRetained.getRetained())
-		                        .field("key", userRetained.getKey())
-		                        .field("value", userRetained.getValue())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			bulkRequest.execute().actionGet();	
-		}else{
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
-			        .setSource(
-			                  )
-			        );
 			bulkRequest.execute().actionGet();	
 		}
 	}
@@ -434,7 +415,6 @@ public class KdsRetainedScheduled {
 			    ).execute().actionGet();
 		logger.debug("-----------esServer---------------");
 
-		UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
 			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
@@ -451,14 +431,19 @@ public class KdsRetainedScheduled {
 				    }else{
 				    	RetentionTwo = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    }
-
-			    	userRetained.setDate(esUtilTest.twoDayAgoFrom());
-			    	userRetained.setGameId(game);
-			    	userRetained.setKey(UserRetained.KEY_SEVSER);
-			    	userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
-			    	userRetained.setRetained(df.format(RetentionTwo));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());	
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",esUtilTest.twoDayAgoFrom().split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("retained", df.format(RetentionTwo))
+				                        .field("key", UserRetained.KEY_SEVSER)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
 				}
 			}else if(dateBucket.equals(esUtilTest.eightDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("server");
@@ -466,15 +451,20 @@ public class KdsRetainedScheduled {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionEight ;
-				    
 				    RetentionEight = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
-			    	userRetained.setDate(esUtilTest.eightDayAgoFrom());
-			    	userRetained.setGameId(game);
-			    	userRetained.setKey(UserRetained.KEY_SEVSER);
-			    	userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
-			    	userRetained.setRetained(df.format(RetentionEight));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",esUtilTest.eightDayAgoFrom().split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("retained", df.format(RetentionEight))
+				                        .field("key", UserRetained.KEY_SEVSER)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
 				}
 			}else if(dateBucket.equals(esUtilTest.thirtyOneDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("server");
@@ -484,38 +474,23 @@ public class KdsRetainedScheduled {
 				    Double RetentionThirty ;
 				    
 			    	RetentionThirty = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
-			    	
-			    	userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-			    	userRetained.setGameId(game);
-			    	userRetained.setKey(UserRetained.KEY_SEVSER);
-			    	userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
-			    	userRetained.setRetained(df.format(RetentionThirty));
-			    	userRetained.setValue(e.getKey());
-			    	userRetained.setTs(entry.getKey());
-
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("retained", df.format(RetentionThirty))
+				                        .field("key", UserRetained.KEY_SEVSER)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
 				}
 			}
 		}
 		if(bulkRequest.numberOfActions()!=0){
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
-			        .setSource(jsonBuilder()
-				           	 .startObject()
-		                        .field("date", userRetained.getDate().split("T")[0])
-		                        .field("gameId", userRetained.getGameId())
-		                        .field("ctRetained", userRetained.getCtRetained())
-		                        .field("retained", userRetained.getRetained())
-		                        .field("key", userRetained.getKey())
-		                        .field("value", userRetained.getValue())
-		                        .field("@timestamp", new Date())
-		                    .endObject()
-			                  )
-			        );
-			bulkRequest.execute().actionGet();	
-		}else{
-			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
-			        .setSource(
-			                  )
-			        );
 			bulkRequest.execute().actionGet();	
 		}
 	}
