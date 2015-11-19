@@ -45,7 +45,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 	//项目名称
 	private static final String fb_game = "FB";
 	
-	private static final String index = "logstash-fb-*";
+	private static final String index = "logstash-fb-user-*";
 	
 	private static final String type = "fb_user.log";
 	
@@ -71,6 +71,18 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
 		Long count = sr.getHits().getTotalHits();
+		
+		System.out.println("sssssssssssss   "  + count);
+		
+		FilteredQueryBuilder b= QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		        FilterBuilders.andFilter(
+				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
+		        		FilterBuilders.termFilter("日志分类关键字", "create"))
+		        );
+		SearchResponse s = client.prepareSearch(index).setTypes(type).setQuery(builder2).execute().actionGet();
+		
+		System.out.println("ddddddddddd   " + s);
+		
 		return count;
 	}
 	
@@ -91,22 +103,34 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(num)
 			    ).execute().actionGet();
 		System.out.println("----------------esAll---------------"+sr);
+		
+		SearchResponse srs = client.prepareSearch(index).setTypes(type).setQuery(builder)
+			    .addAggregation(
+			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false))
+			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(num)
+			    ).execute().actionGet();
+		System.out.println("----------------esAll222222---------------"+srs);
 	    UserRetained userRetained = new UserRetained();
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
+			System.out.println("11111111");
 			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
 			if(dateBucket.equals(esUtilTest.twoDayAgoFrom())){
 			    Cardinality agg = entry.getAggregations().get("agg");
+			    
 			    Long aggcount = agg.getValue();
 			    Double RetentionTwo ;
 			    
 			    Long r = createCount(esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
+			    System.out.println("33333   "  + r);
+			    System.out.println("22222  "  + agg);
 			    if(r==0){
 				    RetentionTwo = (double) 0.00;
 			    }else{
 				    RetentionTwo = (double)aggcount*100/createCount(esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 			    }
-
+			    
+			    System.out.println("aaaaaaaaaaaaaaaaa    "   +  RetentionTwo);
 
 			    userRetained.setDate(esUtilTest.twoDayAgoFrom());
 			    userRetained.setGameId(fb_game);
@@ -116,6 +140,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 			    userRetained.setTs(entry.getKey());
 
 			}else if(dateBucket.equals(esUtilTest.eightDayAgoFrom())){
+				System.out.println("8888888888888888888888888");
 			    Cardinality agg = entry.getAggregations().get("agg");
 			    Long aggcount = agg.getValue();
 			    Double RetentionEight ;
@@ -145,7 +170,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 			}
 		}
 
-		if(bulkRequest.numberOfActions()!=0){
+/*		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
@@ -165,7 +190,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 			                  )
 			        );
 			bulkRequest.execute().actionGet();	
-		}
+		}*/
 	}	
 
 	

@@ -32,7 +32,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	//项目名称
 	private static final String game = "FB";
 	
-	private static final String index = "logstash-fb-*";
+	private static final String index = "logstash-fb-user-*";
 	
 	private static final String type = "fb_user.log";
 	
@@ -127,6 +127,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	
 	
 	//all
+	@Test 
 	public void esAll() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		System.out.println("###############  all 活跃玩家");
@@ -189,6 +190,17 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		
+		SearchResponse mou= client.prepareSearch(index).setTypes(type)
+		        .setPostFilter(FilterBuilders.andFilter(
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.termFilter("日志分类关键字", "login")
+						))
+		        .addAggregation(
+			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
+			    ).execute().actionGet();
+		
+		System.out.println("1111111111  "  + mou  +  "   " + esUtilTest.mouthFrom() + "    " +  esUtilTest.nowDate() + "    "  +  esUtilTest.oneDayAgoFrom().split("T")[0]);
+		
 		Cardinality aggMouth = mouthactive.getAggregations().get("agg");
 		long valueMouth = aggMouth.getValue();
 		
@@ -204,7 +216,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	                    .endObject()
 		                  )
 		        );
-		bulkRequest.execute().actionGet();	
+		//bulkRequest.execute().actionGet();	
 	}	
 	
 	//serverzone
@@ -498,7 +510,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		bulkRequest.execute().actionGet();	
 	}	
 	
-	@Test 
+	//@Test 
 	public void test16() throws IOException, ParseException {
 		System.out.println("----------------活跃用户 active 调度开始");
 		esAll();
