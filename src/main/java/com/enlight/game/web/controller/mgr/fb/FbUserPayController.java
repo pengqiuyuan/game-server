@@ -226,6 +226,7 @@ public class FbUserPayController extends BaseController{
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
+			sZones.add("所有运营大区");
 		}else{
 		    if(sZone != null && sZone.length>0){
 				for (int i = 0; i < sZone.length; i++) {
@@ -324,6 +325,7 @@ public class FbUserPayController extends BaseController{
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
+			sZones.add("所有运营大区");
 		}else{
 		    if(sZone != null && sZone.length>0){
 				for (int i = 0; i < sZone.length; i++) {
@@ -422,6 +424,7 @@ public class FbUserPayController extends BaseController{
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
 			model.addAttribute("server", serverService.findByStoreId(storeId));
+			sZones.add("所有运营大区");
 		}else{
 		    if(sZone != null && sZone.length>0){
 				for (int i = 0; i < sZone.length; i++) {
