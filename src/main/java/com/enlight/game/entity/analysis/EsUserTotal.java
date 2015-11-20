@@ -3,6 +3,9 @@ package com.enlight.game.entity.analysis;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -18,7 +21,18 @@ import com.enlight.game.entity.BaseEntry;
 @Entity
 @Table(name="game_es_user_total")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)   // 二级缓存
-public class EsUserTotal extends BaseEntry{
+public class EsUserTotal{
+	
+
+	public final static String key_all="all";
+	
+	public final static String key_serverzone="serverZone";
+	
+	public final static String key_platform="platForm";
+	
+	public final static String key_server="server";
+	
+	protected Long id;
 	
 	private Long gameId;
 	
@@ -31,7 +45,21 @@ public class EsUserTotal extends BaseEntry{
 	private Long totalPayUser;
 	
 	private Double totalIncome;
+	
+	private String key; //all serverzone platform server
+	
+	private String value;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	public Long getGameId() {
 		return gameId;
 	}
@@ -78,6 +106,22 @@ public class EsUserTotal extends BaseEntry{
 
 	public void setTotalIncome(Double totalIncome) {
 		this.totalIncome = totalIncome;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 	
 	

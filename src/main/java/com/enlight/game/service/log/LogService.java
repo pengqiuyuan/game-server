@@ -21,9 +21,7 @@ import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 
 
 
-//Spring Bean的标�?
 @Component
-//类中�?��public函数都纳入事务管理的标识.
 @Transactional
 /**
  * @Description 日志Service
