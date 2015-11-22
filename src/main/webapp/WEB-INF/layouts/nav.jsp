@@ -273,6 +273,16 @@
 											                </ul>
 										               </li>	
 												</shiro:hasAnyRoles>
+												<shiro:hasAnyRoles name="admin,KUN_USER_PORTRAIT">
+													  <li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">用户画像</a>
+											                <ul class="dropdown-menu">
+											                  <li >
+											                  	<a tabindex="-1" href="${ctx}/manage/count/kunUserPortrait#/dashboard/file/kun_userPortrait.json">用户画像</a>
+											                  </li>
+											                </ul>
+										               </li>	
+												</shiro:hasAnyRoles>
 												<li class="divider"></li>
 												<li><a href="#">sample</a></li>
 											</ul>
@@ -344,6 +354,16 @@
 											                  <li><a href="${ctx}/manage/count/kdsUser#/dashboard/file/kds_userCreate.json">用户创建</a></li>
 											                  <li><a href="${ctx}/manage/count/kdsUser#/dashboard/file/kds_userOnline.json">在线用户</a></li>
 											                  <li><a href="${ctx}/manage/count/kdsUser#/dashboard/file/kds_userNewbieguide.json">新手引导与功能引导</a></li>
+											                </ul>
+										               </li>	
+												</shiro:hasAnyRoles>
+												<shiro:hasAnyRoles name="admin,KDS_USER_PORTRAIT">
+													  <li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">用户画像</a>
+											                <ul class="dropdown-menu">
+											                  <li>
+											                  	<a tabindex="-1" href="${ctx}/manage/count/kdsUserPortrait#/dashboard/file/kds_userPortrait.json">用户画像</a>
+											                  </li>
 											                </ul>
 										               </li>	
 												</shiro:hasAnyRoles>
@@ -440,6 +460,16 @@
 											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userCreate.json">用户创建</a></li>
 											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userOnline.json">在线用户</a></li>
 											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userNewbieguide.json">新手引导与功能引导</a></li>
+											                </ul>
+										               </li>	
+												</shiro:hasAnyRoles>
+												<shiro:hasAnyRoles name="admin,FB_USER_PORTRAIT">
+													  <li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">用户画像</a>
+											                <ul class="dropdown-menu">
+											                  <li>
+											                  	<a tabindex="-1" href="${ctx}/manage/count/fbUserPortrait#/dashboard/file/fb_userPortrait.json">用户画像</a>
+											                  </li>
 											                </ul>
 										               </li>	
 												</shiro:hasAnyRoles>

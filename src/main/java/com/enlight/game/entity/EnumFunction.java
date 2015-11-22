@@ -49,6 +49,11 @@ public class EnumFunction extends BaseEntry{
 	public final static String ENUM_USER = "28";
 	
 	/**
+	 * 用户画像
+	 */
+	public final static String ENUM_USER_PORTRAIT = "29";
+	
+	/**
 	 * 权限 1,2,3,4,5...
 	 */
 	private String enumRole;

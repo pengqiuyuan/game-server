@@ -170,13 +170,13 @@ public class CountController extends BaseController{
 	}	
 	
 	/**
-	 * 用户留存
+	 * 用户画像
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
-	@RequestMapping(value = "/fbUserRetained", method = RequestMethod.GET)
-	public String fbUserRetained(Model model){
-		logger.debug("user Retained...");
-		model.addAttribute("user", EnumFunction.ENUM_USER);
+	@RequiresRoles(value = { "admin", "FB_USER_PORTRAIT" }, logical = Logical.OR)
+	@RequestMapping(value = "/fbUserPortrait", method = RequestMethod.GET)
+	public String fbUserPortrait(Model model){
+		logger.debug("user portrait...");
+		model.addAttribute("user", EnumFunction.ENUM_USER_PORTRAIT);
 		model.addAttribute("game", GAME_Fb);
 		return "/kibana/index";
 	}
@@ -259,6 +259,18 @@ public class CountController extends BaseController{
 		return "/kibana/index";
 	}	
 	
+	/**
+	 * 用户画像
+	 */
+	@RequiresRoles(value = { "admin", "KUN_USER_PORTRAIT" }, logical = Logical.OR)
+	@RequestMapping(value = "/kunUserPortrait", method = RequestMethod.GET)
+	public String kunUserPortrait(Model model){
+		logger.debug("user portrait...");
+		model.addAttribute("user", EnumFunction.ENUM_USER_PORTRAIT);
+		model.addAttribute("game", GAME_KUN);
+		return "/kibana/index";
+	}
+	
 	
 	//kds
 	/**
@@ -339,6 +351,17 @@ public class CountController extends BaseController{
 		return "/kibana/index";
 	}	
 	
+	/**
+	 * 用户画像
+	 */
+	@RequiresRoles(value = { "admin", "KDS_USER_PORTRAIT" }, logical = Logical.OR)
+	@RequestMapping(value = "/kdsUserPortrait", method = RequestMethod.GET)
+	public String kdsUserPortrait(Model model){
+		logger.debug("user portrait...");
+		model.addAttribute("user", EnumFunction.ENUM_USER_PORTRAIT);
+		model.addAttribute("game", GAME_KDS);
+		return "/kibana/index";
+	}
 	
 	/**
 	 * 取出Shiro中的当前用户Id.
