@@ -199,10 +199,17 @@
 			</form>
 
 			<div class="row-fluid">
-				<div class="span12">
+				<div class="span6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 						    <div id="sum" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+						</div>
+					</div>
+				</div>
+				<div class="span6">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content">
+						    <div id="sumtotal" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
 						</div>
 					</div>
 				</div>
@@ -346,6 +353,23 @@
             'echarts/chart/map'
         ],
         function (ec) {
+            var nextNameTotal = [];
+            var nextDateTotal =[];
+            var nextSeriesTotal = [];
+        	var nd = 0;
+            for(var key in ${nextTotal}){
+            	nextNameTotal.push(key);
+            	var da = [];
+            	for ( var datakey in ${nextTotal}[key]) {  
+            		if(nd == 0){
+            			nextDateTotal.push(datakey)
+            		}
+            		da.push(${nextTotal}[key][datakey])                    
+                }  
+            	nextSeriesTotal.push({name:key,type:'line',data:da});
+            	nd = 1;
+            }
+            
             var nextName = [];
             var nextDate =[];
             var nextSeries = [];
@@ -397,6 +421,55 @@
             	thirtySeries.push({name:key,type:'line',data:da});
             	td = 1;
             }
+            
+            //--- 折柱 ---
+            var myChart = ec.init(document.getElementById('sumtotal'));
+            myChart.setTheme('macarons');
+            myChart.setOption({
+                title : {
+                    text: '累计收入金额(人民币)',
+                    subtext: '所选时期玩家充值的累计货币总额。'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:nextNameTotal
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                dataZoom : {
+                    show : true,
+                    realtime : true,
+                    start : 0,
+                    end : 100
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : nextDateTotal
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '¥{value}'
+                        },
+                        splitArea : {show : true}
+                    }
+                ],
+                series : nextSeriesTotal
+            });
             
             //--- 折柱 ---
             var myChart = ec.init(document.getElementById('sum'));

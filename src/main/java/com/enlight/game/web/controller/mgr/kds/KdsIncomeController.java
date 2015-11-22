@@ -59,6 +59,8 @@ public class KdsIncomeController extends BaseController{
 	
 	private static final String type_income_sum = "kds_money_income_sum";
 	
+	private static final String type_income_sum_total = "kds_money_income_sum_total";
+	
 	private static final String type_income_count = "kds_money_income_count";
 	
 	private static final String type_income_peoplenum = "kds_money_income_peoplenum";
@@ -104,6 +106,7 @@ public class KdsIncomeController extends BaseController{
 		List<ServerZone> serverZones = serverZoneService.findAll();
 		
 		Map<String, Map<String,String>> sum = new HashMap<String, Map<String,String>>();
+		Map<String, Map<String,String>> sumtotal = new HashMap<String, Map<String,String>>();
 		Map<String, Map<String,String>> count = new HashMap<String, Map<String,String>>();
 		Map<String, Map<String,String>> peoplenum = new HashMap<String, Map<String,String>>();
 
@@ -116,6 +119,7 @@ public class KdsIncomeController extends BaseController{
 			String dateFrom = thirtyDayAgoFrom();
 			String dateTo = nowDate();
 			sum.put("所有运营大区", userIncomeServer.searchAllIncomesum(index, type_income_sum, dateFrom, dateTo));
+			sumtotal.put("所有运营大区", userIncomeServer.searchAllIncomesumtotal(index, type_income_sum_total, dateFrom, dateTo));
 			count.put("所有运营大区", userIncomeServer.searchAllIncomecount(index, type_income_count, dateFrom, dateTo));
 			peoplenum.put("所有运营大区", userIncomeServer.searchAllIncomepeoplenum(index, type_income_peoplenum, dateFrom, dateTo));
 			model.addAttribute("dateFrom", dateFrom);
@@ -129,12 +133,14 @@ public class KdsIncomeController extends BaseController{
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
 						sum.put("所有运营大区", userIncomeServer.searchAllIncomesum(index, type_income_sum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
+						sumtotal.put("所有运营大区", userIncomeServer.searchAllIncomesumtotal(index, type_income_sum_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
 						count.put("所有运营大区", userIncomeServer.searchAllIncomecount(index, type_income_count, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
 						peoplenum.put("所有运营大区", userIncomeServer.searchAllIncomepeoplenum(index, type_income_peoplenum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString()));
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
 						sum.put(szName, userIncomeServer.searchServerZoneIncomesum(index, type_income_sum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
+						sumtotal.put(szName, userIncomeServer.searchServerZoneIncomesumtotal(index, type_income_sum_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
 						count.put(szName, userIncomeServer.searchServerZoneIncomecount(index, type_income_count, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
 						peoplenum.put(szName, userIncomeServer.searchServerZoneIncomepeoplenum(index, type_income_peoplenum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]));
 					}
@@ -146,6 +152,7 @@ public class KdsIncomeController extends BaseController{
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
 					sum.put(pfName, userIncomeServer.searchPlatFormIncomesum(index, type_income_sum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
+					sumtotal.put(pfName, userIncomeServer.searchPlatFormIncomesumtotal(index, type_income_sum_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
 					count.put(pfName, userIncomeServer.searchPlatFormIncomecount(index, type_income_count, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
 					peoplenum.put(pfName, userIncomeServer.searchPlatFormIncomepeople(index, type_income_peoplenum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),  pForm[i]));
 				}
@@ -154,6 +161,7 @@ public class KdsIncomeController extends BaseController{
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
 					sum.put(sv[i], userIncomeServer.searchServerIncomesum(index, type_income_sum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
+					sumtotal.put(sv[i], userIncomeServer.searchServerIncomesumtotal(index, type_income_sum_total, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
 					count.put(sv[i], userIncomeServer.searchServerIncomecount(index, type_income_count, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
 					peoplenum.put(sv[i], userIncomeServer.searchServerIncomepeoplenum(index, type_income_peoplenum, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]));
 				}
@@ -164,9 +172,11 @@ public class KdsIncomeController extends BaseController{
 		logger.debug(binder.toJson(sum));
 		logger.debug(binder.toJson(count));
 		logger.debug(binder.toJson(peoplenum));
+		logger.debug(binder.toJson(sumtotal));
 		model.addAttribute("next", binder.toJson(sum));
 		model.addAttribute("seven", binder.toJson(count));
 		model.addAttribute("thirty", binder.toJson(peoplenum));
+		model.addAttribute("nextTotal", binder.toJson(sumtotal));
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);

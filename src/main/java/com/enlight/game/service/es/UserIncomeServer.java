@@ -49,6 +49,15 @@ public class UserIncomeServer {
 		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
 	}
 	
+	public Map<String, String> searchAllIncomesumtotal(String index ,String type_income_sum ,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "all"))
+                		);
+		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
+	}
+	
 	public Map<String, String> searchAllIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
@@ -68,6 +77,16 @@ public class UserIncomeServer {
 	}
 	
 	public Map<String, String> searchServerZoneIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "serverZone"),
+                		FilterBuilders.termFilter("value", value))
+                		);
+		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
+	}
+	
+	public Map<String, String> searchServerZoneIncomesumtotal(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
@@ -107,6 +126,16 @@ public class UserIncomeServer {
 		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
 	}
 	
+	public Map<String, String> searchPlatFormIncomesumtotal(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "platForm"),
+                		FilterBuilders.termFilter("value", value))
+                		);
+		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
+	}
+	
 	public Map<String, String> searchPlatFormIncomecount(String index ,String type_income_count ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
@@ -128,6 +157,16 @@ public class UserIncomeServer {
 	}
 	
 	public Map<String, String> searchServerIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+                FilterBuilders.andFilter(
+        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
+                		FilterBuilders.termFilter("key", "server"),
+                		FilterBuilders.termFilter("value", value))
+                		);
+		return esSearch(builder, index, type_income_sum, dateFrom, dateTo);
+	}
+	
+	public Map<String, String> searchServerIncomesumtotal(String index ,String type_income_sum ,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
                 FilterBuilders.andFilter(
         		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),

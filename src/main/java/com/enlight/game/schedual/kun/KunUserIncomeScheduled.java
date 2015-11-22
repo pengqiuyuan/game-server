@@ -47,6 +47,8 @@ public class KunUserIncomeScheduled {
 	
 	private static final String bulk_type_money_sum = "kun_money_income_sum";
 	
+	private static final String bulk_type_money_sum_total = "kun_money_income_sum_total";
+	
 	private static final String bulk_type_money_count = "kun_money_income_count";
 	
 	private static final String bulk_type_money_peoplenum = "kun_money_income_peoplenum";
@@ -87,6 +89,32 @@ public class KunUserIncomeScheduled {
 	                    .endObject()
 		                  )
 		        );
+		
+		//累计收入金额
+		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		        FilterBuilders.andFilter(
+						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
+		        ));
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(buildertotal)
+		        .addAggregation(
+		        		AggregationBuilders.sum("sum").field("支付金额")
+			    ).execute().actionGet();
+		Sum aggtotal = sumtotal.getAggregations().get("sum");
+		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_sum_total)
+		        .setSource(jsonBuilder()
+			           	 .startObject()
+	                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+	                        .field("gameId", game)
+	                        .field("@timestamp", new Date())
+	                        .field("key","all")
+	                        .field("ct","sumtotal")
+	                        .field("cv",aggtotal.getValue())
+	                    .endObject()
+		                  )
+		        );
+		
 		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
 		}	
@@ -118,6 +146,35 @@ public class KunUserIncomeScheduled {
 			                        .field("key","serverZone")
 			                        .field("value",e.getKey())
 			                        .field("ct","sum")
+			                        .field("cv",agg.getValue())
+			                    .endObject()
+				                  )
+				        );
+		}		//累计收入金额
+		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		        FilterBuilders.andFilter(
+						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
+		        ));
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(buildertotal)
+		        .addAggregation(
+						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
+								AggregationBuilders.sum("sum").field("支付金额")
+								)
+			    ).execute().actionGet();
+		Terms genderstotal = sumtotal.getAggregations().get("serverZone");
+		for (Terms.Bucket e : genderstotal.getBuckets()) {
+			 Sum agg = e.getAggregations().get("sum");
+				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_sum_total)
+				        .setSource(jsonBuilder()
+					           	 .startObject()
+			                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+			                        .field("gameId", game)
+			                        .field("@timestamp", new Date())
+			                        .field("key","serverZone")
+			                        .field("value",e.getKey())
+			                        .field("ct","sumtotal")
 			                        .field("cv",agg.getValue())
 			                    .endObject()
 				                  )
@@ -159,6 +216,37 @@ public class KunUserIncomeScheduled {
 				                  )
 				        );
 		}
+		//累计收入金额
+		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		        FilterBuilders.andFilter(
+						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
+		        ));
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(buildertotal)
+		        .addAggregation(
+						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
+								AggregationBuilders.sum("sum").field("支付金额")
+								)
+			    ).execute().actionGet();
+		Terms genderstotal = sumtotal.getAggregations().get("platForm");
+		for (Terms.Bucket e : genderstotal.getBuckets()) {
+			 Sum agg = e.getAggregations().get("sum");
+				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_sum_total)
+				        .setSource(jsonBuilder()
+					           	 .startObject()
+			                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+			                        .field("gameId", game)
+			                        .field("@timestamp", new Date())
+			                        .field("key","platForm")
+			                        .field("value",e.getKey())
+			                        .field("ct","sumtotal")
+			                        .field("cv",agg.getValue())
+			                    .endObject()
+				                  )
+				        );
+		}
+		
 		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
 		}	
@@ -195,6 +283,37 @@ public class KunUserIncomeScheduled {
 				                  )
 				        );
 		}
+		//累计收入金额
+		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
+		        FilterBuilders.andFilter(
+						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
+				        FilterBuilders.termFilter("支付货币", paytype)
+		        ));
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(buildertotal)
+		        .addAggregation(
+						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
+								AggregationBuilders.sum("sum").field("支付金额")
+								)
+			    ).execute().actionGet();
+		Terms genderstotal = sumtotal.getAggregations().get("server");
+		for (Terms.Bucket e : genderstotal.getBuckets()) {
+			 Sum agg = e.getAggregations().get("sum");
+				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_sum_total)
+				        .setSource(jsonBuilder()
+					           	 .startObject()
+			                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+			                        .field("gameId", game)
+			                        .field("@timestamp", new Date())
+			                        .field("key","server")
+			                        .field("value",e.getKey())
+			                        .field("ct","sumtotal")
+			                        .field("cv",agg.getValue())
+			                    .endObject()
+				                  )
+				        );
+		}
+		
 		if(bulkRequest.numberOfActions()!=0){
 			bulkRequest.execute().actionGet();	
 		}	
