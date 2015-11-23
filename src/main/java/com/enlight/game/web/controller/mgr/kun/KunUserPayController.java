@@ -97,7 +97,7 @@ public class KunUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "KUN_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "KUN_OFF_USER_PAY" }, logical = Logical.OR)
 	@RequestMapping(value = "/kun/userPay", method = RequestMethod.GET)
 	public String userPay(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
@@ -196,7 +196,7 @@ public class KunUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "KUN_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "KUN_OFF_USER_PAY" }, logical = Logical.OR)
 	@RequestMapping(value = "/kun/userDay", method = RequestMethod.GET)
 	public String userDay(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
@@ -295,7 +295,7 @@ public class KunUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "KUN_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "KUN_OFF_USER_PAY" }, logical = Logical.OR)
 	@RequestMapping(value = "/kun/userWeek", method = RequestMethod.GET)
 	public String userWeek(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
@@ -394,7 +394,7 @@ public class KunUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "KUN_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "KUN_OFF_USER_PAY" }, logical = Logical.OR)
 	@RequestMapping(value = "/kun/userMouth", method = RequestMethod.GET)
 	public String userMouth(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,

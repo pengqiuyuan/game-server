@@ -93,7 +93,7 @@ public class KunIncomeController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "KUN_MONEY" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "KUN_OFF_USER_INCOME" }, logical = Logical.OR)
 	@RequestMapping(value = "/kun/userIncome", method = RequestMethod.GET)
 	public String userActive(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,

@@ -93,7 +93,7 @@ public class FbUserAddController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "FB_OFF_USER_ADD" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userAdd", method = RequestMethod.GET)
 	public String userRetained(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,

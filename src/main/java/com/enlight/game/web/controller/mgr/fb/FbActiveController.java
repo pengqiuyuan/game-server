@@ -91,7 +91,7 @@ public class FbActiveController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "FB_OFF_USER_ACTIVE" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userActive", method = RequestMethod.GET)
 	public String userActive(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,

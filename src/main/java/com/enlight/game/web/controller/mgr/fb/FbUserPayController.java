@@ -95,7 +95,7 @@ public class FbUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "FB_OFF_USER_PAY" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userPay", method = RequestMethod.GET)
 	public String userPay(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
@@ -194,7 +194,7 @@ public class FbUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "FB_OFF_USER_PAY" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userDay", method = RequestMethod.GET)
 	public String userDay(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
@@ -293,7 +293,7 @@ public class FbUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "FB_OFF_USER_PAY" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userWeek", method = RequestMethod.GET)
 	public String userWeek(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
@@ -392,7 +392,7 @@ public class FbUserPayController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "FB_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "FB_OFF_USER_PAY" }, logical = Logical.OR)
 	@RequestMapping(value = "/fb/userMouth", method = RequestMethod.GET)
 	public String userMouth(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,

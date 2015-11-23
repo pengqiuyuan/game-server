@@ -95,7 +95,7 @@ public class KdsMoneyPayPController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "KDS_MONEY" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "KDS_OFF_USER_INCOME" }, logical = Logical.OR)
 	@RequestMapping(value = "/kds/moneyPayP", method = RequestMethod.GET)
 	public String userMoneyPayP(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,

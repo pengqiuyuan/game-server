@@ -95,7 +95,7 @@ public class KunUserAddController extends BaseController{
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
 	 */
-	@RequiresRoles(value = { "admin", "KUN_USER" }, logical = Logical.OR)
+	@RequiresRoles(value = { "admin", "KUN_OFF_USER_ADD" }, logical = Logical.OR)
 	@RequestMapping(value = "/kun/userAdd", method = RequestMethod.GET)
 	public String userRetained(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
