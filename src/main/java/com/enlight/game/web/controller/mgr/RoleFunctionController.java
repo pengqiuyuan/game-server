@@ -327,6 +327,11 @@ public class RoleFunctionController extends BaseController{
 				if(role.getEnumRole().toString().equals(str)){
 					funs.remove(str);
 					roleFuncs.remove(role);
+					
+					EnumFunction enumFunction =  enumFunctionService.findByEnumRole(str);
+					role.setEnumName(enumFunction.getEnumName());
+					role.setEnumName(enumFunction.getEnumRole());
+					roleAndEnumService.update(role);
 				}
 			}
 		}      

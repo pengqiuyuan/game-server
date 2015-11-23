@@ -58,10 +58,10 @@ color:Red;
 				</div>
 			</div>	
 			<div
-				class="control-group">
+				class="control-group" >
 				<label class="control-label" for="enumRole">功能权限：</label>
 				<div class="controls">
-					<input type="text" name="enumRole" class="input-large "   value="${enumFunction.enumRole}"/>
+					<input type="text" name="enumRole" class="input-large "   value="${enumFunction.enumRole}" readonly="readonly"/>
 				</div>
 			</div>	
 			<shiro:hasAnyRoles name="admin">

@@ -47,4 +47,19 @@ public class RoleAndEnumService {
 		r.setEnumName(roleAndEnum.getEnumName());
 		roleAndEnumDao.save(r);
 	}
+	
+	public void update(RoleAndEnum roleAndEnum){
+		RoleAndEnum r = roleAndEnumDao.findOne(roleAndEnum.getId());
+		r.setCrDate(roleAndEnum.getCrDate());
+		r.setUpdDate(new Date());
+		r.setStatus(RoleAndEnum.STATUS_VALIDE);
+		r.setRoleRunctionId(roleAndEnum.getRoleRunctionId());
+		r.setEnumRole(roleAndEnum.getEnumRole());
+		r.setEnumName(roleAndEnum.getEnumName());
+		roleAndEnumDao.save(r);
+	}
+	
+	
+
+	
 }

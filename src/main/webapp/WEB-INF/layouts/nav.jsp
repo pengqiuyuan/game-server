@@ -485,14 +485,20 @@
 						</li>
 					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">离线统计日志<b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<shiro:hasAnyRoles name="admin,KUN_AP,KUN_ITEM,KUN_MONEY,KUN_DUMMY,KUN_COIN,KUN_USER">
+									<shiro:hasAnyRoles name="admin,KUN_OFF_USER_RETAINED,KUN_OFF_USER_ADD,KUN_OFF_USER_ACTIVE,KUN_OFF_USER_PAY,KUN_OFF_USER_INCOME">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN离线日志</a>
 											<ul class="dropdown-menu">
 												<li class="dropdown-submenu">
-													<shiro:hasAnyRoles name="admin,KUN_USER">
+													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_RETAINED">
 														<li><a href="${ctx}/manage/kunRetained/kun/userRetained?serverZone=all">用户留存</a></li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_ADD">
 														<li><a href="${ctx}/manage/kunUserAdd/kun/userAdd?serverZone=all">用户新增</a></li>
+													</shiro:hasAnyRoles>	
+													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_ACTIVE">
 														<li><a href="${ctx}/manage/kunActive/kun/userActive?serverZone=all">活跃用户</a></li>
+													</shiro:hasAnyRoles>	
+													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_PAY">
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
@@ -504,7 +510,7 @@
 															</ul>
 														</li>
 													</shiro:hasAnyRoles>
-													<shiro:hasAnyRoles name="admin,KUN_MONEY">
+													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_INCOME">
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
@@ -518,14 +524,20 @@
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin,KDS_AP,KDS_ITEM,KDS_MONEY,KDS_DUMMY,KDS_COIN,KDS_USER">
+									<shiro:hasAnyRoles name="admin,KDS_OFF_USER_RETAINED,KDS_OFF_USER_ADD,KDS_OFF_USER_ACTIVE,KDS_OFF_USER_PAY,KDS_OFF_USER_INCOME">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS离线日志</a>
 											<ul class="dropdown-menu">
 												<li class="dropdown-submenu">
-													<shiro:hasAnyRoles name="admin,KDS_USER">
+													<shiro:hasAnyRoles name="admin,KDS_OFF_USER_RETAINED">
 														<li><a href="${ctx}/manage/kdsRetained/kds/userRetained?serverZone=all">用户留存</a></li>
+													</shiro:hasAnyRoles>	
+													<shiro:hasAnyRoles name="admin,KDS_OFF_USER_ADD">
 														<li><a href="${ctx}/manage/kdsUserAdd/kds/userAdd?serverZone=all">用户新增</a></li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,KDS_OFF_USER_ACTIVE">
 														<li><a href="${ctx}/manage/kdsActive/kds/userActive?serverZone=all">活跃用户</a></li>
+													</shiro:hasAnyRoles>	
+													<shiro:hasAnyRoles name="admin,KDS_OFF_USER_PAY">
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
@@ -537,7 +549,7 @@
 															</ul>
 														</li>
 													</shiro:hasAnyRoles>
-													<shiro:hasAnyRoles name="admin,KDS_MONEY">
+													<shiro:hasAnyRoles name="admin,KDS_OFF_USER_INCOME">
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
@@ -551,14 +563,20 @@
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin,FB_AP,FB_ITEM,FB_MONEY,FB_DUMMY,FB_COIN,FB_ARENACOIN,FB_EXPEDITIONC,FB_USER">
+									<shiro:hasAnyRoles name="admin,FB_OFF_USER_RETAINED,FB_OFF_USER_ADD,FB_OFF_USER_ACTIVE,FB_OFF_USER_PAY,FB_OFF_USER_INCOME">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB离线日志</a>
 											<ul class="dropdown-menu">
 												<li class="dropdown-submenu">
-													<shiro:hasAnyRoles name="admin,FB_USER">
+													<shiro:hasAnyRoles name="admin,FB_OFF_USER_RETAINED">
 														<li><a href="${ctx}/manage/fbRetained/fb/userRetained?serverZone=all">用户留存</a></li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,FB_OFF_USER_ADD">
 														<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd?serverZone=all">用户新增</a></li>
+													</shiro:hasAnyRoles>	
+													<shiro:hasAnyRoles name="admin,FB_OFF_USER_ACTIVE">
 														<li><a href="${ctx}/manage/fbActive/fb/userActive?serverZone=all">活跃用户</a></li>
+													</shiro:hasAnyRoles>	
+													<shiro:hasAnyRoles name="admin,FB_OFF_USER_PAY">
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
@@ -570,7 +588,7 @@
 															</ul>
 														</li>
 													</shiro:hasAnyRoles>
-													<shiro:hasAnyRoles name="admin,FB_MONEY">
+													<shiro:hasAnyRoles name="admin,FB_OFF_USER_INCOME">
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
 																<ul class="dropdown-menu">
 																	<li class="dropdown-submenu">
