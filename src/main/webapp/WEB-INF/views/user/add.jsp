@@ -23,98 +23,73 @@ color:Red;
  	 <c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
-	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/user/save" >
-			<div
-	class="control-group">
-	<label class="control-label" for="name">名称：</label>
-	<div class="controls">
-		<input type="text" name="name" class="input-large" value=""   />
-	</div>
-</div>
-
-<div
-	class="control-group">
-	<label class="control-label" for="loginName">登入名：</label>
-	<div class="controls">
-		<input id="loginName" type="text" name="loginName" value=""   class="input-large"  />
-	</div>
-</div>
-
-	<div
-		class="control-group ">
-		<label class="control-label" for="pwdCipher">登录密码：</label>
-		<div class="controls">
-		<input type="password" id="pwdCipher" name="pwdCipher"  class="input-large "  >
+	<form id="inputForm" method="post" Class="form-horizontal"
+		action="${ctx}/manage/user/save">
+		<div class="control-group">
+			<label class="control-label" for="name">名称：</label>
+			<div class="controls">
+				<input type="text" name="name" class="input-large" value="" />
+			</div>
 		</div>
-	</div>
-	<div class="control-group ">
-		<label class="control-label" >确认密码：</label>
-		<div class="controls">
-			<input type="password" id="confirmPwdCipher" name="confirmPwdCipher"  class="input-large"  />
-	   </div>
-	</div>
-	
-	<div class="control-group ">
-		<label class="control-label" for="serverName">服务器大区：</label>
-		<div class="controls">	
-			<c:forEach items="${serverZones}" var="item" varStatus="i">
-						   <input type="checkbox" name="serverName" value="${item.id}"  class="box" />
-				           	<span>${item.serverName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+		<div class="control-group">
+			<label class="control-label" for="loginName">登入名：</label>
+			<div class="controls">
+				<input id="loginName" type="text" name="loginName" value=""
+					class="input-large" />
+			</div>
+		</div>
+
+		<div class="control-group ">
+			<label class="control-label" for="pwdCipher">登录密码：</label>
+			<div class="controls">
+				<input type="password" id="pwdCipher" name="pwdCipher"
+					class="input-large ">
+			</div>
+		</div>
+		<div class="control-group ">
+			<label class="control-label">确认密码：</label>
+			<div class="controls">
+				<input type="password" id="confirmPwdCipher" name="confirmPwdCipher"
+					class="input-large" />
+			</div>
+		</div>
+
+		<div class="control-group ">
+			<label class="control-label" for="serverName">服务器大区：</label>
+			<div class="controls">
+				<c:forEach items="${serverZones}" var="item" varStatus="i">
+					<input type="checkbox" name="serverName" value="${item.id}"
+						class="box" />
+					<span>${item.serverName}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				         <c:if test="${(i.index+1)%5 == 0}">
-						<br/>
-						<br/>
-						</c:if>
-			</c:forEach>			
-		</div>
-	</div>
-	<div class="page-header">
-	  	<span id="addfield" class="btn btn-info">新加项目权限组</span>
-	</div>
-	<div id="field">
-		
-	</div>
-<%-- <div class="control-group">
-	<label class="control-label" for="storeId">选择项目：</label>
-	<div class="controls">
-		<select name="storeId" id="storeId">	
-		    <option value="">请选择项目</option>	
-			<c:forEach items="${stores}" var="item" >
-					<option value="${item.id }"  >
-					${item.name }
-					</option>
-			</c:forEach>
-		</select>	
-	</div>
-</div>
-
-<div class="control-group">
-		<label for="role" class="control-label">权限组：</label>
-			<div class="controls" >
-				<select  id="roleCode" name="role"  class="role-select"></select> 
+						<br />
+						<br />
+					</c:if>
+				</c:forEach>
 			</div>
-</div>
-<div class="control-group">
-		<label for="functions" class="control-label">功能选项：</label>
-			<div class="controls" id="functions">
-			</div>
-</div> --%>
-
-	<div
-		class="control-group ">
-		<label class="control-label" for="status">操作员状态：</label>
-		<div class="controls">
-			<select  name="status">
-				<option value="1" >有效</option>
-				<option value="2" >冻结</option>
-			</select>
 		</div>
-	</div>
-	<input type="hidden" id="storeslength" value="${fn:length(stores)}" >		
-	<input type="hidden" name="roles" value="" >		
- 			<div class="form-actions">
-  			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
-				 <a href="<%=request.getContextPath()%>/manage/user/index" class="btn btn-primary">返回</a>
-	        </div>
+		<div class="page-header">
+			<span id="addfield" class="btn btn-info">新加项目权限组</span>
+		</div>
+		<div id="field"></div>
+
+		<div class="control-group ">
+			<label class="control-label" for="status">操作员状态：</label>
+			<div class="controls">
+				<select name="status">
+					<option value="1">有效</option>
+					<option value="2">冻结</option>
+				</select>
+			</div>
+		</div>
+		<input type="hidden" id="storeslength" value="${fn:length(stores)}">
+		<input type="hidden" name="roles" value="">
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary" id="submit">保存</button>
+			<a href="<%=request.getContextPath()%>/manage/user/index"
+				class="btn btn-primary">返回</a>
+		</div>
 	</form>
 	<script type="text/javascript">
 	 var tindex=0;
@@ -124,7 +99,7 @@ color:Red;
 			 $("#field").prepend("<div id='item'></div>");
 		     $("#item").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
 		     $("#item").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls' ><select  id='roleCode' name='role'  class='role-select'></select></div></div>" );
-		     $("#item").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	&nbsp;<span id='delElememt"+tindex+"' class='del btn btn-danger'>删除权限组</span></div></div>" );
+		     $("#item").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value=''>请选择项目</option><c:forEach items='${stores}' var='item' ><option value='${item.id }'>${item.name}</option></c:forEach></select>	&nbsp;<span id='delElememt"+tindex+"' class='del btn btn-danger'>删除权限组</span></div></div>" );
 
 	     $("#roleCode").change(function(e){
 			var gameId = $(this).parent().parent().prev().children().children("#storeId").val();

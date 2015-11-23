@@ -7,7 +7,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-	<title>用户修改2</title>
+	<title>用户修改</title>
 <style type="text/css"> 
 .error{ 
 	color:Red; 
@@ -139,8 +139,8 @@ $(function(){
   	 				if(parsedJson.stos!=null && parsedJson.storesLength>0 && boot==true){
   						$("#field").prepend("<div id='item'></div>");
   						$("#item").prepend( "<div class='control-group'><label for='functions' class='control-label'>功能选项：</label><div class='controls' id='functions'></div></div>" );
-  						$("#item").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls'><select  id='roleCode' name='role' class='roleCode'><option value='0'>请选择项目</option></select></div></div>" );
-  						$("#item").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value='0'>请选择项目</option></select>&nbsp;<span id='delElememt' class='del btn btn-danger'>删除权限组</span></div></div>" );
+  						$("#item").prepend( "<div class='control-group'><label for='role' class='control-label'>权限组：</label><div class='controls'><select  id='roleCode' name='role' class='roleCode'><option value=''>请选择权限组</option></select></div></div>" );
+  						$("#item").prepend( "<div class='control-group'><label class='control-label' for='storeId'>选择项目：</label><div class='controls'><select name='storeId' id='storeId'><option value=''>请选择项目</option></select>&nbsp;<span id='delElememt' class='del btn btn-danger'>删除权限组</span></div></div>" );
   						jQuery.each(parsedJson.stos, function(index, itemData) {
   							$("#storeId").append("<option value='"+itemData.id+"'>"+itemData.name+"</option>"); 
   						});
@@ -271,6 +271,12 @@ $(function(){
 			},
 			serverName:{
 				required:true
+			},
+			role:{
+				required:true
+			},
+			storeId:{
+				required:true
 			}
 		},messages:{
 			name:{
@@ -280,6 +286,12 @@ $(function(){
 				required:"必须填写",
 			},
 			serverName:{
+				required:"必须填写",
+			},
+			role:{
+				required:"必须填写",
+			},
+			storeId:{
 				required:"必须填写",
 			}
 		}

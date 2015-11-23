@@ -195,10 +195,11 @@ public class UsersController extends BaseController{
 				serverNa = serverNa+","+string;
 			}
 		}
-		List<UserRole> userRoles = userRoleService.findByUserId(user.getId());
+/*		List<UserRole> userRoles = userRoleService.findByUserId(user.getId());
 		for (UserRole userRole : userRoles) {
 			userRoleService.save(userRole);
-		}
+		}*/
+		System.out.println("12121  "   +  user.getStoreId());
 		user.setServerZone(serverNa);
 		userService.update(user);
 		redirectAttributes.addFlashAttribute("message", "修改用户成功");
