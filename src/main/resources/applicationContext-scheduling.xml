@@ -267,6 +267,22 @@
      	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 	</bean>
 	
+<!-- 日志监控值调度 start -->
+	<bean id="gameValueScheduled" class="com.enlight.game.schedual.GameValueScheduled"/> 
+	<bean id="gameValueMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="gameValueScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>
+	<bean id="gameValueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="gameValueMethod" /> 
+     	 <property name="cronExpression" value="0/5 * * * * ?"  /> 
+     	 <!--  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+<!-- 日志监控值调度 end -->
 	
 	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 	    <property name="triggers">
@@ -291,6 +307,10 @@
 	            <ref bean="kunUserActiveTrigger" />
 	            <ref bean="kunUserIncomeTrigger" />
 	            <ref bean="kunPayPenetrationTrigger" />
+	            
+	            <!-- 日志监控值调度 start -->
+	             <ref bean="gameValueTrigger" />
+	             <!-- 日志监控值调度 end -->
 	        </list>
 	    </property>
 	</bean> 
