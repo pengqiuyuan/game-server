@@ -133,7 +133,7 @@
           "editing": true,
           "type": "field",
           "field": "玩家GUID",
-          "query": "输入查询的玩家guid",
+          "query": "*",
           "mandate": "must",
           "active": true,
           "alias": "",
