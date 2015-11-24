@@ -199,14 +199,16 @@
 			</form>
 
 			<div class="row-fluid">
-				<div class="span6">
+				<div class="span12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 						    <div id="sum" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
 						</div>
 					</div>
 				</div>
-				<div class="span6">
+			</div>
+			<div class="row-fluid">
+				<div class="span12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 						    <div id="sumtotal" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
@@ -214,15 +216,18 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="row-fluid">
-				<div class="span6">
+				<div class="span12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 						    <div id="count" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
 						</div>
 					</div>
 				</div>
-				<div class="span6" id="choose">
+			</div>
+			<div class="row-fluid">
+				<div class="span12" id="choose">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
 						    <div id="peoplenum" style="height:500px;border:0px solid #ccc;padding:10px;"></div>

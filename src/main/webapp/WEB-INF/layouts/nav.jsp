@@ -628,6 +628,24 @@
 </div>
 
 <script type="text/javascript">
+
+	var isMobile = {
+			Android: function() {
+			    return navigator.userAgent.match(/Android/i) ? true : false;
+			},
+			BlackBerry: function() {
+			    return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+			},
+			iOS: function() {
+			    return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+			},
+			Windows: function() {
+			    return navigator.userAgent.match(/IEMobile/i) ? true : false;
+			},
+			any: function() {
+			    return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+			}
+	};
 	
 	function changeTag(id,categoryId,sta){
 		var th = $(".storeIdN");
@@ -641,7 +659,12 @@
  				var parsedJson = $.parseJSON(data);
 				th.append("<li class='divider'></li>");
 				jQuery.each(parsedJson, function(index, itemData) {
-				    th.append("<li class='dropdown-submenu "+itemData.storeId+"'><a href='#' onMouseOver='change2("+itemData.storeId+");'>"+itemData.storeName+"</a></li>"); 
+				    if(isMobile.any()){
+				    	th.append("<li class='dropdown-submenu "+itemData.storeId+"'><a href='#' onTouchStart='change2("+itemData.storeId+");'>"+itemData.storeName+"</a></li>"); 
+				    }else{
+				    	th.append("<li class='dropdown-submenu "+itemData.storeId+"'><a href='#' onMouseOver='change2("+itemData.storeId+");'>"+itemData.storeName+"</a></li>"); 
+				    }
+
 				}); 
 				if(sta!="1"){
 					window.location.href='<%=request.getContextPath()%>/manage/index';
@@ -662,7 +685,7 @@
 				th.append("<ul class='dropdown-menu category"+id+"' '></ul>");
  				var parsedJson = $.parseJSON(data);
 				jQuery.each(parsedJson, function(index, itemData) {
-					$(".category"+id).append("<li><a href='#' onclick='changeTag("+id+","+itemData.id+",0);'>"+itemData.categoryName+"</a></li>"); 
+					$(".category"+id).append("<li><a href='javascript:void(0);' onclick='changeTag("+id+","+itemData.id+",0);'>"+itemData.categoryName+"</a></li>"); 
 				}); 
 			}
 		});		
