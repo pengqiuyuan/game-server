@@ -218,6 +218,35 @@
 		  	 			}
 		  			});
 			});
+		  	
+		    $(".roleCodeOne").change(function(e){
+				if(confirm("该操作会修改权限组。。。。！")){
+					var gameId = $(this).parent().parent().prev().children().children("#storeId").val();
+					var role = $(this).children('option:selected').val();
+			    	var userId = $("#userId").val();
+					var th = $(this).parent().parent().next().children("#functions");
+					th.empty();
+					e.preventDefault();
+					$.ajax({                                               
+						url: '<%=request.getContextPath()%>/manage/user/updateFunctions?gameId='+gameId+'&role='+role+'&userId='+userId, 
+						type: 'GET',
+						contentType: "application/json;charset=UTF-8",		
+						dataType: 'text',
+						success: function(data){
+			 				var parsedJson = $.parseJSON(data);
+							jQuery.each(parsedJson.roleFunctions, function(index, itemData) {
+			  					jQuery.each(itemData.roleAndEnums, function(i, its) {
+			  						th.append("<input type='checkbox' onclick='return false' name='functions' value='"+its.enumRole+"' checked='checked' class='box' /><span>"+its.enumRole+"、"+its.enumName+"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
+									if((i+1)%5==0){
+										th.append("<br/><br/>");
+									}
+			  					}); 
+			  				}); 
+						}
+					});
+				}  
+			}); 
+		    
 		  
 		    $(".roleCodeO").click(function(e){
 				var gameId = $(this).prev().prev("#storeId").val();

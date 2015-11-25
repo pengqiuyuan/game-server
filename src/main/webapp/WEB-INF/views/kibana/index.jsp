@@ -12,7 +12,7 @@
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-    <title>Kibana 3{{dashboard.current.title ? " - "+dashboard.current.title : ""}}</title>
+    <title>实时日志</title>
     <link rel="stylesheet" href="css/bootstrap.light.min.css" title="Light">
     <link rel="stylesheet" href="css/timepicker.css">
     <link rel="stylesheet" href="css/animate.min.css">
