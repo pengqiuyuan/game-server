@@ -56,6 +56,9 @@
 							    <shiro:hasAnyRoles name="admin,16">
 							    <li><a href="${ctx}/manage/tag/uploadExcel">上传文档</a></li>
 							    </shiro:hasAnyRoles>
+							    <shiro:hasAnyRoles name="admin,21">
+							    <li><a href="${ctx}/manage/monitor/index">监控数值</a></li>
+							    </shiro:hasAnyRoles>
 								<li class="divider"></li>
 								<li><a href="#">sample</a></li>
 							</ul>

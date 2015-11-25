@@ -51,18 +51,19 @@ color:Red;
 			</div>
 			<div
 				class="control-group">
-				<label class="control-label" for="enumName">功能名称：</label>
-				<div class="controls">
-					<input type="text" name="enumName" class="input-large "  />
-				</div>
-			</div>	
-			<div
-				class="control-group">
 				<label class="control-label" for="enumRole">功能权限：</label>
 				<div class="controls">
 					<input type="text" name="enumRole" class="input-large "  />
 				</div>
 			</div>	
+			<div
+				class="control-group">
+				<label class="control-label" for="enumName">功能名称：</label>
+				<div class="controls">
+					<input type="text" name="enumName" class="input-large "  />
+				</div>
+			</div>	
+
 			<shiro:hasAnyRoles name="admin">
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
@@ -85,7 +86,8 @@ color:Red;
 					required:true
 				},
 				enumRole:{
-					required:true
+					required:true,
+					remote: '<%=request.getContextPath()%>/manage/enumFunction/checkEnumRole'
 				}
 			},messages:{
 				gameId:{
@@ -98,7 +100,8 @@ color:Red;
 					required:"功能名称必须填写"
 				},
 				enumRole:{
-					required:"功能权限必须填写"
+					required:"功能权限必须填写",
+					remote: "功能权限已存在"
 				}
 			}
 		});
