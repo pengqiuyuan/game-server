@@ -8,5 +8,4 @@ import com.enlight.game.entity.Monitor;
 
 public interface MonitorDao extends PagingAndSortingRepository<Monitor, Long>,JpaSpecificationExecutor<Monitor>{
 
-	Monitor findByStoreIdAndMonitorKeyAndEql(String storeId, String monitorKey , String eql);	
 }

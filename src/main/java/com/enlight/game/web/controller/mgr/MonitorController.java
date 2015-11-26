@@ -44,8 +44,7 @@ public class MonitorController extends BaseController{
 	
 	static{
 		sortTypes.put("auto","自动");
-		sortTypes.put("monitorKey", "key");
-		sortTypes.put("storeId", "游戏项目");
+		sortTypes.put("key", "key");
 	}
 	
 	public static Map<String, String> getSortTypes() {
@@ -119,15 +118,9 @@ public class MonitorController extends BaseController{
 	 */
 	@RequestMapping(value = "/save",method=RequestMethod.POST)
 	public String save(Monitor monitor,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		Monitor moni = monitorService.findByStoreIdAndMonitorKeyAndEql(monitor.getStoreId(),monitor.getMonitorKey(),monitor.getEql()); 
-		if (moni == null) {
-			monitorService.save(monitor);
-			redirectAttributes.addFlashAttribute("message", "新增成功");
-			return "redirect:/manage/monitor/index?search_LIKE_storeId="+monitor.getStoreId();
-		} else {
-			redirectAttributes.addFlashAttribute("message", "新增失败，参数已存在，在请此页面选择修改！");
-			return "redirect:/manage/monitor/edit?id="+moni.getId().toString();
-		}
+		monitorService.save(monitor);
+		redirectAttributes.addFlashAttribute("message", "新增成功");
+		return "redirect:/manage/monitor/index?search_LIKE_storeId="+monitor.getStoreId();
 	}
 	
 	@RequestMapping(value="edit",method=RequestMethod.GET)
@@ -145,15 +138,6 @@ public class MonitorController extends BaseController{
 			model.addAttribute("stores", stores);
 		}	
 		model.addAttribute("monitor", monitor);
-		model.addAttribute("monitorValueFrist",monitor.getValueList().get(0));
-		
-		List<String> monitorValuesOther = new ArrayList<String>();  
-		for(String t : monitor.getMonitorValue().split(",")){  
-			monitorValuesOther.add(t);  
-		}  
-		monitorValuesOther.remove(0);  
-		
-		model.addAttribute("monitorValuesOther",monitorValuesOther);
 		return "/monitor/edit";
 	}
 	

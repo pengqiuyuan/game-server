@@ -40,10 +40,9 @@
 						<option value="增加的充值币数量" >money_mount</option>
 						<option value="增加的游戏币数量" >coin_mount</option>
 					</select>
-					<span id='addMonitorValue' class='add btn btn-primary' style='display:none;margin-left: 1em'>增加监控字段值</span>
 				</div>
 			</div>	
-			<div class="control-group" id="eqlDiv">
+			<div class="control-group">
 				<label class="control-label" for="eql">判断值：</label>
 				<div class="controls">
 					<select name="eql" id="eql">
@@ -53,27 +52,21 @@
 					</select>
 				</div>
 			</div>
-			
-			<div class="page-header"></div>
-			<div class="control-group" id="monitorDiv">
+			<div class="control-group">
 				<label class="control-label" for="monitorValue">监控字段值：</label>
 				<div class="controls">
 					<input type="text" name="monitorValue" class="input-large "/>
-				</div>	
-			</div>	
-			
+				</div>
+			</div>		
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
 				 <a href="<%=request.getContextPath()%>/manage/monitor/index" class="btn btn-primary">返回</a>
 	        </div>
 	</form>
 	<script type="text/javascript">
-	    $(function(){	
+		$(function(){
 			$("#inputForm").validate({
 				rules:{
-					storeId:{
-						required:true
-					},
 					monitorKey:{
 						required:true
 					},
@@ -84,9 +77,6 @@
 						required:true
 					}
 				},messages:{
-					storeId:{
-						required:"游戏项目必须填写"
-					},
 					monitorKey:{
 						required:"监控字段名称必须填写"
 					},
@@ -98,28 +88,6 @@
 					}
 				}
 			});
-			
-			$("#monitorKey").change(function(e){
-				if($("#monitorKey").val() == '日志道具id' ){
-					$("#addMonitorValue").show();
-					$('#eqlDiv').empty();
-					$('#eqlDiv').append("<label class='control-label' for='eql'>判断值：</label><div class='controls'><select name='eql' id='eql'><option value=''>请选择</option><option value='eql' >等于</option></select></div>");
-				}else{
-					$('#addMonitorValue').hide();
-					$('#eqlDiv').empty();
-					$('#eqlDiv').append("<label class='control-label' for='eql'>判断值：</label><div class='controls'><select name='eql' id='eql'><option value=''>请选择</option><option value='gte'>大于</option><option value='eql' >等于</option></select></div>");
-				}
-			});
-			
-			$("#addMonitorValue").click(function(e){
-				$("#monitorDiv").after("<div class='control-group'><div class='controls'><input type='text' name='monitorValue' class='input-large'/><span id='delMonitorValue' class='del btn btn-danger' style=' margin-left: 1em'>移除监控字段值</span></div></div>");
-				$("#delMonitorValue").click(function(e){
-					$(this).parent().parent().remove();
-				});
-			});
-			
-
 		})
-
 	</script> 
 </body>
