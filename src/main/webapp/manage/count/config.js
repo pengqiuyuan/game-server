@@ -26,10 +26,10 @@ function (Settings) {
      * elasticsearch: "http://"+window.location.hostname+":9200",
      */
 	 //测试使用
-	 //elasticsearch: "http://"+window.location.hostname+":9200",
+	 elasticsearch: "http://"+window.location.hostname+":9200",
 	 
 	 //线上使用 nginx 80 port 代理9200 
-	 elasticsearch: "http://"+window.location.hostname+"/port",
+	 //elasticsearch: "http://"+window.location.hostname+"/port",
     
     /** @scratch /configuration/config.js/5
      *
