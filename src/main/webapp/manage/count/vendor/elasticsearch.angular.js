@@ -33076,11 +33076,11 @@ Host.prototype.makeUrl = function (params) {
   if (this.port !== Host.defaultPorts[this.protocol]) {
 
 	//没有使用nginx 使用9200
-    port = ':' + this.port;
+    //port = ':' + this.port;
 
 	//使用nginx port 替代9200
-	//port = '/port';
-	//this.host = '182.92.69.21';
+	port = '/port';
+	this.host = '182.92.69.21';
 
   }
 
