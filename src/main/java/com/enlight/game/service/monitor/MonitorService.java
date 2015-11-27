@@ -1,6 +1,6 @@
 package com.enlight.game.service.monitor;
 
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -16,7 +16,6 @@ import org.springside.modules.persistence.DynamicSpecifications;
 import org.springside.modules.persistence.SearchFilter;
 
 import com.enlight.game.entity.Monitor;
-import com.enlight.game.entity.User;
 import com.enlight.game.repository.MonitorDao;
 import com.enlight.game.service.account.AccountService;
 
@@ -29,6 +28,10 @@ public class MonitorService {
 	
 	@Autowired
 	private AccountService accountService;
+	
+	public List<Monitor> findAll(String storeId){
+		return monitorDao.findByStoreId(storeId);
+	}
 	
 	public Monitor findByMoId(Long moId){
 		return monitorDao.findOne(moId);
@@ -48,6 +51,10 @@ public class MonitorService {
 		mo.setEql(monitor.getEql());
 		mo.setMonitorValue(monitor.getMonitorValue());
 		monitorDao.save(mo);
+	}
+	
+	public Monitor findByStoreIdAndMonitorKeyAndEql(String storeId ,String monitorKey, String eql){
+		return monitorDao.findByStoreIdAndMonitorKeyAndEql(storeId, monitorKey, eql);
 	}
 	
 	/**
@@ -77,8 +84,10 @@ public class MonitorService {
 		Sort sort = null;
 		if ("auto".equals(sortType)) {
 			sort = new Sort(Direction.DESC, "id");
-		}else if ("key".equals(sortType)) {
+		}else if ("monitorKey".equals(sortType)) {
 			sort = new Sort(Direction.DESC, "monitorKey");
+		}else if ("storeId".equals(sortType)) {
+			sort = new Sort(Direction.DESC, "storeId");
 		}
 		return new PageRequest(pageNumber - 1, pagzSize, sort);
 	}
