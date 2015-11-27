@@ -38,10 +38,10 @@
 			<thead>
 				<tr>
 					<th title="编号" width="120px">编号</th>
+					<th title="游戏项目">游戏项目</th>
 					<th title="名称">监控字段名称</th>
 					<th title="判断值">判断值</th>
 					<th title="监控字段值">监控字段值</th>
-					<th title="游戏项目">游戏项目</th>
 				</tr>
 			</thead>
 			<tbody id="tbody">
@@ -66,13 +66,13 @@
 								</ul>
 							</div>
 						</td>
+						<td><huake:getStoreNameTag id="${item.storeId}"></huake:getStoreNameTag></td>
 						<td>${item.monitorKey}</td>
 						<td>
 							<c:if test="${item.eql == 'gte'}">大于</c:if>
 							<c:if test="${item.eql == 'eql'}">等于</c:if>	
 						</td>
 						<td>${item.monitorValue}</td>
-						<td><huake:getStoreNameTag id="${item.storeId}"></huake:getStoreNameTag></td>
 					</tr>
 				</c:forEach>
 			</tbody>
