@@ -29,8 +29,8 @@ public class MonitorService {
 	@Autowired
 	private AccountService accountService;
 	
-	public List<Monitor> findAll(){
-		return monitorDao.findAll();
+	public List<Monitor> findAll(String storeId){
+		return monitorDao.findByStoreId(storeId);
 	}
 	
 	public Monitor findByMoId(Long moId){

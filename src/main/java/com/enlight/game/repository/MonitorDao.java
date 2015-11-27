@@ -14,7 +14,5 @@ public interface MonitorDao extends PagingAndSortingRepository<Monitor, Long>,Jp
 	
 	Monitor findByStoreIdAndMonitorKeyAndEql(String storeId, String monitorKey , String eql);	
 
-	@Modifying
-	@Query("from Monitor monitor")
-	List<Monitor> findAll();
+	List<Monitor> findByStoreId(String storeId);
 }
