@@ -9,6 +9,7 @@ public class EsUtil {
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 	SimpleDateFormat s =   new SimpleDateFormat("yyyy-MM-dd" ); 
+	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss.SSS");
 	Calendar calendar = new GregorianCalendar(); 
 
 	public String nowDate(){
@@ -156,6 +157,17 @@ public class EsUtil {
         return fd;
 	}
 	
+	public String nowDate1(){
+		String nowDate = sdf1.format(new Date());
+		return nowDate;
+	}
 	
+	public String fiveMinuteAgoFrom(){
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.MINUTE,-500);
+	    Date date=calendar.getTime();
+	    String da = sdf1.format(date); 
+		return da;
+	}
 	
 }

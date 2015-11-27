@@ -1,6 +1,6 @@
 package com.enlight.game.service.monitor;
 
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -29,6 +29,10 @@ public class MonitorService {
 	
 	@Autowired
 	private AccountService accountService;
+	
+	public List<Monitor> findAll(){
+		return monitorDao.findAll();
+	}
 	
 	public Monitor findByMoId(Long moId){
 		return monitorDao.findOne(moId);

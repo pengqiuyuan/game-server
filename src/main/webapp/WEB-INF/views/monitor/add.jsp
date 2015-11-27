@@ -74,7 +74,8 @@
 						required:true
 					},
 					monitorValue:{
-						required:true
+						required:true,
+						number:true
 					}
 				},messages:{
 					monitorKey:{
@@ -84,7 +85,8 @@
 						required:"判断值必须填写"
 					},
 					monitorValue:{
-						required:"监控字段值必须填写"
+						required:"监控字段值必须填写",
+						number: "请输入合法的数字"
 					}
 				}
 			});

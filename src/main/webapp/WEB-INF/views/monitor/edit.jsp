@@ -61,7 +61,7 @@
 			</div>	
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
-				 <a href="<%=request.getContextPath()%>/manage/platForm/index" class="btn btn-primary">返回</a>
+				 <a href="<%=request.getContextPath()%>/manage/monitor/index" class="btn btn-primary">返回</a>
 	        </div>
 	</form>
 	<script type="text/javascript">
@@ -75,7 +75,8 @@
 						required:true
 					},
 					monitorValue:{
-						required:true
+						required:true,
+						number:true
 					}
 				},messages:{
 					key:{
@@ -85,7 +86,8 @@
 						required:"判断值必须填写"
 					},
 					monitorValue:{
-						required:"监控字段值必须填写"
+						required:"监控字段值必须填写",
+						number: "请输入合法的数字"
 					}
 				}
 			});

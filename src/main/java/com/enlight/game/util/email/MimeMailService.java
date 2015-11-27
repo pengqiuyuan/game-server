@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,12 @@ public class MimeMailService {
 	/**
 	 * 发送MIME格式的用户修改通知邮件.
 	 */
-	public void sendNotificationMailtest(String userName) {
+	public void sendNotificationMailtest(
+			List<String> sr_hits,
+			List<String> items,
+			List<String> moneys,
+			List<String> coins,
+			List<String> itemIds) {
 
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
@@ -59,7 +65,7 @@ public class MimeMailService {
 				helper.setTo(s);
 				helper.setSubject("用户修改通知");
 
-				String content = generateContent(userName);
+				String content = generateContent(sr_hits,items,moneys,coins,itemIds);
 				helper.setText(content, true);
 
 				//File attachment = generateAttachment();
@@ -79,7 +85,12 @@ public class MimeMailService {
 	/**
 	 * 发送MIME格式的用户修改通知邮件.
 	 */
-	public void sendNotificationMail(String userName) {
+	public void sendNotificationMail(
+			List<String> sr_hits,
+			List<String> items,
+			List<String> moneys,
+			List<String> coins,
+			List<String> itemIds) {
 
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
@@ -87,9 +98,9 @@ public class MimeMailService {
 
 			helper.setFrom("pengqiuyuan@126.com");
 			helper.setTo("370020694@qq.com");
-			helper.setSubject("用户修改通知");
+			helper.setSubject("日志阙值触发报警通知");
 
-			String content = generateContent(userName);
+			String content = generateContent(sr_hits,items,moneys,coins,itemIds);
 			helper.setText(content, true);
 
 			//File attachment = generateAttachment();
@@ -109,10 +120,20 @@ public class MimeMailService {
 	/**
 	 * 使用Freemarker生成html格式内容.
 	 */
-	private String generateContent(String userName) throws MessagingException {
-
+	private String generateContent(
+			List<String> sr_hits,
+			List<String> items,
+			List<String> moneys,
+			List<String> coins,
+			List<String> itemIds) throws MessagingException {
 		try {
-			Map context = Collections.singletonMap("userName", userName);
+			Map<String, Object> context = new HashMap<String, Object>();
+			context.put("sr_hits", sr_hits);
+			context.put("items", items);
+			context.put("moneys", moneys);
+			context.put("coins", coins);
+			context.put("itemIds", itemIds);
+			
 			return FreeMarkerTemplateUtils.processTemplateIntoString(template, context);
 		} catch (IOException e) {
 			logger.error("生成邮件内容失败, FreeMarker模板不存在", e);
