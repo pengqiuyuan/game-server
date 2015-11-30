@@ -330,7 +330,7 @@ public class RoleFunctionController extends BaseController{
 					
 					EnumFunction enumFunction =  enumFunctionService.findByEnumRole(str);
 					role.setEnumName(enumFunction.getEnumName());
-					role.setEnumName(enumFunction.getEnumRole());
+					role.setEnumRole(enumFunction.getEnumRole());
 					roleAndEnumService.update(role);
 				}
 			}
