@@ -86,6 +86,7 @@ public class MimeMailService {
 	 * 发送MIME格式的用户修改通知邮件.
 	 */
 	public void sendNotificationMail(
+			String xStoreName,
 			List<String> sr_hits,
 			List<String> items,
 			List<String> moneys,
@@ -98,7 +99,7 @@ public class MimeMailService {
 
 			helper.setFrom("pengqiuyuan@126.com");
 			helper.setTo("370020694@qq.com");
-			helper.setSubject("日志阙值触发报警通知");
+			helper.setSubject(xStoreName+"日志阙值触发报警通知");
 
 			String content = generateContent(sr_hits,items,moneys,coins,itemIds);
 			helper.setText(content, true);

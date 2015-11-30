@@ -69,7 +69,7 @@
 						<td><huake:getStoreNameTag id="${item.storeId}"></huake:getStoreNameTag></td>
 						<td>${item.monitorKey}</td>
 						<td>
-							<c:if test="${item.eql == 'gte'}">大于</c:if>
+							<c:if test="${item.eql == 'gte'}">大于等于</c:if>
 							<c:if test="${item.eql == 'eql'}">等于</c:if>	
 						</td>
 						<td>${item.monitorValue}</td>
