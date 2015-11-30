@@ -40,7 +40,7 @@
 						<option value="增加的充值币数量" >money_mount</option>
 						<option value="增加的游戏币数量" >coin_mount</option>
 					</select>
-					<span id='addMonitorValue' class='add btn btn-primary' style='display:none;margin-left: 1em'>增加监控字段值</span>
+					<span id='addMonitorValue' class='add btn btn-primary' style='display:none;margin-left: 1em;'>增加监控字段值</span>
 				</div>
 			</div>	
 			<div class="control-group" id="eqlDiv">
@@ -48,8 +48,7 @@
 				<div class="controls">
 					<select name="eql" id="eql">
 						<option value="">请选择</option>
-						<option value="gte">大于</option>
-						<option value="eql" >等于</option>
+						<option value="gte">大于等于</option>
 					</select>
 				</div>
 			</div>
@@ -107,7 +106,7 @@
 				}else{
 					$('#addMonitorValue').hide();
 					$('#eqlDiv').empty();
-					$('#eqlDiv').append("<label class='control-label' for='eql'>判断值：</label><div class='controls'><select name='eql' id='eql'><option value=''>请选择</option><option value='gte'>大于</option><option value='eql' >等于</option></select></div>");
+					$('#eqlDiv').append("<label class='control-label' for='eql'>判断值：</label><div class='controls'><select name='eql' id='eql'><option value=''>请选择</option><option value='gte'>大于等于</option></select></div>");
 				}
 			});
 			

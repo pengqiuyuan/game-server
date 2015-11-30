@@ -54,7 +54,7 @@
 				<div class="controls">
 					<select name="eql" id="eql" disabled="disabled">
 						<option value="">请选择</option>
-						<option value="gte" ${monitor.eql == 'gte' ? 'selected' : '' }>大于</option>
+						<option value="gte" ${monitor.eql == 'gte' ? 'selected' : '' }>大于等于</option>
 						<option value="eql" ${monitor.eql == 'eql' ? 'selected' : '' }>等于</option>
 					</select>
 					<input type="text" name="eql" class="input-large " value="${monitor.eql}" style="display: none"/>
@@ -122,7 +122,7 @@
 				}else{
 					$('#addMonitorValue').hide();
 					$('#eqlDiv').empty();
-					$('#eqlDiv').append("<label class='control-label' for='eql'>判断值：</label><div class='controls'><select name='eql' id='eql'><option value=''>请选择</option><option value='gte'>大于</option><option value='eql' >等于</option></select></div>");
+					$('#eqlDiv').append("<label class='control-label' for='eql'>判断值：</label><div class='controls'><select name='eql' id='eql'><option value=''>请选择</option><option value='gte'>大于等于</option></select></div>");
 				}
 			});
 			

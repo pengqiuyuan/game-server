@@ -7,6 +7,9 @@
         h3{
             color:#630000;
         }
+        ul{
+		    padding: 0px;
+		}
         ul li{
             margin: 10px;
         }
@@ -23,6 +26,14 @@
 <h3>报警条数统计</h3>
 <ul>
 	<#list sr_hits as being>
+	    <li>
+	        <td>${being}<td>
+	    </li>
+	</#list>
+</ul>
+<h3>日志道具id（item_id）</h3>
+<ul>
+	<#list itemIds as being>
 	    <li>
 	        <td>${being}<td>
 	    </li>
@@ -47,14 +58,6 @@
 <h3>增加的游戏币数量（coin_count）</h3>
 <ul>
 	<#list coins as being>
-	    <li>
-	        <td>${being}<td>
-	    </li>
-	</#list>
-</ul>
-<h3>日志道具id（item_id）</h3>
-<ul>
-	<#list itemIds as being>
 	    <li>
 	        <td>${being}<td>
 	    </li>

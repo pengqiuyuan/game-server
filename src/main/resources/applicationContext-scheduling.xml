@@ -279,8 +279,8 @@
 	</bean>
 	<bean id="gameValueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="gameValueMethod" /> 
-     	 <property name="cronExpression" value="0 */5 * * * ?"  /> 
-     	 <!--  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+		 <property name="cronExpression" value="0 */5 * * * ?"  />
+     	 <!-- <property name="cronExpression" value="0/30 * * * * ?"  /> -->
 	</bean>
 <!-- 日志监控值调度 end -->
 	

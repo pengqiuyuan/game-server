@@ -14,8 +14,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springside.modules.persistence.DynamicSpecifications;
 import org.springside.modules.persistence.SearchFilter;
+import org.springside.modules.persistence.SearchFilter.Operator;
 
 import com.enlight.game.entity.Monitor;
+import com.enlight.game.entity.PlatForm;
+import com.enlight.game.entity.User;
 import com.enlight.game.repository.MonitorDao;
 import com.enlight.game.service.account.AccountService;
 
@@ -98,6 +101,10 @@ public class MonitorService {
 	private Specification<Monitor> buildSpecification(Long userId,
 			Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+		User user = accountService.getUser(userId);
+		if (!user.getRoles().equals(User.USER_ROLE_ADMIN)) {
+			filters.put("storeId", new SearchFilter("storeId", Operator.EQ,user.getStoreId()));
+		}
 		Specification<Monitor> spec = DynamicSpecifications.bySearchFilter(filters.values(), Monitor.class);
 		return spec;
 	}
