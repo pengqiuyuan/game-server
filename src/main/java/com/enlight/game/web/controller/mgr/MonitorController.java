@@ -125,7 +125,7 @@ public class MonitorController extends BaseController{
 			redirectAttributes.addFlashAttribute("message", "新增成功");
 			return "redirect:/manage/monitor/index?search_LIKE_storeId="+monitor.getStoreId();
 		} else {
-			redirectAttributes.addFlashAttribute("message", "新增失败，参数已存在，在请此页面选择修改！");
+			redirectAttributes.addFlashAttribute("message", "参数已存在，在请此页面选择修改值！");
 			return "redirect:/manage/monitor/edit?id="+moni.getId().toString();
 		}
 	}
