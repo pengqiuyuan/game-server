@@ -13,6 +13,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -40,47 +41,14 @@ public class MimeMailService {
 
 	private Template template;
 
+	@Value("#{envProps.fbEmail}")
+	private String fbEmail;
 	
-
-	/**
-	 * 发送MIME格式的用户修改通知邮件.
-	 */
-	public void sendNotificationMailtest(
-			List<String> sr_hits,
-			List<String> items,
-			List<String> moneys,
-			List<String> coins,
-			List<String> itemIds) {
-
-		try {
-			MimeMessage msg = mailSender.createMimeMessage();
-			
-			List<String> em = new ArrayList<String>();
-			//em.add("80387591@qq.com");
-			//em.add("435206692@qq.com");
-			//em.add("296656525@qq.com");
-			for (String s : em) {
-				MimeMessageHelper helper = new MimeMessageHelper(msg, true, DEFAULT_ENCODING);
-				helper.setFrom("pengqiuyuan@126.com");
-				helper.setTo(s);
-				helper.setSubject("用户修改通知");
-
-				String content = generateContent(sr_hits,items,moneys,coins,itemIds);
-				helper.setText(content, true);
-
-				//File attachment = generateAttachment();
-				//helper.addAttachment("mailAttachment.txt", attachment);
-
-				mailSender.send(msg);
-				logger.info("HTML版邮件已发送至 "+s);
-			}
-
-		} catch (MessagingException e) {
-			logger.error("构造邮件失败", e);
-		} catch (Exception e) {
-			logger.error("发送邮件失败", e);
-		}
-	}
+	@Value("#{envProps.kunEmail}")
+	private String kunEmail;
+	
+	@Value("#{envProps.kdsEmail}")
+	private String kdsEmail;
 	
 	/**
 	 * 发送MIME格式的用户修改通知邮件.
@@ -98,7 +66,14 @@ public class MimeMailService {
 			MimeMessageHelper helper = new MimeMessageHelper(msg, true, DEFAULT_ENCODING);
 
 			helper.setFrom("pengqiuyuan@126.com");
-			helper.setTo("370020694@qq.com");
+			if(xStoreName.equals("FB")){
+				helper.setTo(fbEmail);
+			}else if(xStoreName.equals("KUN")){
+				helper.setTo(kunEmail);
+			}else if(xStoreName.equals("KDS")){
+				helper.setTo(kdsEmail);
+			}
+			
 			helper.setSubject(xStoreName+"日志阙值触发报警通知");
 
 			String content = generateContent(sr_hits,items,moneys,coins,itemIds);

@@ -164,7 +164,7 @@ public class EsUtil {
 	
 	public String fiveMinuteAgoFrom(){
 	    calendar.setTime(new Date()); 
-	    calendar.add(calendar.MINUTE,-5);
+	    calendar.add(calendar.MINUTE,-500);
 	    Date date=calendar.getTime();
 	    String da = sdf1.format(date); 
 		return da;
