@@ -324,7 +324,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（人物等级）"
+          "title": "用户登录次数（人物等级）"
         },
         {
           "error": false,
@@ -357,7 +357,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（人物等级）"
+          "title": "用户登录次数（人物等级）"
         },
         {
           "error": false,
@@ -390,7 +390,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（是否首次登陆） 0是老用户1是新用户"
+          "title": "用户登录次数（是否首次登陆） 0是老用户1是新用户"
         },
         {
           "error": false,
@@ -423,7 +423,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（是否首次登陆） 0是老用户1是新用户"
+          "title": "用户登录次数（是否首次登陆） 0是老用户1是新用户"
         },
         {
           "error": false,
@@ -456,7 +456,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（登陆设备系统）苹果是1，安卓是2，未知登陆设备是0"
+          "title": "用户登录次数（登陆设备系统）苹果是1，安卓是2，未知登陆设备是0"
         },
         {
           "error": false,
@@ -489,7 +489,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（登陆设备系统）苹果是1，安卓是2，未知登陆设备是0"
+          "title": "用户登录次数（登陆设备系统）苹果是1，安卓是2，未知登陆设备是0"
         },
         {
           "error": false,
@@ -522,7 +522,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（运营大区）"
+          "title": "用户登录次数（运营大区）"
         },
         {
           "error": false,
@@ -555,7 +555,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（渠道）"
+          "title": "用户登录次数（渠道）"
         },
         {
           "error": false,
@@ -588,7 +588,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "用户登录人数（服务器）"
+          "title": "用户登录次数（服务器）"
         }
       ],
       "notice": false
