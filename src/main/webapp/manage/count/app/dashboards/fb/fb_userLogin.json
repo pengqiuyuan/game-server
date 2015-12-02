@@ -8,7 +8,7 @@
         "0": {
           "id": 0,
           "color": "#7EB26D",
-          "alias": "登陆人数",
+          "alias": "用户登陆次数",
           "pin": false,
           "type": "lucene",
           "enable": true,
