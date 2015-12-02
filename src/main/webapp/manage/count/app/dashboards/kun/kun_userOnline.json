@@ -8,7 +8,6 @@
         "0": {
           "id": 0,
           "color": "#7EB26D",
-          "alias": "在线人数",
           "pin": false,
           "type": "lucene",
           "enable": true,
@@ -50,7 +49,7 @@
           "editable": true,
           "type": "histogram",
           "loadingEditor": false,
-          "mode": "mean",
+          "mode": "total",
           "time_field": "@timestamp",
           "value_field": "当前在线人数",
           "x-axis": true,
