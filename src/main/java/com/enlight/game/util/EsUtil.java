@@ -9,7 +9,7 @@ public class EsUtil {
 	
 	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 	SimpleDateFormat s =   new SimpleDateFormat("yyyy-MM-dd" ); 
-	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss.SSS");
+	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	Calendar calendar = new GregorianCalendar(); 
 
 	public String nowDate(){
