@@ -89,6 +89,11 @@ public class EsMonitorTest extends SpringTransactionalTestCase{
 	EsUtil esUtilTest = new EsUtil();
 	
 	@Test
+	public void test13() throws IOException, ParseException {	
+		System.out.println("111111   "  +  esUtilTest.fiveMinuteAgoFrom()  +  "    "   + esUtilTest.nowDate1());
+	}
+	
+	//@Test
 	public void test14() throws IOException, ParseException {	
 		xMonitor(fbStoreId, fbStoreName, fb_index, fb_item_type, fb_money_type, fb_coin_type);
 		xMonitor(kunStoreId, kunStoreName, kun_index, kun_item_type, kun_money_type, kun_coin_type);
