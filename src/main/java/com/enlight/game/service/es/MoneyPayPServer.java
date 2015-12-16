@@ -209,7 +209,7 @@ public class MoneyPayPServer {
 				        .setTypes(type)
 				        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 				        .setQuery(builder)
-				        .addSort("date", SortOrder.DESC)
+				        .addSort("date", SortOrder.ASC)
 				        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 				        .execute()
 				        .actionGet();
@@ -233,7 +233,7 @@ public class MoneyPayPServer {
 				        .setTypes(type)
 				        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 				        .setQuery(builder)
-				        .addSort("date", SortOrder.DESC)
+				        .addSort("date", SortOrder.ASC)
 				        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
 				        .execute()
 				        .actionGet();
