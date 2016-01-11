@@ -1,33 +1,20 @@
 package com.enlight.game.es;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
-import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
-import org.quartz.JobDetail;
-import org.quartz.SimpleTrigger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
@@ -43,15 +30,15 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 	private Client client;
 	
 	//项目名称
-	private static final String fb_game = "FB";
+	private static final String game = "KDS";
 	
-	private static final String index = "logstash-fb-user-*";
+	private static final String index = "logstash-kds-user-*";
 	
-	private static final String type = "fb_user.log";
+	private static final String type = "kds_user.log";
 	
-	private static final String bulk_index = "log_fb_user";
+	private static final String bulk_index = "log_kds_user";
 	
-	private static final String bulk_type_retained = "fb_user_retained";
+	private static final String bulk_type_retained = "kds_user_retained";
 	
 	private static final Integer szsize = 10; //运营大区
 	
@@ -133,7 +120,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 			    System.out.println("aaaaaaaaaaaaaaaaa    "   +  RetentionTwo);
 
 			    userRetained.setDate(esUtilTest.twoDayAgoFrom());
-			    userRetained.setGameId(fb_game);
+			    userRetained.setGameId(game);
 			    userRetained.setKey(UserRetained.KEY_ALL);
 			    userRetained.setCtRetained(UserRetained.CT_NEXTDAY);
 			    userRetained.setRetained(df.format(RetentionTwo));
@@ -147,7 +134,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 
 				RetentionEight = (double)aggcount*100/createCount(esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
 			    userRetained.setDate(esUtilTest.eightDayAgoFrom());
-			    userRetained.setGameId(fb_game);
+			    userRetained.setGameId(game);
 			    userRetained.setKey(UserRetained.KEY_ALL);
 			    userRetained.setCtRetained(UserRetained.CT_SEVENDAY);
 			    userRetained.setRetained(df.format(RetentionEight));
@@ -160,7 +147,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 
 			    RetentionThirty = (double)aggcount*100/createCount(esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
 			    userRetained.setDate(esUtilTest.thirtyOneDayAgoFrom());
-			    userRetained.setGameId(fb_game);
+			    userRetained.setGameId(game);
 			    userRetained.setKey(UserRetained.KEY_ALL);
 			    userRetained.setCtRetained(UserRetained.CT_THIRYTDAY);
 			    userRetained.setRetained(df.format(RetentionThirty));
