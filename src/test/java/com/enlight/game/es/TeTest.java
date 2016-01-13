@@ -40,6 +40,11 @@ public class TeTest extends SpringTransactionalTestCase{
 	private Client client;
 	
 	@Test
+	public void test0() throws IOException, ParseException {	
+		System.out.println("11111");
+	}
+	
+	//@Test
 	public void test1() throws IOException, ParseException {	
 		long startTime=System.currentTimeMillis();  
 		
