@@ -33080,7 +33080,9 @@ Host.prototype.makeUrl = function (params) {
 
 	//使用nginx port 替代9200
 	//port = '/port';
-	//this.host = '182.92.69.21';
+	
+	
+	this.host = window.location.hostname;
 
   }
 
