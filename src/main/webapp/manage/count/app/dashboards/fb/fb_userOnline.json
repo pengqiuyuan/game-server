@@ -38,7 +38,7 @@
   },
   "rows": [
     {
-      "title": "当前在线人数",
+      "title": "当前在线(条数)",
       "height": "350px",
       "editable": true,
       "collapse": false,
