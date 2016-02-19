@@ -56,7 +56,7 @@ public class FbRetainedScheduled {
 	public Long createCount(String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(from).to(to),
+				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
@@ -67,7 +67,7 @@ public class FbRetainedScheduled {
 	public Long createServerZoneCount(String key,String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(from).to(to),
+				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("运营大区ID", key))
 		        );
@@ -79,7 +79,7 @@ public class FbRetainedScheduled {
 	public Long createPlatFormCount(String key,String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(from).to(to),
+				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("渠道ID", key))
 		        );
@@ -91,7 +91,7 @@ public class FbRetainedScheduled {
 	public Long createServerCount(String key,String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(from).to(to),
+				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("服务器ID", key))
 		        );
@@ -108,7 +108,7 @@ public class FbRetainedScheduled {
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
 		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -195,7 +195,7 @@ public class FbRetainedScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
 		        QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
@@ -304,7 +304,7 @@ public class FbRetainedScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
 		        QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
@@ -404,7 +404,7 @@ public class FbRetainedScheduled {
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
 		        QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
