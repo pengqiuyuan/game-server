@@ -1,5 +1,6 @@
 package com.enlight.game.service.store;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +87,7 @@ public class StoreService {
 	 * @param store
 	 */
 	public void save(Stores store) {
+		store.setCreateDate(new Date());
 		store.setStatus(Stores.STATUS_VALIDE);
 		storeDao.save(store);
 	}
@@ -113,6 +115,7 @@ public class StoreService {
 	 */
 	public void update(Stores store) {
 		Stores store1 = storeDao.findOne(store.getId());
+		store1.setUpdDate(new Date());
 		store1.setName(store.getName());
 		storeDao.save(store1);
 	}
