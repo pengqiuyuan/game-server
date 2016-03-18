@@ -67,7 +67,7 @@ public class KunPayConversionScheduled {
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 		        		FilterBuilders.termFilter("是否首次充值", "1"),
 				        FilterBuilders.termFilter("支付货币", paytype)
@@ -92,7 +92,7 @@ public class KunPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
 						        FilterBuilders.termFilter("支付货币", paytype)
@@ -116,14 +116,14 @@ public class KunPayConversionScheduled {
 		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						).execute().actionGet();
 		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -154,7 +154,7 @@ public class KunPayConversionScheduled {
 		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						).execute().actionGet();
@@ -162,7 +162,7 @@ public class KunPayConversionScheduled {
 		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -194,7 +194,7 @@ public class KunPayConversionScheduled {
 		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						).execute().actionGet();
@@ -202,7 +202,7 @@ public class KunPayConversionScheduled {
 		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -239,7 +239,7 @@ public class KunPayConversionScheduled {
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 		        		FilterBuilders.termFilter("是否首次充值", "1"),
 				        FilterBuilders.termFilter("支付货币", paytype)
@@ -271,7 +271,7 @@ public class KunPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
 						        FilterBuilders.termFilter("支付货币", paytype)
@@ -305,7 +305,7 @@ public class KunPayConversionScheduled {
 		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -322,7 +322,7 @@ public class KunPayConversionScheduled {
 		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -365,7 +365,7 @@ public class KunPayConversionScheduled {
 		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -382,7 +382,7 @@ public class KunPayConversionScheduled {
 		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -425,7 +425,7 @@ public class KunPayConversionScheduled {
 		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -442,7 +442,7 @@ public class KunPayConversionScheduled {
 		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -491,7 +491,7 @@ public class KunPayConversionScheduled {
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 		        		FilterBuilders.termFilter("是否首次充值", "1"),
 				        FilterBuilders.termFilter("支付货币", paytype)
@@ -522,7 +522,7 @@ public class KunPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
 						        FilterBuilders.termFilter("支付货币", paytype)
@@ -556,7 +556,7 @@ public class KunPayConversionScheduled {
 		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -573,7 +573,7 @@ public class KunPayConversionScheduled {
 		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -616,7 +616,7 @@ public class KunPayConversionScheduled {
 		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -633,7 +633,7 @@ public class KunPayConversionScheduled {
 		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -676,7 +676,7 @@ public class KunPayConversionScheduled {
 		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -693,7 +693,7 @@ public class KunPayConversionScheduled {
 		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -743,7 +743,7 @@ public class KunPayConversionScheduled {
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 		        		FilterBuilders.termFilter("是否首次充值", "1"),
 				        FilterBuilders.termFilter("支付货币", paytype)
@@ -774,7 +774,7 @@ public class KunPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
 						        FilterBuilders.termFilter("支付货币", paytype)
@@ -809,7 +809,7 @@ public class KunPayConversionScheduled {
 		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -826,7 +826,7 @@ public class KunPayConversionScheduled {
 		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -869,7 +869,7 @@ public class KunPayConversionScheduled {
 		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -886,7 +886,7 @@ public class KunPayConversionScheduled {
 		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
@@ -929,7 +929,7 @@ public class KunPayConversionScheduled {
 		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
+						        FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
 				        		FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						)
@@ -946,7 +946,7 @@ public class KunPayConversionScheduled {
 		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),

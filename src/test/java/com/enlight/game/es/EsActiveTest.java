@@ -68,7 +68,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	public void test14() throws IOException, ParseException {	//all
 		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log")
 		        .setPostFilter(FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -85,7 +85,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -107,7 +107,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	public void test15() throws IOException, ParseException {	//serverzone
 		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log")
 		        .setPostFilter(FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -133,7 +133,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		System.out.println("###############  all 活跃玩家");
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -158,7 +158,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -183,7 +183,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -192,7 +192,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse mou= client.prepareSearch(index).setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -225,7 +225,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		System.out.println("###############  serverzone 活跃玩家");
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -255,7 +255,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -286,7 +286,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -322,7 +322,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		System.out.println("###############  platform 活跃玩家");
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -352,7 +352,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -383,7 +383,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -419,7 +419,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		System.out.println("###############  server 活跃玩家");
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -449,7 +449,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(
@@ -480,7 +480,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 		
 		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setPostFilter(FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        .addAggregation(

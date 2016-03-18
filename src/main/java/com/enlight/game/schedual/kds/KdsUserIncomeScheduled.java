@@ -68,7 +68,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -93,7 +93,7 @@ public class KdsUserIncomeScheduled {
 		//累计收入金额
 		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -124,7 +124,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -154,7 +154,7 @@ public class KdsUserIncomeScheduled {
 		//累计收入金额
 		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -191,7 +191,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -221,7 +221,7 @@ public class KdsUserIncomeScheduled {
 		//累计收入金额
 		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -257,7 +257,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -287,7 +287,7 @@ public class KdsUserIncomeScheduled {
 		//累计收入金额
 		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -326,7 +326,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -352,7 +352,7 @@ public class KdsUserIncomeScheduled {
 	public void test2serverZone() throws IOException, ParseException {	
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -386,7 +386,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -419,7 +419,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -453,7 +453,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -484,7 +484,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -520,7 +520,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
@@ -556,7 +556,7 @@ public class KdsUserIncomeScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        ));
