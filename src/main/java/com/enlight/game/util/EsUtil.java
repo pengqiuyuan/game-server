@@ -7,9 +7,9 @@ import java.util.GregorianCalendar;
 
 public class EsUtil {
 	
-	SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
+	//SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 	SimpleDateFormat s =   new SimpleDateFormat("yyyy-MM-dd" ); 
-	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	Calendar calendar = new GregorianCalendar(); 
 
 	public String nowDate(){
@@ -158,7 +158,7 @@ public class EsUtil {
 	}
 	
 	public String nowDate1(){
-		String nowDate = sdf1.format(new Date());
+		String nowDate = sdf.format(new Date());
 		return nowDate;
 	}
 	
@@ -166,7 +166,7 @@ public class EsUtil {
 	    calendar.setTime(new Date()); 
 	    calendar.add(calendar.MINUTE,-5);
 	    Date date=calendar.getTime();
-	    String da = sdf1.format(date); 
+	    String da = sdf.format(date); 
 		return da;
 	}
 	
