@@ -37,7 +37,7 @@ public class KunRetainedScheduled {
 	
 	private static final String index = "logstash-kun-user-*";
 	
-	private static final String type = "kun_user.log";
+	private static final String type = "kun_userlog";
 	
 	private static final String bulk_index = "log_kun_user";
 	

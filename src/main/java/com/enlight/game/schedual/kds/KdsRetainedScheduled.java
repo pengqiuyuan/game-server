@@ -37,7 +37,7 @@ public class KdsRetainedScheduled {
 	
 	private static final String index = "logstash-kds-user-*";
 	
-	private static final String type = "kds_user.log";
+	private static final String type = "kds_userlog";
 	
 	private static final String bulk_index = "log_kds_user";
 	

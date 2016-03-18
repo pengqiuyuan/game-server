@@ -46,9 +46,9 @@ public class FbPayPenetrationScheduled {
 	
 	private static final String index_money = "logstash-fb-money-*";
 	
-	private static final String type_user = "fb_user.log";
+	private static final String type_user = "fb_userlog";
 	
-	private static final String type_money = "fb_money.log";
+	private static final String type_money = "fb_moneylog";
 	
 	
 	private static final String bulk_index = "log_fb_money";

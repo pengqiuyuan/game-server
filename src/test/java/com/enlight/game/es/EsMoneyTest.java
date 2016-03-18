@@ -42,7 +42,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 	
 	private static final String index = "logstash-fb-*";
 	
-	private static final String type = "fb_money.log";
+	private static final String type = "fb_moneylog";
 	
 	private static final String bulk_index = "log_fb_money";
 	

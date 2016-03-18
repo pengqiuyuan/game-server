@@ -75,7 +75,7 @@ public class TeTest extends SpringTransactionalTestCase{
 		System.out.println("开始");
 		for (int i = 0; i < 5000000; i++) {
 			//String temp="create|2014-12-11 11:54:35.107|1|1|1|2|4|92947747373056|player_5|{\"createuser\":\"0\",\"role_id\":\"92947747373056\",\"level\":\"1\",\"ip\":\"183.60.92.253\",\"from\":\"0\"}\r\n";  
-			bulkProcessor.add(new IndexRequest("logstash-fb-user-2015.11", "fb_user.log").source(jsonBuilder()
+			bulkProcessor.add(new IndexRequest("logstash-fb-user-2015.11", "fb_userlog").source(jsonBuilder()
 				           	 .startObject()
 	                        .field("@version", "1")
 	                        .field("索引", "0")
@@ -110,7 +110,7 @@ public class TeTest extends SpringTransactionalTestCase{
 		System.out.println("开始");
 		for (int i = 0; i < 20000; i++) {
 			//String temp="create|2014-12-11 11:54:35.107|1|1|1|2|4|92947747373056|player_5|{\"createuser\":\"0\",\"role_id\":\"92947747373056\",\"level\":\"1\",\"ip\":\"183.60.92.253\",\"from\":\"0\"}\r\n";  
-			bulkRequest.add(client.prepareIndex("logstash-fb-user-2015.11", "fb_user.log")
+			bulkRequest.add(client.prepareIndex("logstash-fb-user-2015.11", "fb_userlog")
 			        .setSource(jsonBuilder()
 				           	 .startObject()
 	                        .field("@version", "1")

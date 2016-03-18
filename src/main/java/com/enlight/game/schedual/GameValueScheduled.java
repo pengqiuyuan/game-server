@@ -49,11 +49,11 @@ public class GameValueScheduled {
 	
 	private static final String fb_index = "logstash-fb-all-*";
 	
-	private static final String fb_item_type = "fb_item.log";
+	private static final String fb_item_type = "fb_itemlog";
 	
-	private static final String fb_money_type = "fb_money.log";
+	private static final String fb_money_type = "fb_moneylog";
 	
-	private static final String fb_coin_type = "fb_coin.log";
+	private static final String fb_coin_type = "fb_coinlog";
 	
 	/**
 	 * 这个controller默认为kun项目的控制层。项目id文档已定
@@ -64,11 +64,11 @@ public class GameValueScheduled {
 	
 	private static final String kun_index = "logstash-kun-all-*";
 	
-	private static final String kun_item_type = "kun_item.log";
+	private static final String kun_item_type = "kun_itemlog";
 	
-	private static final String kun_money_type = "kun_money.log";
+	private static final String kun_money_type = "kun_moneylog";
 	
-	private static final String kun_coin_type = "kun_coin.log";
+	private static final String kun_coin_type = "kun_coinlog";
 	
 	/**
 	 * 这个controller默认为kds项目的控制层。项目id文档已定
@@ -79,11 +79,11 @@ public class GameValueScheduled {
 	
 	private static final String kds_index = "logstash-kds-all-*";
 	
-	private static final String kds_item_type = "kds_item.log";
+	private static final String kds_item_type = "kds_itemlog";
 	
-	private static final String kds_money_type = "kds_money.log";
+	private static final String kds_money_type = "kds_moneylog";
 	
-	private static final String kds_coin_type = "kds_coin.log";
+	private static final String kds_coin_type = "kds_coinlog";
 	
 	EsUtil esUtilTest = new EsUtil();
 	

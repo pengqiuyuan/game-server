@@ -34,7 +34,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	
 	private static final String index = "logstash-fb-user-*";
 	
-	private static final String type = "fb_user.log";
+	private static final String type = "fb_userlog";
 	
 	private static final String bulk_index = "log_fb_user";
 	
@@ -57,7 +57,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	
 	//@Test
 	public void test13() throws IOException, ParseException {	
-		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log")
+		SearchResponse sr = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_userlog")
 			    .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("人物等级")
 			    ).execute().actionGet();
@@ -66,7 +66,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	
 	//@Test
 	public void test14() throws IOException, ParseException {	//all
-		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log")
+		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_userlog")
 		        .setPostFilter(FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
@@ -105,7 +105,7 @@ public class EsActiveTest extends SpringTransactionalTestCase{
 	
 	//@Test 
 	public void test15() throws IOException, ParseException {	//serverzone
-		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_user.log")
+		SearchResponse dayactive = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes("fb_userlog")
 		        .setPostFilter(FilterBuilders.andFilter(
 				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")

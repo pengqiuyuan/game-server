@@ -41,7 +41,7 @@ public class KunUserIncomeScheduled {
 	
 	private static final String index = "logstash-kun-money-*";
 	
-	private static final String type = "kun_money.log";
+	private static final String type = "kun_moneylog";
 	
 	private static final String bulk_index = "log_kun_money";
 	

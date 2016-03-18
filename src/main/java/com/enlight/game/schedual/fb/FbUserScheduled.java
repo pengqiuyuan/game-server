@@ -38,7 +38,7 @@ public class FbUserScheduled {
 	
 	private static final String index = "logstash-fb-user-*";
 	
-	private static final String type = "fb_user.log";
+	private static final String type = "fb_userlog";
 	
 	private static final String bulk_index = "log_fb_user";
 	

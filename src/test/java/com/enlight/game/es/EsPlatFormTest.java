@@ -42,7 +42,7 @@ public class EsPlatFormTest extends SpringTransactionalTestCase{
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("渠道ID", key))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder2).execute().actionGet();
 		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
@@ -78,7 +78,7 @@ public class EsPlatFormTest extends SpringTransactionalTestCase{
 				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder)
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
