@@ -46,9 +46,9 @@ public class KunPayPenetrationScheduled {
 	
 	private static final String index_money = "logstash-kun-money-*";
 	
-	private static final String type_user = "kun_user.log";
+	private static final String type_user = "kun_userlog";
 	
-	private static final String type_money = "kun_money.log";
+	private static final String type_money = "kun_moneylog";
 	
 	
 	private static final String bulk_index = "log_kun_money";

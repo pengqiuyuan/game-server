@@ -41,7 +41,7 @@ public class KdsUserIncomeScheduled {
 	
 	private static final String index = "logstash-kds-money-*";
 	
-	private static final String type = "kds_money.log";
+	private static final String type = "kds_moneylog";
 	
 	private static final String bulk_index = "log_kds_money";
 	

@@ -42,9 +42,9 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 	
 	private static final String index = "logstash-fb-*";
 	
-	private static final String type_user = "fb_user.log";
+	private static final String type_user = "fb_userlog";
 	
-	private static final String type_money = "fb_money.log";
+	private static final String type_money = "fb_moneylog";
 	
 	
 	private static final String bulk_index_money = "log_fb_money";

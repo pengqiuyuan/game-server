@@ -136,7 +136,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 				        FilterBuilders.rangeFilter("日期").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder2).execute().actionGet();
 		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
@@ -149,7 +149,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("服务器ID", key))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder2).execute().actionGet();
 		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
@@ -162,7 +162,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 		        		FilterBuilders.termFilter("日志分类关键字", "create"),
 		        		FilterBuilders.termFilter("渠道ID", key))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder2).execute().actionGet();
 		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
@@ -280,7 +280,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder)
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false))
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(35)
@@ -364,7 +364,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder)
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
@@ -447,7 +447,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder)
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder)
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(35)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
@@ -520,7 +520,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 	
 	//@Test
 	public void test10() {	
-		String typeName = "fb_user.log";
+		String typeName = "fb_userlog";
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		

@@ -40,9 +40,9 @@ public class KdsPayConversionScheduled {
 	
 	private static final String index_money = "logstash-kds-money-*";
 	
-	private static final String type_user = "kds_user.log";
+	private static final String type_user = "kds_userlog";
 	
-	private static final String type_money = "kds_money.log";
+	private static final String type_money = "kds_moneylog";
 	
 	
 	private static final String bulk_index_money = "log_kds_money";

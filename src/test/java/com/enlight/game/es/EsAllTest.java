@@ -42,7 +42,7 @@ public class EsAllTest extends SpringTransactionalTestCase{
 				        FilterBuilders.rangeFilter("日期").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
-		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_user.log").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder2).execute().actionGet();
 		System.out.println(sr);
 		Long count = sr.getHits().getTotalHits();
 		return count;
@@ -67,7 +67,7 @@ public class EsAllTest extends SpringTransactionalTestCase{
 	
 		@Test
 		public void test13() throws IOException {	
-			String typeName = "fb_user.log";
+			String typeName = "fb_userlog";
 			SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 			DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 			
