@@ -69,7 +69,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setQuery(builder)
@@ -97,7 +97,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setQuery(builder)
@@ -131,7 +131,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setQuery(builder)
@@ -165,7 +165,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setQuery(builder)
@@ -201,7 +201,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -225,7 +225,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 	public void test2serverZone() throws IOException, ParseException {	
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
@@ -257,7 +257,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -288,7 +288,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -320,7 +320,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -349,7 +349,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -383,7 +383,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -417,7 +417,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        ));
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
@@ -467,7 +467,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 		String[] arr = new String[] {"logstash-fb-2015.04", "logstash-fb-2015.04"};
 		SearchResponse num = client.prepareSearch("logstash-fb-*").setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2015-04-12").to("2015-04-13"),
+						FilterBuilders.rangeFilter("日期").from("2015-04-12").to("2015-04-13"),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 						))
 		        )		        

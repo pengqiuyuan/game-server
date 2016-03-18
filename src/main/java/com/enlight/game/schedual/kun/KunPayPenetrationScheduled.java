@@ -79,7 +79,7 @@ public class KunPayPenetrationScheduled {
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -91,7 +91,7 @@ public class KunPayPenetrationScheduled {
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -103,7 +103,7 @@ public class KunPayPenetrationScheduled {
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -164,7 +164,7 @@ public class KunPayPenetrationScheduled {
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -183,7 +183,7 @@ public class KunPayPenetrationScheduled {
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -202,7 +202,7 @@ public class KunPayPenetrationScheduled {
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -263,7 +263,7 @@ public class KunPayPenetrationScheduled {
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -282,7 +282,7 @@ public class KunPayPenetrationScheduled {
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -301,7 +301,7 @@ public class KunPayPenetrationScheduled {
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -362,7 +362,7 @@ public class KunPayPenetrationScheduled {
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -381,7 +381,7 @@ public class KunPayPenetrationScheduled {
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -400,7 +400,7 @@ public class KunPayPenetrationScheduled {
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -460,7 +460,7 @@ public class KunPayPenetrationScheduled {
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -472,7 +472,7 @@ public class KunPayPenetrationScheduled {
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -484,7 +484,7 @@ public class KunPayPenetrationScheduled {
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -546,7 +546,7 @@ public class KunPayPenetrationScheduled {
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -565,7 +565,7 @@ public class KunPayPenetrationScheduled {
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -584,7 +584,7 @@ public class KunPayPenetrationScheduled {
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -647,7 +647,7 @@ public class KunPayPenetrationScheduled {
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -666,7 +666,7 @@ public class KunPayPenetrationScheduled {
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -685,7 +685,7 @@ public class KunPayPenetrationScheduled {
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -747,7 +747,7 @@ public class KunPayPenetrationScheduled {
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -766,7 +766,7 @@ public class KunPayPenetrationScheduled {
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        FilterBuilders.termFilter("支付货币", paytype)
 		        )))
@@ -785,7 +785,7 @@ public class KunPayPenetrationScheduled {
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+				        FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
