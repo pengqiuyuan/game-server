@@ -51,6 +51,7 @@
 	<mvc:view-controller path="/" view-name="redirect:/manage/index"/>
 	<mvc:view-controller path="/manage/" view-name="redirect:/manage/index"/>
 	<mvc:view-controller path="/manage/login" view-name="redirect:/manage/index"/>
+	<mvc:view-controller path="/manage/count" view-name="redirect:/manage/index"/>
 	
 	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
