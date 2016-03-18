@@ -81,7 +81,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_add)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
-	                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+	                        .field("date", esUtilTest.oneDayAgoFrom().split(" ")[0])
 	                        .field("gameId", fb_game)
 	                        .field("key", "all")
 	                        .field("@timestamp", new Date())
@@ -128,7 +128,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
-	                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+	                        .field("date", esUtilTest.oneDayAgoFrom().split(" ")[0])
 	                        .field("gameId", fb_game)
 	                        .field("key", "all")
 	                        .field("@timestamp", new Date())
@@ -149,7 +149,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -163,7 +163,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_day)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
-	                        .field("date", esUtilTest.dayFrom().split("T")[0])
+	                        .field("date", esUtilTest.dayFrom().split(" ")[0])
 	                        .field("gameId", fb_game)
 	                        .field("key", "all")
 	                        .field("@timestamp", new Date())
@@ -187,7 +187,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -202,7 +202,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_week)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
-	                        .field("date", esUtilTest.weekFrom().split("T")[0])
+	                        .field("date", esUtilTest.weekFrom().split(" ")[0])
 	                        .field("gameId", fb_game)
 	                        .field("key", "all")
 	                        .field("@timestamp", new Date())
@@ -226,7 +226,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -240,7 +240,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_mouth)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
-	                        .field("date", esUtilTest.mouthFrom().split("T")[0])
+	                        .field("date", esUtilTest.mouthFrom().split(" ")[0])
 	                        .field("gameId", fb_game)
 	                        .field("key", "all")
 	                        .field("@timestamp", new Date())
@@ -274,7 +274,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_add)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("date", esUtilTest.oneDayAgoFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "serverZone")
 		                        .field("value",e.getKey())
@@ -338,7 +338,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("date", esUtilTest.oneDayAgoFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "serverZone")
 		                        .field("value",entry.getKey())
@@ -373,7 +373,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -397,7 +397,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_day)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.dayFrom().split("T")[0])
+		                        .field("date", esUtilTest.dayFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "serverZone")
 		                        .field("value", e.getKey())
@@ -432,7 +432,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -456,7 +456,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_week)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.weekFrom().split("T")[0])
+		                        .field("date", esUtilTest.weekFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "serverZone")
 		                        .field("value", e.getKey())
@@ -491,7 +491,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -515,7 +515,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_mouth)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.mouthFrom().split("T")[0])
+		                        .field("date", esUtilTest.mouthFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "serverZone")
 		                        .field("value", e.getKey())
@@ -551,7 +551,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_add)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("date", esUtilTest.oneDayAgoFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "platForm")
 		                        .field("value",e.getKey())
@@ -613,7 +613,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("date", esUtilTest.oneDayAgoFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "platForm")
 		                        .field("value",entry.getKey())
@@ -647,7 +647,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -671,7 +671,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_day)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.dayFrom().split("T")[0])
+		                        .field("date", esUtilTest.dayFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "platForm")
 		                        .field("value", e.getKey())
@@ -706,7 +706,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -730,7 +730,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_week)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.weekFrom().split("T")[0])
+		                        .field("date", esUtilTest.weekFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "platForm")
 		                        .field("value", e.getKey())
@@ -765,7 +765,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -789,7 +789,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_mouth)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.mouthFrom().split("T")[0])
+		                        .field("date", esUtilTest.mouthFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "platForm")
 		                        .field("value", e.getKey())
@@ -826,7 +826,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_add)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("date", esUtilTest.oneDayAgoFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "server")
 		                        .field("value",e.getKey())
@@ -888,7 +888,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.oneDayAgoFrom().split("T")[0])
+		                        .field("date", esUtilTest.oneDayAgoFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "server")
 		                        .field("value",entry.getKey())
@@ -922,7 +922,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -946,7 +946,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_day)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.dayFrom().split("T")[0])
+		                        .field("date", esUtilTest.dayFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "server")
 		                        .field("value", e.getKey())
@@ -981,7 +981,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -1005,7 +1005,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_week)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.weekFrom().split("T")[0])
+		                        .field("date", esUtilTest.weekFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "server")
 		                        .field("value", e.getKey())
@@ -1040,7 +1040,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
 								FilterBuilders.rangeFilter("日期").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
+								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split(" ")[0]),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1")
 								))
@@ -1064,7 +1064,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_mouth)
 			        .setSource(jsonBuilder()
 				           	 .startObject()
-		                        .field("date", esUtilTest.mouthFrom().split("T")[0])
+		                        .field("date", esUtilTest.mouthFrom().split(" ")[0])
 		                        .field("gameId", fb_game)
 		                        .field("key", "server")
 		                        .field("value", e.getKey())

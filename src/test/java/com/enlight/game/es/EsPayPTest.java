@@ -133,7 +133,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		}
 		System.out.println(df.format(s) + "        "  + df.format(t));
 		
-		String time = esUtilTest.oneDayAgoFrom().split("T")[0]; 
+		String time = esUtilTest.oneDayAgoFrom().split(" ")[0]; 
 		//arpu 日
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_arpuday)
 		        .setSource(jsonBuilder()
@@ -226,7 +226,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 			 mapac.put(e.getKey(), ac.getValue());
 		}
 		
-		String time = esUtilTest.oneDayAgoFrom().split("T")[0]; 
+		String time = esUtilTest.oneDayAgoFrom().split(" ")[0]; 
 		for(Entry<String,Double> entry : mapsum.entrySet()){
 			if(mapac.containsKey(entry.getKey())){
 				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_arpuday)
@@ -328,7 +328,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 			 mapac.put(e.getKey(), ac.getValue());
 		}
 		
-		String time = esUtilTest.oneDayAgoFrom().split("T")[0]; 
+		String time = esUtilTest.oneDayAgoFrom().split(" ")[0]; 
 		for(Entry<String,Double> entry : mapsum.entrySet()){
 			if(mapac.containsKey(entry.getKey())){
 				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_arpuday)
@@ -427,7 +427,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 			 mapac.put(e.getKey(), ac.getValue());
 		}
 		
-		String time = esUtilTest.oneDayAgoFrom().split("T")[0]; 
+		String time = esUtilTest.oneDayAgoFrom().split(" ")[0]; 
 		for(Entry<String,Double> entry : mapsum.entrySet()){
 			if(mapac.containsKey(entry.getKey())){
 				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_arpuday)
