@@ -92,7 +92,7 @@ public class KunPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11 00:00:00.000").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
 						        FilterBuilders.termFilter("支付货币", paytype)
@@ -271,7 +271,7 @@ public class KunPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11 00:00:00.000").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
 						        FilterBuilders.termFilter("支付货币", paytype)
@@ -522,7 +522,7 @@ public class KunPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11 00:00:00.000").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
 						        FilterBuilders.termFilter("支付货币", paytype)
@@ -774,7 +774,7 @@ public class KunPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11 00:00:00.000").to(esUtilTest.nowDate()),
 						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
 				        		FilterBuilders.termFilter("是否首次充值", "1"),
 						        FilterBuilders.termFilter("支付货币", paytype)
