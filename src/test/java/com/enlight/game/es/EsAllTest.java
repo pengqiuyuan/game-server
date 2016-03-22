@@ -39,7 +39,7 @@ public class EsAllTest extends SpringTransactionalTestCase{
 	public Long createCount(String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(from).to(to),
+				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
 		SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes("fb_userlog").setQuery(builder2).execute().actionGet();
@@ -73,7 +73,7 @@ public class EsAllTest extends SpringTransactionalTestCase{
 			
 			FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 			        FilterBuilders.andFilter(
-					        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+					        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 			        		FilterBuilders.termFilter("日志分类关键字", "login"))
 			        );
 			SearchResponse sr = client.prepareSearch().setSearchType("count").setTypes(typeName).setQuery(builder)

@@ -53,7 +53,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 	public Long createCount(String from , String to){
 		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(from).to(to),
+				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
@@ -63,7 +63,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 		
 		FilteredQueryBuilder b= QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(from).to(to),
+				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        );
 		SearchResponse s = client.prepareSearch(index).setTypes(type).setQuery(builder2).execute().actionGet();
@@ -81,7 +81,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "login"))
 		        );
 		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)

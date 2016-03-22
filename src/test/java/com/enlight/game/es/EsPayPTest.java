@@ -87,7 +87,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -99,7 +99,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -111,7 +111,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -173,7 +173,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -192,7 +192,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -211,7 +211,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -275,7 +275,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -294,7 +294,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -313,7 +313,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -374,7 +374,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -393,7 +393,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -412,7 +412,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -472,7 +472,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -484,7 +484,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -496,7 +496,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -558,7 +558,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -577,7 +577,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -596,7 +596,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -659,7 +659,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -678,7 +678,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -697,7 +697,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(
@@ -759,7 +759,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//收入金额
 		SearchResponse paysum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -778,7 +778,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//充值人数
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "money_get")
 		        )))
 		        .addAggregation(
@@ -797,7 +797,7 @@ public class EsPayPTest extends SpringTransactionalTestCase{
 		//活跃玩家
 		SearchResponse active = client.prepareSearch(index).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
 				        FilterBuilders.termFilter("日志分类关键字", "login")
 						))
 		        ).addAggregation(

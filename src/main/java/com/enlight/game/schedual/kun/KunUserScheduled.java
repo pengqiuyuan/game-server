@@ -59,7 +59,7 @@ public class KunUserScheduled {
 		//新增用户
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        )).execute().actionGet();
 		
@@ -83,7 +83,7 @@ public class KunUserScheduled {
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						).execute().actionGet();
@@ -114,7 +114,7 @@ public class KunUserScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
@@ -147,7 +147,7 @@ public class KunUserScheduled {
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 						QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-								FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
+								FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
 				        ))
 				.addAggregation(
 			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
@@ -186,7 +186,7 @@ public class KunUserScheduled {
 		//渠道用户增加
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
@@ -215,7 +215,7 @@ public class KunUserScheduled {
 		
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
-		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
+		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
 				.addAggregation(
 			    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
@@ -253,7 +253,7 @@ public class KunUserScheduled {
 		//服务器用户增加
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
@@ -283,7 +283,7 @@ public class KunUserScheduled {
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
+				FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
 				.addAggregation(
 			    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 			    )

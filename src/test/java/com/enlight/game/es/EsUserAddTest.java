@@ -72,12 +72,12 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		//新增用户
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        )).execute().actionGet();
 		SearchResponse srs = client.prepareSearch(index).setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        )).execute().actionGet();
 		System.out.println("111111111  "  + sr);
@@ -137,7 +137,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
 					QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
+									FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
 									FilterBuilders.termFilter("日志分类关键字", "create")
 									))
 							).execute().actionGet();
@@ -169,7 +169,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
@@ -233,7 +233,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
 					.setQuery(
 							QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-									FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
+									FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
 					        ))
 					.addAggregation(
 				    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
@@ -274,7 +274,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		//渠道用户增加
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
@@ -333,7 +333,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 				}
 			}
 		}else{
-			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
+			FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
 			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
 					.addAggregation(
 				    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
@@ -373,7 +373,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		//服务器用户增加
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("日期").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
+				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
 		        		FilterBuilders.termFilter("日志分类关键字", "create"))
 		        ))
 				.addAggregation(
@@ -433,7 +433,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			}
 		}else{
 			SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-					FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
+					FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
 					.addAggregation(
 				    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 				    )
