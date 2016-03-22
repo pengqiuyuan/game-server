@@ -83,7 +83,7 @@ public class KdsUserScheduled {
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
 				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("日期").from("2014-01-11 00:00:00.000").to(esUtilTest.nowDate()),
+								FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),
 								FilterBuilders.termFilter("日志分类关键字", "create")
 								))
 						).execute().actionGet();
@@ -147,7 +147,7 @@ public class KdsUserScheduled {
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 						QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-								FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11 00:00:00.000").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
+								FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
 				        ))
 				.addAggregation(
 			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
@@ -215,7 +215,7 @@ public class KdsUserScheduled {
 		//渠道用户累计
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
-		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11 00:00:00.000").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
+		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
 				.addAggregation(
 			    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
@@ -284,7 +284,7 @@ public class KdsUserScheduled {
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11 00:00:00.000").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
+				FilterBuilders.andFilter(FilterBuilders.rangeFilter("日期").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
 				.addAggregation(
 			    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 			    )
