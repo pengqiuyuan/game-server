@@ -9,6 +9,7 @@ public class EsUtil {
 	
 	//SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 00:00:00.000");
+	SimpleDateFormat s =   new SimpleDateFormat("yyyy-MM-dd" ); 
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	Calendar calendar = new GregorianCalendar(); 
 
@@ -33,6 +34,13 @@ public class EsUtil {
 		return da;
 	}
 	
+	public String twoDayAgoF(){
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-2);
+	    Date date=calendar.getTime();
+	    String da = s.format(date); 
+		return da;
+	}
 	
 	public String twoDayAgoTo(){
 	    calendar.setTime(new Date()); 

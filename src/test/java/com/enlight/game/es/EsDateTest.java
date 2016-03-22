@@ -25,6 +25,7 @@ public class EsDateTest extends SpringTransactionalTestCase{
 	public void test13() throws IOException {	
 		System.out.println("111111 oneDayAgoFrom  "+esUtilTest.oneDayAgoFrom());
 		System.out.println("111111 twoDayAgoFrom  "+esUtilTest.twoDayAgoFrom());
+		System.out.println("111111 twoDayAgoF  "+esUtilTest.twoDayAgoF());
 		System.out.println("111111  twoDayAgoTo "+esUtilTest.twoDayAgoTo());
 		System.out.println("111111  eightDayAgoFrom "+esUtilTest.eightDayAgoFrom());
 		System.out.println("111111  eightDayAgoTo "+esUtilTest.eightDayAgoTo());

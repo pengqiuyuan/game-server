@@ -112,7 +112,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
 							FilterBuilders.termFilter("key", "all"),
-					        //FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()))
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()))
 			        )).execute().actionGet();
 			long s  = 0L;
 			for (SearchHit searchHit : srTotal.getHits()) {
@@ -211,7 +211,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 					setQuery(
 							QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 									FilterBuilders.andFilter(
-									        //FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
+									        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 							        		FilterBuilders.termFilter("key", "serverZone"))
 					        ))
 					.execute().actionGet();
@@ -313,7 +313,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
-					        //FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 			        		FilterBuilders.termFilter("key", "platForm"))
 			        ))
 					.addAggregation(
@@ -412,7 +412,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 		if(responseindex.isExists() && ty){//判断index是否存在 判断type是否存在
 			SearchResponse srTotal = client.prepareSearch(bulk_index).setTypes(bulk_type_total).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 					FilterBuilders.andFilter(
-					        //FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
+					        FilterBuilders.termFilter("date", esUtilTest.twoDayAgoF()),
 			        		FilterBuilders.termFilter("key", "server"))
 			        ))
 					.addAggregation(
