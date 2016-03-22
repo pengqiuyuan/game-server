@@ -57,7 +57,7 @@ define([
       },
       style   : { "font-size": '24pt'},
       format: 'number',
-      mode: 'count',
+      mode: '-',
       display_breakdown: 'yes',
       sort_field: '',
       sort_reverse: false,
@@ -87,7 +87,6 @@ define([
     };
 
     $scope.set_sort = function(field) {
-      console.log(field);
       if($scope.panel.sort_field === field && $scope.panel.sort_reverse === false) {
         $scope.panel.sort_reverse = true;
       } else if($scope.panel.sort_field === field && $scope.panel.sort_reverse === true) {
@@ -98,6 +97,15 @@ define([
         $scope.panel.sort_reverse = false;
       }
     };
+    $scope.nullsToBottom = function(obj) {
+      return (null === obj.value[$scope.panel.sort_field] ? 0 : 1);
+    };
+
+    $scope.add_dash_to_modes = function(modes){
+      var newmodes = modes.slice();
+      newmodes.unshift('-');
+      return newmodes;
+    }
 
     $scope.get_data = function () {
       if(dashboard.indices.length === 0) {
@@ -111,39 +119,35 @@ define([
         boolQuery,
         queries;
 
-      request = $scope.ejs.Request();
-
       $scope.panel.queries.ids = querySrv.idsByMode($scope.panel.queries);
       queries = querySrv.getQueryObjs($scope.panel.queries.ids);
 
-
-      // This could probably be changed to a BoolFilter
       boolQuery = $scope.ejs.BoolQuery();
       _.each(queries,function(q) {
         boolQuery = boolQuery.should(querySrv.toEjsObj(q));
       });
 
-      request = request
-        .facet($scope.ejs.StatisticalFacet('stats')
-          .field($scope.panel.field)
-          .facetFilter($scope.ejs.QueryFilter(
-            $scope.ejs.FilteredQuery(
-              boolQuery,
-              filterSrv.getBoolFilter(filterSrv.ids())
-              )))).size(0);
+      var query = $scope.ejs.FilteredQuery(
+        $scope.ejs.BoolQuery(),
+        filterSrv.getBoolFilter(filterSrv.ids())
+      );
+      request = $scope.ejs.Request().query(query);
+
+      if ($scope.panel.mode !== '-'){
+        request = request
+        .agg($scope.ejs.FilterAggregation('stats')
+        .filter($scope.ejs.QueryFilter(
+            boolQuery
+          )).agg($scope.ejs.ExtendedStatsAggregation("0").field($scope.panel.field))
+        );
+      }
+
 
       _.each(queries, function (q) {
         var alias = q.alias || q.query;
-        var query = $scope.ejs.BoolQuery();
-        query.should(querySrv.toEjsObj(q));
-        request.facet($scope.ejs.StatisticalFacet('stats_'+alias)
-          .field($scope.panel.field)
-          .facetFilter($scope.ejs.QueryFilter(
-            $scope.ejs.FilteredQuery(
-              query,
-              filterSrv.getBoolFilter(filterSrv.ids())
-            )
-          ))
+        request.agg($scope.ejs.FilterAggregation('stats_'+alias)
+          .filter($scope.ejs.QueryFilter(querySrv.toEjsObj(q)))
+          .agg($scope.ejs.ExtendedStatsAggregation("0").field($scope.panel.field))
         );
       });
 
@@ -154,15 +158,37 @@ define([
 
       results.then(function(results) {
         $scope.panelMeta.loading = false;
-        var value = results.facets.stats[$scope.panel.mode];
+        if ($scope.panel.mode !== '-'){
+          var _fcm = {
+            "sum":"sum",
+            "total":"sum",
+            "mean":"avg",
+            "avg":"avg",
+            "min":"min",
+            "max":"max",
+            "count":"count"
+          };
+          var value = results.aggregations.stats['0'][_fcm[$scope.panel.mode]];
+        }
 
+        //forward_compatible_map
+        var _fcm = {
+          "sum":"total",
+          "avg":"mean"
+        };
         var rows = queries.map(function (q) {
           var alias = q.alias || q.query;
           var obj = _.clone(q);
           obj.label = alias;
           obj.Label = alias.toLowerCase(); //sort field
-          obj.value = results.facets['stats_'+alias];
-          obj.Value = results.facets['stats_'+alias]; //sort field
+          obj.value = results.aggregations['stats_'+alias]['0'];
+          obj.Value = results.aggregations['stats_'+alias]['0']; //sort field
+          for(var _k in _fcm){
+            if (obj.value[_k] !== undefined){
+              obj.value[_fcm[_k]] = obj.value[_k];
+              obj.Value[_fcm[_k]] = obj.Value[_k];
+            }
+          }
           return obj;
         });
 
@@ -170,8 +196,6 @@ define([
           value: value,
           rows: rows
         };
-
-        console.log($scope.data);
 
         $scope.$emit('render');
       });
