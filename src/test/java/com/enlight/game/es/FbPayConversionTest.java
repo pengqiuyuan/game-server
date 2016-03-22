@@ -67,7 +67,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 	//@Test
 	public void esAll() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000"); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'"); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -256,7 +256,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 	//@Test
 	public void esServerZone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000");
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'");
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -533,7 +533,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 	//@Test
 	public void esPlatForm() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000"); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'"); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -808,7 +808,7 @@ public class FbPayConversionTest extends SpringTransactionalTestCase{
 	//@Test
 	public void esServer() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000"); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'"); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
 		SearchResponse sr = client.prepareSearch(index).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),

@@ -103,7 +103,7 @@ public class FbRetainedScheduled {
 
 	public void esAll() throws IOException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
@@ -189,7 +189,7 @@ public class FbRetainedScheduled {
 	public void esServerZone() throws IOException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
@@ -298,7 +298,7 @@ public class FbRetainedScheduled {
 	public void esPlatForm() throws IOException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
@@ -398,7 +398,7 @@ public class FbRetainedScheduled {
 	public void esServer() throws IOException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(

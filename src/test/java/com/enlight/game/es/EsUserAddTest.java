@@ -68,7 +68,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 
 	@Test
 	public void esAll() throws IOException, ParseException {	
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		//新增用户
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
 				FilterBuilders.andFilter(
@@ -162,7 +162,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 	}	
 	
 	public void esServerZone() throws IOException, ParseException {	
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//运营大区用户增加   
@@ -268,7 +268,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 	
 	
 	public void esPlatForm() throws IOException, ParseException {	
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//渠道用户增加
@@ -367,7 +367,7 @@ public class EsUserAddTest extends SpringTransactionalTestCase{
 	}
 	
 	public void esServer() throws IOException, ParseException {	
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//服务器用户增加

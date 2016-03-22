@@ -272,7 +272,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 	//@Test
 	public void test7() {	
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
 		        QueryBuilders.matchAllQuery(),
@@ -356,7 +356,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 	//@Test
 	public void test8() {	
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
 		        QueryBuilders.matchAllQuery(),
@@ -439,7 +439,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 	//@Test
 	public void test9() {	
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
 		        QueryBuilders.matchAllQuery(),
@@ -522,7 +522,7 @@ public class ElasticsearchNodeClientTest extends SpringTransactionalTestCase{
 	public void test10() {	
 		String typeName = "fb_userlog";
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
-		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		
 		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
 		        QueryBuilders.matchAllQuery(),

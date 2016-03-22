@@ -102,7 +102,6 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 		for (Terms.Bucket entry : genders.getBuckets()) {
 			System.out.println("11111111");
 			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
-		    System.out.println("666666666666666666    "  + dateBucket  + "     "  + esUtilTest.twoDayAgoFrom());
 			if(dateBucket.equals(esUtilTest.twoDayAgoFrom())){
 			    Cardinality agg = entry.getAggregations().get("agg");
 			    
