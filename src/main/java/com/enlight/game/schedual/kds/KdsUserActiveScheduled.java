@@ -8,7 +8,6 @@ import java.util.Date;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -61,12 +60,13 @@ public class KdsUserActiveScheduled {
 	public void esAll() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		logger.debug("###############  all 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		
@@ -86,12 +86,13 @@ public class KdsUserActiveScheduled {
 		                  )
 		        );
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		       .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		
@@ -111,12 +112,13 @@ public class KdsUserActiveScheduled {
 		                  )
 		        );
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		
@@ -144,12 +146,13 @@ public class KdsUserActiveScheduled {
 	public void esServerZone() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		logger.debug("###############  serverzone 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -174,12 +177,13 @@ public class KdsUserActiveScheduled {
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -205,12 +209,13 @@ public class KdsUserActiveScheduled {
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -243,12 +248,13 @@ public class KdsUserActiveScheduled {
 	public void esPlatForm() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		logger.debug("###############  platform 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -273,12 +279,13 @@ public class KdsUserActiveScheduled {
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 		        		AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -304,12 +311,13 @@ public class KdsUserActiveScheduled {
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 		        		AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -342,12 +350,13 @@ public class KdsUserActiveScheduled {
 	public void esServer() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		logger.debug("###############  server 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -372,12 +381,13 @@ public class KdsUserActiveScheduled {
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 		        		AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -403,12 +413,13 @@ public class KdsUserActiveScheduled {
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 		        		AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
