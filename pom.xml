@@ -129,16 +129,16 @@
 				<optional>true</optional>
 			</dependency>
 		
-			<dependency>
-			  <groupId>fr.pilato.spring</groupId>
-			  <artifactId>spring-elasticsearch</artifactId>
-			  <version>1.4.0</version>
-			</dependency>
-			<dependency>
-			  <groupId>org.elasticsearch</groupId>
-			  <artifactId>elasticsearch</artifactId>
-			  <version>1.7.0</version>
-		</dependency>
+<dependency>
+  <groupId>fr.pilato.spring</groupId>
+  <artifactId>spring-elasticsearch</artifactId>
+  <version>2.1.0</version>
+</dependency>
+<dependency>
+  <groupId>org.elasticsearch</groupId>
+  <artifactId>elasticsearch</artifactId>
+  <version>2.2.1</version>
+</dependency>
 		
 	    <dependency>
         	<groupId>org.apache.poi</groupId>
