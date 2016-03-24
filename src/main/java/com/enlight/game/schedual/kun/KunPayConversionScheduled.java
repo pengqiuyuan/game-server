@@ -4,7 +4,6 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,6 @@ import java.util.Map.Entry;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -65,14 +63,15 @@ public class KunPayConversionScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
-		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-		        		FilterBuilders.termFilter("是否首次充值", "1"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-						))
-		        ).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
+		        .execute().actionGet();
 		Long newpayuser = sr.getHits().totalHits();
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_add)
 		        .setSource(jsonBuilder()
@@ -89,15 +88,15 @@ public class KunPayConversionScheduled {
 		//累计付费用户
 		
 		long allpayuser  = 0L;
-		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
-						).execute().actionGet();
+		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+				        		.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+				        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+				        )
+						.execute().actionGet();
 		allpayuser  = srTotal.getHits().totalHits();
 		logger.debug("历史累计付费用户all："+allpayuser);
 		bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
@@ -113,23 +112,23 @@ public class KunPayConversionScheduled {
 		        );
 		
 		//首日付费率、首日付费数
-		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
-						).execute().actionGet();
-		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
-						).execute().actionGet();
+		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+				        )
+						.execute().actionGet();
+		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
+				        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+				        		.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+				        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+				        )
+						.execute().actionGet();
 		Double day;
 		if(dayPayRate_user.getHits().totalHits() == 0){
 			day = 0.00;
@@ -151,24 +150,24 @@ public class KunPayConversionScheduled {
 		        );
 		
 		//首周付费率、首周付费数, 8天前
-		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
-						).execute().actionGet();
+		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
+				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+				        )
+						.execute().actionGet();
 		
-		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
-						).execute().actionGet();
+		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.weekFrom().split("T")[0]))
+				        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+				        		.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+				        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+				        )
+						.execute().actionGet();
 		
 		Double week;
 		if(weekPayRate_user.getHits().totalHits() == 0){
@@ -191,24 +190,24 @@ public class KunPayConversionScheduled {
 		        );
 		
 		//首月付费率、首月付费数,31天前
-		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
-						).execute().actionGet();
+		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
+				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+				        )
+						.execute().actionGet();
 		
-		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
-						).execute().actionGet();
+		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.mouthFrom().split("T")[0]))
+				        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+				        		.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+				        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+				        )
+						.execute().actionGet();
 		Double mouth;
 		if(mouthPayRate_user.getHits().totalHits() == 0){
 			mouth = 0.00;
@@ -237,14 +236,15 @@ public class KunPayConversionScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
-		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-		        		FilterBuilders.termFilter("是否首次充值", "1"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-						))
-		        ).addAggregation(
+		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+				        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+				        .must( QueryBuilders.termsQuery("是否首次充值", "1"))
+				        .must( QueryBuilders.termsQuery("支付货币", paytype))
+				)
+		        .addAggregation(
 			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
 			    )
 				.setSize(10).execute().actionGet();
@@ -268,14 +268,13 @@ public class KunPayConversionScheduled {
 		//累计付费用户
 	
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+						        .must( QueryBuilders.termsQuery("是否首次充值", "1"))
+						        .must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 					    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
@@ -283,7 +282,7 @@ public class KunPayConversionScheduled {
 						.setSize(10).execute().actionGet();
 		Terms gendersTotal = srTotal.getAggregations().get("serverZone");
 		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-			map.put(entry.getKey(), entry.getDocCount());
+			map.put((String) entry.getKey(), entry.getDocCount());
 		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
@@ -302,12 +301,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首日付费率、首日付费数
-		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 					    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
@@ -316,18 +314,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> dayusermap = new HashMap<String, Long>();
 		Terms dayusergenders = dayPayRate_user.getAggregations().get("serverZone");	
 		for (Terms.Bucket e : dayusergenders.getBuckets()) {
-			dayusermap.put(e.getKey(), e.getDocCount());
+			dayusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
+						        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+						        .must( QueryBuilders.termsQuery("是否首次充值", "1"))
+						        .must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 					    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
@@ -362,12 +359,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首周付费率、首周付费数, 8天前
-		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
+						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 					    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
@@ -376,18 +372,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> weekusermap = new HashMap<String, Long>();
 		Terms weekusergenders = weekPayRate_user.getAggregations().get("serverZone");	
 		for (Terms.Bucket e : weekusergenders.getBuckets()) {
-			weekusermap.put(e.getKey(), e.getDocCount());
+			weekusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.weekFrom().split("T")[0]))
+						        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+						        .must( QueryBuilders.termsQuery("是否首次充值", "1"))
+						        .must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 					    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
@@ -422,12 +417,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首月付费率、首月付费数,31天前
-		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
+						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 					    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
@@ -436,18 +430,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> mouthusermap = new HashMap<String, Long>();
 		Terms mouthusergenders = mouthPayRate_user.getAggregations().get("serverZone");	
 		for (Terms.Bucket e : mouthusergenders.getBuckets()) {
-			mouthusermap.put(e.getKey(), e.getDocCount());
+			mouthusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+				        		QueryBuilders.boolQuery()
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.mouthFrom().split("T")[0]))
+						        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+						        .must( QueryBuilders.termsQuery("是否首次充值", "1"))
+						        .must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 					    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(10)
@@ -489,14 +482,15 @@ public class KunPayConversionScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
-		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-		        		FilterBuilders.termFilter("是否首次充值", "1"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-						))
-		        ).addAggregation(
+		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+				        QueryBuilders.boolQuery()
+				        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+						.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+						.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+						.must( QueryBuilders.termsQuery("支付货币", paytype))
+				)
+		        .addAggregation(
 		        		AggregationBuilders.terms("platForm").field("渠道ID").size(300)
 			    )
 				.setSize(300).execute().actionGet();
@@ -519,14 +513,13 @@ public class KunPayConversionScheduled {
 		//累计付费用户
 		
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+								.must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("platForm").field("渠道ID").size(300)
@@ -534,7 +527,7 @@ public class KunPayConversionScheduled {
 						.setSize(300).execute().actionGet();
 		Terms gendersTotal = srTotal.getAggregations().get("platForm");
 		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-			map.put(entry.getKey(), entry.getDocCount());
+			map.put((String) entry.getKey(), entry.getDocCount());
 		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index_money, bulk_type_money_all)
@@ -553,12 +546,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首日付费率、首日付费数
-		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("platForm").field("渠道ID").size(300)
@@ -567,18 +559,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> dayusermap = new HashMap<String, Long>();
 		Terms dayusergenders = dayPayRate_user.getAggregations().get("platForm");	
 		for (Terms.Bucket e : dayusergenders.getBuckets()) {
-			dayusermap.put(e.getKey(), e.getDocCount());
+			dayusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+								.must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("platForm").field("渠道ID").size(300)
@@ -613,12 +604,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首周付费率、首周付费数, 8天前
-		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("platForm").field("渠道ID").size(300)
@@ -627,18 +617,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> weekusermap = new HashMap<String, Long>();
 		Terms weekusergenders = weekPayRate_user.getAggregations().get("platForm");	
 		for (Terms.Bucket e : weekusergenders.getBuckets()) {
-			weekusermap.put(e.getKey(), e.getDocCount());
+			weekusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.weekFrom().split("T")[0]))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+								.must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("platForm").field("渠道ID").size(300)
@@ -673,12 +662,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首月付费率、首月付费数,31天前
-		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("platForm").field("渠道ID").size(300)
@@ -687,18 +675,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> mouthusermap = new HashMap<String, Long>();
 		Terms mouthusergenders = mouthPayRate_user.getAggregations().get("platForm");	
 		for (Terms.Bucket e : mouthusergenders.getBuckets()) {
-			mouthusermap.put(e.getKey(), e.getDocCount());
+			mouthusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.mouthFrom().split("T")[0]))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+								.must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("platForm").field("渠道ID").size(300)
@@ -741,14 +728,15 @@ public class KunPayConversionScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
-		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-		        		FilterBuilders.termFilter("是否首次充值", "1"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-						))
-		        ).addAggregation(
+		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+		        .setPostFilter(
+						QueryBuilders.boolQuery()
+						.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+						.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+						.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+						.must( QueryBuilders.termsQuery("支付货币", paytype))
+				)
+		        .addAggregation(
 		        		AggregationBuilders.terms("server").field("服务器ID").size(300)
 			    )
 				.setSize(300).execute().actionGet();
@@ -771,14 +759,13 @@ public class KunPayConversionScheduled {
 		//累计付费用户
 		
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+								QueryBuilders.boolQuery()
+								.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+								.must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("server").field("服务器ID").size(300)
@@ -786,7 +773,7 @@ public class KunPayConversionScheduled {
 						.setSize(300).execute().actionGet();
 		Terms gendersTotal = srTotal.getAggregations().get("server");
 		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-			map.put(entry.getKey(), entry.getDocCount());
+			map.put((String) entry.getKey(), entry.getDocCount());
 		}
 		
 		for(Entry<String,Long> entry : map.entrySet()){
@@ -806,12 +793,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首日付费率、首日付费数
-		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+								QueryBuilders.boolQuery()
+								.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("server").field("服务器ID").size(300)
@@ -820,18 +806,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> dayusermap = new HashMap<String, Long>();
 		Terms dayusergenders = dayPayRate_user.getAggregations().get("server");	
 		for (Terms.Bucket e : dayusergenders.getBuckets()) {
-			dayusermap.put(e.getKey(), e.getDocCount());
+			dayusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.dayFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+								.must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("server").field("服务器ID").size(300)
@@ -866,12 +851,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首周付费率、首周付费数, 8天前
-		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("server").field("服务器ID").size(300)
@@ -880,18 +864,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> weekusermap = new HashMap<String, Long>();
 		Terms weekusergenders = weekPayRate_user.getAggregations().get("server");	
 		for (Terms.Bucket e : weekusergenders.getBuckets()) {
-			weekusermap.put(e.getKey(), e.getDocCount());
+			weekusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.weekFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.weekFrom().split("T")[0]))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+								.must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("server").field("服务器ID").size(300)
@@ -926,12 +909,11 @@ public class KunPayConversionScheduled {
 		}
 		
 		//首月付费率、首月付费数,31天前
-		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-						        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()),
-				        		FilterBuilders.termFilter("日志分类关键字", "create")
-								))
+		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("server").field("服务器ID").size(300)
@@ -940,18 +922,17 @@ public class KunPayConversionScheduled {
 		Map<String, Long> mouthusermap = new HashMap<String, Long>();
 		Terms mouthusergenders = mouthPayRate_user.getAggregations().get("server");	
 		for (Terms.Bucket e : mouthusergenders.getBuckets()) {
-			mouthusermap.put(e.getKey(), e.getDocCount());
+			mouthusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("注册时间", esUtilTest.mouthFrom().split("T")[0]),
-						        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        		FilterBuilders.termFilter("是否首次充值", "1"),
-						        FilterBuilders.termFilter("支付货币", paytype)
-								))
+		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
+						.setPostFilter(
+						        QueryBuilders.boolQuery()
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.mouthFrom().split("T")[0]))
+								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
+								.must( QueryBuilders.termsQuery("支付货币", paytype))
 						)
 						.addAggregation(
 								AggregationBuilders.terms("server").field("服务器ID").size(300)
