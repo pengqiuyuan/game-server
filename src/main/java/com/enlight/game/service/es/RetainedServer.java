@@ -15,8 +15,7 @@ import org.elasticsearch.action.admin.indices.exists.types.TypesExistsResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
@@ -37,44 +36,37 @@ public class RetainedServer {
 	private static final String type = "fb_user_retained";
 	**/
 	public Map<String, Map<String, Object>> searchAllRetained(String index ,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-                		FilterBuilders.termFilter("key", "all"))
-                		);
+		BoolQueryBuilder builder = QueryBuilders.boolQuery()
+        		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
+                		.must(QueryBuilders.termQuery("key", "all"));
 		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	
 	public Map<String, Map<String, Object>> searchServerZoneRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-                		FilterBuilders.termFilter("key", "serverZone"),
-                		FilterBuilders.termFilter("value", value))
-                		);
+		BoolQueryBuilder builder = QueryBuilders.boolQuery()
+        		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
+                		.must(QueryBuilders.termQuery("key", "serverZone"))
+                		.must(QueryBuilders.termQuery("value", value));
 		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	public Map<String, Map<String, Object>> searchPlatFormRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-                		FilterBuilders.termFilter("key", "platForm"),
-                		FilterBuilders.termFilter("value", value))
-                		);
+		BoolQueryBuilder builder = QueryBuilders.boolQuery()
+        		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
+                		.must(QueryBuilders.termQuery("key", "platForm"))
+                		.must(QueryBuilders.termQuery("value", value));
 		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	
 	public Map<String, Map<String, Object>> searchServerRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-                FilterBuilders.andFilter(
-        		        FilterBuilders.rangeFilter("date").from(dateFrom).to(dateTo),
-                		FilterBuilders.termFilter("key", "server"),
-                		FilterBuilders.termFilter("value", value))
+		BoolQueryBuilder builder = QueryBuilders.boolQuery()
+        		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
+                		.must(QueryBuilders.termQuery("key", "server"))
+                		.must(QueryBuilders.termQuery("value", value)
                 		);
 		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	
-	public Map<String, Map<String, Object>> esSearch(FilteredQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Map<String, Object>> esSearch(BoolQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		try {
 			TypesExistsResponse typeEx = client.admin().indices() .prepareTypesExists(index).setTypes(type).execute().actionGet(); 
 			if( typeEx.isExists() == true){
