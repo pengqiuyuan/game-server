@@ -55,8 +55,8 @@ public class KunUserScheduled {
 	public void esAll() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		//新增用户
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -79,8 +79,8 @@ public class KunUserScheduled {
 		logger.debug("昨天新增用户all："+sr.getHits().totalHits());
 		//累计用户
 		
-		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery()).
-				setPostFilter(
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").
+				setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
 						.must( QueryBuilders.termsQuery("日志分类关键字", "create")
@@ -109,9 +109,8 @@ public class KunUserScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//运营大区用户增加   
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
-				QueryBuilders.matchAllQuery()).
-				setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -144,8 +143,7 @@ public class KunUserScheduled {
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
-				.setQuery(QueryBuilders.matchAllQuery()).
-				setPostFilter(
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
 						.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -185,8 +183,8 @@ public class KunUserScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//渠道用户增加
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery()).
-				setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").
+				setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
@@ -217,8 +215,8 @@ public class KunUserScheduled {
 		
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
 						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
@@ -257,8 +255,8 @@ public class KunUserScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//服务器用户增加
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
@@ -289,8 +287,8 @@ public class KunUserScheduled {
 		
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "create"))

@@ -60,8 +60,8 @@ public class KunUserActiveScheduled {
 	public void esAll() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		logger.debug("###############  all 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -86,8 +86,8 @@ public class KunUserActiveScheduled {
 		                  )
 		        );
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		       .setPostFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		       .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -112,8 +112,8 @@ public class KunUserActiveScheduled {
 		                  )
 		        );
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -146,8 +146,8 @@ public class KunUserActiveScheduled {
 	public void esServerZone() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		logger.debug("###############  serverzone 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -177,8 +177,8 @@ public class KunUserActiveScheduled {
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -209,8 +209,8 @@ public class KunUserActiveScheduled {
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -248,8 +248,8 @@ public class KunUserActiveScheduled {
 	public void esPlatForm() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		logger.debug("###############  platform 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -279,8 +279,8 @@ public class KunUserActiveScheduled {
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -311,8 +311,8 @@ public class KunUserActiveScheduled {
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -350,8 +350,8 @@ public class KunUserActiveScheduled {
 	public void esServer() throws IOException, ParseException {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		logger.debug("###############  server 活跃玩家");
-		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -381,8 +381,8 @@ public class KunUserActiveScheduled {
 			        );
 		}   
 		
-		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -413,8 +413,8 @@ public class KunUserActiveScheduled {
 		}  
 		
 		
-		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
