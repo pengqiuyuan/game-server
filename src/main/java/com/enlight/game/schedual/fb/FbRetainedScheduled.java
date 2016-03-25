@@ -52,8 +52,8 @@ public class FbRetainedScheduled {
 	EsUtil esUtilTest = new EsUtil();
 	
 	public Long createCount(String from , String to){
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -64,8 +64,8 @@ public class FbRetainedScheduled {
 	}
 	
 	public Long createServerZoneCount(Object object,String from , String to){
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -77,8 +77,8 @@ public class FbRetainedScheduled {
 	}
 	
 	public Long createPlatFormCount(String key,String from , String to){
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -90,8 +90,8 @@ public class FbRetainedScheduled {
 	}
 	
 	public Long createServerCount(String key,String from , String to){
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -108,8 +108,8 @@ public class FbRetainedScheduled {
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
-		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -194,8 +194,8 @@ public class FbRetainedScheduled {
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -302,8 +302,8 @@ public class FbRetainedScheduled {
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -401,8 +401,8 @@ public class FbRetainedScheduled {
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))

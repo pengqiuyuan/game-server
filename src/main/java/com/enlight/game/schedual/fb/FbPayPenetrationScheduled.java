@@ -76,8 +76,8 @@ public class FbPayPenetrationScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -89,8 +89,8 @@ public class FbPayPenetrationScheduled {
 		Sum pays = paysum.getAggregations().get("sum");
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -102,8 +102,8 @@ public class FbPayPenetrationScheduled {
 		Cardinality peoplen = peoplenum.getAggregations().get("agg");
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -164,8 +164,8 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		       .setPostFilter(
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		       .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -184,8 +184,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -204,8 +204,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -266,8 +266,8 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -286,8 +286,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -306,8 +306,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -368,8 +368,8 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -388,8 +388,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -408,8 +408,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -469,8 +469,8 @@ public class FbPayPenetrationScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -482,8 +482,8 @@ public class FbPayPenetrationScheduled {
 		Sum pays = paysum.getAggregations().get("sum");
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -495,8 +495,8 @@ public class FbPayPenetrationScheduled {
 		Cardinality peoplen = peoplenum.getAggregations().get("agg");
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -558,8 +558,8 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -578,8 +578,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		       .setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		       .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -598,8 +598,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -662,8 +662,8 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -682,8 +682,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -702,8 +702,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
@@ -765,8 +765,8 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -785,8 +785,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -805,8 +805,8 @@ public class FbPayPenetrationScheduled {
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))

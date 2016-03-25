@@ -64,8 +64,8 @@ public class FbUserIncomeScheduled {
 	//收入金额
 	public void test1() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -89,8 +89,8 @@ public class FbUserIncomeScheduled {
 		        );
 		
 		//累计收入金额
-		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -120,8 +120,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test1serverZone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -150,8 +150,8 @@ public class FbUserIncomeScheduled {
 				        );
 		}
 		//累计收入金额
-		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -187,8 +187,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test1platForm() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -217,8 +217,8 @@ public class FbUserIncomeScheduled {
 				        );
 		}
 		//累计收入金额
-		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -253,8 +253,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test1server() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -283,8 +283,8 @@ public class FbUserIncomeScheduled {
 				        );
 		}
 		//累计收入金额
-		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -322,8 +322,8 @@ public class FbUserIncomeScheduled {
 	//充值次数
 	public void test2() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -349,8 +349,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test2serverZone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -382,8 +382,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test2platForm() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -415,8 +415,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test2server() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -449,8 +449,8 @@ public class FbUserIncomeScheduled {
 	//充值人数
 	public void test3() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -480,8 +480,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test3serverZone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -516,8 +516,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test3platForm() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
@@ -552,8 +552,8 @@ public class FbUserIncomeScheduled {
 	
 	public void test3server() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(QueryBuilders.matchAllQuery())
-				.setPostFilter(
+		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
 						QueryBuilders.boolQuery()
 						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))

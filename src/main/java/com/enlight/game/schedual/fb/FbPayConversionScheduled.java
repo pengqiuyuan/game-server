@@ -63,8 +63,8 @@ public class FbPayConversionScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
-		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -88,8 +88,8 @@ public class FbPayConversionScheduled {
 		//累计付费用户
 		
 		long allpayuser  = 0L;
-		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -112,15 +112,15 @@ public class FbPayConversionScheduled {
 		        );
 		
 		//首日付费率、首日付费数
-		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 				        )
 						.execute().actionGet();
-		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
 				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
@@ -150,16 +150,16 @@ public class FbPayConversionScheduled {
 		        );
 		
 		//首周付费率、首周付费数, 8天前
-		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 				        )
 						.execute().actionGet();
 		
-		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
 				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.weekFrom().split("T")[0]))
@@ -190,16 +190,16 @@ public class FbPayConversionScheduled {
 		        );
 		
 		//首月付费率、首月付费数,31天前
-		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 				        )
 						.execute().actionGet();
 		
-		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
 				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.mouthFrom().split("T")[0]))
@@ -236,8 +236,8 @@ public class FbPayConversionScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
-		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+		        .setQuery(
 		        		QueryBuilders.boolQuery()
 		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 				        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -268,8 +268,8 @@ public class FbPayConversionScheduled {
 		//累计付费用户
 	
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -301,8 +301,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首日付费率、首日付费数
-		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -317,8 +317,8 @@ public class FbPayConversionScheduled {
 			dayusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
 				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
@@ -359,8 +359,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首周付费率、首周付费数, 8天前
-		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -375,8 +375,8 @@ public class FbPayConversionScheduled {
 			weekusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
 				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.weekFrom().split("T")[0]))
@@ -417,8 +417,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首月付费率、首月付费数,31天前
-		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -433,8 +433,8 @@ public class FbPayConversionScheduled {
 			mouthusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 				        		QueryBuilders.boolQuery()
 				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
 				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.mouthFrom().split("T")[0]))
@@ -482,8 +482,8 @@ public class FbPayConversionScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
-		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+		        .setQuery(
 				        QueryBuilders.boolQuery()
 				        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 						.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -513,8 +513,8 @@ public class FbPayConversionScheduled {
 		//累计付费用户
 		
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -546,8 +546,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首日付费率、首日付费数
-		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -562,8 +562,8 @@ public class FbPayConversionScheduled {
 			dayusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
 						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
@@ -604,8 +604,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首周付费率、首周付费数, 8天前
-		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -620,8 +620,8 @@ public class FbPayConversionScheduled {
 			weekusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
 						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.weekFrom().split("T")[0]))
@@ -662,8 +662,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首月付费率、首月付费数,31天前
-		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -678,8 +678,8 @@ public class FbPayConversionScheduled {
 			mouthusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
 						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.mouthFrom().split("T")[0]))
@@ -728,8 +728,8 @@ public class FbPayConversionScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//新增付费用户
-		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-		        .setPostFilter(
+		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+		        .setQuery(
 						QueryBuilders.boolQuery()
 						.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
 						.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -759,8 +759,8 @@ public class FbPayConversionScheduled {
 		//累计付费用户
 		
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 								QueryBuilders.boolQuery()
 								.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
@@ -793,8 +793,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首日付费率、首日付费数
-		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 								QueryBuilders.boolQuery()
 								.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -809,8 +809,8 @@ public class FbPayConversionScheduled {
 			dayusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
 						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
@@ -851,8 +851,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首周付费率、首周付费数, 8天前
-		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -867,8 +867,8 @@ public class FbPayConversionScheduled {
 			weekusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse weekPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
 						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.weekFrom().split("T")[0]))
@@ -909,8 +909,8 @@ public class FbPayConversionScheduled {
 		}
 		
 		//首月付费率、首月付费数,31天前
-		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
@@ -925,8 +925,8 @@ public class FbPayConversionScheduled {
 			mouthusermap.put((String) e.getKey(), e.getDocCount());
 		}
 		
-		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count").setQuery(QueryBuilders.matchAllQuery())
-						.setPostFilter(
+		SearchResponse mouthPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
+						.setQuery(
 						        QueryBuilders.boolQuery()
 						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
 						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.mouthFrom().split("T")[0]))
