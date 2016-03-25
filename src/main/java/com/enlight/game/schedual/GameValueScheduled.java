@@ -118,8 +118,8 @@ public class GameValueScheduled {
 				if(monitor.getEql().equals("gte")){
 					//游戏币
 					SearchResponse sr_coin = client.prepareSearch(x_index).setTypes(x_coin_type)
-					        .setQuery(QueryBuilders.matchAllQuery())                 // Query
-					        .setPostFilter(
+					                         // Query
+					        .setQuery(
 					        		QueryBuilders.boolQuery()
 					        		.must( QueryBuilders.rangeQuery("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()) )
 					        		.must( QueryBuilders.rangeQuery("增加的游戏币数量").from(monitor.getMonitorValue()).includeLower(true) )
@@ -139,8 +139,8 @@ public class GameValueScheduled {
 				if(monitor.getEql().equals("gte")){
 					//充值币
 					SearchResponse sr_money = client.prepareSearch(x_index).setTypes(x_money_type)
-					        .setQuery(QueryBuilders.matchAllQuery())                 // Query
-					        .setPostFilter(
+					                         // Query
+					        .setQuery(
 					        		QueryBuilders.boolQuery()
 					        		.must( QueryBuilders.rangeQuery("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()) )
 					        		.must( QueryBuilders.rangeQuery("增加的充值币数量").from(monitor.getMonitorValue()).includeLower(true))
@@ -160,8 +160,8 @@ public class GameValueScheduled {
 				if(monitor.getEql().equals("gte")){
 					//道具
 					SearchResponse sr_item = client.prepareSearch(x_index).setTypes(x_item_type)
-					        .setQuery(QueryBuilders.matchAllQuery())                 // Query
-					        .setPostFilter(
+					                         // Query
+					        .setQuery(
 					        		QueryBuilders.boolQuery()
 					        		.must( QueryBuilders.rangeQuery("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()) )
 					        		.must( QueryBuilders.rangeQuery("增加的道具数量").from(monitor.getMonitorValue()).includeLower(true))
@@ -180,8 +180,8 @@ public class GameValueScheduled {
 			}else if(monitor.getMonitorKey().equals("日志道具id")){
 				//道具id
 				SearchResponse sr_item_id = client.prepareSearch(x_index).setTypes(x_item_type)
-					        .setQuery(QueryBuilders.matchAllQuery())                 // Query
-					        .setPostFilter(
+					                         // Query
+					        .setQuery(
 					        		QueryBuilders.boolQuery()
 					        		.must( QueryBuilders.rangeQuery("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()) )
 					        		.must( QueryBuilders.termsQuery("日志道具id", monitor.getValueList()))
