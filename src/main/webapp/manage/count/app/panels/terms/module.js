@@ -309,10 +309,10 @@ function (angular, app, _, $, kbn) {
 
     $scope.build_search = function(term,negate) {
       if($scope.panel.fmode === 'script') {
-        filterSrv.set({type:'script',script:$scope.panel.script + ' == \"' + term.label + '\"',
+        filterSrv.set({type:'script',script:$scope.panel.script + ' == \"' + term.name + '\"',
           mandate:(negate ? 'mustNot':'must')});
       } else if(_.isUndefined(term.meta)) {
-        filterSrv.set({type:'terms',field:$scope.field,value:term.label,
+        filterSrv.set({type:'terms',field:$scope.field,value:term.name,
           mandate:(negate ? 'mustNot':'must')});
       } else if(term.meta === 'missing') {
         filterSrv.set({type:'exists',field:$scope.field,
@@ -324,10 +324,10 @@ function (angular, app, _, $, kbn) {
 
     var build_multi_search = function(term) {
       if($scope.panel.fmode === 'script') {
-        return({type:'script',script:$scope.panel.script + ' == \"' + term.label + '\"',
-          mandate:'either', alias: term.label});
+        return({type:'script',script:$scope.panel.script + ' == \"' + term.name + '\"',
+          mandate:'either', alias: term.name});
       } else if(_.isUndefined(term.meta)) {
-        return({type:'terms',field:$scope.field,value:term.label, mandate:'either'});
+        return({type:'terms',field:$scope.field,value:term.name, mandate:'either'});
       } else if(term.meta === 'missing') {
         return({type:'exists',field:$scope.field, mandate:'either'});
       } else {
