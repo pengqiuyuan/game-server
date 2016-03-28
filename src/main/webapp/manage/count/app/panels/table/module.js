@@ -380,6 +380,12 @@ function (angular, app, _, kbn, moment) {
       $scope.panel.offset = 0;
       filterSrv.set({type:'field',field:field,query:query,mandate:(negate ? 'mustNot':'must')});
     };
+    
+    $scope.build_search_add = function(field,query) {
+    	query = query || '*';
+        $scope.panel.offset = 0;
+        filterSrv.set({editing:true,type:'field',field:field,query:query,mandate:'must'},undefined,true);
+    };
 
     $scope.fieldExists = function(field,mandate) {
       filterSrv.set({type:'exists',field:field,mandate:mandate});
