@@ -497,18 +497,18 @@
 
         _relativeTime : {
             future : "in %s",
-            past : "%s 前",
-            s : "最近几秒",
-            m : "一分钟",
-            mm : "%d 分钟",
-            h : "一小时",
-            hh : "%d 小时",
-            d : "一天",
-            dd : "%d 天",
-            M : "一个月",
-            MM : "%d 月",
-            y : "一年",
-            yy : "%d 年"
+            past : "%s ago",
+            s : "a few seconds",
+            m : "a minute",
+            mm : "%d minutes",
+            h : "an hour",
+            hh : "%d hours",
+            d : "a day",
+            dd : "%d days",
+            M : "a month",
+            MM : "%d months",
+            y : "a year",
+            yy : "%d years"
         },
         relativeTime : function (number, withoutSuffix, string, isFuture) {
             var output = this._relativeTime[string];
