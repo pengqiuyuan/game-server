@@ -129,7 +129,7 @@
           "loadingEditor": false,
           "field": "geoip.location",
           "provider": "GaoDe",
-          "size": 100000,
+          "size": 10000,
           "spyable": true,
           "tooltip": "_id",
           "queries": {

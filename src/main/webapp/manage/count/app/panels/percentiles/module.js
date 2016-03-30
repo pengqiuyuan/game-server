@@ -66,6 +66,7 @@ define([
       label_name: 'Query',
       value_name: 'Value',
       spyable     : true,
+      compression : '',
       show: {
         '25': true,
         '75': true,
@@ -83,6 +84,12 @@ define([
       });
       $scope.get_data();
     };
+
+    $scope.add_dash_to_modes = function(modes){
+      var newmodes = modes.slice();
+      newmodes.unshift('-');
+      return newmodes;
+    }
 
     $scope.set_sort = function(field) {
       if($scope.panel.sort_field === field && $scope.panel.sort_reverse === false) {
@@ -109,6 +116,11 @@ define([
         queries;
 
       request = $scope.ejs.Request();
+      var query = $scope.ejs.FilteredQuery(
+        $scope.ejs.BoolQuery(),
+        filterSrv.getBoolFilter(filterSrv.ids())
+      );
+      request = $scope.ejs.Request().query(query);
 
       $scope.panel.queries.ids = querySrv.idsByMode($scope.panel.queries);
       queries = querySrv.getQueryObjs($scope.panel.queries.ids);
@@ -121,38 +133,42 @@ define([
 
       var percents = _.keys($scope.panel.show);
 
-      request = request
+      if ($scope.panel.mode !== '-'){
+        var sub_aggs = $scope.ejs.PercentilesAggregation('stats')
+        .field($scope.panel.field)
+        .percents(percents);
+
+        if ($scope.panel.compression!==''){
+          sub_aggs.compression($scope.panel.compression);
+        }
+
+        request = request
         .aggregation(
           $scope.ejs.FilterAggregation('stats')
-            .filter($scope.ejs.QueryFilter(
-              $scope.ejs.FilteredQuery(
-                boolQuery,
-                filterSrv.getBoolFilter(filterSrv.ids())
-              )
-            ))
-            .aggregation($scope.ejs.PercentilesAggregation('stats')
-              .field($scope.panel.field)
-              .percents(percents)
-            )
-          ).size(0);
+          .filter($scope.ejs.QueryFilter(boolQuery))
+          .aggregation(sub_aggs)
+      ).size(0);
+      }
 
       $.each(queries, function (i, q) {
         var query = $scope.ejs.BoolQuery();
         query.should(querySrv.toEjsObj(q));
         var qname = 'stats_'+i;
 
+        var sub_aggs = $scope.ejs.PercentilesAggregation(qname)
+          .field($scope.panel.field)
+          .percents(percents);
+
+        if ($scope.panel.compression!==''){
+          sub_aggs.compression($scope.panel.compression);
+        }
+
         request.aggregation(
           $scope.ejs.FilterAggregation(qname)
             .filter($scope.ejs.QueryFilter(
-              $scope.ejs.FilteredQuery(
-                query,
-                filterSrv.getBoolFilter(filterSrv.ids())
-              )
+                querySrv.toEjsObj(q)
             ))
-            .aggregation($scope.ejs.PercentilesAggregation(qname)
-              .field($scope.panel.field)
-              .percents(percents)
-            )
+            .aggregation(sub_aggs)
           );
       });
       // Populate the inspector panel
@@ -164,7 +180,9 @@ define([
         $scope.panelMeta.loading = false;
         esVersion.gte('1.3.0').then(function(is) {
           if (is) {
-            var value = results.aggregations.stats['stats']['values'][$scope.panel.mode+'.0'];
+            if ($scope.panel.mode !== '-'){
+              var value = results.aggregations.stats['stats']['values'][$scope.panel.mode+'.0'];
+            }
             var rows = queries.map(function (q, i) {
               var alias = q.alias || q.query;
               var obj = _.clone(q);
@@ -177,19 +195,19 @@ define([
                 obj.value[parseInt(keys)] = data[keys];
                 obj.Value[parseInt(keys)] = data[keys]; //sort field
               };
-              return obj;                                           
+              return obj;
             });
-    
+
             $scope.data = {
               value: value,
               rows: rows
             };
-    
-            $scope.$emit('render');
           } else {
             esVersion.gte('1.1.0').then(function(is) {
               if (is) {
-                var value = results.aggregations.stats['stats'][$scope.panel.mode+'.0'];
+                if ($scope.panel.mode !== '-'){
+                  var value = results.aggregations.stats['stats'][$scope.panel.mode+'.0'];
+                }
                 var rows = queries.map(function (q, i) {
                   var alias = q.alias || q.query;
                   var obj = _.clone(q);
@@ -202,20 +220,17 @@ define([
                     obj.value[parseInt(keys)] = data[keys];
                     obj.Value[parseInt(keys)] = data[keys]; //sort field
                   };
-                  return obj;                                           
+                  return obj;
                 });
-        
+
                 $scope.data = {
                   value: value,
                   rows: rows
                 };
-        
-                $scope.$emit('render');
               }
             });
           };
         });
-
       });
     };
 
@@ -228,7 +243,6 @@ define([
         $scope.get_data();
       }
       $scope.refresh =  false;
-      $scope.$emit('render');
     };
 
   });

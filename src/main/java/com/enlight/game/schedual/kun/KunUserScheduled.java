@@ -12,8 +12,6 @@ import java.util.Map.Entry;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -57,11 +55,12 @@ public class KunUserScheduled {
 	public void esAll() throws IOException, ParseException {	
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		//新增用户
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"))
-		        )).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+		        ).execute().actionGet();
 		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
@@ -80,13 +79,12 @@ public class KunUserScheduled {
 		logger.debug("昨天新增用户all："+sr.getHits().totalHits());
 		//累计用户
 		
-		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-								FilterBuilders.termFilter("日志分类关键字", "create")
-								))
-						).execute().actionGet();
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").
+				setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+						.must( QueryBuilders.termsQuery("日志分类关键字", "create")
+						)).execute().actionGet();
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
 		        .setSource(jsonBuilder()
 			           	 .startObject()
@@ -111,12 +109,12 @@ public class KunUserScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//运营大区用户增加   
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(
-				QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"))
-		        ))
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+		        )
 				.addAggregation(
 			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
 			    )
@@ -146,16 +144,17 @@ public class KunUserScheduled {
 		Map<String, Long> map = new HashMap<String, Long>();
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
-						QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-								FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))
-				        ))
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+						.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+				)
 				.addAggregation(
 			    		AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
 			    )
 				.setSize(szsize).execute().actionGet();
 		gendersTotal = srTotal.getAggregations().get("serverZone");
 		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-			map.put(entry.getKey(), entry.getDocCount());
+			map.put((String) entry.getKey(), entry.getDocCount());
 		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
@@ -184,11 +183,12 @@ public class KunUserScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//渠道用户增加
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"))
-		        ))
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").
+				setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
+				)
 				.addAggregation(
 			    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
 			    )
@@ -215,15 +215,19 @@ public class KunUserScheduled {
 		
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
-		FilteredQueryBuilder builderTotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create")));
-		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builderTotal)
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
+				)
 				.addAggregation(
 			    		AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
 			    )
 				.setSize(pfsize).execute().actionGet();
 		gendersTotal = srTotal.getAggregations().get("platForm");
 		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-			map.put(entry.getKey(), entry.getDocCount());
+			map.put((String) entry.getKey(), entry.getDocCount());
 		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
@@ -251,11 +255,12 @@ public class KunUserScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		//服务器用户增加
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"))
-		        ))
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
+		        )
 				.addAggregation(
 			    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 			    )
@@ -282,15 +287,19 @@ public class KunUserScheduled {
 		
 		Terms gendersTotal = null;
 		Map<String, Long> map = new HashMap<String, Long>();
-		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),FilterBuilders.termFilter("日志分类关键字", "create"))))
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
+		        )
 				.addAggregation(
 			    		AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 			    )
 				.setSize(srsize).execute().actionGet();
 		gendersTotal = srTotal.getAggregations().get("server");
 		for (Terms.Bucket entry : gendersTotal.getBuckets()) {
-			map.put(entry.getKey(), entry.getDocCount());
+			map.put((String) entry.getKey(), entry.getDocCount());
 		}
 		for(Entry<String,Long> entry : map.entrySet()){
 			bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)

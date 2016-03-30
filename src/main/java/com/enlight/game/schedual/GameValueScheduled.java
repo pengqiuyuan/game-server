@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
@@ -118,11 +117,14 @@ public class GameValueScheduled {
 			if(monitor.getMonitorKey().equals("增加的游戏币数量")){
 				if(monitor.getEql().equals("gte")){
 					//游戏币
-					SearchResponse sr_coin = client.prepareSearch(x_index).setTypes(x_coin_type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()),
-							        FilterBuilders.rangeFilter("增加的游戏币数量").from(monitor.getMonitorValue()).includeLower(true))
-					        )).execute().actionGet();
+					SearchResponse sr_coin = client.prepareSearch(x_index).setTypes(x_coin_type)
+					                         // Query
+					        .setQuery(
+					        		QueryBuilders.boolQuery()
+					        		.must( QueryBuilders.rangeQuery("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()) )
+					        		.must( QueryBuilders.rangeQuery("增加的游戏币数量").from(monitor.getMonitorValue()).includeLower(true) )
+					        )     // Filter
+					        .execute().actionGet();
 					sr_hits.add("近5分钟，增加的游戏币数量：超过设定阙值："+monitor.getMonitorValue()+"，共出现："+sr_coin.getHits().totalHits()+"条日志");
 					for (SearchHit hit : sr_coin.getHits()) {
 						Map<String, Object> map = new HashMap<String, Object>();
@@ -136,11 +138,14 @@ public class GameValueScheduled {
 			}else if(monitor.getMonitorKey().equals("增加的充值币数量")){
 				if(monitor.getEql().equals("gte")){
 					//充值币
-					SearchResponse sr_money = client.prepareSearch(x_index).setTypes(x_money_type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()),
-							        FilterBuilders.rangeFilter("增加的充值币数量").from(monitor.getMonitorValue()).includeLower(true))
-					        )).execute().actionGet();
+					SearchResponse sr_money = client.prepareSearch(x_index).setTypes(x_money_type)
+					                         // Query
+					        .setQuery(
+					        		QueryBuilders.boolQuery()
+					        		.must( QueryBuilders.rangeQuery("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()) )
+					        		.must( QueryBuilders.rangeQuery("增加的充值币数量").from(monitor.getMonitorValue()).includeLower(true))
+					        )     // Filter
+					        .execute().actionGet();
 					sr_hits.add("近5分钟，增加的充值币数量：超过设定阙值："+monitor.getMonitorValue()+"，共出现："+sr_money.getHits().totalHits()+"条日志");
 					for (SearchHit hit : sr_money.getHits()) {
 						Map<String, Object> map = new HashMap<String, Object>();
@@ -154,11 +159,14 @@ public class GameValueScheduled {
 			}else if(monitor.getMonitorKey().equals("增加的道具数量")){
 				if(monitor.getEql().equals("gte")){
 					//道具
-					SearchResponse sr_item = client.prepareSearch(x_index).setTypes(x_item_type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-							FilterBuilders.andFilter(
-									FilterBuilders.rangeFilter("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()),
-							        FilterBuilders.rangeFilter("增加的道具数量").from(monitor.getMonitorValue()).includeLower(true))
-					        )).execute().actionGet();
+					SearchResponse sr_item = client.prepareSearch(x_index).setTypes(x_item_type)
+					                         // Query
+					        .setQuery(
+					        		QueryBuilders.boolQuery()
+					        		.must( QueryBuilders.rangeQuery("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()) )
+					        		.must( QueryBuilders.rangeQuery("增加的道具数量").from(monitor.getMonitorValue()).includeLower(true))
+					        )     // Filter
+					        .execute().actionGet();
 					sr_hits.add("近5分钟，增加的道具数量：超过设定阙值："+monitor.getMonitorValue()+"，共出现："+sr_item.getHits().totalHits()+"条日志");
 					for (SearchHit hit : sr_item.getHits()) {
 						Map<String, Object> map = new HashMap<String, Object>();
@@ -171,11 +179,14 @@ public class GameValueScheduled {
 				}
 			}else if(monitor.getMonitorKey().equals("日志道具id")){
 				//道具id
-				SearchResponse sr_item_id = client.prepareSearch(x_index).setTypes(x_item_type).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-						FilterBuilders.andFilter(
-								FilterBuilders.rangeFilter("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()),
-								FilterBuilders.termsFilter("日志道具id", monitor.getValueList()))
-				        )).execute().actionGet();
+				SearchResponse sr_item_id = client.prepareSearch(x_index).setTypes(x_item_type)
+					                         // Query
+					        .setQuery(
+					        		QueryBuilders.boolQuery()
+					        		.must( QueryBuilders.rangeQuery("日期").from(esUtilTest.fiveMinuteAgoFrom()).to(esUtilTest.nowDate1()) )
+					        		.must( QueryBuilders.termsQuery("日志道具id", monitor.getValueList()))
+					        )     // Filter				        
+				        .execute().actionGet();
 				sr_hits.add("近5分钟，日志道具id："+monitor.getMonitorValue()+"，共出现："+sr_item_id.getHits().totalHits()+"条日志");
 				for (SearchHit hit : sr_item_id.getHits()) {
 					Map<String, Object> map = new HashMap<String, Object>();
@@ -197,6 +208,4 @@ public class GameValueScheduled {
 			System.out.println(xStoreName+"：没有匹配值，不发送邮件");
 		}
 	}
-	
-
 }

@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -77,36 +76,39 @@ public class FbPayPenetrationScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 		        		AggregationBuilders.sum("sum").field("支付金额")
 			    ).execute().actionGet();
 		Sum pays = paysum.getAggregations().get("sum");
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 		        		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		Cardinality peoplen = peoplenum.getAggregations().get("agg");
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		Cardinality ac = active.getAggregations().get("agg");
@@ -162,12 +164,13 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		       .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 					AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 							AggregationBuilders.sum("sum").field("支付金额")
@@ -176,17 +179,18 @@ public class FbPayPenetrationScheduled {
 		Terms g1 = paysum.getAggregations().get("serverZone");
 		for (Terms.Bucket e : g1.getBuckets()) {
 			 Sum agg = e.getAggregations().get("sum");
-			 mapsum.put(e.getKey(), agg.getValue());
+			 mapsum.put((String) e.getKey(), agg.getValue());
 		}
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
@@ -195,17 +199,18 @@ public class FbPayPenetrationScheduled {
 		Terms g2 = peoplenum.getAggregations().get("serverZone");
 		for (Terms.Bucket e : g2.getBuckets()) {
 			Cardinality peoplen = e.getAggregations().get("agg");
-			mapnum.put(e.getKey(), peoplen.getValue());
+			mapnum.put((String) e.getKey(), peoplen.getValue());
 		}
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -213,7 +218,7 @@ public class FbPayPenetrationScheduled {
 		Terms g3 = active.getAggregations().get("serverZone");
 		for (Terms.Bucket e : g3.getBuckets()) {
 			Cardinality ac = e.getAggregations().get("agg");
-			 mapac.put(e.getKey(), ac.getValue());
+			 mapac.put((String) e.getKey(), ac.getValue());
 		}
 		
 		String time = esUtilTest.oneDayAgoFrom().split("T")[0]; 
@@ -261,12 +266,13 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 					AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 							AggregationBuilders.sum("sum").field("支付金额")
@@ -275,17 +281,18 @@ public class FbPayPenetrationScheduled {
 		Terms g1 = paysum.getAggregations().get("platForm");
 		for (Terms.Bucket e : g1.getBuckets()) {
 			 Sum agg = e.getAggregations().get("sum");
-			 mapsum.put(e.getKey(), agg.getValue());
+			 mapsum.put((String) e.getKey(), agg.getValue());
 		}
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
@@ -294,17 +301,18 @@ public class FbPayPenetrationScheduled {
 		Terms g2 = peoplenum.getAggregations().get("platForm");
 		for (Terms.Bucket e : g2.getBuckets()) {
 			Cardinality peoplen = e.getAggregations().get("agg");
-			mapnum.put(e.getKey(), peoplen.getValue());
+			mapnum.put((String) e.getKey(), peoplen.getValue());
 		}
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -312,7 +320,7 @@ public class FbPayPenetrationScheduled {
 		Terms g3 = active.getAggregations().get("platForm");
 		for (Terms.Bucket e : g3.getBuckets()) {
 			Cardinality ac = e.getAggregations().get("agg");
-			 mapac.put(e.getKey(), ac.getValue());
+			 mapac.put((String) e.getKey(), ac.getValue());
 		}
 		
 		String time = esUtilTest.oneDayAgoFrom().split("T")[0]; 
@@ -360,12 +368,13 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 					AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 							AggregationBuilders.sum("sum").field("支付金额")
@@ -374,17 +383,18 @@ public class FbPayPenetrationScheduled {
 		Terms g1 = paysum.getAggregations().get("server");
 		for (Terms.Bucket e : g1.getBuckets()) {
 			 Sum agg = e.getAggregations().get("sum");
-			 mapsum.put(e.getKey(), agg.getValue());
+			 mapsum.put((String) e.getKey(), agg.getValue());
 		}
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
@@ -393,17 +403,18 @@ public class FbPayPenetrationScheduled {
 		Terms g2 = peoplenum.getAggregations().get("server");
 		for (Terms.Bucket e : g2.getBuckets()) {
 			Cardinality peoplen = e.getAggregations().get("agg");
-			mapnum.put(e.getKey(), peoplen.getValue());
+			mapnum.put((String) e.getKey(), peoplen.getValue());
 		}
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -411,7 +422,7 @@ public class FbPayPenetrationScheduled {
 		Terms g3 = active.getAggregations().get("server");
 		for (Terms.Bucket e : g3.getBuckets()) {
 			Cardinality ac = e.getAggregations().get("agg");
-			 mapac.put(e.getKey(), ac.getValue());
+			 mapac.put((String) e.getKey(), ac.getValue());
 		}
 		
 		String time = esUtilTest.oneDayAgoFrom().split("T")[0]; 
@@ -458,36 +469,39 @@ public class FbPayPenetrationScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 		        		AggregationBuilders.sum("sum").field("支付金额")
 			    ).execute().actionGet();
 		Sum pays = paysum.getAggregations().get("sum");
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 		        		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		Cardinality peoplen = peoplenum.getAggregations().get("agg");
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
 		Cardinality ac = active.getAggregations().get("agg");
@@ -504,6 +518,7 @@ public class FbPayPenetrationScheduled {
 			t = pays.getValue()/ac.getValue();
 		}
 		
+		logger.debug(df.format(s) + "        "  + df.format(t));
 		
 		//arpu 月
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_arpumouth,esUtilTest.lastmouth()+"_all")
@@ -543,12 +558,13 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 					AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 							AggregationBuilders.sum("sum").field("支付金额")
@@ -557,17 +573,18 @@ public class FbPayPenetrationScheduled {
 		Terms g1 = paysum.getAggregations().get("serverZone");
 		for (Terms.Bucket e : g1.getBuckets()) {
 			 Sum agg = e.getAggregations().get("sum");
-			 mapsum.put(e.getKey(), agg.getValue());
+			 mapsum.put((String) e.getKey(), agg.getValue());
 		}
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		       .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
@@ -576,17 +593,18 @@ public class FbPayPenetrationScheduled {
 		Terms g2 = peoplenum.getAggregations().get("serverZone");
 		for (Terms.Bucket e : g2.getBuckets()) {
 			Cardinality peoplen = e.getAggregations().get("agg");
-			mapnum.put(e.getKey(), peoplen.getValue());
+			mapnum.put((String) e.getKey(), peoplen.getValue());
 		}
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -594,7 +612,7 @@ public class FbPayPenetrationScheduled {
 		Terms g3 = active.getAggregations().get("serverZone");
 		for (Terms.Bucket e : g3.getBuckets()) {
 			Cardinality ac = e.getAggregations().get("agg");
-			 mapac.put(e.getKey(), ac.getValue());
+			 mapac.put((String) e.getKey(), ac.getValue());
 		}
 		
 		for(Entry<String,Double> entry : mapsum.entrySet()){
@@ -644,12 +662,13 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 					AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 							AggregationBuilders.sum("sum").field("支付金额")
@@ -658,17 +677,18 @@ public class FbPayPenetrationScheduled {
 		Terms g1 = paysum.getAggregations().get("platForm");
 		for (Terms.Bucket e : g1.getBuckets()) {
 			 Sum agg = e.getAggregations().get("sum");
-			 mapsum.put(e.getKey(), agg.getValue());
+			 mapsum.put((String) e.getKey(), agg.getValue());
 		}
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
@@ -677,17 +697,18 @@ public class FbPayPenetrationScheduled {
 		Terms g2 = peoplenum.getAggregations().get("platForm");
 		for (Terms.Bucket e : g2.getBuckets()) {
 			Cardinality peoplen = e.getAggregations().get("agg");
-			mapnum.put(e.getKey(), peoplen.getValue());
+			mapnum.put((String) e.getKey(), peoplen.getValue());
 		}
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -695,7 +716,7 @@ public class FbPayPenetrationScheduled {
 		Terms g3 = active.getAggregations().get("platForm");
 		for (Terms.Bucket e : g3.getBuckets()) {
 			Cardinality ac = e.getAggregations().get("agg");
-			 mapac.put(e.getKey(), ac.getValue());
+			 mapac.put((String) e.getKey(), ac.getValue());
 		}
 		
 		for(Entry<String,Double> entry : mapsum.entrySet()){
@@ -744,12 +765,13 @@ public class FbPayPenetrationScheduled {
 		Map<String, Long> mapnum = new HashMap<String, Long>();
 		Map<String, Long> mapac = new HashMap<String, Long>();
 		//收入金额
-		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 					AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 							AggregationBuilders.sum("sum").field("支付金额")
@@ -758,17 +780,18 @@ public class FbPayPenetrationScheduled {
 		Terms g1 = paysum.getAggregations().get("server");
 		for (Terms.Bucket e : g1.getBuckets()) {
 			 Sum agg = e.getAggregations().get("sum");
-			 mapsum.put(e.getKey(), agg.getValue());
+			 mapsum.put((String) e.getKey(), agg.getValue());
 		}
 
 		
 		//充值人数
-		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        )))
+		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
+		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
@@ -777,17 +800,18 @@ public class FbPayPenetrationScheduled {
 		Terms g2 = peoplenum.getAggregations().get("server");
 		for (Terms.Bucket e : g2.getBuckets()) {
 			Cardinality peoplen = e.getAggregations().get("agg");
-			mapnum.put(e.getKey(), peoplen.getValue());
+			mapnum.put((String) e.getKey(), peoplen.getValue());
 		}
 
 		
 		//活跃玩家
-		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user).setQuery(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-				FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()),
-				        FilterBuilders.termFilter("日志分类关键字", "login")
-						))
-		        ).addAggregation(
+		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.presentfirstday()).to(esUtilTest.lastmouthfirstday()))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
+		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
 								)
@@ -795,7 +819,7 @@ public class FbPayPenetrationScheduled {
 		Terms g3 = active.getAggregations().get("server");
 		for (Terms.Bucket e : g3.getBuckets()) {
 			Cardinality ac = e.getAggregations().get("agg");
-			 mapac.put(e.getKey(), ac.getValue());
+			 mapac.put((String) e.getKey(), ac.getValue());
 		}
 		
 		for(Entry<String,Double> entry : mapsum.entrySet()){
@@ -836,6 +860,7 @@ public class FbPayPenetrationScheduled {
 		}
 		}
 	}
+
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{

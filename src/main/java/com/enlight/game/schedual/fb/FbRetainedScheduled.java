@@ -9,8 +9,6 @@ import java.util.Date;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -54,48 +52,52 @@ public class FbRetainedScheduled {
 	EsUtil esUtilTest = new EsUtil();
 	
 	public Long createCount(String from , String to){
-		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"))
-		        );
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+		        )
+				.execute().actionGet();
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
 	
-	public Long createServerZoneCount(String key,String from , String to){
-		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"),
-		        		FilterBuilders.termFilter("运营大区ID", key))
-		        );
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
+	public Long createServerZoneCount(Object object,String from , String to){
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+		        		.must( QueryBuilders.termsQuery("运营大区ID", object))
+		        )
+				.execute().actionGet();
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
 	
 	public Long createPlatFormCount(String key,String from , String to){
-		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"),
-		        		FilterBuilders.termFilter("渠道ID", key))
-		        );
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+		        		.must( QueryBuilders.termsQuery("渠道ID", key))
+		        )
+				.execute().actionGet();
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
 	
 	public Long createServerCount(String key,String from , String to){
-		FilteredQueryBuilder builder2 = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(from).to(to),
-		        		FilterBuilders.termFilter("日志分类关键字", "create"),
-		        		FilterBuilders.termFilter("服务器ID", key))
-		        );
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder2).execute().actionGet();
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+		        		.must( QueryBuilders.termsQuery("服务器ID", key))
+		        )
+				.execute().actionGet();
 		Long count = sr.getHits().getTotalHits();
 		return count;
 	}
@@ -106,12 +108,12 @@ public class FbRetainedScheduled {
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-		        		FilterBuilders.termFilter("日志分类关键字", "login"))
-		        );
-		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false))
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(num)
@@ -192,13 +194,12 @@ public class FbRetainedScheduled {
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
-		        QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-		        		FilterBuilders.termFilter("日志分类关键字", "login"))
-		        );
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
 			    		.subAggregation(
@@ -223,11 +224,11 @@ public class FbRetainedScheduled {
 				    Long aggcount = agg.getValue();
 				    Double RetentionTwo ;
 
-				    Long r = createServerZoneCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
+				    Long r = createServerZoneCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    if(r==0){
 					    RetentionTwo = (double) 0.00;
 				    }else{
-				    	RetentionTwo = (double)aggcount*100/createServerZoneCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
+				    	RetentionTwo = (double)aggcount*100/createServerZoneCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    }
 				    
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
@@ -301,13 +302,12 @@ public class FbRetainedScheduled {
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
-		        QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-		        		FilterBuilders.termFilter("日志分类关键字", "login"))
-		        );
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
@@ -325,11 +325,11 @@ public class FbRetainedScheduled {
 				    Long aggcount = agg.getValue();
 				    Double RetentionTwo ;
 				    
-				    Long r = createPlatFormCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
+				    Long r = createPlatFormCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    if(r==0){
 					    RetentionTwo = (double) 0.00;
 				    }else{
-				    	RetentionTwo = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
+				    	RetentionTwo = (double)aggcount*100/createPlatFormCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    }
 				    
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
@@ -352,7 +352,7 @@ public class FbRetainedScheduled {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionEight ;
-				    RetentionEight = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
+				    RetentionEight = (double)aggcount*100/createPlatFormCount((String) e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 					        .setSource(jsonBuilder()
 						           	 .startObject()
@@ -373,7 +373,7 @@ public class FbRetainedScheduled {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionThirty ;
-			    	RetentionThirty = (double)aggcount*100/createPlatFormCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
+			    	RetentionThirty = (double)aggcount*100/createPlatFormCount((String) e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 					        .setSource(jsonBuilder()
 						           	 .startObject()
@@ -401,13 +401,12 @@ public class FbRetainedScheduled {
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(
-		        QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-				        FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-		        		FilterBuilders.termFilter("日志分类关键字", "login"))
-		        );
-		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").setQuery(builder)
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+				.setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
+		        )
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
 			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
@@ -425,11 +424,11 @@ public class FbRetainedScheduled {
 				    Long aggcount = agg.getValue();
 				    Double RetentionTwo ;
 				    
-				    Long r = createServerCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
+				    Long r = createServerCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    if(r==0){
 					    RetentionTwo = (double) 0.00;
 				    }else{
-				    	RetentionTwo = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
+				    	RetentionTwo = (double)aggcount*100/createServerCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo());
 				    }
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 					        .setSource(jsonBuilder()
@@ -451,7 +450,7 @@ public class FbRetainedScheduled {
 				    Cardinality agg = e.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double RetentionEight ;
-				    RetentionEight = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
+				    RetentionEight = (double)aggcount*100/createServerCount((String) e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo());
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 					        .setSource(jsonBuilder()
 						           	 .startObject()
@@ -473,7 +472,7 @@ public class FbRetainedScheduled {
 				    Long aggcount = agg.getValue();
 				    Double RetentionThirty ;
 				    
-			    	RetentionThirty = (double)aggcount*100/createServerCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
+			    	RetentionThirty = (double)aggcount*100/createServerCount((String) e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo());
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 					        .setSource(jsonBuilder()
 						           	 .startObject()

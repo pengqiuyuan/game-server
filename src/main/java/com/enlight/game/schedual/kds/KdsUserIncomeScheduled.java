@@ -8,8 +8,6 @@ import java.util.Date;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -66,13 +64,13 @@ public class KdsUserIncomeScheduled {
 	//收入金额
 	public void test1() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 		        		AggregationBuilders.sum("sum").field("支付金额")
 			    ).execute().actionGet();
@@ -91,13 +89,13 @@ public class KdsUserIncomeScheduled {
 		        );
 		
 		//累计收入金额
-		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(buildertotal)
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 		        		AggregationBuilders.sum("sum").field("支付金额")
 			    ).execute().actionGet();
@@ -122,13 +120,13 @@ public class KdsUserIncomeScheduled {
 	
 	public void test1serverZone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
@@ -152,13 +150,13 @@ public class KdsUserIncomeScheduled {
 				        );
 		}
 		//累计收入金额
-		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(buildertotal)
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
@@ -189,13 +187,13 @@ public class KdsUserIncomeScheduled {
 	
 	public void test1platForm() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
@@ -219,13 +217,13 @@ public class KdsUserIncomeScheduled {
 				        );
 		}
 		//累计收入金额
-		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(buildertotal)
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
@@ -255,13 +253,13 @@ public class KdsUserIncomeScheduled {
 	
 	public void test1server() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
@@ -285,13 +283,13 @@ public class KdsUserIncomeScheduled {
 				        );
 		}
 		//累计收入金额
-		FilteredQueryBuilder buildertotal = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(buildertotal)
+		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.sum("sum").field("支付金额")
@@ -324,13 +322,13 @@ public class KdsUserIncomeScheduled {
 	//充值次数
 	public void test2() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .execute().actionGet();
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_money_count)
 		        .setSource(jsonBuilder()
@@ -350,14 +348,14 @@ public class KdsUserIncomeScheduled {
 	}
 	
 	public void test2serverZone() throws IOException, ParseException {	
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize)
 			    ).execute().actionGet();
@@ -384,13 +382,13 @@ public class KdsUserIncomeScheduled {
 	
 	public void test2platForm() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize)
 			    ).execute().actionGet();
@@ -417,13 +415,13 @@ public class KdsUserIncomeScheduled {
 	
 	public void test2server() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize)
 			    ).execute().actionGet();
@@ -451,13 +449,13 @@ public class KdsUserIncomeScheduled {
 	//充值人数
 	public void test3() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 		        		AggregationBuilders.cardinality("agg").field("玩家GUID")
 			    ).execute().actionGet();
@@ -482,13 +480,13 @@ public class KdsUserIncomeScheduled {
 	
 	public void test3serverZone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
@@ -518,13 +516,13 @@ public class KdsUserIncomeScheduled {
 	
 	public void test3platForm() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
@@ -554,13 +552,13 @@ public class KdsUserIncomeScheduled {
 	
 	public void test3server() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
-		FilteredQueryBuilder builder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(),
-		        FilterBuilders.andFilter(
-						FilterBuilders.rangeFilter("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()),
-				        FilterBuilders.termFilter("日志分类关键字", "money_get"),
-				        FilterBuilders.termFilter("支付货币", paytype)
-		        ));
-		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type).setQuery(builder)
+		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
+				.setQuery(
+						QueryBuilders.boolQuery()
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
+						.must(QueryBuilders.termQuery("支付货币", paytype))
+		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
 								AggregationBuilders.cardinality("agg").field("玩家GUID")
