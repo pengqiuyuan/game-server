@@ -482,6 +482,91 @@
 
 										</li>
 									</shiro:hasAnyRoles>
+									<shiro:hasAnyRoles name="admin,XYJ_AP,XYJ_ITEM,XYJ_MONEY,XYJ_DUMMY,XYJ_COIN,XYJ_USER">
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">XYJ实时日志</a>
+											<ul class="dropdown-menu">
+												<shiro:hasAnyRoles name="admin,XYJ_ITEM">
+												<li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">道具日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/xyjItem#/dashboard/file/xyj_item.json">道具日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/xyjItem#/dashboard/file/xyj_itemGet.json">道具获得</a></li>
+									                  <li><a href="${ctx}/manage/count/xyjItem#/dashboard/file/xyj_itemCost.json">道具消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <!-- 
+								               <shiro:hasAnyRoles name="admin,XYJ_AP">
+								               <li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">体力日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/xyjAp#/dashboard/file/xyj_ap.json">体力日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/xyjAp#/dashboard/file/xyj_apGet.json">体力获得</a></li>
+									                  <li><a href="${ctx}/manage/count/xyjAp#/dashboard/file/xyj_apCost.json">体力消耗</a></li>
+									                </ul>
+								               </li>
+												</shiro:hasAnyRoles>
+												 -->
+											   <shiro:hasAnyRoles name="admin,XYJ_MONEY">
+														<li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">真实充值币日志</a>
+											                <ul class="dropdown-menu">
+											                  <li><a tabindex="-1" href="${ctx}/manage/count/xyjMoney#/dashboard/file/xyj_money.json">真实充值币日志(总)</a></li>
+											                  <li><a href="${ctx}/manage/count/xyjMoney#/dashboard/file/xyj_moneyGet.json">真实充值币获得</a></li>
+											                  <li><a href="${ctx}/manage/count/xyjMoney#/dashboard/file/xyj_moneyCost.json">真实充值币消耗</a></li>
+											                </ul>
+										               </li>
+												</shiro:hasAnyRoles>
+												<shiro:hasAnyRoles name="admin,XYJ_DUMMY">
+												<li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">虚拟充值币日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/xyjDummy#/dashboard/file/xyj_dummy.json">虚拟充值币日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/xyjDummy#/dashboard/file/xyj_dummyGet.json">虚拟充值币获得</a></li>
+									                  <li><a href="${ctx}/manage/count/xyjDummy#/dashboard/file/xyj_dummyCost.json">虚拟充值币消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <shiro:hasAnyRoles name="admin,XYJ_COIN">
+								               <li class="dropdown-submenu">
+								                    <a tabindex="-1" href="#">游戏币日志</a>
+									                <ul class="dropdown-menu">
+									                  <li><a tabindex="-1" href="${ctx}/manage/count/xyjCoin#/dashboard/file/xyj_coin.json">游戏币日志(总)</a></li>
+									                  <li><a href="${ctx}/manage/count/xyjCoin#/dashboard/file/xyj_coinGet.json">游戏币获得</a></li>
+									                  <li><a href="${ctx}/manage/count/xyjCoin#/dashboard/file/xyj_coinCost.json">游戏币消耗</a></li>
+									                </ul>
+								               </li>
+								               </shiro:hasAnyRoles>
+								               <shiro:hasAnyRoles name="admin,XYJ_USER">
+													  <li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">用户相关日志</a>
+											                <ul class="dropdown-menu">
+											                  <li class="dropdown-submenu">
+											                  	<a tabindex="-1" href="${ctx}/manage/count/xyjUser#/dashboard/file/xyj_user.json">用户相关日志(总)</a>
+											                  </li>
+											                  <li><a href="${ctx}/manage/count/xyjUser#/dashboard/file/xyj_userLogin.json">用户登录</a></li>
+											                  <li><a href="${ctx}/manage/count/xyjUser#/dashboard/file/xyj_userCreate.json">用户创建</a></li>
+											                  <li><a href="${ctx}/manage/count/xyjUser#/dashboard/file/xyj_userOnline.json">在线用户</a></li>
+											                  <li><a href="${ctx}/manage/count/xyjUser#/dashboard/file/xyj_userNewbieguide.json">新手引导与功能引导</a></li>
+											                </ul>
+										               </li>	
+												</shiro:hasAnyRoles>
+												<shiro:hasAnyRoles name="admin,XYJ_USER_PORTRAIT">
+													  <li class="dropdown-submenu">
+										                    <a tabindex="-1" href="#">用户画像</a>
+											                <ul class="dropdown-menu">
+											                  <li >
+											                  	<a tabindex="-1" href="${ctx}/manage/count/xyjUserPortrait#/dashboard/file/xyj_userPortrait.json">用户画像</a>
+											                  </li>
+											                </ul>
+										               </li>	
+												</shiro:hasAnyRoles>
+												<li class="divider"></li>
+												<li><a href="#">sample</a></li>
+											</ul>
+										</li>
+									</shiro:hasAnyRoles>
+									
 									<li class="divider"></li>
 									<li><a href="#">sample</a></li>
 								</ul>
@@ -606,6 +691,46 @@
 
 										</li>
 									</shiro:hasAnyRoles>
+									<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_RETAINED,XYJ_OFF_USER_ADD,XYJ_OFF_USER_ACTIVE,XYJ_OFF_USER_PAY,XYJ_OFF_USER_INCOME">
+										<li class="dropdown-submenu"><a tabindex="-1" href="#">XYJ离线日志</a>
+											<ul class="dropdown-menu">
+												<li class="dropdown-submenu">
+													<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_RETAINED">
+														<li><a href="${ctx}/manage/xyjRetained/xyj/userRetained?serverZone=all">用户留存</a></li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_ADD">
+														<li><a href="${ctx}/manage/xyjUserAdd/xyj/userAdd?serverZone=all">用户新增</a></li>
+													</shiro:hasAnyRoles>	
+													<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_ACTIVE">
+														<li><a href="${ctx}/manage/xyjActive/xyj/userActive?serverZone=all">活跃用户</a></li>
+													</shiro:hasAnyRoles>	
+													<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_PAY">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<li><a href="${ctx}/manage/xyjUserPay/xyj/userPay?serverZone=all">新增付费用户</a></li>
+																	<li><a href="${ctx}/manage/xyjUserPay/xyj/userDay?serverZone=all">当日付费率</a></li>
+																	<li><a href="${ctx}/manage/xyjUserPay/xyj/userWeek?serverZone=all">当周付费率</a></li>
+																	<li><a href="${ctx}/manage/xyjUserPay/xyj/userMouth?serverZone=all">当月付费率</a></li>
+																<li>
+															</ul>
+														</li>
+													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_INCOME">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
+																<ul class="dropdown-menu">
+																	<li class="dropdown-submenu">
+																		<li><a href="${ctx}/manage/xyjIncome/xyj/userIncome?serverZone=all">收入分析</a></li>
+																		<li><a href="${ctx}/manage/xyjMoneyPayP/xyj/moneyPayP?serverZone=all">ARPU与ARPPU</a></li>
+																	<li>
+																</ul>
+														</li>
+													</shiro:hasAnyRoles>
+												<li>	
+											</ul>
+										</li>
+									</shiro:hasAnyRoles>
+									
 									<li class="divider"></li>
 									<li><a href="#">sample</a></li>
 								</ul>
