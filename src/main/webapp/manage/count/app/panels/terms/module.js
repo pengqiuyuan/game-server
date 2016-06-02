@@ -432,6 +432,8 @@ function (angular, app, _, $, kbn) {
                       slice = { label : "kds_s"+v.key, name : v.key, data : [[k,v.doc_count]], actions: true};
                     }else if(game ==="kun"){
                       slice = { label : "kun_s"+v.key, name : v.key, data : [[k,v.doc_count]], actions: true};
+                    }else if(game ==="xyj"){
+                      slice = { label : "xyj_s"+v.key, name : v.key, data : [[k,v.doc_count]], actions: true};
                     }
                 }else if(scope.panel.field==="人物等级"||scope.panel.field==="角色等级"){
                   slice = { label : v.key+'级', name : v.key, data : [[k,v.doc_count]], actions: true};
@@ -476,6 +478,8 @@ function (angular, app, _, $, kbn) {
                       slice = { label : "kds_s"+v.key,  name : v.key, data : [[k,v['subaggs'][_fcm[scope.panel.tstat]]]], actions: true};
                     }else if(game ==="kun"){
                       slice = { label : "kun_s"+v.key,  name : v.key, data : [[k,v['subaggs'][_fcm[scope.panel.tstat]]]], actions: true};
+                    }else if(game ==="xyj"){
+                      slice = { label : "xyj_s"+v.key,  name : v.key, data : [[k,v['subaggs'][_fcm[scope.panel.tstat]]]], actions: true};
                     }
                 }
                 else if(scope.panel.field==="人物等级"||scope.panel.field==="角色等级"){
