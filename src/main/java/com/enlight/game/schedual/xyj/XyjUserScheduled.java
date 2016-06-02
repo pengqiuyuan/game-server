@@ -1,4 +1,4 @@
-package com.enlight.game.schedual.kun;
+package com.enlight.game.schedual.xyj;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 import java.io.IOException;
@@ -24,25 +24,25 @@ import org.springframework.transaction.annotation.Transactional;
 import com.enlight.game.util.EsUtil;
 
 @Transactional(readOnly = true)
-public class KunUserScheduled {
+public class XyjUserScheduled {
 	
 	@Autowired
 	public Client client;
 	
-	private static final Logger logger = LoggerFactory.getLogger(KunUserScheduled.class);
+	private static final Logger logger = LoggerFactory.getLogger(XyjUserScheduled.class);
 	
 	//项目名称
-	private static final String game = "KUN";
+	private static final String game = "XYJ";
 	
-	private static final String index = "logstash-kun-user-*";
+	private static final String index = "logstash-xyj-user-*";
 	
-	private static final String type = "kun_userlog";
+	private static final String type = "xyj_userlog";
 	
-	private static final String bulk_index = "log_kun_user";
+	private static final String bulk_index = "log_xyj_user";
 	
-	private static final String bulk_type_add = "kun_user_add";
+	private static final String bulk_type_add = "xyj_user_add";
 	
-	private static final String bulk_type_total = "kun_user_total";
+	private static final String bulk_type_total = "xyj_user_total";
 	
 	private static final Integer szsize = 10; //运营大区
 	
@@ -324,36 +324,36 @@ public class KunUserScheduled {
 	
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.info("----------------kun useradd usertotal begin----------------");
+		logger.info("----------------xyj useradd usertotal begin----------------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("kun all useradd usertotal error "+e);
+			logger.error("xyj all useradd usertotal error "+e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("kun serverZone useradd usertotal error "+e);
+			logger.error("xyj serverZone useradd usertotal error "+e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("kun platForm useradd usertotal error "+e);
+			logger.error("xyj platForm useradd usertotal error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("kun server useradd usertotal error "+e);
+			logger.error("xyj server useradd usertotal error "+e);
 		}
 		
-		logger.info("----------------kun useradd usertotal end-----------------");
+		logger.info("----------------xyj useradd usertotal end-----------------");
 	}
 	
 

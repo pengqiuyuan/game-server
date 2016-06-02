@@ -267,6 +267,92 @@
      	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 	</bean>
 	
+	<bean id="xyjRetainedScheduled" class="com.enlight.game.schedual.xyj.XyjRetainedScheduled"/> <!-- 用户留存 -->
+ 	<bean id="xyjUserScheduled" class="com.enlight.game.schedual.xyj.XyjUserScheduled"/><!-- 用户新增、累计 -->
+ 	<bean id="xyjPayScheduled" class="com.enlight.game.schedual.xyj.XyjPayConversionScheduled"/><!-- 用户付费率 -->
+ 	<bean id="xyjUserActiveScheduled" class="com.enlight.game.schedual.xyj.XyjUserActiveScheduled"/><!-- 用户活跃 -->
+ 	<bean id="xyjUserIncomeScheduled" class="com.enlight.game.schedual.xyj.XyjUserIncomeScheduled"/><!-- 收入分析 -->
+ 	<bean id="xyjPayPenetrationScheduled" class="com.enlight.game.schedual.xyj.XyjPayPenetrationScheduled"/><!-- 收入分析 arpu arppu-->
+ 	
+	<bean id="xyjRetainedMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="xyjRetainedScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>
+	<bean id="xyjUserMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="xyjUserScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>
+	<bean id="xyjPayMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="xyjPayScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>   
+	<bean id="xyjUserActiveMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="xyjUserActiveScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>   
+	<bean id="xyjUserIncomeMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="xyjUserIncomeScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>  
+	<bean id="xyjPayPenetrationMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+   		 <property name="targetObject">
+        	<ref bean="xyjPayPenetrationScheduled"/>
+   		</property>  
+    	<property name="targetMethod">  
+       		 <value>schedual</value> 
+   		 </property>  
+	</bean>  
+	
+	<bean id="xyjRetainedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="xyjRetainedMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <!--  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="xyjUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="xyjUserMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="xyjPayTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="xyjPayMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="xyjUserActiveTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="xyjUserActiveMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="xyjUserIncomeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="xyjUserIncomeMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+<!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
+	</bean>
+	<bean id="xyjPayPenetrationTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	 <property name="jobDetail" ref="xyjPayPenetrationMethod" /> 
+     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+	</bean>
+	
 <!-- 日志监控值调度 start -->
 	<bean id="gameValueScheduled" class="com.enlight.game.schedual.GameValueScheduled"/> 
 	<bean id="gameValueMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
@@ -307,6 +393,13 @@
 	            <ref bean="kunUserActiveTrigger" />
 	            <ref bean="kunUserIncomeTrigger" />
 	            <ref bean="kunPayPenetrationTrigger" />
+	            
+	            <ref bean="xyjRetainedTrigger" />
+	            <ref bean="xyjUserTrigger" />
+	            <ref bean="xyjPayTrigger" />
+	            <ref bean="xyjUserActiveTrigger" />
+	            <ref bean="xyjUserIncomeTrigger" />
+	            <ref bean="xyjPayPenetrationTrigger" />
 	            
 	            <!-- 日志监控值调度 start -->
 	             <ref bean="gameValueTrigger" />

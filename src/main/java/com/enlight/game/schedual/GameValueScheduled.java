@@ -84,6 +84,22 @@ public class GameValueScheduled {
 	
 	private static final String kds_coin_type = "kds_coinlog";
 	
+	/**
+	 * 这个controller默认为xyj项目的控制层。项目id文档已定
+	 */
+	private static final String xyjStoreId = "4";
+	
+	private static final String xyjStoreName = "XYJ";
+	
+	private static final String xyj_index = "logstash-xyj-all-*";
+	
+	private static final String xyj_item_type = "xyj_itemlog";
+	
+	private static final String xyj_money_type = "xyj_moneylog";
+	
+	private static final String xyj_coin_type = "xyj_coinlog";
+	
+	
 	EsUtil esUtilTest = new EsUtil();
 	
 	private static final Logger logger = LoggerFactory.getLogger(GameValueScheduled.class);
@@ -98,6 +114,7 @@ public class GameValueScheduled {
 			xMonitor(fbStoreId, fbStoreName, fb_index, fb_item_type, fb_money_type, fb_coin_type);
 			xMonitor(kunStoreId, kunStoreName, kun_index, kun_item_type, kun_money_type, kun_coin_type);
 			xMonitor(kdsStoreId, kdsStoreName, kds_index, kds_item_type, kds_money_type, kds_coin_type);
+			xMonitor(xyjStoreId, xyjStoreName, xyj_index, xyj_item_type, xyj_money_type, xyj_coin_type);
 			logger.debug("----------------Monitor调度结束");
 		} catch (Exception e) {
 			// TODO: handle exception
