@@ -51,6 +51,7 @@ public class CountController extends BaseController{
 	
 	private static final String GAME_KDS = "kds";
 	
+	private static final String GAME_XYJ = "xyj";
 	
 	@Autowired
 	private ServerZoneService serverZoneService;
@@ -360,6 +361,99 @@ public class CountController extends BaseController{
 		logger.debug("user portrait...");
 		model.addAttribute("user", EnumFunction.ENUM_USER_PORTRAIT);
 		model.addAttribute("game", GAME_KDS);
+		return "/kibana/index";
+	}
+	
+	
+	
+	//xyj
+	/**
+	 * 道具日志
+	 * @return
+	 */
+	@RequiresRoles(value = { "admin", "XYJ_ITEM" }, logical = Logical.OR)
+	@RequestMapping(value = "/xyjItem", method = RequestMethod.GET)
+	public String xyjItem(Model model){
+		logger.debug("item coming...");
+		model.addAttribute("user", EnumFunction.ENUM_ITEM);
+		model.addAttribute("game", GAME_XYJ);
+		return "/kibana/index";
+	}	
+	
+	/**
+	 * 体力日志
+	 * @return
+	 */
+	@RequiresRoles(value = { "admin", "XYJ_AP" }, logical = Logical.OR)
+	@RequestMapping(value = "/xyjAp", method = RequestMethod.GET)
+	public String xyjAp(Model model){
+		logger.debug("ap coming...");
+		model.addAttribute("user", EnumFunction.ENUM_AP);
+		model.addAttribute("game", GAME_XYJ);
+		return "/kibana/index";
+	}	
+	
+	/**
+	 * 真实充值币日志
+	 * @return
+	 */
+	@RequiresRoles(value = { "admin", "XYJ_MONEY" }, logical = Logical.OR)
+	@RequestMapping(value = "/xyjMoney", method = RequestMethod.GET)
+	public String xyjMoney(Model model){
+		logger.debug("money coming...");
+		model.addAttribute("user", EnumFunction.ENUM_MONEY);
+		model.addAttribute("game", GAME_XYJ);
+		return "/kibana/index";
+	}	
+	
+	/**
+	 * 虚拟充值币日志
+	 * @return
+	 */
+	@RequiresRoles(value = { "admin", "XYJ_DUMMY" }, logical = Logical.OR)
+	@RequestMapping(value = "/xyjDummy", method = RequestMethod.GET)
+	public String xyjDummy(Model model){
+		logger.debug("dummy coming...");
+		model.addAttribute("user", EnumFunction.ENUM_DUMMY);
+		model.addAttribute("game", GAME_XYJ);
+		return "/kibana/index";
+	}	
+	
+	/**
+	 * 游戏币日志
+	 * @return
+	 */
+	@RequiresRoles(value = { "admin", "XYJ_COIN" }, logical = Logical.OR)
+	@RequestMapping(value = "/xyjCoin", method = RequestMethod.GET)
+	public String xyjCoin(Model model){
+		logger.debug("coin coming...");
+		model.addAttribute("user", EnumFunction.ENUM_COIN);
+		model.addAttribute("game", GAME_XYJ);
+		return "/kibana/index";
+	}	
+	  
+	/**
+	 * 用户日志
+	 * @return
+	 */
+	@RequiresRoles(value = { "admin", "XYJ_USER" }, logical = Logical.OR)
+	@RequestMapping(value = "/xyjUser", method = RequestMethod.GET)
+	public String xyjUser(Model model){
+		logger.debug("user coming...");
+		model.addAttribute("user", EnumFunction.ENUM_USER);
+		model.addAttribute("game", GAME_XYJ);
+		return "/kibana/index";
+	}	
+	
+	/**
+	 * 用户画像
+	 */
+	@RequiresRoles(value = { "admin", "XYJ_USER_PORTRAIT" }, logical = Logical.OR)
+	@RequestMapping(value = "/xyjUserPortrait", method = RequestMethod.GET)
+	public String xyjUserPortrait(Model model){
+		logger.debug("user portrait...");
+		model.addAttribute("user", EnumFunction.ENUM_USER_PORTRAIT);
+		model.addAttribute("game", GAME_XYJ);
 		return "/kibana/index";
 	}
 	
