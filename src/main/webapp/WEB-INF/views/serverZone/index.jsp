@@ -59,6 +59,7 @@
 												</c:if>
 									</shiro:hasAnyRoles>
 									<li class="divider"></li>
+									<li><a href="#">sample</a></li>
 								</ul>
 							</div>
 						</td>
