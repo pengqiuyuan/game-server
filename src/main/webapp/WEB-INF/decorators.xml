@@ -38,6 +38,12 @@
 		<pattern>/*manage/kdsIncome*</pattern>
 	    <pattern>/*manage/kdsMoneyPayP*</pattern>
 	    
+	    <pattern>/*manage/xyjRetained*</pattern>
+		<pattern>/*manage/xyjUserAdd*</pattern>
+		<pattern>/*manage/xyjUserPay*</pattern>
+		<pattern>/*manage/xyjActive*</pattern>
+		<pattern>/*manage/xyjIncome*</pattern>
+	    <pattern>/*manage/xyjMoneyPayP*</pattern>
 	</decorator>
 	
 </decorators>
