@@ -14,15 +14,6 @@
 			.error{ 
 			color:Red; 
 			} 
-			.checkbox.inline+.checkbox.inline {
-			margin-left: 0px;
-			}
-			.radio.inline, .checkbox.inline {
-			padding-top: 16px;
-			}
-			.radio, .checkbox {
-			min-height: 20px;
-			}
 			.form-ac {
 			  padding: 19px 20px 20px;
 			  margin-top: 20px;
@@ -46,7 +37,7 @@
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/gift/save"   enctype="multipart/form-data" >
 			<div class="container-fluid">
 				<div class="row-fluid">
-					<div class="span3">
+					<div class="span12">
 						<div class="control-group">
 							<label class="control-label" for="gameId">选择游戏项目：</label>
 							<div class="controls">
@@ -83,7 +74,7 @@
 						</div>
 					</div>
 					
-					<div class="span9">
+					<div class="span12">
 						 <div
 							class="control-group">
 							<label class="control-label" for="playerId">限制Id：</label>
@@ -97,15 +88,15 @@
 								<div class="controls">
 									<label class="radio">
 									  <input type="radio" name="category" id="category" class="category" value="1" checked>
-									  <span class="help-block" style="margin-top: -5px;width: 90%;">礼品卡类型1：同批绑定单服单次使用，使用后作废（即生成的礼品码在所选择的的服务器中只能有一个服务器使用，一个玩家在一个服务器中使用后，此卡就作废）</span>
+									  礼品卡类型1：同批绑定单服单次使用，使用后作废（即生成的礼品码在所选择的的服务器中只能有一个服务器使用，一个玩家在一个服务器中使用后，此卡就作废）
 									</label>
 									<label class="radio">
 									  <input type="radio" name="category" id="category" class="category" value="2">
-									  <span class="help-block" style="margin-top: -5px;width: 90%;">礼品卡类型2：同批支持多服单次使用，使用后作废（即生成的礼品码在所选择的的服务器均可使用，这张卡在每个服只可使用一次，一经使用，其他玩家无法使用这张卡，使用这个卡的玩家可以再其他服继续使用这张卡）</span>
+									  礼品卡类型2：同批支持多服单次使用，使用后作废（即生成的礼品码在所选择的的服务器均可使用，这张卡在每个服只可使用一次，一经使用，其他玩家无法使用这张卡，使用这个卡的玩家可以再其他服继续使用这张卡）
 									</label>
 									<label class="radio">
 									  <input type="radio" name="category" id="category" class="category" value="3">
-									  <span class="help-block" style="margin-top: -5px;width: 90%;">礼品卡类型3：同批支持多服单次使用，使用后在本服无法再次使用，可在其他服再次使用（此种类型礼品卡只生成一个礼品码，此礼品码在所选择的的服务器均可使用，但是每个玩家GUID在每个服只能使用一次这个礼品卡）</span>
+									  礼品卡类型3：同批支持多服单次使用，使用后在本服无法再次使用，可在其他服再次使用（此种类型礼品卡只生成一个礼品码，此礼品码在所选择的的服务器均可使用，但是每个玩家GUID在每个服只能使用一次这个礼品卡）
 									</label>
 								</div>
 						</div>
@@ -226,7 +217,7 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline span3'><input type='checkbox' id='server' name='server' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
+						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='server' name='server' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
@@ -287,7 +278,7 @@
 					success: function(data){
 						var parsedJson = $.parseJSON(data);
 						jQuery.each(parsedJson, function(index, itemData) {
-						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline span3'><input type='checkbox' id='server' name='server' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
+						$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='server' name='server' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
 						});
 					},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 				});
