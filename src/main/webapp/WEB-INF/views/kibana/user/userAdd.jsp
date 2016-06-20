@@ -27,7 +27,8 @@
     
     <link href="<%=request.getContextPath()%>/static/echarts/css/echartsHome.css" rel="stylesheet">
 
-  
+    <script src="https://npmcdn.com/antd/dist/antd.js" type="text/javascript"></script>
+    <link href="https://npmcdn.com/antd/dist/antd.css" rel="stylesheet">
 <body>
 	<div id="wrapper">
 
