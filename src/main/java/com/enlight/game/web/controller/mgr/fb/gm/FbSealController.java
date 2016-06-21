@@ -2,7 +2,11 @@ package com.enlight.game.web.controller.mgr.fb.gm;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -73,6 +77,8 @@ public class FbSealController extends BaseController{
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	
 	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
+	
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	static {
 		sortTypes.put("auto", "自动");
@@ -250,11 +256,38 @@ public class FbSealController extends BaseController{
 		seal.setServerZoneId(serverZoneId);
 		seal.setServerId(serverId);
 		seal.setGuid(guid);
+		seal.setName(request.getParameter("name"));
+		seal.setPlatForm(request.getParameter("platForm"));
+		seal.setAccount(request.getParameter("account"));
 		if(null != request.getParameter("sealTime")){
-			seal.setSealTime(request.getParameter("sealTime"));
+			if(!request.getParameter("sealTime").equals("-1")){
+				seal.setSealTime(request.getParameter("sealTime"));
+				
+				Calendar now = Calendar.getInstance();
+				String datestart = sdf.format(now.getTimeInMillis());
+				now.add(Calendar.SECOND,Integer.parseInt(request.getParameter("sealTime")));
+				String dateend = sdf.format(now.getTimeInMillis());
+				
+				seal.setSealStart(datestart);
+				seal.setSealEnd(dateend);
+			}else{
+				seal.setSealTime(request.getParameter("sealTime"));
+			}
+			
 		}else if(null != request.getParameter("sealStart") && null != request.getParameter("sealEnd")){
 			seal.setSealStart(request.getParameter("sealStart"));
 			seal.setSealEnd(request.getParameter("sealEnd"));
+			
+			try {
+				Date begin = sdf.parse(request.getParameter("sealStart"));
+				Date end = sdf.parse(request.getParameter("sealEnd"));   
+				long between=(end.getTime()-begin.getTime())/1000;
+				seal.setSealTime(String.valueOf(between));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}   
+
 		}
 		
 		logger.debug("id : " + id +" serverZoneid: " + serverZoneId + " gameId:  " + gameId  + " serverId: " + serverId  + " guid: " + guid 
@@ -275,6 +308,36 @@ public class FbSealController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Seal seal,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
         if(seal.getServerId() != null){
+    		if(null != request.getParameter("sealTime")){
+    			if(!request.getParameter("sealTime").equals("-1")){
+    				seal.setSealTime(request.getParameter("sealTime"));
+    				
+    				Calendar now = Calendar.getInstance();
+    				String datestart = sdf.format(now.getTimeInMillis());
+    				now.add(Calendar.SECOND,Integer.parseInt(request.getParameter("sealTime")));
+    				String dateend = sdf.format(now.getTimeInMillis());
+    				
+    				seal.setSealStart(datestart);
+    				seal.setSealEnd(dateend);
+    			}else{
+    				seal.setSealTime(request.getParameter("sealTime"));
+    			}
+    			
+    		}else if(null != request.getParameter("sealStart") && null != request.getParameter("sealEnd")){
+    			seal.setSealStart(request.getParameter("sealStart"));
+    			seal.setSealEnd(request.getParameter("sealEnd"));
+    			
+    			try {
+    				Date begin = sdf.parse(request.getParameter("sealStart"));
+    				Date end = sdf.parse(request.getParameter("sealEnd"));   
+    				long between=(end.getTime()-begin.getTime())/1000;
+    				seal.setSealTime(String.valueOf(between));
+    			} catch (ParseException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}   
+
+    		}
     		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/seal/addSealAccount" , JSONObject.fromObject(seal));
     		redirectAttributes.addFlashAttribute("message", "新增封号Guid: "+seal.getGuid()+":" +res.getString("message"));
     		return "redirect:/manage/gm/fb/seal/add";
