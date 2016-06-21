@@ -199,7 +199,7 @@
 						<option value="86400">封禁1天</option>	
 						<option value="2592000">封禁1个月</option>	
 						<option value="31536000">封禁1年</option>	
-						<option value="－1">永久封禁</option>		
+						<option value="-1">永久封禁</option>		
 					</select>	
 				</div>
 			</div>
