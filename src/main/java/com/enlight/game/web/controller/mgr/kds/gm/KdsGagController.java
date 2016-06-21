@@ -2,7 +2,10 @@ package com.enlight.game.web.controller.mgr.kds.gm;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -74,6 +77,7 @@ public class KdsGagController extends BaseController{
 	
 	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
 	
+	
 	static {
 		sortTypes.put("auto", "自动");
 	}
@@ -143,7 +147,7 @@ public class KdsGagController extends BaseController{
 			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
 			List<String> s = u.getServerZoneList();
 			for (String str : s) {	
-				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneIdAndStoreId(Integer.valueOf(str), Integer.valueOf(user.getStoreId()));
 				if(goServerZone!=null){
 					goServerZones.add(goServerZone);
 				}
@@ -156,7 +160,7 @@ public class KdsGagController extends BaseController{
 			if(goStore!=null){
 				goStores.add(goStore);
 			}
-			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findByStoreId(KDS);
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}
@@ -213,7 +217,7 @@ public class KdsGagController extends BaseController{
 			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
 			List<String> s = u.getServerZoneList();
 			for (String str : s) {	
-				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneIdAndStoreId(Integer.valueOf(str), Integer.valueOf(user.getStoreId()));
 				if(goServerZone!=null){
 					goServerZones.add(goServerZone);
 				}
@@ -226,7 +230,7 @@ public class KdsGagController extends BaseController{
 			if(goStore!=null){
 				goStores.add(goStore);
 			}
-			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findByStoreId(KDS);
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}
@@ -250,8 +254,27 @@ public class KdsGagController extends BaseController{
 		gag.setServerZoneId(serverZoneId);
 		gag.setServerId(serverId);
 		gag.setGuid(guid);
+		gag.setName(request.getParameter("name"));
+		gag.setPlatForm(request.getParameter("platForm"));
+		gag.setAccount(request.getParameter("account"));
 		if(null != request.getParameter("gagTime")){
-			gag.setGagTime(request.getParameter("gagTime"));
+			if(!request.getParameter("gagTime").equals("-1")){
+				gag.setGagTime(request.getParameter("gagTime"));
+				
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Calendar now = Calendar.getInstance();
+				String datestart = sdf.format(now.getTimeInMillis());
+				now.add(Calendar.SECOND,Integer.parseInt(request.getParameter("gagTime")));
+				String dateend = sdf.format(now.getTimeInMillis());
+				
+				gag.setGagStart(datestart);
+				gag.setGagEnd(dateend);
+			}else{
+				gag.setGagTime(request.getParameter("gagTime"));
+			}
+
+			
+			
 		}else if(null != request.getParameter("gagStart") && null != request.getParameter("gagEnd")){
 			gag.setGagStart(request.getParameter("gagStart"));
 			gag.setGagEnd(request.getParameter("gagEnd"));

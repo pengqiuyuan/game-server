@@ -19,6 +19,8 @@ public class GoServerZone {
 	private int id;
 	
 	private int serverZoneId;
+	
+	private int storeId;
 
 	public int getId() {
 		return id;
@@ -34,6 +36,14 @@ public class GoServerZone {
 
 	public void setServerZoneId(int serverZoneId) {
 		this.serverZoneId = serverZoneId;
+	}
+
+	public int getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(int storeId) {
+		this.storeId = storeId;
 	}
 	
 }

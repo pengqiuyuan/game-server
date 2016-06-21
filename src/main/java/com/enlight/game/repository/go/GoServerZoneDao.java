@@ -18,4 +18,8 @@ public interface GoServerZoneDao extends PagingAndSortingRepository<GoServerZone
 	
 	GoServerZone findByServerZoneId(int serverZoneId);
 	
+	GoServerZone findByServerZoneIdAndStoreId(int serverZoneId , int storeId);
+	
+	List<GoServerZone> findByStoreId(int storeId);
+	
 }

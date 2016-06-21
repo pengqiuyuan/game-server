@@ -144,7 +144,7 @@ public class KdsEmailController extends BaseController{
 			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
 			List<String> s = u.getServerZoneList();
 			for (String str : s) {	
-				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneIdAndStoreId(Integer.valueOf(str), Integer.valueOf(user.getStoreId()));
 				if(goServerZone!=null){
 					goServerZones.add(goServerZone);
 				}
@@ -157,7 +157,7 @@ public class KdsEmailController extends BaseController{
 			if(goStore!=null){
 				goStores.add(goStore);
 			}
-			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findByStoreId(KDS);
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}
@@ -213,7 +213,7 @@ public class KdsEmailController extends BaseController{
 			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
 			List<String> s = u.getServerZoneList();
 			for (String str : s) {	
-				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneIdAndStoreId(Integer.valueOf(str), Integer.valueOf(user.getStoreId()));
 				if(goServerZone!=null){
 					goServerZones.add(goServerZone);
 				}
@@ -226,7 +226,7 @@ public class KdsEmailController extends BaseController{
 			if(goStore!=null){
 				goStores.add(goStore);
 			}
-			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findByStoreId(KDS);
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}
@@ -298,6 +298,7 @@ public class KdsEmailController extends BaseController{
 			
         if(email.getServerId() != null){
     		JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/email/addEmail" , JSONObject.fromObject(email));
+    		System.out.println("111111 "   +JSONObject.fromObject(email));
     		redirectAttributes.addFlashAttribute("message", "选择渠道: "+ email.getPlatForm() +",有服务器"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
     		return "redirect:/manage/gm/kds/email/add";
         }else{

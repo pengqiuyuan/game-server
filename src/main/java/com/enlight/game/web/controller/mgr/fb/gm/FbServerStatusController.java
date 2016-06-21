@@ -140,7 +140,7 @@ public class FbServerStatusController extends BaseController{
 			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
 			List<String> s = u.getServerZoneList();
 			for (String str : s) {	
-				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneIdAndStoreId(Integer.valueOf(str), Integer.valueOf(user.getStoreId()));
 				if(goServerZone!=null){
 					goServerZones.add(goServerZone);
 				}
@@ -153,7 +153,7 @@ public class FbServerStatusController extends BaseController{
 			if(goStore!=null){
 				goStores.add(goStore);
 			}
-			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findByStoreId(FB);
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}
@@ -219,7 +219,7 @@ public class FbServerStatusController extends BaseController{
 			List<GoServerZone> goServerZones = new ArrayList<GoServerZone>();
 			List<String> s = u.getServerZoneList();
 			for (String str : s) {	
-				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneIdAndStoreId(Integer.valueOf(str), Integer.valueOf(user.getStoreId()));
 				if(goServerZone!=null){
 					goServerZones.add(goServerZone);
 				}
@@ -232,7 +232,7 @@ public class FbServerStatusController extends BaseController{
 			if(goStore!=null){
 				goStores.add(goStore);
 			}
-			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findByStoreId(FB);
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}
@@ -287,7 +287,7 @@ public class FbServerStatusController extends BaseController{
 			//List<GoAllServer> goAllServers = new ArrayList<GoAllServer>();
 			List<String> s = u.getServerZoneList();
 			for (String str : s) {	
-				GoServerZone goServerZone = goServerZoneService.findByServerZoneId(Integer.valueOf(str));
+				GoServerZone goServerZone = goServerZoneService.findByServerZoneIdAndStoreId(Integer.valueOf(str), Integer.valueOf(user.getStoreId()));
 				//List<GoAllServer> gs= goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(user.getStoreId()), Integer.valueOf(str));
 				if(goServerZone!=null){
 					goServerZones.add(goServerZone);
@@ -302,7 +302,7 @@ public class FbServerStatusController extends BaseController{
 			if(goStore!=null){
 				goStores.add(goStore);
 			}
-			List<GoServerZone> goServerZones = goServerZoneService.findAll();
+			List<GoServerZone> goServerZones = goServerZoneService.findByStoreId(FB);
 			model.addAttribute("stores", goStores);
 			model.addAttribute("serverZones", goServerZones);
 		}

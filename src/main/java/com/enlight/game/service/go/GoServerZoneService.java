@@ -17,13 +17,20 @@ public class GoServerZoneService {
 	@Autowired
 	private GoServerZoneDao goServerZoneDao;
 	
-	public List<GoServerZone> findAll(){
+/*	public List<GoServerZone> findAll(){
 		return goServerZoneDao.findAll();
-	}
+	}*/
 	
-	public GoServerZone findByServerZoneId(int serverZoneId){
+/*	public GoServerZone findByServerZoneId(int serverZoneId){
 		return goServerZoneDao.findByServerZoneId(serverZoneId);
+	}*/
+	
+	public List<GoServerZone> findByStoreId(int storeId){
+		return goServerZoneDao.findByStoreId(storeId);
 	}
 	
+	public GoServerZone findByServerZoneIdAndStoreId(int serverZoneId,int storeId){
+		return goServerZoneDao.findByServerZoneIdAndStoreId(serverZoneId, storeId);
+	}
 	
 }
