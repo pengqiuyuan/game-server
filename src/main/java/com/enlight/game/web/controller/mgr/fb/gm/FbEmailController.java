@@ -283,7 +283,7 @@ public class FbEmailController extends BaseController{
 			email.setAnnex(annexs);
 		}
 
-		//按渠道发送，最终也要找出渠道对应服务器
+		//按渠道发送，最终也要找出渠道对应服务器 , gomiddle按serverId处理gm请求与游戏服务器传递消息
 		if(email.getPlatForm()!=null){
 			Set<String>  set=new HashSet<String>();
 			List<String> pfIds =  ImmutableList.copyOf(StringUtils.split(email.getPlatForm(), ","));

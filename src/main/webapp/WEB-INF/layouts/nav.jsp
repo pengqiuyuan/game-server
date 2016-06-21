@@ -263,20 +263,6 @@
 															</ul>
 														</li>														
 													</shiro:hasAnyRoles>
-												    <shiro:hasAnyRoles name="admin,kds_gm_product_select,kds_gm_product_add">
-														<li class="dropdown-submenu"><a tabindex="-1" href="#">商店商品</a>
-															<ul class="dropdown-menu">
-																<li class="dropdown-submenu">
-																	<shiro:hasAnyRoles name="admin,kds_gm_product_select">
-																		<li><a href="${ctx}/manage/gm/kds/product/index">商店商品</a></li>
-																	</shiro:hasAnyRoles>
-																	<shiro:hasAnyRoles name="admin,kds_gm_product_add">
-																		<li><a href="${ctx}/manage/gm/kds/product/add">商店商品新增</a></li>
-																	</shiro:hasAnyRoles>
-																<li>
-															</ul>
-														</li>														    
-												    </shiro:hasAnyRoles>
 													<li class="divider"></li>
 													<li><a href="#">sample</a></li>
 												<li>	
