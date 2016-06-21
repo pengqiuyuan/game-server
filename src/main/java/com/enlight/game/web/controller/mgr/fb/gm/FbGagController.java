@@ -2,7 +2,11 @@ package com.enlight.game.web.controller.mgr.fb.gm;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -73,6 +77,8 @@ public class FbGagController extends BaseController{
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	
 	private static JsonBinder binder = JsonBinder.buildNonDefaultBinder();
+	
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	static {
 		sortTypes.put("auto", "自动");
@@ -250,11 +256,38 @@ public class FbGagController extends BaseController{
 		gag.setServerZoneId(serverZoneId);
 		gag.setServerId(serverId);
 		gag.setGuid(guid);
+		gag.setName(request.getParameter("name"));
+		gag.setPlatForm(request.getParameter("platForm"));
+		gag.setAccount(request.getParameter("account"));
 		if(null != request.getParameter("gagTime")){
-			gag.setGagTime(request.getParameter("gagTime"));
+			if(!request.getParameter("gagTime").equals("-1")){
+				gag.setGagTime(request.getParameter("gagTime"));
+				
+				Calendar now = Calendar.getInstance();
+				String datestart = sdf.format(now.getTimeInMillis());
+				now.add(Calendar.SECOND,Integer.parseInt(request.getParameter("gagTime")));
+				String dateend = sdf.format(now.getTimeInMillis());
+				
+				gag.setGagStart(datestart);
+				gag.setGagEnd(dateend);
+			}else{
+				gag.setGagTime(request.getParameter("gagTime"));
+			}
+			
 		}else if(null != request.getParameter("gagStart") && null != request.getParameter("gagEnd")){
 			gag.setGagStart(request.getParameter("gagStart"));
 			gag.setGagEnd(request.getParameter("gagEnd"));
+			
+			try {
+				Date begin = sdf.parse(request.getParameter("gagStart"));
+				Date end = sdf.parse(request.getParameter("gagEnd"));   
+				long between=(end.getTime()-begin.getTime())/1000;
+				gag.setGagTime(String.valueOf(between));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}   
+
 		}
 		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/updateGagAccount" , JSONObject.fromObject(gag));
@@ -270,6 +303,36 @@ public class FbGagController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Gag gag,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
         if(gag.getServerId() != null){
+    		if(null != request.getParameter("gagTime")){
+    			if(!request.getParameter("gagTime").equals("-1")){
+    				gag.setGagTime(request.getParameter("gagTime"));
+    				
+    				Calendar now = Calendar.getInstance();
+    				String datestart = sdf.format(now.getTimeInMillis());
+    				now.add(Calendar.SECOND,Integer.parseInt(request.getParameter("gagTime")));
+    				String dateend = sdf.format(now.getTimeInMillis());
+    				
+    				gag.setGagStart(datestart);
+    				gag.setGagEnd(dateend);
+    			}else{
+    				gag.setGagTime(request.getParameter("gagTime"));
+    			}
+    			
+    		}else if(null != request.getParameter("gagStart") && null != request.getParameter("gagEnd")){
+    			gag.setGagStart(request.getParameter("gagStart"));
+    			gag.setGagEnd(request.getParameter("gagEnd"));
+    			
+    			try {
+    				Date begin = sdf.parse(request.getParameter("gagStart"));
+    				Date end = sdf.parse(request.getParameter("gagEnd"));   
+    				long between=(end.getTime()-begin.getTime())/1000;
+    				gag.setGagTime(String.valueOf(between));
+    			} catch (ParseException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}   
+
+    		}
     		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/gag/addGagAccount" , JSONObject.fromObject(gag));
     		redirectAttributes.addFlashAttribute("message", "新增禁言Guid:"+gag.getGuid()+":"+res.getString("message"));
     		return "redirect:/manage/gm/fb/gag/add";
