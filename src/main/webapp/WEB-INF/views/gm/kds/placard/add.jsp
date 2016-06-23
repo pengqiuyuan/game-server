@@ -20,7 +20,6 @@
 </head>
 
 <body>
-	<script type="text/javascript" src="${ctx}/static/ckeditor/ckeditor.js"></script>
 	<div class="page-header">
    		<h2>新增公告</h2>
  	</div>
@@ -72,7 +71,7 @@
 			<div class="control-group ">
 				<label class="control-label" for="contents">公告内容：</label>
 				<div class="controls">
-					<textarea path="contents" name="contents" cssClass="input-xlarge" value="" cols="200" rows="20" /></textarea>
+					<textarea path="contents" name="contents" cssClass="input-xlarge" value="" style="height: 200px;width: 800px" /></textarea>
 				</div>
 			</div>
 
@@ -84,7 +83,6 @@
 			</div>
 	</form>
 <script type="text/javascript">
-	CKEDITOR.replace('contents');
 	function selectAll(){  
         $("input[id='serverId']").attr("checked", true);  
 	}	

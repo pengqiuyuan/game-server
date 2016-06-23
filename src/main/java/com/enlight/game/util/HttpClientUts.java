@@ -132,10 +132,21 @@ public class HttpClientUts {
 	    HttpPost post = new HttpPost(url);
 	    JSONObject response = null;
 	    try {
-	      StringEntity s = new StringEntity(json.toString());
+	    	
+ /*         StringEntity entity1 = new StringEntity(json.toString(), "UTF-8");  
+          entity1.setContentType("text/xml;charset=UTF-8");  
+          entity1.setContentEncoding("UTF-8");  
+          post.setHeader("Content-Type", "text/xml;charset=UTF-8");  
+          post.setEntity(entity1);  */
+	    	
+	      StringEntity s = new StringEntity(json.toString(), "UTF-8");
 	      s.setContentEncoding("UTF-8");
-	      s.setContentType("application/json");//发送json数据需要设置contentType
+	      s.setContentType("text/xml; charset=utf-8");//发送json数据需要设置contentType
+	      post.setHeader("Content-Type", "text/xml;charset=UTF-8");  
 	      post.setEntity(s);
+	      
+	      
+	      
 	      HttpResponse res = client.execute(post);
 	      if(res.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
 	        HttpEntity entity = res.getEntity();

@@ -21,7 +21,6 @@
 	</style>
 </head>
 <body>
-	<script type="text/javascript" src="${ctx}/static/ckeditor/ckeditor.js"></script>
 
 	<div >
 		<div class="page-header">
@@ -163,7 +162,7 @@
 			<div class="control-group ">
 				<label class="control-label" for="contents">公告内容：</label>
 				<div class="controls">
-					<textarea path="contents" id="contents" name="contents" cssClass="input-xlarge" value="" cols="200" rows="20" /></textarea>
+					<textarea ="contents" id="contents" name="contents" cssClass="input-xlarge" value="" style="height: 200px;width: 800px" /></textarea>
 				</div>
 			</div>
 			<div class="control-group">
@@ -191,8 +190,6 @@
 
 	</div>
 	<script type="text/javascript">
-			CKEDITOR.replace('contents');	
-	
 			$(function(){
 				$('.intro').tooltip();
 			});
@@ -201,10 +198,10 @@
 				$("#id").attr('value',id);
 				$('#inputForm').show();
 				$("#version").attr('value','');
-				CKEDITOR.instances.contents.setData('')
+				$("#contents").attr('value','');
 				
 				$("#version").attr('value',version);
-				CKEDITOR.instances.contents.setData(contents)
+				$("#contents").attr('value',contents);
 				
 				$("#selBtn").attr("disabled","disabled");  
 				$("#gameId").attr("disabled","disabled");  

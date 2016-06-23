@@ -238,9 +238,10 @@ public class KdsPlacardController extends BaseController{
 		placard.setServerZoneId(serverZoneId);
 		System.out.println(placard.getId() +"  " + placard.getGameId() + " "+ placard.getServerZoneId() + "  "  + placard.getServerId() + " " + placard.getVersion() + "  " + placard.getContents());
 
+		placard.setContents(placard.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
 		JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/placard/updatePlacards" , JSONObject.fromObject(placard));
 		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/kds/placard/index";
+		return "redirect:/manage/gm/kds/placard/index?search_EQ_storeId="+placard.getGameId()+"&search_EQ_serverZoneId="+placard.getServerZoneId()+"&search_EQ_serverId="+placard.getServerId();
 	}
 
 	
@@ -251,15 +252,15 @@ public class KdsPlacardController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Placard placard,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "  "  +placard.getVersion() + "  "  + placard.getContents() );
-
+		placard.setContents(placard.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
         if(placard.getServerId() != null){
     		System.out.println(JSONObject.fromObject(placard));
     		JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/placard/addPlacards"  , JSONObject.fromObject(placard));
     		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-    		return "redirect:/manage/gm/kds/placard/add";
+    		return "redirect:/manage/gm/kds/placard/index?search_EQ_storeId="+placard.getGameId()+"&search_EQ_serverZoneId="+placard.getServerZoneId()+"&search_EQ_serverId="+placard.getServerId();
         }else{
         	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
-        	return "redirect:/manage/gm/kds/placard/add";
+        	return "redirect:/manage/gm/kds/placard/index";
         }
 	}
 	
