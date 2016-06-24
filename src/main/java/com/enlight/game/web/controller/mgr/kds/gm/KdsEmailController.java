@@ -324,7 +324,7 @@ public class KdsEmailController extends BaseController{
 		 Map<String,Object> map = new HashMap<String, Object>();
 		 String	account = HttpClientUts.doGet(gm_url+"/kdsserver/email/delEmailById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
-		 map.put("success", dataJson.get("message"));
+		 map.put("message", dataJson.get("message"));
 		 return map;
 	}
 

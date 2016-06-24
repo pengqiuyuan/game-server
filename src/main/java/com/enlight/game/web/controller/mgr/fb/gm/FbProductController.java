@@ -289,7 +289,7 @@ public class FbProductController extends BaseController{
 		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/product/delProductById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 System.out.println(dataJson);
-		 map.put("success", dataJson.get("message"));
+		 map.put("message", dataJson.get("message"));
 		 return map;
 	}
 

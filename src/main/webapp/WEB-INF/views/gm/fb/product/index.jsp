@@ -390,6 +390,9 @@
 								contentType: "application/json;charset=UTF-8",
 								dataType: 'json',
 								success: function(data){
+									if(data.message == 'error'){
+										alert("删除失败");
+									}
 									window.location.href = window.location.href;
 								},error:function(xhr){
 									alert('错误了，请重试');
