@@ -134,6 +134,11 @@
 					</tbody>
 				</table>
 				<tags:pagination page="${email}" paginationSize="5"/>
+				<div class="form-actions">
+					<shiro:hasAnyRoles name="admin,fb_gm_email_add">
+						<a href="${ctx}/manage/gm/fb/email/add" class="btn btn-primary">新增邮件</a>
+					</shiro:hasAnyRoles>
+				</div>
 		</div>
 		
 
