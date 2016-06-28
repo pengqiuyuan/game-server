@@ -351,11 +351,11 @@ public class KdsServerStatusController extends BaseController{
 				objFail.add(res.getString("objFail"));
 			}
         	redirectAttributes.addFlashAttribute("message", "选择灰度帐号的服务器 "+choose+" 个，成功 "+ success+" 个，失败 "+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
-        	return "redirect:/manage/gm/kds/serverStatus/accountIndex?search_EQ_storeId="+serverStatusAccount.getGameId()+"&search_EQ_serverZoneId="+serverStatusAccount.getServerZoneId();
+        	return "redirect:/manage/gm/kds/serverStatus/accountIndex";
 			
 	    }else{
 	        redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
-	        return "redirect:/manage/gm/kds/serverStatus/accountIndex?search_EQ_storeId="+serverStatusAccount.getGameId()+"&search_EQ_serverZoneId="+serverStatusAccount.getServerZoneId();
+	        return "redirect:/manage/gm/kds/serverStatus/accountIndex";
 	    }
 	}
 	
@@ -369,9 +369,27 @@ public class KdsServerStatusController extends BaseController{
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
 		serverStatusAccount.setGameId(gameId);
 		serverStatusAccount.setServerZoneId(serverZoneId);		
-		JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/server/updateGrayAccount" , JSONObject.fromObject(serverStatusAccount));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/kds/serverStatus/accountIndex";
+		if(serverStatusAccount.getServerId() != null){	
+        	System.out.println("111111 "   +JSONObject.fromObject(serverStatusAccount));
+        	int choose = 0,success = 0,fail = 0;
+            List<String> objFail = new ArrayList<String>();
+        	List<String> serverId = ImmutableList.copyOf(StringUtils.split(serverStatusAccount.getServerId(), ","));
+        	for (String sId : serverId) {
+        		serverStatusAccount.setServerId(sId);
+        		JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/server/updateGrayAccount" , JSONObject.fromObject(serverStatusAccount));
+				System.out.println("多个 kds 更新 Gray 保存返回值" + res);
+				choose += Integer.valueOf(res.getString("choose"));
+				success += Integer.valueOf(res.getString("success"));
+				fail += Integer.valueOf(res.getString("fail"));
+				objFail.add(res.getString("objFail"));
+			}
+        	redirectAttributes.addFlashAttribute("message", "选择修改灰度帐号的服务器 "+choose+" 个，成功 "+ success+" 个，失败 "+fail+" 个，修改失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+        	return "redirect:/manage/gm/kds/serverStatus/accountIndex";
+			
+	    }else{
+	        redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
+	        return "redirect:/manage/gm/kds/serverStatus/accountIndex";
+	    }
 	}
 	
 	/**
