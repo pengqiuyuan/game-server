@@ -259,7 +259,7 @@ public class KdsEmailController extends BaseController{
 
 		email.setContents(email.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
 		JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/email/updateEmail" , JSONObject.fromObject(email));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+		redirectAttributes.addFlashAttribute("message", "选择修改邮件的服务器："+res.getString("choose")+" 个，成功："+res.getString("success")+" 个，失败："+res.getString("fail")+" 个，失败的服务器有："+res.getString("objFail"));
 		return "redirect:/manage/gm/kds/email/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+serverId;
 	}
 
@@ -299,7 +299,6 @@ public class KdsEmailController extends BaseController{
 		email.setContents(email.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));	
         if(email.getServerId() != null){
         	System.out.println("111111 "   +JSONObject.fromObject(email));
-        	
         	int choose = 0,success = 0,fail = 0;
             List<String> objFail = new ArrayList<String>();
         	List<String> serverId = ImmutableList.copyOf(StringUtils.split(email.getServerId(), ","));
@@ -307,19 +306,16 @@ public class KdsEmailController extends BaseController{
 				email.setServerId(sId);
 				JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/email/addEmail" , JSONObject.fromObject(email));
 				System.out.println("多个 kds email 保存返回值" + res);
-				
 				choose += Integer.valueOf(res.getString("choose"));
 				success += Integer.valueOf(res.getString("success"));
 				fail += Integer.valueOf(res.getString("fail"));
 				objFail.add(res.getString("objFail"));
 			}
-    		
         	if(email.getPlatForm()!=null){
-        		redirectAttributes.addFlashAttribute("message", "选择渠道："+ email.getPlatForm() +"，选择发送邮件服务器 "+choose+" 个，成功 "+ success+" 个，失败 "+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+        		redirectAttributes.addFlashAttribute("message", "选择新增邮件的渠道："+ email.getPlatForm() +"，选择新增邮件的服务器："+choose+" 个，成功："+ success+" 个，失败："+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
         	}else{
-        		redirectAttributes.addFlashAttribute("message", "选择发送邮件服务器 "+choose+" 个，成功 "+ success+" 个，失败 "+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+        		redirectAttributes.addFlashAttribute("message", "选择新增邮件的服务器："+choose+" 个，成功："+ success+" 个，失败："+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
         	}
-    		
     		return "redirect:/manage/gm/kds/email/index";
         }else{
         	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");

@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -49,6 +50,7 @@ import com.enlight.game.entity.gm.fb.Placard;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 @Controller("fbPlacardController")
@@ -239,9 +241,26 @@ public class FbPlacardController extends BaseController{
 		System.out.println(placard.getId() +"  " + placard.getGameId() + " "+ placard.getServerZoneId() + "  "  + placard.getServerId() + " " + placard.getVersion() + "  " + placard.getContents());
 
 		placard.setContents(placard.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
-		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/updatePlacards" , JSONObject.fromObject(placard));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/fb/placard/index?search_EQ_storeId="+placard.getGameId()+"&search_EQ_serverZoneId="+placard.getServerZoneId()+"&search_EQ_serverId="+placard.getServerId();
+        if(placard.getServerId() != null){
+        	System.out.println("111111 "   +JSONObject.fromObject(placard));
+        	int choose = 0,success = 0,fail = 0;
+            List<String> objFail = new ArrayList<String>();
+        	List<String> serverId = ImmutableList.copyOf(StringUtils.split(placard.getServerId(), ","));
+        	for (String sId : serverId) {
+        		placard.setServerId(sId);
+				JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/updatePlacards" , JSONObject.fromObject(placard));
+				System.out.println("多个 fb placard 保存返回值" + res);
+				choose += Integer.valueOf(res.getString("choose"));
+				success += Integer.valueOf(res.getString("success"));
+				fail += Integer.valueOf(res.getString("fail"));
+				objFail.add(res.getString("objFail"));
+			}
+        	redirectAttributes.addFlashAttribute("message", "选择修改公告的服务器 "+choose+" 个，成功 "+ success+" 个，失败 "+fail+" 个，修改失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+    		return "redirect:/manage/gm/fb/placard/index";
+        }else{
+        	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
+        	return "redirect:/manage/gm/fb/placard/index";
+        }
 	}
 
 	
@@ -254,10 +273,21 @@ public class FbPlacardController extends BaseController{
 		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "  "  +placard.getVersion() + "  "  + placard.getContents() );
 		placard.setContents(placard.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
         if(placard.getServerId() != null){
-    		System.out.println(JSONObject.fromObject(placard));
-    		JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/addPlacards"  , JSONObject.fromObject(placard));
-    		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-    		return "redirect:/manage/gm/fb/placard/index?search_EQ_storeId="+placard.getGameId()+"&search_EQ_serverZoneId="+placard.getServerZoneId()+"&search_EQ_serverId="+placard.getServerId();
+        	System.out.println("111111 "   +JSONObject.fromObject(placard));
+        	int choose = 0,success = 0,fail = 0;
+            List<String> objFail = new ArrayList<String>();
+        	List<String> serverId = ImmutableList.copyOf(StringUtils.split(placard.getServerId(), ","));
+        	for (String sId : serverId) {
+        		placard.setServerId(sId);
+				JSONObject res = HttpClientUts.doPost(gm_url+"/fbserver/placard/addPlacards" , JSONObject.fromObject(placard));
+				System.out.println("多个 fb placard 保存返回值" + res);
+				choose += Integer.valueOf(res.getString("choose"));
+				success += Integer.valueOf(res.getString("success"));
+				fail += Integer.valueOf(res.getString("fail"));
+				objFail.add(res.getString("objFail"));
+			}
+        	redirectAttributes.addFlashAttribute("message", "选择新增公告的服务器 "+choose+" 个，成功 "+ success+" 个，失败 "+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+    		return "redirect:/manage/gm/fb/placard/index";
         }else{
         	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
         	return "redirect:/manage/gm/fb/placard/index";

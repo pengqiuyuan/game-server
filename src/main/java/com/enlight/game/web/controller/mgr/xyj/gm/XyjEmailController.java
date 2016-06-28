@@ -259,7 +259,7 @@ public class XyjEmailController extends BaseController{
 
 		email.setContents(email.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
 		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/email/updateEmail" , JSONObject.fromObject(email));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
+		redirectAttributes.addFlashAttribute("message", "选择修改邮件的服务器："+res.getString("choose")+" 个，成功："+res.getString("success")+" 个，失败："+res.getString("fail")+" 个，失败的服务器有："+res.getString("objFail"));
 		return "redirect:/manage/gm/xyj/email/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId+"&search_EQ_serverId="+serverId;
 	}
 
@@ -312,9 +312,9 @@ public class XyjEmailController extends BaseController{
 				objFail.add(res.getString("objFail"));
 			}
         	if(email.getPlatForm()!=null){
-        		redirectAttributes.addFlashAttribute("message", "选择渠道："+ email.getPlatForm() +"，选择发送邮件服务器 "+choose+" 个，成功 "+ success+" 个，失败 "+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+        		redirectAttributes.addFlashAttribute("message", "选择新增邮件的渠道："+ email.getPlatForm() +"，选择新增邮件的服务器："+choose+" 个，成功："+ success+" 个，失败："+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
         	}else{
-        		redirectAttributes.addFlashAttribute("message", "选择发送邮件服务器 "+choose+" 个，成功 "+ success+" 个，失败 "+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+        		redirectAttributes.addFlashAttribute("message", "选择新增邮件的服务器："+choose+" 个，成功："+ success+" 个，失败："+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
         	}
     		return "redirect:/manage/gm/xyj/email/index";
         }else{
