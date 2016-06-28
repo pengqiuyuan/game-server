@@ -105,6 +105,11 @@
 			</tbody>
 		</table>
 		<tags:pagination page="${serverStatusAccount}" paginationSize="5"/>
+		<div class="form-actions">
+ 			<shiro:hasAnyRoles name="admin,fb_gm_account_add">
+  			    <a href="<%=request.getContextPath()%>/manage/gm/fb/serverStatus/accountAdd" class="btn btn-primary">新增灰度帐号</a>
+  			</shiro:hasAnyRoles>
+	    </div>
 	</div>
 	
 	<form id="inputForm" method="post" Class="form-horizontal" action="<%=request.getContextPath()%>/manage/gm/fb/serverStatus/accountUpdate"   enctype="multipart/form-data"  style="display: none;">
