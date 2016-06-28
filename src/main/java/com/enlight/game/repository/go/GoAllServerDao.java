@@ -23,4 +23,7 @@ public interface GoAllServerDao extends PagingAndSortingRepository<GoAllServer, 
 	
 	GoAllServer findByServerId(String serverId);
 	
+	@Modifying
+	@Query("update GoAllServer goAllServer set goAllServer.status=?4 where goAllServer.storeId=?1 and goAllServer.serverZoneId=?2 and goAllServer.serverId=?3")
+	void updateByStatus(Integer gameId,Integer serverZoneId,String serverId,String status);
 }

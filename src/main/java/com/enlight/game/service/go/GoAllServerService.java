@@ -49,6 +49,10 @@ public class GoAllServerService {
 		return goAllServerDao.findAll();
 	}
 	
+	public void updateStatus(Integer storeId, Integer serverZoneId, String serverId , String status){
+		goAllServerDao.updateByStatus(storeId, serverZoneId, serverId, status);
+	}
+	
 	/**
 	 * 分页查询
 	 * 

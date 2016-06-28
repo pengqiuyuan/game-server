@@ -90,16 +90,16 @@
 								<td>${item.port}</td>
 								<td>
 									<c:choose>
-										<c:when  test="${item.status eq '1'}">
+										<c:when  test="${item.status eq '0'}">
 											<span>维护</span>
 										</c:when >
-										<c:when  test="${item.status eq '2'}">
+										<c:when  test="${item.status eq '1'}">
 											<span>新区</span>
 										</c:when >
-										<c:when  test="${item.status eq '3'}">
+										<c:when  test="${item.status eq '2'}">
 											<span>良好</span>
 										</c:when >
-										<c:when  test="${item.status eq '4'}">
+										<c:when  test="${item.status eq '3'}">
 											<span>爆满</span>
 										</c:when >
 									</c:choose>

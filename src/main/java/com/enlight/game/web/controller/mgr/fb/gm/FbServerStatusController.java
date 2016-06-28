@@ -192,6 +192,7 @@ public class FbServerStatusController extends BaseController{
 		list.setServerZoneId(serverZoneId);
 		list.setStatus(checkStatus);
 		int choose = 0,success = 0,fail = 0;
+		String status = "";
 		List<String> objFail = new ArrayList<String>();
 		for (String serverId : checkIds) {
 			list.setServerId(serverId);
@@ -202,6 +203,13 @@ public class FbServerStatusController extends BaseController{
 			success += Integer.valueOf(res.getString("success"));
 			fail += Integer.valueOf(res.getString("fail"));
 			objFail.add(res.getString("objFail"));
+			status = res.getString("status");
+			System.out.println("接受到游戏服务器status的修改：" +serverId +"   "   +status);
+			if(!status.equals("-1") && !status.equals("-2")){
+				//web server 修改服务器状态，游戏服务器存在但没有响应，返回-1	
+				//web server 修改服务器状态，gomiddle服务器与游戏服务器断连，返回-2
+				goAllServerService.updateStatus(Integer.valueOf(gameId), Integer.valueOf(serverZoneId), serverId, res.getString("status"));
+			}
 		}
 		redirectAttributes.addFlashAttribute("message", "选择修改状态的服务器："+choose+" 个，成功："+success+" 个，失败："+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
 		return "redirect:/manage/gm/fb/serverStatus/index";
