@@ -212,7 +212,7 @@ public class FbServerStatusController extends BaseController{
 			}
 		}
 		redirectAttributes.addFlashAttribute("message", "选择修改状态的服务器："+choose+" 个，成功："+success+" 个，失败："+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
-		return "redirect:/manage/gm/fb/serverStatus/index";
+		return "redirect:/manage/gm/fb/serverStatus/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId;
 	}
 
 	
