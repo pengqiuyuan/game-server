@@ -173,17 +173,16 @@
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="">服务器:</label>
-				<div class="controls">
-					<c:if test="${not empty param.search_EQ_serverId}">
-						<input type="text" value="${param.search_EQ_serverId}"  disabled="disabled" />
-						<input type="text" value="${param.search_EQ_serverId}"  name="search_EQ_serverId" style="display: none;"/>
-					</c:if>		
-					<c:if test="${empty param.search_EQ_serverId}">
-						<input type="text"  readonly="readonly" name="search_EQ_serverId"/>
-					</c:if>		
+				<label class="control-label" for="">选择修改服务器：</label>
+				<div class="controls" id="serverDivCheckbox">
+					<c:forEach items="${servers}" var="item" >
+						<label class="checkbox inline">
+							<input type="checkbox" id="serverId_checkbox" name="serverId" value="${item.serverId }"/><span>${item.serverId}</span><br/>
+						</label>
+					</c:forEach>
 				</div>
 			</div>
+			
 			<div
 				class="control-group">
 				<label class="control-label" for="sender">发件人：</label>
