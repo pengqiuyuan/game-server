@@ -6,6 +6,10 @@ package com.enlight.game.entity.gm.fb;
  */
 public class ServerStatusList {
 	
+	private String serverZoneId;
+	
+	private String gameId;
+	
 	private String serverId;
 	
 	private String status;
@@ -26,6 +30,20 @@ public class ServerStatusList {
 		this.status = status;
 	}
 	
-	
+	public String getServerZoneId() {
+		return serverZoneId;
+	}
+
+	public void setServerZoneId(String serverZoneId) {
+		this.serverZoneId = serverZoneId;
+	}
+
+	public String getGameId() {
+		return gameId;
+	}
+
+	public void setGameId(String gameId) {
+		this.gameId = gameId;
+	}
 
 }

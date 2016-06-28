@@ -187,13 +187,24 @@ public class KdsServerStatusController extends BaseController{
 		String checkStatus = request.getParameter("checkStatus");
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
-		String s = StringUtils.join(checkIds,",");
 		ServerStatusList list = new ServerStatusList();
-		list.setServerId(s);
+		list.setGameId(gameId);
+		list.setServerZoneId(serverZoneId);
 		list.setStatus(checkStatus);
-		JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/server/updateServers" , JSONObject.fromObject(list));
-		redirectAttributes.addFlashAttribute("message", "选择"+res.getString("choose")+"个，成功"+res.getString("success")+"个，失败"+res.getString("fail")+"个，失败的服务器有："+res.getString("objFail"));
-		return "redirect:/manage/gm/kds/serverStatus/index?search_EQ_storeId="+gameId+"&search_EQ_serverZoneId="+serverZoneId;
+		int choose = 0,success = 0,fail = 0;
+		List<String> objFail = new ArrayList<String>();
+		for (String serverId : checkIds) {
+			list.setServerId(serverId);
+        	System.out.println("111111 "   +JSONObject.fromObject(list));
+            JSONObject res = HttpClientUts.doPost(gm_url+"/kdsserver/server/updateServers" , JSONObject.fromObject(list));
+			System.out.println("多个 kds serverstatus 保存返回值" + res);
+			choose += Integer.valueOf(res.getString("choose"));
+			success += Integer.valueOf(res.getString("success"));
+			fail += Integer.valueOf(res.getString("fail"));
+			objFail.add(res.getString("objFail"));
+		}
+		redirectAttributes.addFlashAttribute("message", "选择修改状态的服务器："+choose+" 个，成功："+success+" 个，失败："+fail+" 个，失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+		return "redirect:/manage/gm/kds/serverStatus/index";
 	}
 
 	
