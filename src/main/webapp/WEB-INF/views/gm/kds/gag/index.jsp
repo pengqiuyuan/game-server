@@ -117,6 +117,11 @@
 					</tbody>
 				</table>
 				<tags:pagination page="${gag}" paginationSize="5"/>
+				<div class="form-actions">
+					<shiro:hasAnyRoles name="admin,kds_gm_gag_add">
+						<a href="${ctx}/manage/gm/kds/gag/add" class="btn btn-primary">新增禁言</a>
+					</shiro:hasAnyRoles>
+				</div>
 		</div>
 		
 
