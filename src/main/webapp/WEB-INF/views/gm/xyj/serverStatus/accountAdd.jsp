@@ -8,6 +8,14 @@
 <html>
 <head>
 	<title>新增灰度账号</title>
+	<style type="text/css">
+		.form-ac {
+		  padding: 19px 20px 20px;
+		  margin-top: 20px;
+		  margin-bottom: 20px;
+		  padding-left: 180px;
+		}
+	</style>
 </head>
 
 <body>
@@ -47,8 +55,11 @@
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="">服务器列表：</label>
-				<div class="controls" id="serverDiv">
-				</div>
+				<div class="controls" id="serverDiv"></div>
+			</div>
+			<div class="form-ac">
+				<button type="button" class="btn btn-success" onclick="selectAll();">全选</button>
+				<button type="button" class="btn btn-info" onclick="selectAllNot();">反选</button>
 			</div>
 			<div
 				class="control-group">
@@ -72,7 +83,12 @@
 	        </div>
 	</form>
 	<script type="text/javascript">
-
+		function selectAll(){  
+	        $("input[id='serverId']").attr("checked", true);  
+		}	
+		function selectAllNot(){
+	    	$("input[id='serverId']").attr("checked", false);  
+		}	
 		$(function(){
 			
 			$("#serverZoneId").change(function(e){
@@ -88,7 +104,7 @@
 						success: function(data){
 							var parsedJson = $.parseJSON(data);
 							jQuery.each(parsedJson, function(index, itemData) {
-							$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='radio inline'><input type='radio' id='serverId' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
+								$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverId' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
 							});
 						},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 					});
@@ -117,7 +133,7 @@
 						success: function(data){
 							var parsedJson = $.parseJSON(data);
 							jQuery.each(parsedJson, function(index, itemData) {
-							$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='radio inline'><input type='radio' id='serverId' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label></c:forEach>"); 
+								$("#serverDiv").append("<c:forEach items='"+itemData+"' var='ite' varStatus='j'><label class='checkbox inline'><input type='checkbox' id='serverId' name='serverId' value='"+itemData.serverId+"'/><span>"+itemData.serverId+"</span><br/></label>&nbsp;</c:forEach>"); 
 							});
 						},error:function(xhr){alert('错误了\n\n'+xhr.responseText)}//回调看看是否有出错
 					});
