@@ -182,7 +182,10 @@
 					</c:forEach>
 				</div>
 			</div>
-			
+			<div class="form-ac">
+				<button type="button" class="btn btn-success" onclick="selectAll();">全选</button>
+				<button type="button" class="btn btn-info" onclick="selectAllNot();">反选</button>
+			</div>
 			<div
 				class="control-group">
 				<label class="control-label" for="sender">发件人：</label>
@@ -223,7 +226,12 @@
 			$(function(){
 				$('.intro').tooltip();
 			});
-			
+			function selectAll(){  
+		        $("input[id='serverId_checkbox']").attr("checked", true);  
+			}	
+			function selectAllNot(){
+		    	$("input[id='serverId_checkbox']").attr("checked", false);  
+			}	
 			$("#addfield").click(function(){
 				var gameId = $("#gameId").val();
 				if(gameId!=""){
