@@ -140,10 +140,10 @@
 				<label class="control-label">服务器状态：</label> 
 				<div class="controls">	
 					<select name="checkStatus">	
-							<option value="1">维护</option>
-							<option value="2">新区</option>
-							<option value="3">良好</option>
-							<option value="4">爆满</option>
+							<option value="0">维护</option>
+							<option value="1">新区</option>
+							<option value="2">良好</option>
+							<option value="3">爆满</option>
 					</select>	
 				</div>			
 			</div>

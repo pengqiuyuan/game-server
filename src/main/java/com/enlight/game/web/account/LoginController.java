@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import com.enlight.game.entity.EnumFunction;
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.UserRole;
 import com.enlight.game.service.account.AccountService;
+import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.enumCategory.EnumCategoryService;
 import com.enlight.game.service.enumFunction.EnumFunctionService;
 import com.enlight.game.service.store.StoreService;
@@ -61,7 +63,12 @@ public class LoginController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String login() {
-		return "account/login";
+		ShiroUser u = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		if(u!=null){
+			return "redirect:/manage/index";
+		}else{
+			return "account/login";
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
