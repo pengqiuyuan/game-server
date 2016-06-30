@@ -83,20 +83,20 @@
 				</tr>
 			</thead>
 			<tbody id="tbody">
-				<c:forEach items="${serverStatusAccount.content}" var="item" varStatus="s">
-					<tr id="${item.id}">
-						<td>${item.gameId}</td>
-						<td>${item.serverZoneId}</td>
-						<td>${item.serverId}</td>
+				<c:forEach items="${serverStatusGrayList.content}" var="item" varStatus="s">
+					<tr>
+						<td>${gameId}</td>
+						<td>${serverZoneId}</td>
+						<td>${serverId}</td>
 						<td>${item.platForm}</td>
 						<td>${item.account}</td>
 						<td>
 							<div class="action-buttons">
 								<shiro:hasAnyRoles name="admin,fb_gm_account_update">
-									<a class="exportCode btn table-actions" onclick="updateAccount('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}','${item.platForm}','${item.account}')"><i class="icon-ok"></i>修改</a>
+									<a class="exportCode btn table-actions" onclick="updateAccount('${gameId}','${serverZoneId}','${serverId}','${item.platForm}','${item.account}')"><i class="icon-ok"></i>修改</a>
 								</shiro:hasAnyRoles>
 								<shiro:hasAnyRoles name="admin,fb_gm_account_delete">
-									<a class="exportCode btn table-actions" onclick="delAccount('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}','${item.platForm}','${item.account}')"><i class="icon-remove"></i>删除</a>
+									<a class="exportCode btn table-actions" onclick="delAccount('${gameId}','${serverZoneId}','${serverId}','${item.platForm}','${item.account}')"><i class="icon-remove"></i>删除</a>
 								</shiro:hasAnyRoles>
 							</div>
 						</td>
@@ -104,7 +104,7 @@
 				</c:forEach>
 			</tbody>
 		</table>
-		<tags:pagination page="${serverStatusAccount}" paginationSize="5"/>
+		<tags:pagination page="${serverStatusGrayList}" paginationSize="5"/>
 		<div class="form-actions">
  			<shiro:hasAnyRoles name="admin,fb_gm_account_add">
   			    <a href="<%=request.getContextPath()%>/manage/gm/fb/serverStatus/accountAdd" class="btn btn-primary">新增灰度帐号</a>
@@ -188,8 +188,7 @@
 			$("input#serverId").removeAttr("disabled"); 
 		});
 	
-		function updateAccount(id,gameId,serverZoneId,serverId,platForm,account){
-			$("#id").attr('value',id);
+		function updateAccount(gameId,serverZoneId,serverId,platForm,account){
 			$('#inputForm').show();
 			$("#platForm").attr('value',platForm);
 			$("#account").attr('value',account);
@@ -201,11 +200,11 @@
 			$("input#serverId").attr("disabled","disabled");  
 		}
 		
-		function delAccount(id,gameId,serverZoneId,serverId,platForm,account){
+		function delAccount(gameId,serverZoneId,serverId,platForm,account){
 			if(confirm("该操作会删除。。。。！"))
 		    {
 				$.ajax({
-					url: '<%=request.getContextPath()%>/manage/gm/fb/serverStatus/accountDel?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId+'&platForm='+platForm+'&account='+account,
+					url: '<%=request.getContextPath()%>/manage/gm/fb/serverStatus/accountDel?gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId+'&platForm='+platForm+'&account='+account,
 					type: 'DELETE',
 					contentType: "application/json;charset=UTF-8",
 					dataType: 'json',
