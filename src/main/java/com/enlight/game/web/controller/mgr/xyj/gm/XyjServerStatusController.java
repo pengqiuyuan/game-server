@@ -51,6 +51,8 @@ import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.xyj.Category;
 import com.enlight.game.entity.gm.xyj.ServerStatusAccount;
+import com.enlight.game.entity.gm.xyj.ServerStatusAccountAddOrUpdate;
+import com.enlight.game.entity.gm.xyj.ServerStatusGrayList;
 import com.enlight.game.entity.gm.xyj.ServerStatusList;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
@@ -265,19 +267,33 @@ public class XyjServerStatusController extends BaseController{
 				String gs = HttpClientUts.doGet(gm_url+"/xyjserver/server/getAllGrayAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
 				String total = HttpClientUts.doGet(gm_url+"/xyjserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.account+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				JSONObject dataJson=JSONObject.fromObject(total);
-				
+				System.out.println("111111111111  "  + gs);
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<ServerStatusAccount> beanList = binder.getMapper().readValue(gs, new TypeReference<List<ServerStatusAccount>>() {}); 
-		        PageImpl<ServerStatusAccount> serverStatusAccount = new PageImpl<ServerStatusAccount>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
-				model.addAttribute("serverStatusAccount", serverStatusAccount);
+				if(!gs.equals("{}")){
+					 ServerStatusAccount beanList = binder.getMapper().readValue(gs, new TypeReference<ServerStatusAccount>() {}); 
+					 PageImpl<ServerStatusGrayList> serverStatusGrayList = new PageImpl<ServerStatusGrayList>(beanList.getGrayList(), pageRequest, Long.valueOf(dataJson.get("num").toString()));
+					 model.addAttribute("serverStatusGrayList", serverStatusGrayList);
+				}else{
+		        	List<ServerStatusGrayList> beanList = new ArrayList<ServerStatusGrayList>();
+			        PageImpl<ServerStatusGrayList> serverStatusGrayList = new PageImpl<ServerStatusGrayList>(beanList, pageRequest, 0);
+					model.addAttribute("serverStatusGrayList", serverStatusGrayList);
+				}
+				
+				model.addAttribute("gameId", storeId);
+				model.addAttribute("serverZoneId", serverZoneId);
+				model.addAttribute("serverId", URLEncoder.encode(serverId, "utf-8"));
 				
 				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
 				model.addAttribute("servers", servers);
 	        }else{
-	        	List<ServerStatusAccount> beanList = new ArrayList<ServerStatusAccount>();
+	        	System.out.println("22222222");
+	        	List<ServerStatusGrayList> beanList = new ArrayList<ServerStatusGrayList>();
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        PageImpl<ServerStatusAccount> serverStatusAccount = new PageImpl<ServerStatusAccount>(beanList, pageRequest, 0);
-				model.addAttribute("serverStatusAccount", serverStatusAccount);
+		        PageImpl<ServerStatusGrayList> serverStatusGrayList = new PageImpl<ServerStatusGrayList>(beanList, pageRequest, 0);
+				model.addAttribute("serverStatusGrayList", serverStatusGrayList);
+				model.addAttribute("gameId", storeId);
+				model.addAttribute("serverZoneId", serverZoneId);
+				model.addAttribute("serverId", serverId);
 	        }
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -334,16 +350,18 @@ public class XyjServerStatusController extends BaseController{
 	 * 新增
 	 */
 	@RequestMapping(value = "/accountSave",method=RequestMethod.POST)
-	public String accountSave(ServerStatusAccount serverStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
-		System.out.println(serverStatusAccount.getGameId() + "  "  + serverStatusAccount.getServerZoneId()+ "  "  + serverStatusAccount.getServerId()+ "  "  +serverStatusAccount.getPlatForm() + "  "  + serverStatusAccount.getAccount() );
-		if(serverStatusAccount.getServerId() != null){	
-        	System.out.println("111111 "   +JSONObject.fromObject(serverStatusAccount));
+	public String accountSave(ServerStatusAccountAddOrUpdate serverStatusAccountOrUpdate,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
+		System.out.println(serverStatusAccountOrUpdate.getGameId() + "  "  + serverStatusAccountOrUpdate.getServerZoneId()+ 
+				"  "  + serverStatusAccountOrUpdate.getServerId()+ "  "  +serverStatusAccountOrUpdate.getPlatForm() + "  "  + serverStatusAccountOrUpdate.getAccount() );
+		
+		if(serverStatusAccountOrUpdate.getServerId() != null){	
+        	System.out.println("111111 "   +JSONObject.fromObject(serverStatusAccountOrUpdate));
         	int choose = 0,success = 0,fail = 0;
             List<String> objFail = new ArrayList<String>();
-        	List<String> serverId = ImmutableList.copyOf(StringUtils.split(serverStatusAccount.getServerId(), ","));
+        	List<String> serverId = ImmutableList.copyOf(StringUtils.split(serverStatusAccountOrUpdate.getServerId(), ","));
         	for (String sId : serverId) {
-        		serverStatusAccount.setServerId(sId);
-        		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/server/addGrayAccount" , JSONObject.fromObject(serverStatusAccount));
+        		serverStatusAccountOrUpdate.setServerId(sId);
+        		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/server/addGrayAccount" , JSONObject.fromObject(serverStatusAccountOrUpdate));
 				System.out.println("多个 xyj Gray 保存返回值" + res);
 				choose += Integer.valueOf(res.getString("choose"));
 				success += Integer.valueOf(res.getString("success"));
@@ -364,19 +382,22 @@ public class XyjServerStatusController extends BaseController{
 	 * 更新
 	 */
 	@RequestMapping(value = "/accountUpdate",method=RequestMethod.POST)
-	public String accountUpdate(ServerStatusAccount serverStatusAccount,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
+	public String accountUpdate(ServerStatusAccountAddOrUpdate serverStatusAccountOrUpdate,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
-		serverStatusAccount.setGameId(gameId);
-		serverStatusAccount.setServerZoneId(serverZoneId);		
-		if(serverStatusAccount.getServerId() != null){	
-        	System.out.println("111111 "   +JSONObject.fromObject(serverStatusAccount));
+		serverStatusAccountOrUpdate.setGameId(gameId);
+		serverStatusAccountOrUpdate.setServerZoneId(serverZoneId);	
+		System.out.println(serverStatusAccountOrUpdate.getGameId() + "  "  + serverStatusAccountOrUpdate.getServerZoneId()+ 
+				"  "  + serverStatusAccountOrUpdate.getServerId()+ "  "  +serverStatusAccountOrUpdate.getPlatForm() + "  "  + serverStatusAccountOrUpdate.getAccount() );
+		
+		if(serverStatusAccountOrUpdate.getServerId() != null){	
+        	System.out.println("111111 "   +JSONObject.fromObject(serverStatusAccountOrUpdate));
         	int choose = 0,success = 0,fail = 0;
             List<String> objFail = new ArrayList<String>();
-        	List<String> serverId = ImmutableList.copyOf(StringUtils.split(serverStatusAccount.getServerId(), ","));
+        	List<String> serverId = ImmutableList.copyOf(StringUtils.split(serverStatusAccountOrUpdate.getServerId(), ","));
         	for (String sId : serverId) {
-        		serverStatusAccount.setServerId(sId);
-        		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/server/updateGrayAccount" , JSONObject.fromObject(serverStatusAccount));
+        		serverStatusAccountOrUpdate.setServerId(sId);
+        		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/server/updateGrayAccount" , JSONObject.fromObject(serverStatusAccountOrUpdate));
 				System.out.println("多个 xyj 更新 Gray 保存返回值" + res);
 				choose += Integer.valueOf(res.getString("choose"));
 				success += Integer.valueOf(res.getString("success"));
@@ -400,15 +421,14 @@ public class XyjServerStatusController extends BaseController{
 	@RequestMapping(value = "accountDel", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> del(@RequestParam(value = "id")Long id
-			,@RequestParam(value = "gameId")String gameId
+	public Map<String,Object> del(@RequestParam(value = "gameId")String gameId
 			,@RequestParam(value = "serverZoneId")String serverZoneId
 			,@RequestParam(value = "serverId")String serverId
 			,@RequestParam(value = "platForm")String platForm
 			,@RequestParam(value = "account")String account
 			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	acc = HttpClientUts.doGet(gm_url+"/xyjserver/server/delGrayAccountById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId+"&platForm="+platForm+"&account="+account, "utf-8");
+		 String	acc = HttpClientUts.doGet(gm_url+"/xyjserver/server/delGrayAccountById?gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId+"&platForm="+URLEncoder.encode(platForm, "utf-8")+"&account="+URLEncoder.encode(account, "utf-8"), "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(acc);
 		 map.put("message", dataJson.get("message"));
 		 return map;
@@ -420,7 +440,10 @@ public class XyjServerStatusController extends BaseController{
 	@ResponseStatus(HttpStatus.OK)
 	public List<GoAllServer> findServers(@RequestParam(value="serverZoneId") String serverZoneId
 			,@RequestParam(value="gameId") String gameId) throws AppBizException{
-		List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
+		List<GoAllServer> servers = new ArrayList<GoAllServer>();
+		if(!serverZoneId.equals("") && !gameId.equals("")){
+			servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
+		}
 		return servers;
 	}
 	
@@ -429,14 +452,16 @@ public class XyjServerStatusController extends BaseController{
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, String> findPlatForms(@RequestParam(value="serverZoneId") String serverZoneId
 			,@RequestParam(value="gameId") String gameId) throws AppBizException{
-		List<String> servers = goAllPlatFormService.findPlatFormIds(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
 		Map<String, String> map = new HashMap<String, String>();
-		for (String s : servers) {
-			PlatForm platForm = platFormService.findByPfId(s);
-			if(platForm!=null){
-				map.put(s, platForm.getPfName());
-			}else{
-				map.put(s,s);
+		if(!serverZoneId.equals("") && !gameId.equals("")){
+			List<String> servers = goAllPlatFormService.findPlatFormIds(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
+			for (String s : servers) {
+				PlatForm platForm = platFormService.findByPfId(s);
+				if(platForm!=null){
+					map.put(s, platForm.getPfName());
+				}else{
+					map.put(s,s);
+				}
 			}
 		}
 		return map;
