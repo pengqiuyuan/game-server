@@ -420,7 +420,10 @@ public class KdsServerStatusController extends BaseController{
 	@ResponseStatus(HttpStatus.OK)
 	public List<GoAllServer> findServers(@RequestParam(value="serverZoneId") String serverZoneId
 			,@RequestParam(value="gameId") String gameId) throws AppBizException{
-		List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
+		List<GoAllServer> servers = new ArrayList<GoAllServer>();
+		if(!serverZoneId.equals("") && !gameId.equals("")){
+			servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
+		}
 		return servers;
 	}
 	
@@ -429,14 +432,16 @@ public class KdsServerStatusController extends BaseController{
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, String> findPlatForms(@RequestParam(value="serverZoneId") String serverZoneId
 			,@RequestParam(value="gameId") String gameId) throws AppBizException{
-		List<String> servers = goAllPlatFormService.findPlatFormIds(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
 		Map<String, String> map = new HashMap<String, String>();
-		for (String s : servers) {
-			PlatForm platForm = platFormService.findByPfId(s);
-			if(platForm!=null){
-				map.put(s, platForm.getPfName());
-			}else{
-				map.put(s,s);
+		if(!serverZoneId.equals("") && !gameId.equals("")){
+			List<String> servers = goAllPlatFormService.findPlatFormIds(Integer.valueOf(gameId), Integer.valueOf(serverZoneId));
+			for (String s : servers) {
+				PlatForm platForm = platFormService.findByPfId(s);
+				if(platForm!=null){
+					map.put(s, platForm.getPfName());
+				}else{
+					map.put(s,s);
+				}
 			}
 		}
 		return map;
