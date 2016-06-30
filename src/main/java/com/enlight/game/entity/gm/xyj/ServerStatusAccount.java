@@ -1,30 +1,20 @@
 package com.enlight.game.entity.gm.xyj;
 
+import java.util.List;
+
 /**
  * @author dell
  * 灰度账号
  */
 public class ServerStatusAccount {
 	
-	private int id;
-	
 	private String serverZoneId;
 	
 	private String gameId;
 	
 	private String serverId;
-	
-	private String platForm;
-	
-	private String account;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	private List<ServerStatusGrayList> grayList;
 
 	public String getServerZoneId() {
 		return serverZoneId;
@@ -50,22 +40,12 @@ public class ServerStatusAccount {
 		this.serverId = serverId;
 	}
 
-	public String getPlatForm() {
-		return platForm;
+	public List<ServerStatusGrayList> getGrayList() {
+		return grayList;
 	}
 
-	public void setPlatForm(String platForm) {
-		this.platForm = platForm;
+	public void setGrayList(List<ServerStatusGrayList> grayList) {
+		this.grayList = grayList;
 	}
-
-	public String getAccount() {
-		return account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
-	}
-	
-	
 
 }
