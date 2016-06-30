@@ -403,10 +403,12 @@ public class FbServerStatusController extends BaseController{
 			,@RequestParam(value = "gameId")String gameId
 			,@RequestParam(value = "serverZoneId")String serverZoneId
 			,@RequestParam(value = "serverId")String serverId
+			,@RequestParam(value = "platForm")String platForm
+			,@RequestParam(value = "account")String account
 			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/server/delGrayAccountById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
-		 JSONObject dataJson=JSONObject.fromObject(account);
+		 String	acc = HttpClientUts.doGet(gm_url+"/fbserver/server/delGrayAccountById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId+"&platForm="+platForm+"&account="+account, "utf-8");
+		 JSONObject dataJson=JSONObject.fromObject(acc);
 		 map.put("message", dataJson.get("message"));
 		 return map;
 	}

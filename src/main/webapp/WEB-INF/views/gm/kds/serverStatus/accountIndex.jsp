@@ -96,7 +96,7 @@
 									<a class="exportCode btn table-actions" onclick="updateAccount('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}','${item.platForm}','${item.account}')"><i class="icon-ok"></i>修改</a>
 								</shiro:hasAnyRoles>
 								<shiro:hasAnyRoles name="admin,kds_gm_account_delete">
-									<a class="exportCode btn table-actions" onclick="delAccount('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
+									<a class="exportCode btn table-actions" onclick="delAccount('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId},'${item.platForm}','${item.account}')"><i class="icon-remove"></i>删除</a>
 								</shiro:hasAnyRoles>
 							</div>
 						</td>
@@ -201,11 +201,11 @@
 			$("input#serverId").attr("disabled","disabled");  
 		}
 		
-		function delAccount(id,gameId,serverZoneId,serverId){
+		function delAccount(id,gameId,serverZoneId,serverId,platForm,account){
 			if(confirm("该操作会删除。。。。！"))
 		    {
 				$.ajax({
-					url: '<%=request.getContextPath()%>/manage/gm/kds/serverStatus/accountDel?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId, 
+					url: '<%=request.getContextPath()%>/manage/gm/kds/serverStatus/accountDel?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId+'&platForm='+platForm+'&account='+account,
 					type: 'DELETE',
 					contentType: "application/json;charset=UTF-8",
 					dataType: 'json',
