@@ -2,7 +2,7 @@ package com.enlight.game.entity.gm.fb;
 
 import java.util.List;
 
-import com.enlight.game.entity.gm.xyj.ServerStatusGrayList;
+import com.enlight.game.entity.gm.fb.ServerStatusGrayList;
 
 /**
  * @author dell
