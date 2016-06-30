@@ -1,5 +1,9 @@
 package com.enlight.game.entity.gm.kds;
 
+import java.util.List;
+
+import com.enlight.game.entity.gm.xyj.ServerStatusGrayList;
+
 /**
  * @author dell
  * 灰度账号
@@ -13,6 +17,8 @@ public class ServerStatusAccount {
 	
 	private String serverId;
 
+	private List<ServerStatusGrayList> grayList;
+	
 	public String getServerZoneId() {
 		return serverZoneId;
 	}
@@ -37,4 +43,11 @@ public class ServerStatusAccount {
 		this.serverId = serverId;
 	}
 
+	public List<ServerStatusGrayList> getGrayList() {
+		return grayList;
+	}
+
+	public void setGrayList(List<ServerStatusGrayList> grayList) {
+		this.grayList = grayList;
+	}
 }
