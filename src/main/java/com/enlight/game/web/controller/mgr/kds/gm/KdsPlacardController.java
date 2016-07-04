@@ -47,6 +47,7 @@ import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.kds.Category;
 import com.enlight.game.entity.gm.kds.Placard;
+import com.enlight.game.entity.gm.kds.PlacardList;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
@@ -166,7 +167,7 @@ public class KdsPlacardController extends BaseController{
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<Placard> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Placard>>() {}); 
+				List<Placard> beanList = binder.getMapper().readValue(binder.toJson(binder.fromJson(gs, PlacardList.class).getPlacardList()), new TypeReference<List<Placard>>() {});
 		        PageImpl<Placard> placard = new PageImpl<Placard>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("placard", placard);
 				
@@ -314,7 +315,24 @@ public class KdsPlacardController extends BaseController{
 		 return map;
 	}
 
-
+	/**
+	 * 获取操作	 
+	 * @param oid 用户id
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "findByPlacardId", method = RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Placard findByPlacardId(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
+		 String	account = HttpClientUts.doGet(gm_url+"/kdsserver/placard/getPlacardById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
+		 System.out.println("111111   "  + account);
+		 Placard placard = binder.fromJson(account, Placard.class);
+		 return placard;
+	}
 	
 	/**
 	 * 取出Shiro中的当前用户Id.

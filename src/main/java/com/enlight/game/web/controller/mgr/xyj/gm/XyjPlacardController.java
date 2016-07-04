@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletRequest;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.codehaus.jackson.type.TypeReference;
@@ -46,12 +49,15 @@ import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.xyj.Category;
+import com.enlight.game.entity.gm.xyj.Email;
 import com.enlight.game.entity.gm.xyj.Placard;
+import com.enlight.game.entity.gm.xyj.PlacardList;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.google.zxing.FormatException;
 
 @Controller("xyjPlacardController")
 @RequestMapping("/manage/gm/xyj/placard")
@@ -166,7 +172,7 @@ public class XyjPlacardController extends BaseController{
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<Placard> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Placard>>() {}); 
+		        List<Placard> beanList = binder.getMapper().readValue(binder.toJson(binder.fromJson(gs, PlacardList.class).getPlacardList()), new TypeReference<List<Placard>>() {}); 
 		        PageImpl<Placard> placard = new PageImpl<Placard>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("placard", placard);
 				
@@ -314,8 +320,24 @@ public class XyjPlacardController extends BaseController{
 		 return map;
 	}
 
-
-	
+	/**
+	 * 获取操作	 
+	 * @param oid 用户id
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "findByPlacardId", method = RequestMethod.GET)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Placard findByPlacardId(@RequestParam(value = "id")Long id
+			,@RequestParam(value = "gameId")String gameId
+			,@RequestParam(value = "serverZoneId")String serverZoneId
+			,@RequestParam(value = "serverId")String serverId
+			) throws Exception{
+		 String	account = HttpClientUts.doGet(gm_url+"/xyjserver/placard/getPlacardById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
+		 System.out.println("111111   "  + account);
+		 Placard placard = binder.fromJson(account, Placard.class);
+		 return placard;
+	}
 	/**
 	 * 取出Shiro中的当前用户Id.
 	 */
