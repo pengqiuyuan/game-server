@@ -107,7 +107,7 @@
 			   					<td>
 									<div class="action-buttons">
 										<shiro:hasAnyRoles name="admin,kds_gm_placard_update">
-											<a class="exportCode btn table-actions" onclick="updatePlacard('${item.version}','${item.contents}','${item.id}')"><i class="icon-ok"></i>修改</a>
+											<a class="exportCode btn table-actions" onclick="updatePlacard('${item.version}','${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-ok"></i>修改</a>
 										</shiro:hasAnyRoles>
 										<shiro:hasAnyRoles name="admin,kds_gm_placard_delete">
 									    	<a class="exportCode btn table-actions" onclick="delPlacard('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
@@ -200,14 +200,25 @@
 				$('.intro').tooltip();
 			});
 			
-			function updatePlacard(version,contents,id){
+			function updatePlacard(version,id,gameId,serverZoneId,serverId){
 				$("#id").attr('value',id);
 				$('#inputForm').show();
 				$("#version").attr('value','');
 				$("#contents").attr('value','');
 				
 				$("#version").attr('value',version);
-				$("#contents").attr('value',contents);
+				
+				$.ajax({
+					url: '<%=request.getContextPath()%>/manage/gm/kds/placard/findByPlacardId?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId, 
+					type: 'GET',
+					contentType: "application/json;charset=UTF-8",
+					dataType: 'json',
+					success: function(data){
+						$("#contents").attr('value',data.contents);
+					},error:function(xhr){
+						alert("出错了");
+					}
+				});
 				
 				$("#selBtn").attr("disabled","disabled");  
 				$("#gameId").attr("disabled","disabled");  
