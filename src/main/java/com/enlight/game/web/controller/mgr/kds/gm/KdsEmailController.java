@@ -255,7 +255,6 @@ public class KdsEmailController extends BaseController{
 		email.setGameId(gameId);
 		email.setAnnex(annexs);
 
-		email.setContents(email.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
         if(email.getServerId() != null){
         	System.out.println("111111 "   +JSONObject.fromObject(email));
         	int choose = 0,success = 0,fail = 0;
@@ -311,7 +310,6 @@ public class KdsEmailController extends BaseController{
 			serverId = StringUtils.join(set.toArray(), ","); // 根据不同切割符返回字符串
 			email.setServerId(serverId);
 		}
-		email.setContents(email.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));	
         if(email.getServerId() != null){
         	System.out.println("111111 "   +JSONObject.fromObject(email));
         	int choose = 0,success = 0,fail = 0;

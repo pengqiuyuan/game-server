@@ -241,7 +241,6 @@ public class FbPlacardController extends BaseController{
 		placard.setServerZoneId(serverZoneId);
 		System.out.println(placard.getId() +"  " + placard.getGameId() + " "+ placard.getServerZoneId() + "  "  + placard.getServerId() + " " + placard.getVersion() + "  " + placard.getContents());
 
-		placard.setContents(placard.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
         if(placard.getServerId() != null){
         	System.out.println("111111 "   +JSONObject.fromObject(placard));
         	int choose = 0,success = 0,fail = 0;
@@ -272,7 +271,6 @@ public class FbPlacardController extends BaseController{
 	@RequestMapping(value="/save" , method=RequestMethod.POST)
 	public String save(Placard placard,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		System.out.println(placard.getGameId() + "  "  + placard.getServerZoneId()+ "  "  + placard.getServerId()+ "  "  +placard.getVersion() + "  "  + placard.getContents() );
-		placard.setContents(placard.getContents().replaceAll("(\r\n|\r|\n|\n\r)", ""));
         if(placard.getServerId() != null){
         	System.out.println("111111 "   +JSONObject.fromObject(placard));
         	int choose = 0,success = 0,fail = 0;
