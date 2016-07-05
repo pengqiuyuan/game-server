@@ -269,15 +269,10 @@ public class XyjServerStatusController extends BaseController{
 				JSONObject dataJson=JSONObject.fromObject(total);
 				System.out.println("111111111111  "  + gs);
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-				if(!gs.equals("{}")){
-					 ServerStatusAccount beanList = binder.getMapper().readValue(gs, new TypeReference<ServerStatusAccount>() {}); 
-					 PageImpl<ServerStatusGrayList> serverStatusGrayList = new PageImpl<ServerStatusGrayList>(beanList.getGrayList(), pageRequest, Long.valueOf(dataJson.get("num").toString()));
-					 model.addAttribute("serverStatusGrayList", serverStatusGrayList);
-				}else{
-		        	List<ServerStatusGrayList> beanList = new ArrayList<ServerStatusGrayList>();
-			        PageImpl<ServerStatusGrayList> serverStatusGrayList = new PageImpl<ServerStatusGrayList>(beanList, pageRequest, 0);
-					model.addAttribute("serverStatusGrayList", serverStatusGrayList);
-				}
+				
+				ServerStatusAccount beanList = binder.getMapper().readValue(gs, new TypeReference<ServerStatusAccount>() {}); 
+				PageImpl<ServerStatusGrayList> serverStatusGrayList = new PageImpl<ServerStatusGrayList>(beanList.getGrayList(), pageRequest, Long.valueOf(dataJson.get("num").toString()));
+				model.addAttribute("serverStatusGrayList", serverStatusGrayList);
 				
 				model.addAttribute("gameId", storeId);
 				model.addAttribute("serverZoneId", serverZoneId);
