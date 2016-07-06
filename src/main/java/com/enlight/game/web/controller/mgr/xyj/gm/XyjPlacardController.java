@@ -51,7 +51,6 @@ import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.xyj.Category;
 import com.enlight.game.entity.gm.xyj.Email;
 import com.enlight.game.entity.gm.xyj.Placard;
-import com.enlight.game.entity.gm.xyj.PlacardList;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
@@ -172,7 +171,8 @@ public class XyjPlacardController extends BaseController{
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<Placard> beanList = binder.getMapper().readValue(binder.toJson(binder.fromJson(gs, PlacardList.class).getPlacardList()), new TypeReference<List<Placard>>() {}); 
+				List<Placard> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Placard>>() {}); 
+		        //List<Placard> beanList = binder.getMapper().readValue(binder.toJson(binder.fromJson(gs, PlacardList.class).getPlacardList()), new TypeReference<List<Placard>>() {}); 
 		        PageImpl<Placard> placard = new PageImpl<Placard>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("placard", placard);
 				

@@ -95,8 +95,8 @@
 								<td>${item.version}</td>
 								<td><a href="#"  class="intro" title="${item.contents}" >
 								<c:choose> 
-			    					<c:when test="${fn:length(item.contents)>3 }"> 
-			     						<c:out value="${fn:substring(item.contents,0,3) }..." /> 
+			    					<c:when test="${fn:length(item.contents)>30 }"> 
+			     						<c:out value="${fn:substring(item.contents,0,30) }..." /> 
 			    					</c:when> 
 			    					<c:otherwise> 
 			     						<c:out value="${item.contents }" /> 
