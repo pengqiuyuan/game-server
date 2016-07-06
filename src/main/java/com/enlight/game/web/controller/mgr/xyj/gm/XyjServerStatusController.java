@@ -50,8 +50,8 @@ import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.xyj.Category;
-import com.enlight.game.entity.gm.xyj.ServerStatusAccount;
-import com.enlight.game.entity.gm.xyj.ServerStatusAccountAddOrUpdate;
+import com.enlight.game.entity.gm.xyj.Placard;
+import com.enlight.game.entity.gm.xyj.ServerStatusGrayAddOrUpdate;
 import com.enlight.game.entity.gm.xyj.ServerStatusGrayList;
 import com.enlight.game.entity.gm.xyj.ServerStatusList;
 import com.enlight.game.entity.go.GoAllServer;
@@ -269,9 +269,9 @@ public class XyjServerStatusController extends BaseController{
 				JSONObject dataJson=JSONObject.fromObject(total);
 				System.out.println("111111111111  "  + gs);
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-				
-				ServerStatusAccount beanList = binder.getMapper().readValue(gs, new TypeReference<ServerStatusAccount>() {}); 
-				PageImpl<ServerStatusGrayList> serverStatusGrayList = new PageImpl<ServerStatusGrayList>(beanList.getGrayList(), pageRequest, Long.valueOf(dataJson.get("num").toString()));
+
+				List<ServerStatusGrayList> beanList = binder.getMapper().readValue(gs, new TypeReference<List<ServerStatusGrayList>>() {}); 
+				PageImpl<ServerStatusGrayList> serverStatusGrayList = new PageImpl<ServerStatusGrayList>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
 				model.addAttribute("serverStatusGrayList", serverStatusGrayList);
 				
 				model.addAttribute("gameId", storeId);
@@ -345,7 +345,7 @@ public class XyjServerStatusController extends BaseController{
 	 * 新增
 	 */
 	@RequestMapping(value = "/accountSave",method=RequestMethod.POST)
-	public String accountSave(ServerStatusAccountAddOrUpdate serverStatusAccountOrUpdate,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
+	public String accountSave(ServerStatusGrayAddOrUpdate serverStatusAccountOrUpdate,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		System.out.println(serverStatusAccountOrUpdate.getGameId() + "  "  + serverStatusAccountOrUpdate.getServerZoneId()+ 
 				"  "  + serverStatusAccountOrUpdate.getServerId()+ "  "  +serverStatusAccountOrUpdate.getPlatForm() + "  "  + serverStatusAccountOrUpdate.getAccount() );
 		
@@ -377,7 +377,7 @@ public class XyjServerStatusController extends BaseController{
 	 * 更新
 	 */
 	@RequestMapping(value = "/accountUpdate",method=RequestMethod.POST)
-	public String accountUpdate(ServerStatusAccountAddOrUpdate serverStatusAccountOrUpdate,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
+	public String accountUpdate(ServerStatusGrayAddOrUpdate serverStatusAccountOrUpdate,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
 		serverStatusAccountOrUpdate.setGameId(gameId);

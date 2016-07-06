@@ -2,22 +2,49 @@ package com.enlight.game.entity.gm.fb;
 
 import java.util.List;
 
-import com.enlight.game.entity.gm.fb.ServerStatusGrayList;
-
 /**
  * @author dell
  * 灰度账号
  */
-public class ServerStatusAccount {
-
+public class ServerStatusGrayAddOrUpdate {
+	
+	private int id;
+	
 	private String serverZoneId;
 	
 	private String gameId;
 	
 	private String serverId;
+
+	private String platForm;
 	
-	private List<ServerStatusGrayList> grayList;
+	private String account;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPlatForm() {
+		return platForm;
+	}
+
+	public void setPlatForm(String platForm) {
+		this.platForm = platForm;
+	}
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	
+
 	public String getServerZoneId() {
 		return serverZoneId;
 	}
@@ -40,13 +67,5 @@ public class ServerStatusAccount {
 
 	public void setServerId(String serverId) {
 		this.serverId = serverId;
-	}
-	
-	public List<ServerStatusGrayList> getGrayList() {
-		return grayList;
-	}
-
-	public void setGrayList(List<ServerStatusGrayList> grayList) {
-		this.grayList = grayList;
 	}
 }

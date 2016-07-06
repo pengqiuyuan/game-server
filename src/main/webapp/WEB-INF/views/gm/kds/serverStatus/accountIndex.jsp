@@ -92,9 +92,11 @@
 						<td>${item.account}</td>
 						<td>
 							<div class="action-buttons">
+								<!-- 
 								<shiro:hasAnyRoles name="admin,kds_gm_account_update">
 									<a class="exportCode btn table-actions" onclick="updateAccount('${gameId}','${serverZoneId}','${serverId}','${item.platForm}','${item.account}')"><i class="icon-ok"></i>修改</a>
 								</shiro:hasAnyRoles>
+								-->
 								<shiro:hasAnyRoles name="admin,kds_gm_account_delete">
 									<a class="exportCode btn table-actions" onclick="delAccount('${gameId}','${serverZoneId}','${serverId}','${item.platForm}','${item.account}')"><i class="icon-remove"></i>删除</a>
 								</shiro:hasAnyRoles>
