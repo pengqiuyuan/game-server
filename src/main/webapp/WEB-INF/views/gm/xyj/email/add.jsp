@@ -103,7 +103,10 @@
 				<shiro:hasAnyRoles name="admin,xyj_gm_email_add">
 					<button type="submit" class="btn btn-primary" id="submit">保存</button>
 				</shiro:hasAnyRoles>
+				<!-- 
 				<a href="${ctx}/manage/gm/xyj/email/index" class="btn btn-primary">返回</a>
+				 -->
+				<a href="${ctx}/manage/index" class="btn btn-primary">返回</a>
 			</div>
 
 	</form>

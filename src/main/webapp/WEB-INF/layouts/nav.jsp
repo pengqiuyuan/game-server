@@ -117,9 +117,11 @@
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">邮件</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
+																<!--  
 																	<shiro:hasAnyRoles name="admin,fb_gm_email_select">
 																		<li><a href="${ctx}/manage/gm/fb/email/index">邮件</a></li>
 																	</shiro:hasAnyRoles>
+																-->
 																	<shiro:hasAnyRoles name="admin,fb_gm_email_add">
 																		<li><a href="${ctx}/manage/gm/fb/email/add">邮件新增</a></li>
 																	</shiro:hasAnyRoles>
@@ -225,9 +227,11 @@
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">邮件</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
+																<!-- 
 																	<shiro:hasAnyRoles name="admin,kds_gm_email_select">
 																		<li><a href="${ctx}/manage/gm/kds/email/index">邮件</a></li>
 																	</shiro:hasAnyRoles>
+																 -->
 																	<shiro:hasAnyRoles name="admin,kds_gm_email_add">
 																		<li><a href="${ctx}/manage/gm/kds/email/add">邮件新增</a></li>
 																	</shiro:hasAnyRoles>
@@ -319,9 +323,11 @@
 														<li class="dropdown-submenu"><a tabindex="-1" href="#">邮件</a>
 															<ul class="dropdown-menu">
 																<li class="dropdown-submenu">
+																<!-- 
 																	<shiro:hasAnyRoles name="admin,xyj_gm_email_select">
 																		<li><a href="${ctx}/manage/gm/xyj/email/index">邮件</a></li>
 																	</shiro:hasAnyRoles>
+																 -->
 																	<shiro:hasAnyRoles name="admin,xyj_gm_email_add">
 																		<li><a href="${ctx}/manage/gm/xyj/email/add">邮件新增</a></li>
 																	</shiro:hasAnyRoles>
