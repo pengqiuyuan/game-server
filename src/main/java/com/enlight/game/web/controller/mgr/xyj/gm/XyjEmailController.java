@@ -288,6 +288,7 @@ public class XyjEmailController extends BaseController{
 		
 		String[] itemId = request.getParameterValues("itemId");
 		String[] itemNum = request.getParameterValues("itemNum");
+		String rev = request.getParameter("receiver");
 		if(itemId!=null && itemNum!=null){
 			List<Annex> annexs  = new ArrayList<Annex>();
 			for (int i = 0; i < itemId.length; i++) {
@@ -297,8 +298,12 @@ public class XyjEmailController extends BaseController{
 				annexs.add(annex);
 			}
 			email.setAnnex(annexs);
+		}else{
+			List<Annex> annexs  = new ArrayList<Annex>();
+			email.setAnnex(annexs);
 		}
-
+		List<String> receiver =  ImmutableList.copyOf(StringUtils.split(rev, ","));
+		email.setReceiver(receiver);
 		//按渠道发送，最终也要找出渠道对应服务器
 		if(email.getPlatForm()!=null){
 			Set<String>  set=new HashSet<String>();
@@ -330,10 +335,10 @@ public class XyjEmailController extends BaseController{
         	}else{
         		redirectAttributes.addFlashAttribute("message", "选择新增邮件的服务器："+choose+" 个，成功："+ success+" 个，失败："+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
         	}
-    		return "redirect:/manage/gm/xyj/email/index";
+    		return "redirect:/manage/gm/xyj/email/add";
         }else{
         	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
-    		return "redirect:/manage/gm/xyj/email/index";
+    		return "redirect:/manage/gm/xyj/email/add";
         }
 	}
 	
