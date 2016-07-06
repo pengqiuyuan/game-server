@@ -108,7 +108,7 @@
 											<a class="exportCode btn table-actions" onclick="updateGag('${item.guid}','${item.name}','${item.account}','${item.platForm}','${item.id}')"><i class="icon-ok"></i>修改</a>
 										</shiro:hasAnyRoles>
 										<shiro:hasAnyRoles name="admin,fb_gm_gag_delete">
-									    	<a class="exportCode btn table-actions" onclick="delGag('${item.id}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
+									    	<a class="exportCode btn table-actions" onclick="delGag('${item.guid}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -266,11 +266,11 @@
 				$("input#serverId").attr("disabled","disabled");  
 			}
 			
-			function delGag(id,gameId,serverZoneId,serverId){
+			function delGag(guid,gameId,serverZoneId,serverId){
 				if(confirm("该操作会删除。。。。！"))
 				    {
 							$.ajax({
-								url: '<%=request.getContextPath()%>/manage/gm/fb/gag/del?id='+id+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId, 
+								url: '<%=request.getContextPath()%>/manage/gm/fb/gag/del?guid='+guid+'&gameId='+gameId+'&serverZoneId='+serverZoneId+'&serverId='+serverId, 
 								type: 'DELETE',
 								contentType: "application/json;charset=UTF-8",
 								dataType: 'json',

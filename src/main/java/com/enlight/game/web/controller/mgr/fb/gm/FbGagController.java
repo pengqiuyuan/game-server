@@ -276,6 +276,7 @@ public class FbGagController extends BaseController{
 				gag.setGagTime(request.getParameter("gagTime"));
 			}
 			*/
+			
 			gag.setGagTime(request.getParameter("gagTime"));
 		}else if(null != request.getParameter("gagStart") && null != request.getParameter("gagEnd")){
 			gag.setGagStart(request.getParameter("gagStart"));
@@ -356,13 +357,13 @@ public class FbGagController extends BaseController{
 	@RequestMapping(value = "del", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> del(@RequestParam(value = "id")Long id
+	public Map<String,Object> del(@RequestParam(value = "guid")Long guid
 			,@RequestParam(value = "gameId")String gameId
 			,@RequestParam(value = "serverZoneId")String serverZoneId
 			,@RequestParam(value = "serverId")String serverId
 			) throws Exception{
 		 Map<String,Object> map = new HashMap<String, Object>();
-		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/gag/delGagAccountById?id="+id+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
+		 String	account = HttpClientUts.doGet(gm_url+"/fbserver/gag/delGagAccountById?guid="+guid+"&gameId="+gameId+"&serverZoneId="+serverZoneId+"&serverId="+serverId, "utf-8");
 		 JSONObject dataJson=JSONObject.fromObject(account);
 		 map.put("message", dataJson.get("message"));
 		 return map;
