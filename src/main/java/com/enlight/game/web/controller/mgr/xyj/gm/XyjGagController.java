@@ -260,6 +260,8 @@ public class XyjGagController extends BaseController{
 		gag.setPlatForm(request.getParameter("platForm"));
 		gag.setAccount(request.getParameter("account"));
 		if(null != request.getParameter("gagTime")){
+			/**
+			 * 
 			if(!request.getParameter("gagTime").equals("-1")){
 				gag.setGagTime(request.getParameter("gagTime"));
 				
@@ -273,11 +275,12 @@ public class XyjGagController extends BaseController{
 			}else{
 				gag.setGagTime(request.getParameter("gagTime"));
 			}
-			
+			*/
+			gag.setGagTime(request.getParameter("gagTime"));
 		}else if(null != request.getParameter("gagStart") && null != request.getParameter("gagEnd")){
 			gag.setGagStart(request.getParameter("gagStart"));
 			gag.setGagEnd(request.getParameter("gagEnd"));
-			
+			/**
 			try {
 				Date begin = sdf.parse(request.getParameter("gagStart"));
 				Date end = sdf.parse(request.getParameter("gagEnd"));   
@@ -287,7 +290,7 @@ public class XyjGagController extends BaseController{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}   
-
+			 */
 		}
 		
 		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/gag/updateGagAccount" , JSONObject.fromObject(gag));
@@ -304,6 +307,8 @@ public class XyjGagController extends BaseController{
 	public String save(Gag gag,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
         if(gag.getServerId() != null){
     		if(null != request.getParameter("gagTime")){
+    			/**
+    			 * 
     			if(!request.getParameter("gagTime").equals("-1")){
     				gag.setGagTime(request.getParameter("gagTime"));
     				
@@ -317,11 +322,12 @@ public class XyjGagController extends BaseController{
     			}else{
     				gag.setGagTime(request.getParameter("gagTime"));
     			}
-    			
+    			*/
+    			gag.setGagTime(request.getParameter("gagTime"));
     		}else if(null != request.getParameter("gagStart") && null != request.getParameter("gagEnd")){
     			gag.setGagStart(request.getParameter("gagStart"));
     			gag.setGagEnd(request.getParameter("gagEnd"));
-    			
+    			/**
     			try {
     				Date begin = sdf.parse(request.getParameter("gagStart"));
     				Date end = sdf.parse(request.getParameter("gagEnd"));   
@@ -331,10 +337,12 @@ public class XyjGagController extends BaseController{
     				// TODO Auto-generated catch block
     				e.printStackTrace();
     			}   
-
+    			 */
     		}
+    		
+    		System.out.println("111111 "   +JSONObject.fromObject(gag));
     		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/gag/addGagAccount" , JSONObject.fromObject(gag));
-    		redirectAttributes.addFlashAttribute("message", "新增禁言Guid:"+gag.getGuid()+":"+res.getString("message"));
+    		redirectAttributes.addFlashAttribute("message", "新增禁言 Guid："+gag.getGuid()+" "+res.getString("message"));
     		return "redirect:/manage/gm/xyj/gag/add";
         }else{
         	redirectAttributes.addFlashAttribute("message", "服务器列表为空,保存失败");
