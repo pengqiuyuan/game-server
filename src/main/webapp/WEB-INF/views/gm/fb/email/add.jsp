@@ -73,6 +73,13 @@
 					<input type="text" name="sender" class="input-large "  placeholder="发件人"/>
 				</div>
 			</div>	
+			<div class="control-group">
+				<label class="control-label" for="receiver">收件玩家Guid：</label>
+					<div class="controls">  
+						<input type="text" name="receiver" class="input-large " placeholder="玩家Guid,英文逗号隔开"/>
+						<span class="help-block">多个收件玩家使用空格分割</span>
+					</div>
+			</div>	
 			<div
 				class="control-group">
 				<label class="control-label" for="title">标题：</label>
@@ -250,10 +257,12 @@
 					required:true
 				},
 				itemId:{
-					required:true
+					required:true,
+					number:true
 				},
 				itemNum:{
-					required:true
+					required:true,
+					number:true
 				}
 			},messages:{
 				gameId:{
@@ -278,10 +287,12 @@
 					required:"内容必须填写"
 				},
 				itemId:{
-					required:"道具Id必须填写"
+					required:"道具Id必须填写",
+					number: "请输入合法的数字"
 				},
 				itemNum:{
-					required:"道具数量必须填写"
+					required:"道具数量必须填写",
+					number: "请输入合法的数字"
 				}
 			}
 		});			
