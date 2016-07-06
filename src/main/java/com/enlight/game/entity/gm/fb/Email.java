@@ -18,6 +18,8 @@ public class Email {
 	
 	private String sender;
 	
+	private List<String> receiver;
+	
 	private String title;
 	
 	private String contents;
@@ -25,6 +27,14 @@ public class Email {
 	private List<Annex> annex;
 	
 	private String platForm;
+	
+	public List<String> getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(List<String> receiver) {
+		this.receiver = receiver;
+	}
 
 	public int getId() {
 		return id;
