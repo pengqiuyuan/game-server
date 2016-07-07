@@ -71,8 +71,6 @@ public class XyjGagController extends BaseController{
 
 	private static final String PAGE_SIZE = "2";
 	
-	private static final String CATEGORY = "gag";
-	
 	private static final Integer XYJ = 4; //数据库、excel表 ，xyj项目storeId为4
 
 	private static final Logger logger = LoggerFactory.getLogger(XyjGagController.class);

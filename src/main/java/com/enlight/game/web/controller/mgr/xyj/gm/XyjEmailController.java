@@ -64,8 +64,6 @@ public class XyjEmailController extends BaseController{
 
 	private static final String PAGE_SIZE = "10";
 	
-	private static final String CATEGORY = "email";
-	
 	private static final Integer XYJ = 4; //数据库、excel表 ，xyj项目storeId为4
 
 	private static final Logger logger = LoggerFactory.getLogger(XyjEmailController.class);
