@@ -54,6 +54,7 @@ import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.Seal;
+import com.enlight.game.entity.gm.fb.SealList;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
@@ -177,17 +178,25 @@ public class FbSealController extends BaseController{
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<Seal> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Seal>>() {}); 
-		        PageImpl<Seal> seal = new PageImpl<Seal>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
-				model.addAttribute("seal", seal);
+		        List<SealList> beanList = binder.getMapper().readValue(gs, new TypeReference<List<SealList>>() {}); 
+		        PageImpl<SealList> sealList = new PageImpl<SealList>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
+				model.addAttribute("sealList", sealList);
+				
+				model.addAttribute("gameId", storeId);
+				model.addAttribute("serverZoneId", serverZoneId);
+				model.addAttribute("serverId", URLEncoder.encode(serverId, "utf-8"));
 				
 				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
 				model.addAttribute("servers", servers);
 	        }else{
-	        	List<Seal> beanList = new ArrayList<Seal>();
+	        	List<SealList> beanList = new ArrayList<SealList>();
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        PageImpl<Seal> seal = new PageImpl<Seal>(beanList, pageRequest, 0);
-				model.addAttribute("seal", seal);
+		        PageImpl<SealList> sealList = new PageImpl<SealList>(beanList, pageRequest, 0);
+				model.addAttribute("sealList", sealList);
+				
+				model.addAttribute("gameId", storeId);
+				model.addAttribute("serverZoneId", serverZoneId);
+				model.addAttribute("serverId", serverId);
 				
 				Set<Server> servers = new HashSet<Server>();
 				model.addAttribute("servers", servers);
@@ -245,13 +254,11 @@ public class FbSealController extends BaseController{
 	 */
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
 	public String update(ServletRequest request,RedirectAttributes redirectAttributes) throws UnsupportedEncodingException{
-		String id = request.getParameter("id");
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
 		String serverId = request.getParameter("search_EQ_serverId");
 		String guid = request.getParameter("guid");
 		Seal seal = new Seal();
-		seal.setId(Integer.parseInt(id));
 		seal.setGameId(gameId);
 		seal.setServerZoneId(serverZoneId);
 		seal.setServerId(serverId);
@@ -290,7 +297,7 @@ public class FbSealController extends BaseController{
 
 		}
 		
-		logger.debug("id : " + id +" serverZoneid: " + serverZoneId + " gameId:  " + gameId  + " serverId: " + serverId  + " guid: " + guid 
+		logger.debug(" serverZoneid: " + serverZoneId + " gameId:  " + gameId  + " serverId: " + serverId  + " guid: " + guid 
 				+ " sealTime: " + request.getParameter("sealTime") 
 				+ " sealStart " + request.getParameter("sealStart")
 				+ " sealEnd " + request.getParameter("sealEnd"));
