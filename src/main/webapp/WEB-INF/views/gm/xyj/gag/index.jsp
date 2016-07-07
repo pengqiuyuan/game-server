@@ -94,21 +94,22 @@
 						</tr>
 					</thead>
 					<tbody id="tbody">
-						<c:forEach items="${gag.content}" var="item" varStatus="s">
+						<c:forEach items="${gagList.content}" var="item" varStatus="s">
 							<tr id="${item.guid}">
+								<td>${item.guid}</td>
 								<td>${item.name}</td>
 								<td>${item.account}</td>
 								<td>${item.platForm}</td>
-								<td>${item.gagTime}</td>
-								<td>${item.gagStart}</td>
-								<td>${item.gagEnd}</td>
+								<td><huake:getSecondToDayTag id="${item.gagTime}"></huake:getSecondToDayTag></td>
+								<td><huake:getTimestampTag id="${item.gagStart}"></huake:getTimestampTag></td>
+								<td><huake:getTimestampTag id="${item.gagEnd}"></huake:getTimestampTag></td>
 			   					<td>
 									<div class="action-buttons">
 										<shiro:hasAnyRoles name="admin,xyj_gm_gag_update">
-											<a class="exportCode btn table-actions" onclick="updateGag('${item.guid}','${item.name}','${item.account}','${item.platForm}','${item.id}')"><i class="icon-ok"></i>修改</a>
+											<a class="exportCode btn table-actions" onclick="updateGag('${item.guid}','${item.name}','${item.account}','${item.platForm}')"><i class="icon-ok"></i>修改</a>
 										</shiro:hasAnyRoles>
 										<shiro:hasAnyRoles name="admin,xyj_gm_gag_delete">
-									    	<a class="exportCode btn table-actions" onclick="delGag('${item.guid}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
+									    	<a class="exportCode btn table-actions" onclick="delGag('${item.guid}','${gameId}','${serverZoneId}','${serverId}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -116,7 +117,7 @@
 						</c:forEach>
 					</tbody>
 				</table>
-				<tags:pagination page="${gag}" paginationSize="5"/>
+				<tags:pagination page="${gagList}" paginationSize="5"/>
 				<div class="form-actions">
 					<shiro:hasAnyRoles name="admin,xyj_gm_gag_add">
 						<a href="${ctx}/manage/gm/xyj/gag/add" class="btn btn-primary">新增禁言</a>
@@ -129,7 +130,6 @@
 		<form id="inputForm" method="post" Class="form-horizontal" action="<%=request.getContextPath()%>/manage/gm/xyj/gag/update"   enctype="multipart/form-data"  style="display: none;">
 			<div style="color:#3352CC;clear:both">
 			<br><hr style="background-color:#808080;height:1px;width:800px;margin:auto"><h4>修改禁言时间：</h4></div>
-			<input type="hidden" name="id" id="id">
 			<div class="control-group">
 				<label class="control-label" for="">游戏:</label>
 				<div class="controls">
@@ -245,7 +245,7 @@
 				$('.intro').tooltip();
 			});
 			
-			function updateGag(platForm,guid,name,account,id){
+			function updateGag(platForm,guid,name,account){
 				$('#inputForm').show();
 				
 			    $("#gagTime").val("pxx");
@@ -253,7 +253,6 @@
 				$('#gagEnd').attr('value','');
 				
 				
-				$("#id").attr('value',id);
 				$("#platForm").attr('value',platForm);
 				$("#guid").attr('value',guid);
 				$("#name").attr('value',name);
