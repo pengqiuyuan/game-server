@@ -94,21 +94,22 @@
 						</tr>
 					</thead>
 					<tbody id="tbody">
-						<c:forEach items="${seal.content}" var="item" varStatus="s">
+						<c:forEach items="${sealList.content}" var="item" varStatus="s">
 							<tr id="${item.guid}">
+								<td>${item.guid}</td>
 								<td>${item.name}</td>
 								<td>${item.account}</td>
 								<td>${item.platForm}</td>
-								<td>${item.sealTime}</td>
-								<td>${item.sealStart}</td>
-								<td>${item.sealEnd}</td>
+								<td><huake:getSecondToDayTag id="${item.sealTime}"></huake:getSecondToDayTag></td>
+								<td><huake:getTimestampTag id="${item.sealStart}"></huake:getTimestampTag></td>
+								<td><huake:getTimestampTag id="${item.sealEnd}"></huake:getTimestampTag></td>
 			   					<td>
 									<div class="action-buttons">
 										<shiro:hasAnyRoles name="admin,xyj_gm_seal_update">
-											<a class="exportCode btn table-actions" onclick="updateSeal('${item.guid}','${item.name}','${item.account}','${item.platForm}','${item.id}')"><i class="icon-ok"></i>修改</a>
+											<a class="exportCode btn table-actions" onclick="updateSeal('${item.guid}','${item.name}','${item.account}','${item.platForm}')"><i class="icon-ok"></i>修改</a>
 										</shiro:hasAnyRoles>
 										<shiro:hasAnyRoles name="admin,xyj_gm_seal_delete">
-									    	<a class="exportCode btn table-actions" onclick="delGag('${item.guid}','${item.gameId}','${item.serverZoneId}','${item.serverId}')"><i class="icon-remove"></i>删除</a>
+									    	<a class="exportCode btn table-actions" onclick="delGag('${item.guid}','${gameId}','${serverZoneId}','${serverId}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -116,7 +117,7 @@
 						</c:forEach>
 					</tbody>
 				</table>
-				<tags:pagination page="${seal}" paginationSize="5"/>
+				<tags:pagination page="${sealList}" paginationSize="5"/>
 		</div>
 		
 
@@ -124,7 +125,6 @@
 		<form id="inputForm" method="post" Class="form-horizontal" action="<%=request.getContextPath()%>/manage/gm/xyj/seal/update"   enctype="multipart/form-data"  style="display: none;">
 			<div style="color:#3352CC;clear:both">
 			<br><hr style="background-color:#808080;height:1px;width:800px;margin:auto"><h4>修改封号时间：</h4></div>
-			<input type="hidden" name="id" id="id">
 			<div class="control-group">
 				<label class="control-label" for="">游戏:</label>
 				<div class="controls">
@@ -238,7 +238,7 @@
 				$('.intro').tooltip();
 			});
 			
-			function updateSeal(platForm,guid,name,account,id){
+			function updateSeal(platForm,guid,name,account){
 				$('#inputForm').show();
 				
 			    $("#sealTime").val("pxx");
@@ -246,7 +246,6 @@
 				$('#sealEnd').attr('value','');
 				
 				
-				$("#id").attr('value',id);
 				$("#platForm").attr('value',platForm);
 				$("#guid").attr('value',guid);
 				$("#name").attr('value',name);
