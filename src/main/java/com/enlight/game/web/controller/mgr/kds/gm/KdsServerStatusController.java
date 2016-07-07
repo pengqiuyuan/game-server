@@ -65,6 +65,10 @@ public class KdsServerStatusController extends BaseController{
 
 	private static final String PAGE_SIZE = "50";
 	
+	private static final String CATEGORY_SERVER = "server";
+	
+	private static final String CATEGORY_ACCOUNT = "account";
+	
 	private static final Integer KDS = 3; //数据库、excel表 ，kds项目storeId为3
 
 	private static final Logger logger = LoggerFactory.getLogger(KdsServerStatusController.class);

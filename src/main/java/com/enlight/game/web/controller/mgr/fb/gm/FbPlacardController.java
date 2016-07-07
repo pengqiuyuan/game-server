@@ -59,6 +59,8 @@ public class FbPlacardController extends BaseController{
 
 	private static final String PAGE_SIZE = "10";
 	
+	private static final String CATEGORY = "placard";
+	
 	private static final Integer FB = 1; //数据库、excel表 ，fb项目storeId为1
 
 	private static final Logger logger = LoggerFactory.getLogger(FbPlacardController.class);

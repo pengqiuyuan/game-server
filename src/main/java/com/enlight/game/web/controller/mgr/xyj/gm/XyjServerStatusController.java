@@ -66,6 +66,10 @@ public class XyjServerStatusController extends BaseController{
 
 	private static final String PAGE_SIZE = "50";
 	
+	private static final String CATEGORY_SERVER = "server";
+	
+	private static final String CATEGORY_ACCOUNT = "account";
+	
 	private static final Integer XYJ = 4; //数据库、excel表 ，xyj项目storeId为4
 
 	private static final Logger logger = LoggerFactory.getLogger(XyjServerStatusController.class);

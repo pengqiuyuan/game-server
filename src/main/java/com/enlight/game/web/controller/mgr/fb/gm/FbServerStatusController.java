@@ -65,6 +65,10 @@ public class FbServerStatusController extends BaseController{
 
 	private static final String PAGE_SIZE = "50";
 	
+	private static final String CATEGORY_SERVER = "server";
+	
+	private static final String CATEGORY_ACCOUNT = "account";
+	
 	private static final Integer FB = 1; //数据库、excel表 ，fb项目storeId为1
 
 	private static final Logger logger = LoggerFactory.getLogger(FbServerStatusController.class);
