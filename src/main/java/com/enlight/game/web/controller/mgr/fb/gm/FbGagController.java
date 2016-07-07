@@ -54,6 +54,7 @@ import com.enlight.game.util.JsonBinder;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.enlight.game.entity.gm.fb.Category;
 import com.enlight.game.entity.gm.fb.Gag;
+import com.enlight.game.entity.gm.fb.GagList;
 import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.entity.go.GoServerZone;
 import com.enlight.game.entity.go.GoStore;
@@ -177,17 +178,25 @@ public class FbGagController extends BaseController{
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        List<Gag> beanList = binder.getMapper().readValue(gs, new TypeReference<List<Gag>>() {}); 
-		        PageImpl<Gag> gag = new PageImpl<Gag>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
-				model.addAttribute("gag", gag);
+		        List<GagList> beanList = binder.getMapper().readValue(gs, new TypeReference<List<GagList>>() {}); 
+		        PageImpl<GagList> gagList = new PageImpl<GagList>(beanList, pageRequest, Long.valueOf(dataJson.get("num").toString()));
+				model.addAttribute("gagList", gagList);
+				
+				model.addAttribute("gameId", storeId);
+				model.addAttribute("serverZoneId", serverZoneId);
+				model.addAttribute("serverId", URLEncoder.encode(serverId, "utf-8"));
 				
 				List<GoAllServer> servers = goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(request.getParameter("search_EQ_storeId")),Integer.valueOf(serverZoneId));
 				model.addAttribute("servers", servers);
 	        }else{
-	        	List<Gag> beanList = new ArrayList<Gag>();
+	        	List<GagList> beanList = new ArrayList<GagList>();
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
-		        PageImpl<Gag> gag = new PageImpl<Gag>(beanList, pageRequest, 0);
-				model.addAttribute("gag", gag);
+				PageImpl<GagList> gagList = new PageImpl<GagList>(beanList, pageRequest, 0);
+				model.addAttribute("gagList", gagList);
+				
+				model.addAttribute("gameId", storeId);
+				model.addAttribute("serverZoneId", serverZoneId);
+				model.addAttribute("serverId", serverId);
 				
 				Set<Server> servers = new HashSet<Server>();
 				model.addAttribute("servers", servers);
@@ -245,13 +254,11 @@ public class FbGagController extends BaseController{
 	 */
 	@RequestMapping(value = "/update",method=RequestMethod.POST)
 	public String update(ServletRequest request,RedirectAttributes redirectAttributes) throws UnsupportedEncodingException{
-		String id = request.getParameter("id");
 		String gameId = request.getParameter("search_EQ_storeId");
 		String serverZoneId = request.getParameter("search_EQ_serverZoneId");
 		String serverId = request.getParameter("search_EQ_serverId");
 		String guid = request.getParameter("guid");
 		Gag gag = new Gag();
-		gag.setId(Integer.parseInt(id));
 		gag.setGameId(gameId);
 		gag.setServerZoneId(serverZoneId);
 		gag.setServerId(serverId);
