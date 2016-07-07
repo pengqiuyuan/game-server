@@ -264,7 +264,7 @@ public class FbServerStatusController extends BaseController{
 					storeId = user.getStoreId();
 				}
 				String gs = HttpClientUts.doGet(gm_url+"/fbserver/server/getAllGrayAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/fbserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.account+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/fbserver/server/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.account+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				JSONObject dataJson=JSONObject.fromObject(total);
 				System.out.println("111111111111  "  + gs);
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);

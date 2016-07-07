@@ -161,7 +161,7 @@ public class KdsPlacardController extends BaseController{
 				}
 				
 				String gs = HttpClientUts.doGet(gm_url+"/kdsserver/placard/getAllPlacards"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/kdsserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/kdsserver/placard/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.placard+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				
 				JSONObject dataJson=JSONObject.fromObject(total);
 				

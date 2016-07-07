@@ -174,7 +174,7 @@ public class KdsGagController extends BaseController{
 					storeId = user.getStoreId();
 				}
 				String gs = HttpClientUts.doGet(gm_url+"/kdsserver/gag/getAllGagAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/kdsserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.gag+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/kdsserver/gag/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.gag+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);

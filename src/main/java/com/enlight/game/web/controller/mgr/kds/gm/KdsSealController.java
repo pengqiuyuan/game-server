@@ -173,7 +173,7 @@ public class KdsSealController extends BaseController{
 					storeId = user.getStoreId();
 				}
 				String gs = HttpClientUts.doGet(gm_url+"/kdsserver/seal/getAllSealAccount"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&serverId="+URLEncoder.encode(serverId, "utf-8")+"&pageNumber="+pageNumber+"&pageSize="+pageSize, "utf-8");
-				String total = HttpClientUts.doGet(gm_url+"/kdsserver/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.seal+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
+				String total = HttpClientUts.doGet(gm_url+"/kdsserver/seal/getTotalByServerZoneIdAndGameId"+"?serverZoneId="+serverZoneId+"&gameId="+storeId+"&category="+Category.seal+"&serverId="+URLEncoder.encode(serverId, "utf-8"), "utf-8");
 				JSONObject dataJson=JSONObject.fromObject(total);
 				
 				PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
