@@ -245,7 +245,7 @@
 				$('.intro').tooltip();
 			});
 			
-			function updateGag(platForm,guid,name,account){
+			function updateGag(guid,name,account,platForm){
 				$('#inputForm').show();
 				
 			    $("#gagTime").val("pxx");

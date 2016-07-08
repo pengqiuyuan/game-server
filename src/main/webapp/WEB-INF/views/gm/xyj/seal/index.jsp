@@ -109,7 +109,7 @@
 											<a class="exportCode btn table-actions" onclick="updateSeal('${item.guid}','${item.name}','${item.account}','${item.platForm}')"><i class="icon-ok"></i>修改</a>
 										</shiro:hasAnyRoles>
 										<shiro:hasAnyRoles name="admin,xyj_gm_seal_delete">
-									    	<a class="exportCode btn table-actions" onclick="delGag('${item.guid}','${gameId}','${serverZoneId}','${serverId}')"><i class="icon-remove"></i>删除</a>
+									    	<a class="exportCode btn table-actions" onclick="delSeal('${item.guid}','${gameId}','${serverZoneId}','${serverId}')"><i class="icon-remove"></i>删除</a>
 										</shiro:hasAnyRoles>
 									</div>
 								</td>
@@ -118,6 +118,11 @@
 					</tbody>
 				</table>
 				<tags:pagination page="${sealList}" paginationSize="5"/>
+				<div class="form-actions">
+					<shiro:hasAnyRoles name="admin,xyj_gm_seal_add">
+						<a href="${ctx}/manage/gm/xyj/seal/add" class="btn btn-primary">新增封号</a>
+					</shiro:hasAnyRoles>
+				</div>
 		</div>
 		
 
@@ -238,7 +243,7 @@
 				$('.intro').tooltip();
 			});
 			
-			function updateSeal(platForm,guid,name,account){
+			function updateSeal(guid,name,account,platForm){
 				$('#inputForm').show();
 				
 			    $("#sealTime").val("pxx");

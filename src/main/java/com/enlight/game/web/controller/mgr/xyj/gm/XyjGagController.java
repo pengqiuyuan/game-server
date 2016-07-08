@@ -69,7 +69,7 @@ import com.google.common.collect.Maps;
 @RequestMapping("/manage/gm/xyj/gag")
 public class XyjGagController extends BaseController{
 
-	private static final String PAGE_SIZE = "2";
+	private static final String PAGE_SIZE = "10";
 	
 	private static final Integer XYJ = 4; //数据库、excel表 ，xyj项目storeId为4
 
