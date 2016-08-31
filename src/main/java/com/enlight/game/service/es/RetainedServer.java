@@ -101,7 +101,6 @@ public class RetainedServer {
 		Map<String, Object> next = new LinkedHashMap<String, Object>();
 		Map<String, Object> seven = new LinkedHashMap<String, Object>();
 		Map<String, Object> thirty = new LinkedHashMap<String, Object>();
-		
 		for (SearchHit hit : response.getHits()) {
 			Map<String, Object> source = hit.getSource();
 			if(source.get("ctRetained").equals("nextDay")){

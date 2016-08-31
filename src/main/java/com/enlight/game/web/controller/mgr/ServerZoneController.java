@@ -178,14 +178,10 @@ public class ServerZoneController extends BaseController{
 		 List<User> users = accountService.getAllUser();
 		 for (User user : users) {
 			 List<String> list = user.getServerZoneList();
-			 List<String> lis = new ArrayList<String>();
-			 for (String string : list) {
-				 if(!string.equals(id.toString())){
-					 System.out.println(string);
-					 lis.add(string); 
-				 }
+			 if(list.contains(id.toString())){
+				 list.remove(id.toString());
 			 }
-			 user.setServerZone(StringUtils.join(lis,","));
+			 user.setServerZone(StringUtils.join(list,","));
 			 userService.update(user);
 		}
 		 map.put("success", "true");

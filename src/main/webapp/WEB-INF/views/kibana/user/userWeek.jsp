@@ -130,12 +130,12 @@
 										<label class="control-label" for="endD">结束时间：
 											<div class="input-append date dp3"
 												data-date-format="yyyy-mm-dd">
-												<c:if test="${not empty param.search_EQ_dateFrom}">
+												<c:if test="${not empty param.search_EQ_dateTo}">
 													<input size="16" type="text" id="dateTo"
 														value="${param.search_EQ_dateTo == dateTo  ? dateTo : param.search_EQ_dateTo }"
 														name="search_EQ_dateTo">
 												</c:if>
-												<c:if test="${empty param.search_EQ_dateFrom}">
+												<c:if test="${empty param.search_EQ_dateTo}">
 													<input size="16" type="text" id="dateTo" value="${dateTo}"
 														name="search_EQ_dateTo">
 												</c:if>
