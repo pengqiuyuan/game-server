@@ -11,3 +11,7 @@
 # Others
 target/
 logs/
+
+src/main/webapp/manage/count/.DS_Store
+
+.DS_Store
