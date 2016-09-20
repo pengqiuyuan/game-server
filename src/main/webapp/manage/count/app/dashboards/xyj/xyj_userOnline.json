@@ -99,7 +99,7 @@
           "lines": false,
           "fill": 0,
           "linewidth": 3,
-          "points": true,
+          "points": false,
           "pointradius": 5,
           "bars": false,
           "stack": false,
