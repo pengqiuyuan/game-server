@@ -19,5 +19,7 @@ public class Category {
 	public static final String email = "email";
 	
 	public static final String product = "product";
+	
+	public static final String eventPrototype = "eventProtptype";
 
 }
