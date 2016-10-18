@@ -36,9 +36,8 @@
 				</select>
 				<label>活动状态：</label> 
 				<select name="search_EQ_times">
-					<option value="">全部活动</option>
-					<option value="-1">开启的活动</option>
-					<option value="0">关闭的活动</option>
+					<option value="" ${param.search_EQ_times == '' ? 'selected' : '' }>全部活动</option>
+					<option value="0" ${param.search_EQ_times == '0' ? 'selected' : '' }>关闭的活动</option>
 				</select>
 				<input type="submit" class="btn btn-primary" value="查 找" />
 				<tags:sort />
@@ -51,8 +50,8 @@
 					<th title="名称">名称</th>
 					<th title="激活方式">激活方式</th>
 					<th title="激活日期">激活日期</th>
-					<th title="持续时间">持续时间</th>
-					<th title="重复间隔">重复间隔</th>
+					<th title="持续时间">持续时间（小时）</th>
+					<th title="重复间隔">重复间隔（天）</th>
 					<th title="后续活动Id">后续活动Id</th>
 					<th title="玩家等级">玩家等级</th>
 					<th title="操作">操作</th>
@@ -60,7 +59,7 @@
 			</thead>
 			<tbody id="tbody">
 				<c:forEach items="${eventPrototypes.content}" var="item" varStatus="s">
-					<tr id="${item.id}">
+					<tr id="${item.id}" ${item.times == 0 ? 'class="error"' : '' }>
 						<td id="iDictionary" value="${item.id}">
 							<div class="btn-group">
 								<a class="btn" href="#">#${item.id}</a> 

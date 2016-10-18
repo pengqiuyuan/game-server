@@ -81,7 +81,7 @@
 					<div class="control-group">
 						<label class="control-label" for="mainUiPosition">主界面图标显示优先级：</label>
 						<div class="controls">
-							<input type="text" name="mainUiPosition" id="mainUiPosition" class="input-large" value="${eventPrototype.mainUiPosition}" placeholder="值越大越靠右"/>
+							<input type="text" name="mainUiPosition" id="mainUiPosition" class="input-large" value="${eventPrototype.mainUiPosition}" ${eventPrototype.eventType == 13 ? '' : 'readonly="readonly"' } placeholder="值越大越靠右"/>
 						</div>
 					</div>
 				</div>
@@ -89,7 +89,8 @@
 					<div class="control-group">
 						<label class="control-label" for="eventPic">活动图标：</label>
 						<div class="controls">
-							<input type="text" name="eventPic" id="eventPic" class="input-large " value="${eventPrototype.eventPic}" placeholder="如：huodong_icon_tongyong.png"/>
+							<input type="text" name="eventPic" id="eventPic" class="input-large " value="${eventPrototype.eventPic}" placeholder="如：huodong_icon_tongyong"/>
+							<span class="add-on">.png</span>
 						</div>
 					</div>
 				</div>
@@ -97,7 +98,8 @@
 					<div class="control-group">
 						<label class="control-label" for="eventShow">活动大图：</label>
 						<div class="controls">
-							<input type="text" name="eventShow" id="eventShow" class="input-large " value="${eventPrototype.eventShow}" placeholder="如：huodong_icon_tongyong.png"/>
+							<input type="text" name="eventShow" id="eventShow" class="input-large " value="${eventPrototype.eventShow}" placeholder="如：huodong_icon_tongyong"/>
+							<span class="add-on">.png</span>
 						</div>
 					</div>
 				</div>
@@ -116,11 +118,11 @@
 						</div>
 					</div>
 				</div>
-				<div class="span6">
+				<div class="span6"  ${eventPrototype.activeType == 0 ? '' : 'hidden' }   id="activeData">
 					<div class="control-group">
 						<label class="control-label" for="activeData">一般激活时间：</label>
 						<div class="controls">
-								<input type="text" name="activeData" id="activeData" class="form_datetime" value="${eventPrototype.activeData}"></input> 
+								<input type="text" name="activeData" class="form_datetime" value="${eventPrototype.activeType == 0 ? eventPrototype.activeData : ''}" ></input> 
 						</div>
 					</div>
 				</div>
@@ -272,10 +274,10 @@
 			
 			$("#activeType").change(function(e){
 				if($("#activeType").val() == '0'){
-					$('#activeData').removeAttr("disabled");
+					$('#activeData').removeAttr("hidden");
 				}else{
-					$("#activeData").val("");
-					$('#activeData').attr("disabled","disabled");
+					$("input[name='activeData']").val("");
+					$('#activeData').attr("hidden","true");
 				}
 			});
 			

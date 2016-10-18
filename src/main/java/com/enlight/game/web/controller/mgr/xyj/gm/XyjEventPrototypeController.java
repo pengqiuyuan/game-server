@@ -152,7 +152,7 @@ public class XyjEventPrototypeController extends BaseController{
 						String time1 = xyjEventPrototypeService.getByDay(eventPrototype.getActiveData(), eventPrototype.getActiveDelay()); // （加上延时激活时间）活动激活时间起点
 						String time2 = eventPrototype.getTimes(); //活动持续时间（单位小时）
 						time3 = xyjEventPrototypeService.getByHour(time1, time2); //活动结束时间
-						logger.debug(eventPrototype.getId()+" |"+"1：星期几激活选择为 0，通过激活时间基点："+eventPrototype.getActiveData()+"、延时时间（天）："+eventPrototype.getActiveDelay()+"、延时后激活时间基点："+time1+"、持续时间（小时）："+eventPrototype.getTimes()+"获取活动结束时间："+time3);
+						logger.debug(eventPrototype.getId()+" |"+"1：星期几激活选择为 0，通过激活时间基点："+eventPrototype.getActiveData()+"、延时时间（天）："+eventPrototype.getActiveDelay()+"、延时后激活时间基点："+time1+"、持续时间（小时）："+eventPrototype.getTimes()+"、获取活动结束时间："+time3);
 					}else { /*指定星期N激活 ，需要与活动激活时间起点 做比较*/
 						String time1 = xyjEventPrototypeService.getByDay(eventPrototype.getActiveData(), eventPrototype.getActiveDelay()); // （加上延时激活时间）活动激活时间起点
 						String timeWeek = xyjEventPrototypeService.getDateByWeek(eventPrototype.getActiveDay(), nowDate).compareTo(nowDate) <= 0?
@@ -161,19 +161,23 @@ public class XyjEventPrototypeController extends BaseController{
 						String timeStart = time1.compareTo(timeWeek) <= 0? time1 : timeWeek; /*time1 比 timeWeek 早，使用time1*/
 						String time2 = eventPrototype.getTimes(); //活动持续时间（单位小时）
 						time3 = xyjEventPrototypeService.getByHour(timeStart, time2); //活动结束时间 按活动时间基点计算
-						logger.debug(eventPrototype.getId()+" |"+"1：星期几激活选择为 N，（按活动激活时间几点+延时激活时间）"+time1+" 与 （按按星期几激活活动）"+timeWeek+" 做比较，得到较近的激活时间："+timeStart);
+						logger.debug(eventPrototype.getId()+" |"+"1：星期几激活选择为 "+timeWeek+"，（按活动激活时间几点+延时激活时间）"+time1+" 与 （按按星期几激活活动）"+timeWeek+" 做比较，得到较近的激活时间："+timeStart);
 					}
 					if(time3.compareTo(nowDate)<=0){
 						if(eventPrototype.getEventRepeatInterval().equals("0")){ /*活动不重复激活 单位天*/
 							/*time3 早于 nowDate ，活动已结束*/
 							logger.debug(eventPrototype.getId()+" |"+"2：活动重复激活："+eventPrototype.getEventRepeatInterval()+"天");
 							logger.debug(eventPrototype.getId()+" |"+"3：活动自动关闭，活动结束时间："+time3+" 早于现在时间："+nowDate);
+							eventPrototype.setTimes("0");
+							xyjEventPrototypeService.save(eventPrototype);
 						}else { /*活动重复激活 */
 							String time4 = xyjEventPrototypeService.getByDay(time3, eventPrototype.getEventRepeatInterval());
 							if(time4.compareTo(nowDate)<=0){
 								/*time4（重复N天后） 早于 nowDate ，活动已结束*/
 								logger.debug(eventPrototype.getId()+" |"+"2：活动重复激活："+eventPrototype.getEventRepeatInterval()+"天");
 								logger.debug(eventPrototype.getId()+" |"+"3：活动自动关闭，活动结束时间："+time4+" 早于现在时间："+nowDate);
+								eventPrototype.setTimes("0");
+								xyjEventPrototypeService.save(eventPrototype);
 							}else {
 								logger.debug(eventPrototype.getId()+" |"+"2：活动重复激活："+eventPrototype.getEventRepeatInterval()+"天");
 								logger.debug(eventPrototype.getId()+" |"+"3：活动不自动关闭，活动结束时间："+time4+" 晚于现在时间："+nowDate+"，活动未结束");
@@ -241,6 +245,8 @@ public class XyjEventPrototypeController extends BaseController{
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public String saveEventPrototype(EventPrototype eventPrototype,RedirectAttributes redirectAttributes){
 		ShiroUser user = getCurrentUser();
+		eventPrototype.setEventPic(eventPrototype.getEventPic()+".png");
+		eventPrototype.setEventShow(eventPrototype.getEventShow()+".png");
 		xyjEventPrototypeService.save(eventPrototype);
 		logService.log(user.name, user.name+"：xyj 新增一条活动", Log.TYPE_GM_EVENT);
 		redirectAttributes.addFlashAttribute("message", "新增活动成功");
@@ -312,11 +318,11 @@ public class XyjEventPrototypeController extends BaseController{
 		}
 		if(!eventPrototype.getEventPic().equals(eventP1.getEventPic())){
 			logService.log(user.name, user.name+"：xyj 活动 eventPic 字段 "+eventP1.getEventPic()+" 修改为 "+eventPrototype.getEventPic() , Log.TYPE_GM_EVENT);
-			eventP1.setEventPic(eventPrototype.getEventPic());
+			eventP1.setEventPic(eventPrototype.getEventPic()+".png");
 		}
 		if(!eventPrototype.getEventShow().equals(eventP1.getEventShow())){
 			logService.log(user.name, user.name+"：xyj 活动 eventShow 字段 "+eventP1.getEventShow()+" 修改为 "+eventPrototype.getEventShow() , Log.TYPE_GM_EVENT);
-			eventP1.setEventShow(eventPrototype.getEventShow());
+			eventP1.setEventShow(eventPrototype.getEventShow()+".png");
 		}
 		if(!eventPrototype.getActiveType().equals(eventP1.getActiveType())){
 			logService.log(user.name, user.name+"：xyj 活动 activeType 字段 "+eventP1.getActiveType()+" 修改为 "+eventPrototype.getActiveType() , Log.TYPE_GM_EVENT);

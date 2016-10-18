@@ -31,7 +31,7 @@
 					<option value="">---------请选择---------</option>
 					<option value="1" ${param.search_EQ_type == '1' ? 'selected' : '' } >用户日志</option>
 					<option value="2" ${param.search_EQ_type == '2' ? 'selected' : '' } >项目日志</option>
-					<option value="3" ${param.search_EQ_type == 'gm_event' ? 'selected' : '' } >GM活动日志</option>
+					<option value="gm_event" ${param.search_EQ_type == 'gm_event' ? 'selected' : '' } >GM活动日志</option>
 				</select>	
 						 <input type="submit" class="btn"
 						value="查 找" />

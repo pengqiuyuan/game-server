@@ -117,11 +117,11 @@
 						</div>
 					</div>
 				</div>
-				<div class="span6">
+				<div class="span6" hidden="true" id="activeData">
 					<div class="control-group">
 						<label class="control-label" for="activeData">一般激活时间：</label>
 						<div class="controls">
-							<input type="text" name="activeData" id="activeData" class="form_datetime" disabled="disabled"></input> 
+							<input type="text" name="activeData" class="form_datetime"></input> 
 						</div>
 					</div>
 				</div>
@@ -247,7 +247,7 @@
 				</div>
 			</div>
 			<div class="page-header">
-				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/add" class="btn btn-danger">保存并编辑下属条目</a>
+				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/add"  class="btn btn-danger">保存并编辑下属条目</a>
 			</div>		
  			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
@@ -273,10 +273,10 @@
 			
 			$("#activeType").change(function(e){
 				if($("#activeType").val() == '0'){
-					$('#activeData').removeAttr("disabled");
+					$('#activeData').removeAttr("hidden");
 				}else{
-					$("#activeData").val("");
-					$('#activeData').attr("disabled","disabled");
+					$("input[name='activeData']").val("");
+					$('#activeData').attr("hidden","true");
 				}
 			});
 			
