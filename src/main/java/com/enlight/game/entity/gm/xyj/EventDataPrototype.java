@@ -1,6 +1,9 @@
 package com.enlight.game.entity.gm.xyj;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -15,6 +18,8 @@ public class EventDataPrototype {
 	/**
 	 * 数据索引
 	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long eventDataId;
 	
 	/**
@@ -55,10 +60,16 @@ public class EventDataPrototype {
 	private String eventDataTimes;
 	
 	/**
-	 * vip上下限
+	 * vip上限
 	 * 标识完成该条目所需vip上下限 格式为 下限_上限，闭区间每个条目描述对应文本
 	 */
-	private String vipPremiss;
+	private String vipMin;
+	
+	/**
+	 * vip下限
+	 * 标识完成该条目所需vip上下限 格式为 下限_上限，闭区间每个条目描述对应文本
+	 */
+	private String vipMax;
 	
 	/**
 	 * 活动条目条件类型
@@ -149,12 +160,20 @@ public class EventDataPrototype {
 		this.eventDataTimes = eventDataTimes;
 	}
 
-	public String getVipPremiss() {
-		return vipPremiss;
+	public String getVipMin() {
+		return vipMin;
 	}
 
-	public void setVipPremiss(String vipPremiss) {
-		this.vipPremiss = vipPremiss;
+	public void setVipMin(String vipMin) {
+		this.vipMin = vipMin;
+	}
+
+	public String getVipMax() {
+		return vipMax;
+	}
+
+	public void setVipMax(String vipMax) {
+		this.vipMax = vipMax;
 	}
 
 	public String getEventConditionType() {

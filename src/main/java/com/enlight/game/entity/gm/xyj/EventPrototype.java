@@ -3,6 +3,9 @@ package com.enlight.game.entity.gm.xyj;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -15,13 +18,13 @@ import javax.persistence.Transient;
 @Table(name = "game_gm_event_prototype")
 public class EventPrototype {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String serverZoneId;
 	
 	private String gameId;
-	
-	private String serverId;
 	
 	/**
 	 * 活动类型
@@ -103,8 +106,16 @@ public class EventPrototype {
 	/**
 	 * 激活活动所需玩家等级上下限
 	 * 格式 下限_上限 闭区间，玩家等级制满足就在区间之内才能获得该活动
+	 * 活动上限
 	 */
-	private String roleLevel;
+	private String roleLevelMin;
+	
+	/**
+	 * 激活活动所需玩家等级上下限
+	 * 格式 下限_上限 闭区间，玩家等级制满足就在区间之内才能获得该活动
+	 * 活动下线
+	 */
+	private String roleLevelMax;
 	
 	/**
 	 * 主界面显示位置优先级
@@ -151,6 +162,11 @@ public class EventPrototype {
 		只针对因下属条目完全完成而导致的关闭做处理，活动持续时间到达而关闭的强制隐藏
 	 */
 	private String doneHiding;
+	
+	/**
+	 * 活动大图，默认给 0
+	 */
+	private String eventShow;
 	
 	@Transient
 	private List<EventDataPrototype> eventDataPrototypes;
@@ -235,14 +251,6 @@ public class EventPrototype {
 		this.followingEvent = followingEvent;
 	}
 
-	public String getRoleLevel() {
-		return roleLevel;
-	}
-
-	public void setRoleLevel(String roleLevel) {
-		this.roleLevel = roleLevel;
-	}
-
 	public String getMainUiPosition() {
 		return mainUiPosition;
 	}
@@ -323,12 +331,29 @@ public class EventPrototype {
 		this.gameId = gameId;
 	}
 
-	public String getServerId() {
-		return serverId;
+	public String getRoleLevelMin() {
+		return roleLevelMin;
 	}
 
-	public void setServerId(String serverId) {
-		this.serverId = serverId;
+	public void setRoleLevelMin(String roleLevelMin) {
+		this.roleLevelMin = roleLevelMin;
 	}
 
+	public String getRoleLevelMax() {
+		return roleLevelMax;
+	}
+
+	public void setRoleLevelMax(String roleLevelMax) {
+		this.roleLevelMax = roleLevelMax;
+	}
+
+	public String getEventShow() {
+		return eventShow;
+	}
+
+	public void setEventShow(String eventShow) {
+		this.eventShow = eventShow;
+	}
+	
+	
 }

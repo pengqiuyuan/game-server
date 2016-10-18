@@ -21,38 +21,19 @@ public class Log extends BaseEntry{
 	public static final String STATUS_INVALIDE = "0";
 	
 	/**
-	 * 订单日志
-	 */
-	public static final String TYPE_ORDER = "1";
-	/**
-	 * 商品日志
-	 */
-	public static final String TYPE_PRODUCT = "2";
-	/**
 	 * 用户日志
 	 */
-	public static final String TYPE_USER = "3";
-	/**
-	 * 门店日志
-	 */
-	public static final String TYPE_STORE = "4";
-	/**
-	 * 劵日志
-	 */
-	public static final String TYPE_COUPON = "5";
+	public static final String TYPE_USER = "1";
 	
 	/**
-	 * 配置日志
+	 * 项目日志
 	 */
-	public static final String TYPE_CONFIG = "6";
+	public static final String TYPE_STORE = "2";
+	
 	/**
-	 * 主题日志
+	 * GM 活动日志
 	 */
-	public static final String TYPE_THEME = "7";
-	/**
-	 * 活动日志
-	 */
-	public static final String TYPE_ACTIVITE = "8";
+	public static final String TYPE_GM_EVENT = "gm_event";
 	
 	/**
 	 * 内容

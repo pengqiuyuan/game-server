@@ -29,17 +29,10 @@
 						type="text" value="${param.search_EQ_crUser}" /> 
 			         <label>日志类型：</label> 	<select name="search_EQ_type" style="width:200px">
 					<option value="">---------请选择---------</option>
-					<option value="1" ${param.search_EQ_type == '1' ? 'selected' : '' } >订单日志</option>
-					<option value="2" ${param.search_EQ_type == '2' ? 'selected' : '' } >商品日志</option>
-					<option value="3" ${param.search_EQ_type == '3' ? 'selected' : '' } >用户日志</option>
-					<option value="4" ${param.search_EQ_type == '4' ? 'selected' : '' } >门店日志</option>
-					<option value="5" ${param.search_EQ_type == '5' ? 'selected' : '' } >劵日志</option>
-					<option value="6" ${param.search_EQ_type == '6' ? 'selected' : '' } >配置日志</option>
-					<option value="7" ${param.search_EQ_type == '7' ? 'selected' : '' } >主题日志</option>
-					<option value="8" ${param.search_EQ_type == '8' ? 'selected' : '' } >活动日志</option>
+					<option value="1" ${param.search_EQ_type == '1' ? 'selected' : '' } >用户日志</option>
+					<option value="2" ${param.search_EQ_type == '2' ? 'selected' : '' } >项目日志</option>
+					<option value="3" ${param.search_EQ_type == 'gm_event' ? 'selected' : '' } >GM活动日志</option>
 				</select>	
-			
-					
 						 <input type="submit" class="btn"
 						value="查 找" />
 				<tags:sort />
@@ -87,8 +80,8 @@
 							 data-fancybox-type="iframe" 
 							 rel="fancy" title="日志详细" class="showInfo" >
 								<c:choose>
-		    					<c:when test="${fn:length(item.content)>10}"> 
-		     					<c:out value="${fn:substring(item.content,0,10) }..." />
+		    					<c:when test="${fn:length(item.content)>100}"> 
+		     					<c:out value="${fn:substring(item.content,0,100) }..." />
 		    					</c:when> 
 		    					<c:otherwise> 
 		     						<c:out value="${item.content}" />
@@ -97,7 +90,7 @@
 						
 						</a>
 						</td>
-					<td>${item.type == "1" ? "订单日志" : item.type == "2" ? "商品日志" : item.type == "3" ? "用户日志" : item.type == "4"? "门店日志" : item.type == "5" ? "劵日志" : item.type == "6" ? "配置日志" : item.type == "7"? "主题日志" : item.type == "8"? "活动日志" : "未知"}</td>
+					<td>${item.type == "1" ? "用户日志" : item.type == "2" ? "项目日志" : item.type == "gm_event" ? "GM活动日志" : "未知"}</td>
 						<td><fmt:formatDate value="${item.crDate}"
 								pattern="yyyy/MM/dd  HH:mm:ss" /></td>
 						

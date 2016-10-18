@@ -274,7 +274,7 @@
 										</li>
 									</shiro:hasAnyRoles>
 									
-									<shiro:hasAnyRoles name="admin,xyj_gm_server_select,xyj_gm_account_select,xyj_gm_placard_select,xyj_gm_email_select,xyj_gm_gag_select,xyj_gm_seal_select">
+									<shiro:hasAnyRoles name="admin,xyj_gm_server_select,xyj_gm_account_select,xyj_gm_placard_select,xyj_gm_email_select,xyj_gm_gag_select,xyj_gm_seal_select,xyj_gm_eventprototype_select">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">《XYJ》项目GM</a>
 											<ul class="dropdown-menu">
 												<li class="dropdown-submenu">
@@ -363,14 +363,26 @@
 															</ul>
 														</li>														
 													</shiro:hasAnyRoles>
+													<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_select,xyj_gm_eventprototype_add">
+														<li class="dropdown-submenu"><a tabindex="-1" href="#">活动</a>
+															<ul class="dropdown-menu">
+																<li class="dropdown-submenu">
+																	<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_select">
+																		<li><a href="${ctx}/manage/gm/xyj/eventPrototype/index">活动查询</a></li>
+																	</shiro:hasAnyRoles>
+																	<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_add">
+																		<li><a href="${ctx}/manage/gm/xyj/eventPrototype/add">活动新增</a></li>
+																	</shiro:hasAnyRoles>
+																<li>
+															</ul>
+														</li>														
+													</shiro:hasAnyRoles>
 													<li class="divider"></li>
 													<li><a href="#">sample</a></li>
 												<li>	
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									
-									
 									<li class="divider"></li>
 									<li><a href="#">sample</a></li>
 								</ul>
