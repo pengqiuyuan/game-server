@@ -82,7 +82,7 @@
 							</div>
 						</td>
 						<td>${item.eventName}</td>
-						<td>${item.activeType == '0' ? '普通激活' : item.activeType == '1' ? '开服激活': item.activeType == '2' ? '玩家首次登陆激活' : item.activeType }</td>
+						<td>${item.activeType == '0' ? '一般激活' : item.activeType == '1' ? '开服激活': item.activeType == '2' ? '玩家首次登陆激活' : item.activeType }</td>
 						<td>${item.activeType == '0' ? item.activeData : item.activeType == '1' ? '开服激活': item.activeType == '2' ? '玩家首次登陆激活' : '未知' }</td>
 						<td>${item.times == '0' ? '活动关闭' : item.times == '-1' ? '无限时长': item.times}</td>
 						<td>${item.eventRepeatInterval}天</td>

@@ -88,7 +88,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventPic">活动图标：</label>
 						<div class="controls">
-								<input type="text" name="eventPic" class="input-large " placeholder="如：huodong_icon_tongyong"/>
+								<input type="text" name="eventPic" id="eventPic" class="input-large " placeholder="如：huodong_icon_tongyong"/>
 								<span>.png</span>
 						</div>
 					</div>
@@ -97,7 +97,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventShow">活动大图：</label>
 						<div class="controls">
-								<input type="text" name="eventShow" class="input-large " placeholder="如：huodong_icon_tongyong"/>
+								<input type="text" name="eventShow" id="eventShow" class="input-large " placeholder="如：huodong_icon_tongyong"/>
 								<span class="add-on">.png</span>
 						</div>
 					</div>
@@ -110,9 +110,9 @@
 						<div class="controls">
 							<select name="activeType" id="activeType">	
 							    <option value="">选择激活方式</option>	
-								<option value="1">一般激活</option>	
-								<option value="2">开服激活</option>	
-								<option value="3">玩家首次登陆激活</option>	
+								<option value="0">一般激活</option>	
+								<option value="1">开服激活</option>	
+								<option value="2">玩家首次登陆激活</option>	
 							</select>	
 						</div>
 					</div>
@@ -147,7 +147,7 @@
 					<div class="control-group">
 						<label class="control-label" for="times">持续时间（小时）：</label>
 						<div class="controls">
-							<input type="text" name="times" class="input-large " value="-1" placeholder="单位小时，如：1"/>
+							<input type="text" name="times" id="times" class="input-large " value="-1" placeholder="单位小时，如：1"/>
 						</div>
 					</div>
 				</div>
@@ -155,7 +155,7 @@
 					<div class="control-group">
 						<label class="control-label" for="activeDelay">设置激活时间后N天激活：</label>
 						<div class="controls">
-							<input type="text" name="activeDelay" class="input-large " value="0" placeholder="单位天，如：1"/>
+							<input type="text" name="activeDelay" id="activeDelay" class="input-large " value="0" placeholder="单位天，如：1"/>
 						</div>
 					</div>
 				</div>
@@ -163,7 +163,7 @@
 					<div class="control-group">
 						<label class="control-label" for="activeDay">强制于星期N激活：</label>
 						<div class="controls">
-							<input type="text" name="activeDay" class="input-large " value="0" placeholder="星期一，如：1"/>
+							<input type="text" name="activeDay" id="activeDay" class="input-large " value="0" placeholder="星期一，如：1"/>
 						</div>
 					</div>
 				</div>
@@ -171,7 +171,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventRepeatInterval">每隔N天重复激活：</label>
 						<div class="controls">
-							<input type="text" name="eventRepeatInterval" class="input-large " value="0" placeholder="单位天，如：1"/>
+							<input type="text" name="eventRepeatInterval" id="eventRepeatInterval" class="input-large " value="0" placeholder="单位天，如：1"/>
 						</div>
 					</div>
 				</div>
@@ -181,7 +181,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventName">活动名称：</label>
 						<div class="controls">
-							<input type="text" name="eventName" class="input-large "  placeholder="如：首冲超级大礼包"/>
+							<input type="text" name="eventName" id="eventName" class="input-large "  placeholder="如：首冲超级大礼包"/>
 						</div>
 					</div>
 				</div>
@@ -189,7 +189,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventTitle">活动标题：</label>
 						<div class="controls">
-							<input type="text" name="eventTitle" class="input-large " placeholder="如：首冲超级大礼包"/>
+							<input type="text" name="eventTitle" id="eventTitle" class="input-large " placeholder="如：首冲超级大礼包"/>
 						</div>
 					</div>
 				</div>
@@ -199,7 +199,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventDes">活动描述（144字）：</label>
 						<div class="controls">
-							<textarea path="text" name="eventDes" cssClass="input-xlarge" value="" style="height: 100px;width: 400px" /></textarea>
+							<textarea path="text" name="eventDes" id="eventDes" cssClass="input-xlarge" value="" style="height: 100px;width: 400px" /></textarea>
 						</div>
 					</div>
 				</div>
@@ -222,7 +222,7 @@
 					<div class="control-group">
 						<label class="control-label" for="listPriority">活动优先级：</label>
 						<div class="controls">
-							<input type="text" name="listPriority" class="input-large " value="0"  placeholder="值越大，活动处于列表越靠前的位置，如：0"/>
+							<input type="text" name="listPriority" id="listPriority" class="input-large " value="0"  placeholder="值越大，活动处于列表越靠前的位置，如：0"/>
 						</div>
 					</div>
 				</div>
@@ -241,7 +241,7 @@
 					<div class="control-group">
 						<label class="control-label" for="followingEvent">后续活动Id：</label>
 						<div class="controls">
-							<input type="text" name="followingEvent" class="input-large " value="0"  placeholder="如：0"/>
+							<input type="text" name="followingEvent" id="followingEvent" class="input-large " value="0"  placeholder="如：0"/>
 						</div>
 					</div>
 				</div>
@@ -272,7 +272,7 @@
 			});
 			
 			$("#activeType").change(function(e){
-				if($("#activeType").val() == '1'){
+				if($("#activeType").val() == '0'){
 					$('#activeData').removeAttr("disabled");
 				}else{
 					$("#activeData").val("");
