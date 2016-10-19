@@ -6,6 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * 活动条目 活动目标条件
  * @author dell
@@ -13,6 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "game_gm_event_data_prototype_instruction")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)   // 二级缓存
 public class EventDataPrototypeInstruction {
 	
 	/**

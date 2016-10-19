@@ -22,4 +22,8 @@ public interface EventPrototypeDao extends PagingAndSortingRepository<EventProto
 	@Modifying
 	@Query("from EventPrototype eventPrototype where eventPrototype.times != 0")
 	List<EventPrototype> findByTimes();
+	
+	@Modifying
+	@Query("delete from EventPrototype eventPrototype where eventPrototype.id=?1 and eventPrototype.status = 0")
+	void deleteByStatusInvalide(Long eventId);
 }

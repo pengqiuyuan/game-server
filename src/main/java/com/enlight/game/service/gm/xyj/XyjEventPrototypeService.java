@@ -18,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springside.modules.persistence.DynamicSpecifications;
 import org.springside.modules.persistence.SearchFilter;
+import org.springside.modules.persistence.SearchFilter.Operator;
 
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.gm.xyj.EventPrototype;
@@ -61,8 +62,11 @@ public class XyjEventPrototypeService {
 	 * 保存活动
 	 */
 	public void save(EventPrototype eventPrototype){
-		
 		eventPrototypeDao.save(eventPrototype);
+	}
+	
+	public EventPrototype saveRetureEventPrototype(EventPrototype eventPrototype){
+		return eventPrototypeDao.save(eventPrototype);
 	}
 	
 	/**
@@ -79,6 +83,10 @@ public class XyjEventPrototypeService {
 	 */
 	public List<EventPrototype> findByTimes(){
 		return eventPrototypeDao.findByTimes();
+	}
+	
+	public void deleteByStatusInvalide(Long eventId){
+		eventPrototypeDao.deleteByStatusInvalide(eventId);
 	}
 	
 	/**
@@ -100,6 +108,7 @@ public class XyjEventPrototypeService {
 			Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		User user = accountService.getUser(userId);
+		filters.put("status", new SearchFilter("status", Operator.EQ,EventPrototype.STATUS_VALIDE));
 		Specification<EventPrototype> spec = DynamicSpecifications.bySearchFilter(filters.values(), EventPrototype.class);
 		return spec;
 	}

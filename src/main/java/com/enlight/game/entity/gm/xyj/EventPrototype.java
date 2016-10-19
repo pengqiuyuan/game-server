@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -17,9 +18,18 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "game_gm_event_prototype")
 public class EventPrototype {
+	
+	/**
+	 * 有效
+	 */
+	public static final String STATUS_VALIDE = "1";
+	/**
+	 * 无效
+	 */
+	public static final String STATUS_INVALIDE = "0";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private Long id;
 
 	private String serverZoneId;
@@ -168,15 +178,17 @@ public class EventPrototype {
 	 */
 	private String eventShow;
 	
-	@Transient
-	private List<EventDataPrototype> eventDataPrototypes;
+	/**
+	 * 活动状态有效 1 ，无效 0 
+	 */
+	private String status;
 
-	public List<EventDataPrototype> getEventDataPrototypes() {
-		return eventDataPrototypes;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setEventDataPrototypes(List<EventDataPrototype> eventDataPrototypes) {
-		this.eventDataPrototypes = eventDataPrototypes;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Long getId() {

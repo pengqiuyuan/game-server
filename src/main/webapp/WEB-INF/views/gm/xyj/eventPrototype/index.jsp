@@ -54,7 +54,7 @@
 					<th title="重复间隔">重复间隔（天）</th>
 					<th title="后续活动Id">后续活动Id</th>
 					<th title="玩家等级">玩家等级</th>
-					<th title="操作">操作</th>
+					<th title="操作" width="400px">操作</th>
 				</tr>
 			</thead>
 			<tbody id="tbody">
@@ -89,6 +89,8 @@
 						<td>${item.roleLevelMin}_${item.roleLevelMax}</td>
 						<td>
 							<div class="action-buttons">
+								<a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/edit?eventId=${item.id}" class="btn">修改条目</a>
+								<a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/add?eventId=${item.id}" class="btn">新增条目</a>
 								<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_update">
 									<a class="exportCode btn table-actions" href="${ctx}/manage/gm/xyj/eventPrototype/edit?id=${item.id}" ><i class="icon-ok"></i>修改</a>
 								</shiro:hasAnyRoles>

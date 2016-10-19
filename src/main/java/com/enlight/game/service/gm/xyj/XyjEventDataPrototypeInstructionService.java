@@ -17,38 +17,38 @@ import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.persistence.SearchFilter.Operator;
 
 import com.enlight.game.entity.User;
-import com.enlight.game.entity.gm.xyj.EventDataPrototype;
-import com.enlight.game.repository.gm.xyj.EventDataPrototypeDao;
+import com.enlight.game.entity.gm.xyj.EventDataPrototypeInstruction;
+import com.enlight.game.repository.gm.xyj.EventDataPrototypeInstructionDao;
 import com.enlight.game.service.account.AccountService;
 
 @Component
 @Transactional
-public class XyjEventDataPrototypeService {
+public class XyjEventDataPrototypeInstructionService {
 	
 	@Autowired
-	private EventDataPrototypeDao eventDataPrototypeDao;
+	private EventDataPrototypeInstructionDao eventDataPrototypeInstructionDao;
 	
 	@Autowired
 	private AccountService accountService;
 	
-	public List<EventDataPrototype> findAllByEventId(Long eventId){
-		return eventDataPrototypeDao.findAllByEventId(eventId);
+	public List<EventDataPrototypeInstruction> findAll(){
+		return eventDataPrototypeInstructionDao.findAllCached();
 	}
 	
-	public void save(EventDataPrototype eventDataPrototype){
-		eventDataPrototypeDao.save(eventDataPrototype);
+	public void save(EventDataPrototypeInstruction eventDataPrototypeInstruction){
+		eventDataPrototypeInstructionDao.save(eventDataPrototypeInstruction);
 	}
 	
-	public EventDataPrototype saveReturnEventData(EventDataPrototype eventDataPrototype){
-		return eventDataPrototypeDao.save(eventDataPrototype);
+	public EventDataPrototypeInstruction saveReturnEventDataInstr(EventDataPrototypeInstruction eventDataPrototypeInstruction){
+		return  eventDataPrototypeInstructionDao.save(eventDataPrototypeInstruction);
 	}
 	
-	public Page<EventDataPrototype> findEventPrototypesByCondition(Long userId,
+	public Page<EventDataPrototypeInstruction> findEventPrototypesByCondition(Long userId,
 			Map<String, Object> searchParams, int pageNumber, int pageSize,
 			String sortType) {
 		PageRequest pageRequest = buildPageRequest(pageNumber, pageSize,sortType);
-		Specification<EventDataPrototype> spec = buildSpecification(userId, searchParams);
-		return eventDataPrototypeDao.findAll(spec, pageRequest);
+		Specification<EventDataPrototypeInstruction> spec = buildSpecification(userId, searchParams);
+		return eventDataPrototypeInstructionDao.findAll(spec, pageRequest);
 	}
 	
 	/**
@@ -66,12 +66,11 @@ public class XyjEventDataPrototypeService {
 	/**
 	 * 创建动态查询条件组合.
 	 */
-	private Specification<EventDataPrototype> buildSpecification(Long userId,
+	private Specification<EventDataPrototypeInstruction> buildSpecification(Long userId,
 			Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		User user = accountService.getUser(userId);
-		filters.put("times",new SearchFilter("times", Operator.EQ, userId));
-		Specification<EventDataPrototype> spec = DynamicSpecifications.bySearchFilter(filters.values(), EventDataPrototype.class);
+		Specification<EventDataPrototypeInstruction> spec = DynamicSpecifications.bySearchFilter(filters.values(), EventDataPrototypeInstruction.class);
 		return spec;
 	}
 }

@@ -246,12 +246,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="page-header">
-				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/add"  class="btn btn-danger">保存并编辑下属条目</a>
-			</div>		
  			<div class="form-actions">
-  			     <button type="submit" class="btn btn-primary" id="submit">保存</button>
-				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/index" class="btn btn-primary">返回</a>
+ 			  	 <button type="submit" class="btn btn-primary" id="submit">保存并编辑下属条目</button>
+				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/index" class="btn btn-primary">放弃本次新增</a>
 	        </div>
 	</form>
 	<script type="text/javascript" src="${ctx}/static/datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>
@@ -300,7 +297,7 @@
 		    // times（单位小时） 大于-1的整数 匹配integer
 		    jQuery.validator.addMethod("isIntegerGt1", function(value, element) {       
 		         return this.optional(element) || (/^[-\+]?\d+$/.test(value) && parseInt(value)>=-1);       
-		    }, "请输入大于-1的整数");  
+		    }, "请输入大于等于-1的整数");  
 		    
 		    // activeDelay 延迟激活(单位天) 默认为0 ，不可为负数 
 		    jQuery.validator.addMethod("isIntegerGt0", function(value, element) {       

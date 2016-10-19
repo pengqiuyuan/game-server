@@ -33,9 +33,11 @@ import com.enlight.game.entity.Log;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
+import com.enlight.game.entity.gm.xyj.EventDataPrototypeInstruction;
 import com.enlight.game.entity.gm.xyj.EventPrototype;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
+import com.enlight.game.service.gm.xyj.XyjEventDataPrototypeInstructionService;
 import com.enlight.game.service.gm.xyj.XyjEventPrototypeService;
 import com.enlight.game.service.log.LogService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -92,6 +94,9 @@ public class XyjEventPrototypeController extends BaseController{
 	
 	@Autowired
 	private LogService logService;
+	
+	@Autowired
+	private XyjEventDataPrototypeInstructionService xyjEventDataPrototypeInstructionService;
 	
 	/**
 	 *  活动管理首页
@@ -235,22 +240,24 @@ public class XyjEventPrototypeController extends BaseController{
 			model.addAttribute("stores", stores);
 			model.addAttribute("serverZones", serverZones);
 		}
-		
 		return "/gm/xyj/eventPrototype/add";
 	}
 	
 	/**
+	 * 保存并编辑活动条目（活动保存为无效）
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public String saveEventPrototype(EventPrototype eventPrototype,RedirectAttributes redirectAttributes){
+	public String saveEventPrototype(EventPrototype eventPrototype,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		ShiroUser user = getCurrentUser();
 		eventPrototype.setEventPic(eventPrototype.getEventPic()+".png");
 		eventPrototype.setEventShow(eventPrototype.getEventShow()+".png");
-		xyjEventPrototypeService.save(eventPrototype);
-		logService.log(user.name, user.name+"：xyj 新增一条活动", Log.TYPE_GM_EVENT);
-		redirectAttributes.addFlashAttribute("message", "新增活动成功");
-		return "redirect:/manage/gm/xyj/eventPrototype/index";
+		//logService.log(user.name, user.name+"：xyj 新增一条活动", Log.TYPE_GM_EVENT);
+		//redirectAttributes.addFlashAttribute("message", "新增活动成功");
+		/** 保存一条status为0（无效）的活动，活动在保存至少一条活动条目时保存 */
+		eventPrototype.setStatus(EventPrototype.STATUS_INVALIDE);
+		EventPrototype e =  xyjEventPrototypeService.saveRetureEventPrototype(eventPrototype);
+		return "redirect:/manage/gm/xyj/eventDataPrototype/add?eventId="+e.getId();
 	}
 	
 	/**
