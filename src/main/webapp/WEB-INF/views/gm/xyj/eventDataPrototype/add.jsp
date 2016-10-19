@@ -307,9 +307,8 @@
 		    
 		    // conditionValue1 conditionValue2 大于1的整数 匹配integer
 		    jQuery.validator.addMethod("isIntegerGt1Plus", function(value, element) {
-		    	 if($('#').attr("readonly")==true)
 		         return this.optional(element) || (/^[-\+]?\d+$/.test(value) && parseInt(value)>=1);       
-		    }, "填写的大于等于1的整数");  
+		    }, "填写大于等于1的整数");  
 		    
 		     // 星期几  
 		    jQuery.validator.addMethod("isActiveDay", function(value, element) {    
