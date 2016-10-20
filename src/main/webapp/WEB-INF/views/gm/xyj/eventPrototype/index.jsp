@@ -21,10 +21,10 @@
 			</c:if>
 			<form id="queryForm" class="well form-inline" method="get" action="${ctx}/manage/gm/xyj/eventPrototype/index">
 				<label class="control-label" for="gameId">选择游戏项目：</label> 
-				<select name="search_EQ_storeId" id="gameId">
+				<select name="search_EQ_gameId" id="gameId">
 					<option value="">请选择项目</option>
 					<c:forEach items="${stores}" var="item">
-						<option value="${item.id}" ${param.search_EQ_storeId == item.id ? 'selected' : '' }> ${item.name}</option>
+						<option value="${item.id}" ${param.search_EQ_gameId== item.id ? 'selected' : '' }> ${item.name}</option>
 					</c:forEach>
 				</select> 
 				<label>运营大区：</label> 

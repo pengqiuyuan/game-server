@@ -20,6 +20,7 @@
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/gm/xyj/eventDataPrototype/update"   enctype="multipart/form-data" >
+			<input type="hidden" name="eventDataId" value="${eventDataPrototype.eventDataId}" > 
 			<div class="row">
 				<div class="span6">
 					<div class="control-group">
@@ -119,10 +120,19 @@
 					<div class="control-group">
 							<label class="control-label" for="eventConditionType">目标类型：</label>
 							<div class="controls">
-								<select name="eventConditionType" id="eventConditionType">
-									<option value="1" ${eventDataPrototype.eventConditionType == 1 ? 'selected' : '' }>活动开启记录</option>	
-									<option value="2" ${eventDataPrototype.eventConditionType == 2 ? 'selected' : '' }>生涯记录</option>	
-								</select>	
+								<c:if test="${eventInstr.eventConditionType == '2'}">
+									<select name="eventConditionType" id="eventConditionType" disabled="disabled">
+										<option value="1" ${eventDataPrototype.eventConditionType == 1 ? 'selected' : '' }>活动开启记录</option>	
+										<option value="2" ${eventDataPrototype.eventConditionType == 2 ? 'selected' : '' }>生涯记录</option>	
+									</select>	
+									<input type='hidden' id='eventConditionType_hidden' name='eventConditionType' value='2'>
+								</c:if>
+								<c:if test="${eventInstr.eventConditionType != '2'}">
+									<select name="eventConditionType" id="eventConditionType">
+										<option value="1" ${eventDataPrototype.eventConditionType == 1 ? 'selected' : '' }>活动开启记录</option>	
+										<option value="2" ${eventDataPrototype.eventConditionType == 2 ? 'selected' : '' }>生涯记录</option>	
+									</select>	
+								</c:if>
 							</div>							
 					</div>
 				</div>
@@ -130,7 +140,7 @@
 					<div class="control-group">
 						<label class="control-label" for="conditionValue1" id="conditionValue1_name">${eventInstr.conditionName1 == null ? '目标值1' : eventInstr.conditionName1}：</label>
 						<div class="controls">
-							<input type="text" name="conditionValue1" id="conditionValue1" class="input-large " value="${eventDataPrototype.conditionValue1}"  placeholder="如：1"/>
+							<input type="text" name="conditionValue1" id="conditionValue1" class="input-large " value="${eventDataPrototype.conditionValue1}"  ${eventInstr.conditionValue1 == '0' ? 'readonly="readonly"' : ''}  placeholder="如：1"/>
 						</div>
 					</div>
 				</div>
@@ -138,7 +148,7 @@
 					<div class="control-group">
 						<label class="control-label" for="conditionValue2" id="conditionValue2_name">${eventInstr.conditionName2 == null ? '目标值2' : eventInstr.conditionName2}：</label>
 						<div class="controls">
-							<input type="text" name="conditionValue2" id="conditionValue2" class="input-large " value="${eventDataPrototype.conditionValue2}"  placeholder="如：1"/>
+							<input type="text" name="conditionValue2" id="conditionValue2" class="input-large " value="${eventDataPrototype.conditionValue2}" ${eventInstr.conditionValue2 == '1' ? 'readonly="readonly"' : ''}  placeholder="如：1"/>
 						</div>
 					</div>
 				</div>
@@ -191,7 +201,7 @@
 			</c:forEach>
 			<div class="form-actions">
   			     <button type="submit" class="btn btn-primary" id="submit1">修改条目</button>
-  			     <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/index" class="btn btn-danger">返回</a>
+  			     <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/index?search_EQ_eventId=${eventPrototype.id}" class="btn btn-danger">返回</a>
 	        </div>
 	</form>
 	<script type="text/javascript" src="${ctx}/static/datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>
@@ -253,6 +263,7 @@
 									$("#eventConditionType option[value='2']").attr("selected", "selected");
 									$("#eventConditionType option[value='1']").removeAttr("selected");
 									$("#eventConditionType").attr("disabled", "disabled");
+									$("#eventConditionType_hidden").remove();
 									$("#eventConditionType").after("<input type='hidden' id='eventConditionType_hidden' name='eventConditionType' value='2'>");
 								}
 								if(itemData.conditionName1 == null){

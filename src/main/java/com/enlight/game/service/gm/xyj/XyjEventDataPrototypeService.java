@@ -47,6 +47,10 @@ public class XyjEventDataPrototypeService {
 		return eventDataPrototypeDao.findByEventIdAndEventDataId(eventId,eventDataId);
 	}
 	
+	public EventDataPrototype findByEventDataId(Long eventDataId){
+		return eventDataPrototypeDao.findOne(eventDataId);
+	}
+	
 	public Page<EventDataPrototype> findEventDataPrototypesByCondition(Long userId,
 			Map<String, Object> searchParams, int pageNumber, int pageSize,
 			String sortType) {

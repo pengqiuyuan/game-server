@@ -212,6 +212,7 @@ public class XyjEventDataPrototypeController extends BaseController{
 		List<EventDataPrototypeInstruction> eventDataPrototypeInstructions = xyjEventDataPrototypeInstructionService.findAll();
 		EventDataPrototype eventDataPrototype = xyjEventDataPrototypeService.findAllByEventIdAndEventDataId(eventId, eventDataId);
 		Map<String, String> map = new HashMap<String, String>();
+		System.out.println("11111  "+eventDataPrototype.getEventRewards()  +  "     "  +  eventDataPrototype.getEventRewardsNum());
 		List<String> eventRewards = ImmutableList.copyOf(StringUtils.split(eventDataPrototype.getEventRewards(), "_"));
 		List<String> eventRewardsNum = ImmutableList.copyOf(StringUtils.split(eventDataPrototype.getEventRewardsNum(), "_"));
 		for (int i = 0; i < eventRewards.size(); i++) {
@@ -234,9 +235,78 @@ public class XyjEventDataPrototypeController extends BaseController{
 	 */
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String updateEventPrototype(EventDataPrototype eventDataPrototype,RedirectAttributes redirectAttributes,ServletRequest request,Model model){
+		
+		String[] eventRewards = request.getParameterValues("eventRewards");
+		String[] eventRewardsNum = request.getParameterValues("eventRewardsNum");
+		String eRewards=StringUtils.join(eventRewards, "_");
+		String eRewardsNum = StringUtils.join(eventRewardsNum, "_");
+		System.out.println("22222  "+eRewards + "   "  + eRewardsNum);
+
 		ShiroUser user = getCurrentUser();
-		/*要求知道活动修改了哪一个字段，并记录日志 logService*/
-		redirectAttributes.addFlashAttribute("message", "修改活动条目成功");
+		EventDataPrototype eventP1 = xyjEventDataPrototypeService.findByEventDataId(eventDataPrototype.getEventDataId());
+		System.out.println(eventP1.getEventRewardsNum() + "   3333  "  + eRewardsNum);
+		/*要求知道活动条目修改了哪一个字段，并记录日志 logService*/
+		if(!eventDataPrototype.getEventId().equals(eventP1.getEventId())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventId 字段 "+eventP1.getEventId()+" 修改为 "+eventDataPrototype.getEventId(), Log.TYPE_GM_EVENT);
+			eventP1.setEventId(eventDataPrototype.getEventId());
+		} if(!eventDataPrototype.getGroup().equals(eventP1.getGroup())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的group 字段 "+eventP1.getGroup()+" 修改为 "+eventDataPrototype.getGroup(), Log.TYPE_GM_EVENT);
+			eventP1.setGroup(eventDataPrototype.getGroup());
+		} if(!eventDataPrototype.getEventDataName().equals(eventP1.getEventDataName())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventDataName 字段 "+eventP1.getEventDataName()+" 修改为 "+eventDataPrototype.getEventDataName(), Log.TYPE_GM_EVENT);
+			eventP1.setEventDataName(eventDataPrototype.getEventDataName());
+		} if(!eventDataPrototype.getVipMin().equals(eventP1.getVipMin())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的vipMin 字段 "+eventP1.getVipMin()+" 修改为 "+eventDataPrototype.getVipMin(), Log.TYPE_GM_EVENT);
+			eventP1.setVipMin(eventDataPrototype.getVipMin());
+		} if(!eventDataPrototype.getVipMax().equals(eventP1.getVipMax())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的vipMax 字段 "+eventP1.getVipMax()+" 修改为 "+eventDataPrototype.getVipMax(), Log.TYPE_GM_EVENT);
+			eventP1.setVipMax(eventDataPrototype.getVipMax());
+		} if(!eventDataPrototype.getEventDataTimes().equals(eventP1.getEventDataTimes())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventDataTimes 字段 "+eventP1.getEventDataTimes()+" 修改为 "+eventDataPrototype.getEventDataTimes(), Log.TYPE_GM_EVENT);
+			eventP1.setEventDataTimes(eventDataPrototype.getEventDataTimes());
+		} if(!eventDataPrototype.getEventDataDelay().equals(eventP1.getEventDataDelay())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventDataDelay 字段 "+eventP1.getEventDataDelay()+" 修改为 "+eventDataPrototype.getEventDataDelay(), Log.TYPE_GM_EVENT);
+			eventP1.setEventDataDelay(eventDataPrototype.getEventDataDelay());
+		} if(!eventDataPrototype.getEventDataDes().equals(eventP1.getEventDataDes())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventDataDes 字段 "+eventP1.getEventDataDes()+" 修改为 "+eventDataPrototype.getEventDataDes(), Log.TYPE_GM_EVENT);
+			eventP1.setEventDataDes(eventDataPrototype.getEventDataDes());
+		} if(!eventDataPrototype.getEventCondition().equals(eventP1.getEventCondition())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventCondition 字段 "+eventP1.getEventCondition()+" 修改为 "+eventDataPrototype.getEventCondition(), Log.TYPE_GM_EVENT);
+			eventP1.setEventCondition(eventDataPrototype.getEventCondition());
+		} if(!eventDataPrototype.getEventConditionType().equals(eventP1.getEventConditionType())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventConditionType 字段 "+eventP1.getEventConditionType()+" 修改为 "+eventDataPrototype.getEventConditionType(), Log.TYPE_GM_EVENT);
+			eventP1.setEventConditionType(eventDataPrototype.getEventConditionType());
+		} if(!eventDataPrototype.getConditionValue1().equals(eventP1.getConditionValue1())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的conditionValue1 字段 "+eventP1.getConditionValue1()+" 修改为 "+eventDataPrototype.getConditionValue1(), Log.TYPE_GM_EVENT);
+			eventP1.setConditionValue1(eventDataPrototype.getConditionValue1());
+		} if(!eventDataPrototype.getConditionValue2().equals(eventP1.getConditionValue2())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的conditionValue2 字段 "+eventP1.getConditionValue2()+" 修改为 "+eventDataPrototype.getConditionValue2(), Log.TYPE_GM_EVENT);
+			eventP1.setConditionValue2(eventDataPrototype.getConditionValue2());
+		} if(!eRewards.equals(eventP1.getEventRewards())){
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventRewards 字段 "+eventP1.getEventRewards()+" 修改为 "+eRewards, Log.TYPE_GM_EVENT);
+			eventP1.setEventRewards(eRewards);
+		} if(!eRewardsNum.equals(eventP1.getEventRewardsNum())){
+			System.out.println("tttttttttttttt");
+			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
+					+ "的eventRewardsNum 字段 "+eventP1.getEventRewardsNum()+" 修改为 "+eRewardsNum, Log.TYPE_GM_EVENT);
+			eventP1.setEventRewardsNum(eRewardsNum);
+		}
+		System.out.println(eventP1.getEventRewardsNum() + "   4444444  "  + eRewardsNum);
+		xyjEventDataPrototypeService.save(eventP1);
+		redirectAttributes.addFlashAttribute("message", "修改活动条目 "+eventP1.getEventDataId()+" 成功");
 	    return "redirect:/manage/gm/xyj/eventDataPrototype/index?search_EQ_eventId="+eventDataPrototype.getEventId();
 	}
 	 

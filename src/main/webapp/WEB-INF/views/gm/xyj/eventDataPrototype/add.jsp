@@ -245,6 +245,7 @@
 									$("#eventConditionType option[value='2']").attr("selected", "selected");
 									$("#eventConditionType option[value='1']").removeAttr("selected");
 									$("#eventConditionType").attr("disabled", "disabled");
+									$("#eventConditionType_hidden").remove();
 									$("#eventConditionType").after("<input type='hidden' id='eventConditionType_hidden' name='eventConditionType' value='2'>");
 								}
 								if(itemData.conditionName1 == null){
