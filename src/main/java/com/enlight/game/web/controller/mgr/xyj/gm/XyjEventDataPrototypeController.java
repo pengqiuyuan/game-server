@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springside.modules.web.Servlets;
 
 import com.enlight.game.entity.Log;
 import com.enlight.game.entity.ServerZone;
@@ -48,6 +49,7 @@ import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.user.UserService;
 import com.enlight.game.web.controller.mgr.BaseController;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 @Controller("xyjEventDataPrototypeController")
@@ -106,11 +108,41 @@ public class XyjEventDataPrototypeController extends BaseController{
 	private XyjEventDataPrototypeInstructionService xyjEventDataPrototypeInstructionService;
 	
 	/**
+	 * 活动下的条目列表
+	 * @param pageNumber 当前	 
+	 * @param pageSize   显示条数
+	 * @param sortType  排序
+	 * @param model   返回对象
+	 * @param request  封装的请	
+	 * @throws ParseException 
+	 */
+	@RequestMapping(value = "index", method = RequestMethod.GET)
+	public String index(
+			@RequestParam(value = "page", defaultValue = "1") int pageNumber,
+			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
+			@RequestParam(value = "sortType", defaultValue = "auto")String sortType, Model model,
+			ServletRequest request) throws ParseException{
+		Long userId = getCurrentUserId();
+		ShiroUser user = getCurrentUser();
+		User u = accountService.getUser(user.id);
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Page<EventDataPrototype> eventDataPrototypes = xyjEventDataPrototypeService.findEventDataPrototypesByCondition(userId, searchParams, pageNumber, pageSize, sortType);
+		
+		model.addAttribute("eventDataPrototypes", eventDataPrototypes);
+		model.addAttribute("eventId", request.getParameter("search_EQ_eventId"));
+		model.addAttribute("sortType", sortType);
+		model.addAttribute("sortTypes", sortTypes);
+		// 将搜索条件编码成字符串，用于排序，分页的URL
+		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+		return "/gm/xyj/eventDataPrototype/index";
+	}
+	
+	/**
 	 * 新增活动条目页面
 	 * @return
 	 */
 	@RequestMapping(value = "add", method = RequestMethod.GET)
-	public String addEventDataPrototype(Model model,@RequestParam(value =  "eventId") long eventId){
+	public String addEventDataPrototype(Model model,@RequestParam(value =  "eventId") long eventId,@RequestParam(value =  "group" , required = false) String group){
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
 		List<EventDataPrototypeInstruction> eventDataPrototypeInstructions = xyjEventDataPrototypeInstructionService.findAll();
@@ -121,6 +153,7 @@ public class XyjEventDataPrototypeController extends BaseController{
 		 * 保存了至少一条条目（活动是有效的status为1），按钮为返回，
 		 * 一条条目也没有保存（活动是无效的status为0）按钮为放弃编辑*/
 		model.addAttribute("giveUpOrReturn",eventPrototype.getStatus());
+		model.addAttribute("group",group);/*点击保存并新增则保存当前条目，并在其下方新增出新的条目编辑，ID自增1，从属ID不变，group等于上一条条目*/
 		return "/gm/xyj/eventDataPrototype/add";
 	}
 	
@@ -145,7 +178,7 @@ public class XyjEventDataPrototypeController extends BaseController{
 		ShiroUser user = getCurrentUser();
 		/*先修改活动status 无效为有效*/
 		EventPrototype eventPrototype = xyjEventPrototypeService.findById(eventDataPrototype.getEventId());
-		eventPrototype.setStatus(EventPrototype.STATUS_INVALIDE);
+		eventPrototype.setStatus(EventPrototype.STATUS_VALIDE);
 		EventPrototype eventPrototype2 =  xyjEventPrototypeService.saveRetureEventPrototype(eventPrototype);
 		logService.log(user.name, user.name+"：xyj 新增一条活动", Log.TYPE_GM_EVENT);
 		
@@ -158,17 +191,12 @@ public class XyjEventDataPrototypeController extends BaseController{
 		eventDataPrototype.setEventRewardsNum(eRewardsNum);
 		EventDataPrototype e =  xyjEventDataPrototypeService.saveReturnEventData(eventDataPrototype);
 		logService.log(user.name, user.name+"：xyj 活动 "+eventDataPrototype.getEventId()+" 新增一条活动条目", Log.TYPE_GM_EVENT);
-		redirectAttributes.addFlashAttribute("message", "xyj 活动 "+eventDataPrototype.getEventId()+" 新增一条条目成功");
 		
 		if(request.getParameter("submitAndEventData") !=null){ /**保存并新增条目*/
-			List<EventDataPrototypeInstruction> eventDataPrototypeInstructions = xyjEventDataPrototypeInstructionService.findAll();
-			model.addAttribute("eventPrototype", eventPrototype2);
-			model.addAttribute("eventDataPrototypeInstructions", eventDataPrototypeInstructions);
-			model.addAttribute("group", e.getGroup());
-			return "/gm/xyj/eventDataPrototype/add";
+			redirectAttributes.addFlashAttribute("message", "xyj 活动 "+eventDataPrototype.getEventId()+" 新增一条条目成功！请继续新增条目或者返回活动列表！");
+			return "redirect:/manage/gm/xyj/eventDataPrototype/add?eventId="+eventPrototype2.getId() + "&group="+e.getGroup();
 		}else{
-			logService.log(user.name, user.name+"：xyj 活动 "+eventDataPrototype.getEventId()+" 新增一条活动条目", Log.TYPE_GM_EVENT);
-			redirectAttributes.addFlashAttribute("message", "xyj 活动 "+eventDataPrototype.getEventId()+" 新增一条条目成功");
+			redirectAttributes.addFlashAttribute("message", "xyj 活动 "+eventDataPrototype.getEventId()+" 新增一条条目成功！");
 			return "redirect:/manage/gm/xyj/eventPrototype/index";
 		}
 	}
@@ -178,35 +206,26 @@ public class XyjEventDataPrototypeController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "edit", method = RequestMethod.GET)
-	public String edit(@RequestParam(value = "eventId")long eventId,Model model){
+	public String edit(@RequestParam(value = "eventId")long eventId,@RequestParam(value = "eventDataId")long eventDataId,Model model){
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
-		if (!u.getRoles().equals(User.USER_ROLE_ADMIN)) {	
-			List<Stores> stores = new ArrayList<Stores>();
-			Stores st = storeService.findById(Integer.valueOf(user.getStoreId()));
-			if(st != null){
-				stores.add(st);
-			}
-			List<ServerZone> serverZones = new ArrayList<ServerZone>();
-			List<String> s = u.getServerZoneList();
-			for (String str : s) {
-				ServerZone server = serverZoneService.findById(Long.valueOf(str));
-				serverZones.add(server);
-			}
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
-		}else{
-			List<Stores> stores = new ArrayList<Stores>();
-			Stores st = storeService.findById(XYJ);
-			if(st != null){
-				stores.add(st);
-			}
-			List<ServerZone> serverZones = serverZoneService.findAll();
-			model.addAttribute("stores", stores);
-			model.addAttribute("serverZones", serverZones);
+		List<EventDataPrototypeInstruction> eventDataPrototypeInstructions = xyjEventDataPrototypeInstructionService.findAll();
+		EventDataPrototype eventDataPrototype = xyjEventDataPrototypeService.findAllByEventIdAndEventDataId(eventId, eventDataId);
+		Map<String, String> map = new HashMap<String, String>();
+		List<String> eventRewards = ImmutableList.copyOf(StringUtils.split(eventDataPrototype.getEventRewards(), "_"));
+		List<String> eventRewardsNum = ImmutableList.copyOf(StringUtils.split(eventDataPrototype.getEventRewardsNum(), "_"));
+		for (int i = 0; i < eventRewards.size(); i++) {
+			map.put(eventRewards.get(i), eventRewardsNum.get(i));
 		}
+		EventPrototype eventPrototype = xyjEventPrototypeService.findById(eventId);
+		model.addAttribute("eventPrototype", eventPrototype);
+		model.addAttribute("eventDataPrototype", eventDataPrototype);
+		model.addAttribute("eventDataPrototypeInstructions", eventDataPrototypeInstructions);
 		
-		return "/gm/xyj/eventPrototype/edit";
+		model.addAttribute("eventRewardsMap", map);
+		EventDataPrototypeInstruction eventInstr = xyjEventDataPrototypeInstructionService.findById(Long.valueOf(eventDataPrototype.getEventCondition()));
+		model.addAttribute("eventInstr", eventInstr);
+		return "/gm/xyj/eventDataPrototype/edit";
 	}
 	
 	/**
@@ -214,11 +233,11 @@ public class XyjEventDataPrototypeController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String updateEventPrototype(EventDataPrototype eventDataPrototype,RedirectAttributes redirectAttributes){
+	public String updateEventPrototype(EventDataPrototype eventDataPrototype,RedirectAttributes redirectAttributes,ServletRequest request,Model model){
 		ShiroUser user = getCurrentUser();
 		/*要求知道活动修改了哪一个字段，并记录日志 logService*/
 		redirectAttributes.addFlashAttribute("message", "修改活动条目成功");
-	    return "redirect:/manage/gm/xyj/eventPrototype/edit";
+	    return "redirect:/manage/gm/xyj/eventDataPrototype/index?search_EQ_eventId="+eventDataPrototype.getEventId();
 	}
 	 
 	

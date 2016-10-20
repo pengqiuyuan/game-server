@@ -15,5 +15,6 @@ public interface EventDataPrototypeDao extends PagingAndSortingRepository<EventD
 	@Modifying
 	@Query("from EventDataPrototype eventDataPrototype where eventDataPrototype.eventId=?1")
 	List<EventDataPrototype> findAllByEventId(Long eventId);
-
+	
+	EventDataPrototype findByEventIdAndEventDataId(Long eventId,Long eventDataId);
 }

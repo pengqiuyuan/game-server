@@ -33,11 +33,13 @@ import com.enlight.game.entity.Log;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
+import com.enlight.game.entity.gm.xyj.EventDataPrototype;
 import com.enlight.game.entity.gm.xyj.EventDataPrototypeInstruction;
 import com.enlight.game.entity.gm.xyj.EventPrototype;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.gm.xyj.XyjEventDataPrototypeInstructionService;
+import com.enlight.game.service.gm.xyj.XyjEventDataPrototypeService;
 import com.enlight.game.service.gm.xyj.XyjEventPrototypeService;
 import com.enlight.game.service.log.LogService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -98,6 +100,10 @@ public class XyjEventPrototypeController extends BaseController{
 	@Autowired
 	private XyjEventDataPrototypeInstructionService xyjEventDataPrototypeInstructionService;
 	
+	@Autowired
+	private XyjEventDataPrototypeService xyjEventDataPrototypeService;
+	
+	
 	/**
 	 *  活动管理首页
 	 * @param pageNumber 当前	 
@@ -105,13 +111,13 @@ public class XyjEventPrototypeController extends BaseController{
 	 * @param sortType  排序
 	 * @param model   返回对象
 	 * @param request  封装的请	
-	 * @throws ParseException 
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "index", method = RequestMethod.GET)
 	public String index(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
 			@RequestParam(value = "sortType", defaultValue = "auto")String sortType, Model model,
-			ServletRequest request) throws ParseException{
+			ServletRequest request) throws Exception{
 		Long userId = getCurrentUserId();
 		ShiroUser user = getCurrentUser();
 		User u = accountService.getUser(user.id);
@@ -173,16 +179,14 @@ public class XyjEventPrototypeController extends BaseController{
 							/*time3 早于 nowDate ，活动已结束*/
 							logger.debug(eventPrototype.getId()+" |"+"2：活动重复激活："+eventPrototype.getEventRepeatInterval()+"天");
 							logger.debug(eventPrototype.getId()+" |"+"3：活动自动关闭，活动结束时间："+time3+" 早于现在时间："+nowDate);
-							eventPrototype.setTimes("0");
-							xyjEventPrototypeService.save(eventPrototype);
+							closeEventPrototype(eventPrototype.getId());/*关闭活动及活动条目*/
 						}else { /*活动重复激活 */
 							String time4 = xyjEventPrototypeService.getByDay(time3, eventPrototype.getEventRepeatInterval());
 							if(time4.compareTo(nowDate)<=0){
 								/*time4（重复N天后） 早于 nowDate ，活动已结束*/
 								logger.debug(eventPrototype.getId()+" |"+"2：活动重复激活："+eventPrototype.getEventRepeatInterval()+"天");
 								logger.debug(eventPrototype.getId()+" |"+"3：活动自动关闭，活动结束时间："+time4+" 早于现在时间："+nowDate);
-								eventPrototype.setTimes("0");
-								xyjEventPrototypeService.save(eventPrototype);
+								closeEventPrototype(eventPrototype.getId());/*关闭活动及活动条目*/
 							}else {
 								logger.debug(eventPrototype.getId()+" |"+"2：活动重复激活："+eventPrototype.getEventRepeatInterval()+"天");
 								logger.debug(eventPrototype.getId()+" |"+"3：活动不自动关闭，活动结束时间："+time4+" 晚于现在时间："+nowDate+"，活动未结束");
@@ -405,13 +409,20 @@ public class XyjEventPrototypeController extends BaseController{
 	@RequestMapping(value = "close", method = RequestMethod.DELETE)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> closeServerZone(@RequestParam(value = "id")Long id) throws Exception{
+	public Map<String,Object> closeEventPrototype(@RequestParam(value = "id")Long id) throws Exception{
 		ShiroUser user = getCurrentUser();
 		Map<String,Object> map = new HashMap<String, Object>();
 		 EventPrototype eventPrototype =  xyjEventPrototypeService.findById(id);
-		 logService.log(user.name, user.name+"：xyj 关闭活动 times 字段 "+eventPrototype.getFollowingEvent()+" 修改为 0", Log.TYPE_GM_EVENT);
+		 logService.log(user.name, user.name+"：xyj 关闭活动 times 字段 "+eventPrototype.getTimes()+" 修改为 0", Log.TYPE_GM_EVENT);
 		 eventPrototype.setTimes("0"); /**times 0 活动关闭 如果填写-1 则无限时长 **/
 		 xyjEventPrototypeService.save(eventPrototype);
+		 
+		 /*条目关闭时间服从所从属的活动关闭时间，如果活动关闭则其下条目全部强制关闭*/
+		 List<EventDataPrototype> eventDataPrototypes =  xyjEventDataPrototypeService.findAllByEventId(id);
+		 for (EventDataPrototype eventDataPrototype : eventDataPrototypes) {
+			 eventDataPrototype.setEventDataTimes("0");
+			 xyjEventDataPrototypeService.save(eventDataPrototype);
+		 }
 		 map.put("success", "true");
 		 return map;
 	}	 

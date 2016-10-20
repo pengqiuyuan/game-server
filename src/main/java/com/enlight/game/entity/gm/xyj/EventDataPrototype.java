@@ -1,5 +1,8 @@
 package com.enlight.game.entity.gm.xyj;
 
+import java.util.Map;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,6 +35,7 @@ public class EventDataPrototype {
 	 * 条目分组
 	 * 确定活动条目对应分组情况，该字段以及与其对应的字段应该只会在具有独立主界面图标的单一活动里面用到
 	 */
+	@Column(name = "event_group")
 	private String group;
 	
 	/**
@@ -103,7 +107,7 @@ public class EventDataPrototype {
 	 * 活动条目奖励道具数量
 	 */
 	private String eventRewardsNum;
-
+	
 	public Long getEventDataId() {
 		return eventDataId;
 	}

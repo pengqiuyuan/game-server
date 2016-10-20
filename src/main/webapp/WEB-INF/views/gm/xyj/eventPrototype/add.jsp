@@ -248,7 +248,7 @@
 			</div>
  			<div class="form-actions">
  			  	 <button type="submit" class="btn btn-primary" id="submit">保存并编辑下属条目</button>
-				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/index" class="btn btn-primary">放弃本次新增</a>
+				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/index" class="btn btn-primary">返回</a>
 	        </div>
 	</form>
 	<script type="text/javascript" src="${ctx}/static/datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>

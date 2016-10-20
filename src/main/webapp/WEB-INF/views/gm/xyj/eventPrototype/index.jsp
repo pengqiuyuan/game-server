@@ -68,12 +68,16 @@
 								</a>
 								<ul class="dropdown-menu">
 									<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_update">
-										<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/edit?id=${item.id}"><i class="icon-edit"></i>修改</a></li>
+										<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/edit?id=${item.id}"><i class="icon-edit"></i>修改活动</a></li>
 									</shiro:hasAnyRoles>
 									<c:if test="${item.times != '0'}">
 										<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_close">
 											<li><a href="javascript:void(0);" rel="${item.id}" class="closeEvent"><i class="icon-th"></i>关闭活动 </a></li>
 										</shiro:hasAnyRoles>
+									</c:if>
+									<c:if test="${item.times != '0'}">
+										<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/add?eventId=${item.id}"><i class="icon-edit"></i>新增活动条目</a></li>
+										<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/index?search_EQ_eventId=${item.id}"><i class="icon-edit"></i>修改活动条目</a></li>
 									</c:if>
 									<li class="divider"></li>
 									<li><a href="#">sample</a></li>
@@ -89,8 +93,7 @@
 						<td>${item.roleLevelMin}_${item.roleLevelMax}</td>
 						<td>
 							<div class="action-buttons">
-								<a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/edit?eventId=${item.id}" class="btn">修改条目</a>
-								<a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/add?eventId=${item.id}" class="btn">新增条目</a>
+
 								<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_update">
 									<a class="exportCode btn table-actions" href="${ctx}/manage/gm/xyj/eventPrototype/edit?id=${item.id}" ><i class="icon-ok"></i>修改</a>
 								</shiro:hasAnyRoles>

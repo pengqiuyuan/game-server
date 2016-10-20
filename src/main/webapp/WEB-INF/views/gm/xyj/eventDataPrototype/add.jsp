@@ -52,7 +52,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventDataName">条目名称：</label>
 						<div class="controls">
-							<input type="text" name="eventDataName" id="eventDataName" class="input-large " value="活动大礼" placeholder="最多输入8个汉字" readonly="readonly"/>
+							<input type="text" name="eventDataName" id="eventDataName" class="input-large " value="活动大礼" placeholder="最多输入8个汉字" ${eventPrototype.eventType == 13 ? '' : 'readonly="readonly"' }/>
 						</div>
 					</div>
 				</div>
@@ -307,8 +307,8 @@
 		    
 		    // conditionValue1 conditionValue2 大于1的整数 匹配integer
 		    jQuery.validator.addMethod("isIntegerGt1Plus", function(value, element) {
-		         return this.optional(element) || (/^[-\+]?\d+$/.test(value) && parseInt(value)>=1);       
-		    }, "填写大于等于1的整数");  
+		         return this.optional(element) || (/^[-\+]?\d+$/.test(value) && parseInt(value)>=0);       
+		    }, "填写大于等于0的整数");  
 		    
 		     // 星期几  
 		    jQuery.validator.addMethod("isActiveDay", function(value, element) {    

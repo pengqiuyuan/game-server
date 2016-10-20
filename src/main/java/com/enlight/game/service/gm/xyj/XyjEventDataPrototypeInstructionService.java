@@ -43,6 +43,10 @@ public class XyjEventDataPrototypeInstructionService {
 		return  eventDataPrototypeInstructionDao.save(eventDataPrototypeInstruction);
 	}
 	
+	public EventDataPrototypeInstruction findById(Long id){
+		return eventDataPrototypeInstructionDao.findOne(id);
+	}
+	
 	public Page<EventDataPrototypeInstruction> findEventPrototypesByCondition(Long userId,
 			Map<String, Object> searchParams, int pageNumber, int pageSize,
 			String sortType) {

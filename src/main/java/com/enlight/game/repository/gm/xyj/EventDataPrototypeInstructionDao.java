@@ -22,5 +22,7 @@ public interface EventDataPrototypeInstructionDao extends PagingAndSortingReposi
 	@Query("from EventDataPrototypeInstruction")
 	@QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })  
 	List<EventDataPrototypeInstruction> findAllCached();
+	
+	EventDataPrototypeInstruction findByEventCondition(String eventCondition);
 
 }

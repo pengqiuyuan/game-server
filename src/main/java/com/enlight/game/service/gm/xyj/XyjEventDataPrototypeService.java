@@ -43,7 +43,11 @@ public class XyjEventDataPrototypeService {
 		return eventDataPrototypeDao.save(eventDataPrototype);
 	}
 	
-	public Page<EventDataPrototype> findEventPrototypesByCondition(Long userId,
+	public EventDataPrototype findAllByEventIdAndEventDataId(Long eventId,Long eventDataId){
+		return eventDataPrototypeDao.findByEventIdAndEventDataId(eventId,eventDataId);
+	}
+	
+	public Page<EventDataPrototype> findEventDataPrototypesByCondition(Long userId,
 			Map<String, Object> searchParams, int pageNumber, int pageSize,
 			String sortType) {
 		PageRequest pageRequest = buildPageRequest(pageNumber, pageSize,sortType);
@@ -58,7 +62,7 @@ public class XyjEventDataPrototypeService {
 			String sortType) {
 		Sort sort = null;
 		if ("auto".equals(sortType)) {
-			sort = new Sort(Direction.ASC, "id");
+			sort = new Sort(Direction.ASC, "eventDataId");
 		}
 		return new PageRequest(pageNumber - 1, pagzSize, sort);
 	}
@@ -70,7 +74,6 @@ public class XyjEventDataPrototypeService {
 			Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		User user = accountService.getUser(userId);
-		filters.put("times",new SearchFilter("times", Operator.EQ, userId));
 		Specification<EventDataPrototype> spec = DynamicSpecifications.bySearchFilter(filters.values(), EventDataPrototype.class);
 		return spec;
 	}
