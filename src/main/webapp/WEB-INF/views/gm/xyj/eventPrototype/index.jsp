@@ -19,6 +19,12 @@
 			<c:if test="${not empty message}">
 				<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 			</c:if>
+			<c:if test="${not empty message1}">
+				<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message1}</div>
+			</c:if>
+			<c:if test="${not empty message2}">
+				<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message2}</div>
+			</c:if>
 			<form id="queryForm" class="well form-inline" method="get" action="${ctx}/manage/gm/xyj/eventPrototype/index">
 				<label class="control-label" for="gameId">选择游戏项目：</label> 
 				<select name="search_EQ_gameId" id="gameId">
@@ -72,7 +78,9 @@
 									</shiro:hasAnyRoles>
 									<c:if test="${item.times != '0'}">
 										<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_close">
-											<li><a href="javascript:void(0);" rel="${item.id}" class="closeEvent"><i class="icon-th"></i>关闭活动 </a></li>
+											<!--  
+											<li><a href="javascript:void(0);" rel="${item.id}" class="closeEvent"><i class="icon-th"></i>关闭活动 </a></li>-->
+											<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/close?id=${item.id}"><i class="icon-th"></i>关闭活动 </a>
 										</shiro:hasAnyRoles>
 									</c:if>
 									<c:if test="${item.times != '0'}">
@@ -99,7 +107,8 @@
 								</shiro:hasAnyRoles>
 								<c:if test="${item.times != '0'}">
 									<shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_close">
-										<a class="exportCode btn table-actions closeEvent" rel="${item.id}" ><i class="icon-remove"></i>关闭活动</a>
+										<!-- <a class="exportCode btn table-actions closeEvent" rel="${item.id}" ><i class="icon-remove"></i>关闭活动</a> -->
+										<a class="exportCode btn table-actions" href="${ctx}/manage/gm/xyj/eventPrototype/close?id=${item.id}" ><i class="icon-remove"></i>关闭活动</a>
 									</shiro:hasAnyRoles>
 								</c:if>
 							</div>

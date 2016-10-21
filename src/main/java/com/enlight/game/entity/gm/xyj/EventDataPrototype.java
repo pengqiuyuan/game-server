@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 活动条目数据
@@ -107,7 +108,7 @@ public class EventDataPrototype {
 	 * 活动条目奖励道具数量
 	 */
 	private String eventRewardsNum;
-	
+
 	public Long getEventDataId() {
 		return eventDataId;
 	}

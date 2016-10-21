@@ -19,6 +19,12 @@
  	<c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
+	<c:if test="${not empty message1}">
+		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message1}</div>
+	</c:if>
+	<c:if test="${not empty message2}">
+		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message2}</div>
+	</c:if>
 	<form id="inputForm" method="post" Class="form-horizontal" action="${ctx}/manage/gm/xyj/eventDataPrototype/save"   enctype="multipart/form-data" >
 			<div class="row">
 				<div class="span6">

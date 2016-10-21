@@ -36,6 +36,9 @@ public class EventPrototype {
 	
 	private String gameId;
 	
+	@Transient
+	private String serverId;
+	
 	/**
 	 * 活动类型
 	 * 界面在ui上呈现类型，同时确定哪种活动 
@@ -182,6 +185,14 @@ public class EventPrototype {
 	 * 活动状态有效 1 ，无效 0 
 	 */
 	private String status;
+	
+	public String getServerId() {
+		return serverId;
+	}
+
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
+	}
 
 	public String getStatus() {
 		return status;

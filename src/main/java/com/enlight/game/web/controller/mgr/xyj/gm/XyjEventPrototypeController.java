@@ -10,10 +10,14 @@ import java.util.Map;
 
 import javax.servlet.ServletRequest;
 
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,17 +38,19 @@ import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.User;
 import com.enlight.game.entity.gm.xyj.EventDataPrototype;
-import com.enlight.game.entity.gm.xyj.EventDataPrototypeInstruction;
 import com.enlight.game.entity.gm.xyj.EventPrototype;
+import com.enlight.game.entity.go.GoAllServer;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.gm.xyj.XyjEventDataPrototypeInstructionService;
 import com.enlight.game.service.gm.xyj.XyjEventDataPrototypeService;
 import com.enlight.game.service.gm.xyj.XyjEventPrototypeService;
+import com.enlight.game.service.go.GoAllServerService;
 import com.enlight.game.service.log.LogService;
 import com.enlight.game.service.serverZone.ServerZoneService;
 import com.enlight.game.service.store.StoreService;
 import com.enlight.game.service.user.UserService;
+import com.enlight.game.util.HttpClientUts;
 import com.enlight.game.web.controller.mgr.BaseController;
 import com.google.common.collect.Maps;
 
@@ -103,6 +109,11 @@ public class XyjEventPrototypeController extends BaseController{
 	@Autowired
 	private XyjEventDataPrototypeService xyjEventDataPrototypeService;
 	
+	@Autowired
+	private GoAllServerService goAllServerService;
+	
+	@Value("#{envProps.gm_url}")
+	private String gm_url;
 	
 	/**
 	 *  活动管理首页
@@ -397,7 +408,23 @@ public class XyjEventPrototypeController extends BaseController{
 		}
 		/*要求知道活动修改了哪一个字段，并记录日志 logService*/
 		xyjEventPrototypeService.save(eventP1);
-		redirectAttributes.addFlashAttribute("message", "修改活动成功");
+		
+		List<GoAllServer> servers =  goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(eventP1.getGameId()), Integer.valueOf(eventP1.getServerZoneId()));
+		int choose = 0,success = 0,fail = 0;
+        List<String> objFail = new ArrayList<String>();
+		for (GoAllServer goAllServer : servers) {
+			eventP1.setServerId(goAllServer.getServerId());
+			JSONObject jsonObject = JSONObject.fromObject(eventP1);
+			jsonObject.remove("status");
+    		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/eventPrototype/updateEventPrototype" , jsonObject);
+			System.out.println("多个 xyj EventPrototype 修改活动，返回值" + res);
+			choose += Integer.valueOf(res.getString("choose"));
+			success += Integer.valueOf(res.getString("success"));
+			fail += Integer.valueOf(res.getString("fail"));
+			objFail.add(res.getString("objFail"));
+		}
+		redirectAttributes.addFlashAttribute("message","xyj 运营大区："+eventP1.getServerZoneId()+ "下的在线服务器 "+choose+" 个，修改活动成功 "+ success+" 个，失败 "+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+		//redirectAttributes.addFlashAttribute("message", "修改活动成功");
 	    return "redirect:/manage/gm/xyj/eventPrototype/index";
 	}
 	
@@ -406,12 +433,9 @@ public class XyjEventPrototypeController extends BaseController{
 	 * @param oid 用户id
 	 * @throws Exception 
 	 */
-	@RequestMapping(value = "close", method = RequestMethod.DELETE)
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> closeEventPrototype(@RequestParam(value = "id")Long id) throws Exception{
+	@RequestMapping(value = "close", method = RequestMethod.GET)
+	public String closeEventPrototype(@RequestParam(value = "id")Long id,RedirectAttributes redirectAttributes) throws Exception{
 		ShiroUser user = getCurrentUser();
-		Map<String,Object> map = new HashMap<String, Object>();
 		 EventPrototype eventPrototype =  xyjEventPrototypeService.findById(id);
 		 logService.log(user.name, user.name+"：xyj 关闭活动 times 字段 "+eventPrototype.getTimes()+" 修改为 0", Log.TYPE_GM_EVENT);
 		 eventPrototype.setTimes("0"); /**times 0 活动关闭 如果填写-1 则无限时长 **/
@@ -423,9 +447,40 @@ public class XyjEventPrototypeController extends BaseController{
 			 eventDataPrototype.setEventDataTimes("0");
 			 xyjEventDataPrototypeService.save(eventDataPrototype);
 		 }
-		 map.put("success", "true");
-		 return map;
+		 
+		List<GoAllServer> servers =  goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(eventPrototype.getGameId()), Integer.valueOf(eventPrototype.getServerZoneId()));
+		int choose = 0,success = 0,fail = 0;
+	    List<String> objFail = new ArrayList<String>();
+		for (GoAllServer goAllServer : servers) {
+			String	account = HttpClientUts.doGet(gm_url+"/xyjserver/eventPrototype/closeEventPrototype?id="+eventPrototype.getId()+"&gameId="+eventPrototype.getGameId()+"&serverZoneId="+eventPrototype.getServerZoneId()+"&serverId="+goAllServer.getServerId(), "utf-8");
+			JSONObject dataJson=JSONObject.fromObject(account);
+			System.out.println("多个 xyj EventPrototype 关闭，返回值" + dataJson);
+			choose ++;
+			if(dataJson.get("message").equals("success")){
+				success++;
+			}else{
+				fail++;
+				objFail.add(goAllServer.getServerId());
+			}
+		}
+		 redirectAttributes.addFlashAttribute("message","xyj 运营大区："+eventPrototype.getServerZoneId()+ "下的在线服务器 "+choose+" 个，关闭活动成功 "+ success+" 个，失败 "+fail+" 个，关闭失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+		 return "redirect:/manage/gm/xyj/eventPrototype/index";
 	}	 
+	
+	public void closeEventPrototype(@RequestParam(value = "id")Long id) throws Exception{
+		 ShiroUser user = getCurrentUser();
+		 EventPrototype eventPrototype =  xyjEventPrototypeService.findById(id);
+		 logService.log(user.name, user.name+"：xyj 关闭活动 times 字段 "+eventPrototype.getTimes()+" 修改为 0", Log.TYPE_GM_EVENT);
+		 eventPrototype.setTimes("0"); /**times 0 活动关闭 如果填写-1 则无限时长 **/
+		 xyjEventPrototypeService.save(eventPrototype);
+		 
+		 /*条目关闭时间服从所从属的活动关闭时间，如果活动关闭则其下条目全部强制关闭*/
+		 List<EventDataPrototype> eventDataPrototypes =  xyjEventDataPrototypeService.findAllByEventId(id);
+		 for (EventDataPrototype eventDataPrototype : eventDataPrototypes) {
+			 eventDataPrototype.setEventDataTimes("0");
+			 xyjEventDataPrototypeService.save(eventDataPrototype);
+		 }
+	}	
 	
 	/**
 	 * 删除活动	 
