@@ -88,7 +88,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventPic">活动图标：</label>
 						<div class="controls">
-								<input type="text" name="eventPic" id="eventPic" class="input-large " placeholder="如：huodong_icon_tongyong"/>
+								<input type="text" name="eventPic" id="eventPic" class="input-large " value="" readonly="readonly" placeholder="如：huodong_icon_tongyong"/>
 								<span>.png</span>
 						</div>
 					</div>
@@ -97,7 +97,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventShow">活动大图：</label>
 						<div class="controls">
-								<input type="text" name="eventShow" id="eventShow" class="input-large " placeholder="如：huodong_icon_tongyong"/>
+								<input type="text" name="eventShow" id="eventShow" class="input-large " value="" placeholder="如：huodong_icon_tongyong"/>
 								<span class="add-on">.png</span>
 						</div>
 					</div>
@@ -247,8 +247,8 @@
 				</div>
 			</div>
  			<div class="form-actions">
- 			  	 <button type="submit" class="btn btn-primary" id="submit">保存并编辑下属条目</button>
-				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/index" class="btn btn-primary">返回</a>
+ 			  	 <button type="submit" class="btn btn-primary" id="submit">继续编辑下属条目</button>
+				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/index" class="btn btn-primary">返回放弃编辑</a>
 	        </div>
 	</form>
 	<script type="text/javascript" src="${ctx}/static/datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>
@@ -261,10 +261,14 @@
 			$("#eventType").change(function(e){
 				if($("#eventType").val() == '13'){
 					$("#mainUiPosition").val("0");
-					$('#mainUiPosition').removeAttr("readonly");
+					$('#mainUiPosition').removeAttr("readonly");					
+					$("#eventPic").val("");
+					$('#eventPic').removeAttr("readonly");
 				}else{
 					$("#mainUiPosition").val("-1");
-					$('#mainUiPosition').attr("readonly","readonly");
+					$('#mainUiPosition').attr("readonly","readonly");					
+					$("#eventPic").val("");
+					$('#eventPic').attr("readonly","readonly");
 				}
 			});
 			
@@ -333,12 +337,6 @@
 						required:true,
 						number:true,
 						isIntGteZero:true
-					},
-					eventPic:{
-						required:true
-					},
-					eventShow:{
-						required:true
 					},
 					activeType:{
 						required:true
@@ -411,12 +409,6 @@
 					mainUiPosition:{
 						required:"显示优先级必须填写",
 						number:"必须为数字"
-					},
-					eventPic:{
-						required:"活动图标必须填写"
-					},
-					eventShow:{
-						required:"活动大图必须填写"
 					},
 					activeType:{
 						required:"激活方式必须填写"

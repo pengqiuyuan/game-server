@@ -212,7 +212,7 @@ public class XyjEventDataPrototypeController extends BaseController{
 				fail += Integer.valueOf(res.getString("fail"));
 				objFail.add(res.getString("objFail"));
 			}
-			redirectAttributes.addFlashAttribute("message1","xyj 运营大区："+eventPrototype2.getServerZoneId()+ "下的在线服务器 "+choose+" 个，保存活动成功 "+ success+" 个，失败 "+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+			redirectAttributes.addFlashAttribute("message1","xyj 运营大区："+eventPrototype2.getServerZoneId()+ " 下的在线服务器 "+choose+" 个，保存活动成功 "+ success+" 个，失败 "+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
 		}
 		/*gm 新增活动*/
 		
@@ -243,7 +243,7 @@ public class XyjEventDataPrototypeController extends BaseController{
 			fail1 += Integer.valueOf(res.getString("fail"));
 			objFail1.add(res.getString("objFail"));
 		}
-		redirectAttributes.addFlashAttribute("message2","xyj 运营大区："+eventPrototype2.getServerZoneId()+ "下的在线服务器 "+choose1+" 个，保存活动条目成功 "+ success1+" 个，失败 "+fail1+" 个，新增失败的服务器有："+StringUtils.join(objFail1.toArray(), " "));
+		redirectAttributes.addFlashAttribute("message2","xyj 运营大区："+eventPrototype2.getServerZoneId()+ " 下的在线服务器 "+choose1+" 个，保存活动条目成功 "+ success1+" 个，失败 "+fail1+" 个，新增失败的服务器有："+StringUtils.join(objFail1.toArray(), " "));
 		/*gm 新增活动条目*/
 		
 		if(request.getParameter("submitAndEventData") !=null){ /**保存并新增条目*/
@@ -353,14 +353,34 @@ public class XyjEventDataPrototypeController extends BaseController{
 					+ "的eventRewards 字段 "+eventP1.getEventRewards()+" 修改为 "+eRewards, Log.TYPE_GM_EVENT);
 			eventP1.setEventRewards(eRewards);
 		} if(!eRewardsNum.equals(eventP1.getEventRewardsNum())){
-			System.out.println("tttttttttttttt");
 			logService.log(user.name, user.name+"：xyj "+eventP1.getEventId()+" 活动下修改条目 "+ eventP1.getEventDataId() +" "
 					+ "的eventRewardsNum 字段 "+eventP1.getEventRewardsNum()+" 修改为 "+eRewardsNum, Log.TYPE_GM_EVENT);
 			eventP1.setEventRewardsNum(eRewardsNum);
 		}
 		System.out.println(eventP1.getEventRewardsNum() + "   4444444  "  + eRewardsNum);
 		xyjEventDataPrototypeService.save(eventP1);
-		redirectAttributes.addFlashAttribute("message", "修改活动条目 "+eventP1.getEventDataId()+" 成功");
+		
+		/*gm 修改活动条目*/
+		EventPrototype eventPrototype = xyjEventPrototypeService.findById(eventP1.getEventId());
+		List<GoAllServer> servers =  goAllServerService.findAllByStoreIdAndServerZoneId(Integer.valueOf(eventPrototype.getGameId()), Integer.valueOf(eventPrototype.getServerZoneId()));
+		int choose1 = 0,success1 = 0,fail1 = 0;
+        List<String> objFail1 = new ArrayList<String>();
+		for (GoAllServer goAllServer : servers) {
+			JSONObject jsonObject = JSONObject.fromObject(eventP1);
+			jsonObject.put("serverId", goAllServer.getServerId());
+			jsonObject.put("eventId", eventP1.getEventId().toString());  //long 转 string
+			jsonObject.put("eventDataId", eventP1.getEventDataId().toString());//long 转 string
+			System.out.println("修改活动条目    " + jsonObject);
+    		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/eventPrototype/addEventDataPrototype" , jsonObject);
+			System.out.println("多个 xyj EventPrototype 修改活动条目，返回值" + res);
+			choose1 += Integer.valueOf(res.getString("choose"));
+			success1 += Integer.valueOf(res.getString("success"));
+			fail1 += Integer.valueOf(res.getString("fail"));
+			objFail1.add(res.getString("objFail"));
+		}
+		redirectAttributes.addFlashAttribute("message","xyj 运营大区："+eventPrototype.getServerZoneId()+ " 下的在线服务器 "+choose1+" 个，修改活动条目成功 "+ success1+" 个，失败 "+fail1+" 个，修改失败的服务器有："+StringUtils.join(objFail1.toArray(), " "));
+		/*gm 修改活动条目*/
+		
 	    return "redirect:/manage/gm/xyj/eventDataPrototype/index?search_EQ_eventId="+eventDataPrototype.getEventId();
 	}
 	 

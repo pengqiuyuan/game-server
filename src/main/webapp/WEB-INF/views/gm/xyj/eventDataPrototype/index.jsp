@@ -19,6 +19,16 @@
 			<c:if test="${not empty message}">
 				<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 			</c:if>
+			<form id="queryForm" class="well form-inline" method="get" action="${ctx}/manage/gm/xyj/eventDataPrototype/index">
+				<input type="hidden" name="search_EQ_eventId" value="${eventId}" > 
+				<label>活动状态：</label> 
+				<select name="search_EQ_eventDataTimes">
+					<option value="" ${param.search_EQ_eventDataTimes == '' ? 'selected' : '' }>全部活动条目</option>
+					<option value="0" ${param.search_EQ_eventDataTimes == '0' ? 'selected' : '' }>关闭的活动条目</option>
+				</select>
+				<input type="submit" class="btn btn-primary" value="查 找" />
+				<tags:sort />
+			</form>
 		</div>
 		<table class="table table-striped table-bordered table-condensed" id="table">
 			<thead>
@@ -33,7 +43,7 @@
 			</thead>
 			<tbody id="tbody">
 				<c:forEach items="${eventDataPrototypes.content}" var="item" varStatus="s">
-					<tr id="${item.eventDataId}">
+					<tr id="${item.eventDataId}" ${item.eventDataTimes == 0 ? 'class="error"' : '' }>
 						<td id="iDictionary" value="${item.eventDataId}">
 							<div class="btn-group">
 								<a class="btn" href="#">#${item.eventDataId}</a> 
@@ -50,7 +60,7 @@
 						<td>${item.eventId}</td>
 						<td>${item.group}</td>
 						<td>${item.eventDataName }</td>
-						<td>${item.eventDataTimes == '0' ? '活动关闭' : item.eventDataTimes == '-1' ? '无限时长': item.eventDataTimes}</td>
+						<td>${item.eventDataTimes == '0' ? '活动条目关闭' : item.eventDataTimes == '-1' ? '无限时长': item.eventDataTimes}</td>
 						<td>
 							<div class="action-buttons">
 								<a class="exportCode btn table-actions" href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/edit?eventId=${item.eventId}&eventDataId=${item.eventDataId}" ><i class="icon-ok"></i>修改活动条目</a>

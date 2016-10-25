@@ -265,8 +265,17 @@ public class XyjEventPrototypeController extends BaseController{
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public String saveEventPrototype(EventPrototype eventPrototype,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		ShiroUser user = getCurrentUser();
-		eventPrototype.setEventPic(eventPrototype.getEventPic()+".png");
-		eventPrototype.setEventShow(eventPrototype.getEventShow()+".png");
+		if(!eventPrototype.getEventPic().equals("") && eventPrototype.getEventPic() !=null){
+			eventPrototype.setEventPic(eventPrototype.getEventPic()+".png");
+		}else{
+			eventPrototype.setEventPic("");
+		}
+		if(!eventPrototype.getEventShow().equals("") && eventPrototype.getEventShow() !=null){
+			eventPrototype.setEventShow(eventPrototype.getEventShow()+".png");
+		}else{
+			eventPrototype.setEventShow("");
+		}
+		
 		//logService.log(user.name, user.name+"：xyj 新增一条活动", Log.TYPE_GM_EVENT);
 		//redirectAttributes.addFlashAttribute("message", "新增活动成功");
 		/** 保存一条status为0（无效）的活动，活动在保存至少一条活动条目时保存 */
@@ -340,11 +349,19 @@ public class XyjEventPrototypeController extends BaseController{
 		}
 		if(!eventPrototype.getEventPic().equals(eventP1.getEventPic())){
 			logService.log(user.name, user.name+"：xyj 活动 eventPic 字段 "+eventP1.getEventPic()+" 修改为 "+eventPrototype.getEventPic() , Log.TYPE_GM_EVENT);
-			eventP1.setEventPic(eventPrototype.getEventPic()+".png");
+			if(!eventPrototype.getEventPic().equals("") && eventPrototype.getEventPic() !=null){
+				eventP1.setEventPic(eventPrototype.getEventPic()+".png");
+			}else{
+				eventP1.setEventPic("");
+			}
 		}
 		if(!eventPrototype.getEventShow().equals(eventP1.getEventShow())){
 			logService.log(user.name, user.name+"：xyj 活动 eventShow 字段 "+eventP1.getEventShow()+" 修改为 "+eventPrototype.getEventShow() , Log.TYPE_GM_EVENT);
-			eventP1.setEventShow(eventPrototype.getEventShow()+".png");
+			if(!eventPrototype.getEventShow().equals("") && eventPrototype.getEventShow() !=null){
+				eventP1.setEventShow(eventPrototype.getEventShow()+".png");
+			}else{
+				eventP1.setEventShow("");
+			}
 		}
 		if(!eventPrototype.getActiveType().equals(eventP1.getActiveType())){
 			logService.log(user.name, user.name+"：xyj 活动 activeType 字段 "+eventP1.getActiveType()+" 修改为 "+eventPrototype.getActiveType() , Log.TYPE_GM_EVENT);
@@ -423,7 +440,7 @@ public class XyjEventPrototypeController extends BaseController{
 			fail += Integer.valueOf(res.getString("fail"));
 			objFail.add(res.getString("objFail"));
 		}
-		redirectAttributes.addFlashAttribute("message","xyj 运营大区："+eventP1.getServerZoneId()+ "下的在线服务器 "+choose+" 个，修改活动成功 "+ success+" 个，失败 "+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+		redirectAttributes.addFlashAttribute("message","xyj 运营大区："+eventP1.getServerZoneId()+ " 下的在线服务器 "+choose+" 个，修改活动成功 "+ success+" 个，失败 "+fail+" 个，新增失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
 		//redirectAttributes.addFlashAttribute("message", "修改活动成功");
 	    return "redirect:/manage/gm/xyj/eventPrototype/index";
 	}
@@ -463,7 +480,7 @@ public class XyjEventPrototypeController extends BaseController{
 				objFail.add(goAllServer.getServerId());
 			}
 		}
-		 redirectAttributes.addFlashAttribute("message","xyj 运营大区："+eventPrototype.getServerZoneId()+ "下的在线服务器 "+choose+" 个，关闭活动成功 "+ success+" 个，失败 "+fail+" 个，关闭失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
+		 redirectAttributes.addFlashAttribute("message","xyj 运营大区："+eventPrototype.getServerZoneId()+ " 下的在线服务器 "+choose+" 个，关闭活动成功 "+ success+" 个，失败 "+fail+" 个，关闭失败的服务器有："+StringUtils.join(objFail.toArray(), " "));
 		 return "redirect:/manage/gm/xyj/eventPrototype/index";
 	}	 
 	

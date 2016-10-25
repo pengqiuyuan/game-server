@@ -89,7 +89,7 @@
 					<div class="control-group">
 						<label class="control-label" for="eventPic">活动图标：</label>
 						<div class="controls">
-							<input type="text" name="eventPic" id="eventPic" class="input-large " value="${eventPrototype.eventPic}" placeholder="如：huodong_icon_tongyong"/>
+							<input type="text" name="eventPic" id="eventPic" class="input-large " value="${eventPrototype.eventPic}"  ${eventPrototype.eventType == 13 ? '' : 'readonly="readonly"' } placeholder="如：huodong_icon_tongyong"/>
 							<span class="add-on">.png</span>
 						</div>
 					</div>
@@ -263,9 +263,11 @@
 				if($("#eventType").val() == '13'){
 					$("#mainUiPosition").val("0");
 					$('#mainUiPosition').removeAttr("readonly");
+					$('#eventPic').removeAttr("readonly");
 				}else{
 					$("#mainUiPosition").val("-1");
 					$('#mainUiPosition').attr("readonly","readonly");
+					$('#eventPic').attr("readonly","readonly");
 				}
 			});
 			
@@ -334,12 +336,6 @@
 						required:true,
 						number:true,
 						isIntGteZero:true
-					},
-					eventPic:{
-						required:true
-					},
-					eventShow:{
-						required:true
 					},
 					activeType:{
 						required:true
@@ -412,12 +408,6 @@
 					mainUiPosition:{
 						required:"显示优先级必须填写",
 						number:"必须为数字"
-					},
-					eventPic:{
-						required:"活动图标必须填写"
-					},
-					eventShow:{
-						required:"活动大图必须填写"
 					},
 					activeType:{
 						required:"激活方式必须填写"
