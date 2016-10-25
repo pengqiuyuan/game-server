@@ -85,9 +85,9 @@
 				</div>
 				<div class="span6">
 					<div class="control-group">
-						<label class="control-label" for="eventDataDelay">于活动激活后第N天激活：</label>
+						<label class="control-label" for="eventDataDelay">于活动激活后第N小时激活：</label>
 						<div class="controls">
-							<input type="text" name="eventDataDelay" id="eventDataDelay" class="input-large " value="${eventDataPrototype.eventDataDelay}" placeholder="单位天，如：1"/>
+							<input type="text" name="eventDataDelay" id="eventDataDelay" class="input-large " value="${eventDataPrototype.eventDataDelay}" placeholder="单位小时，如：1"/>
 						</div>
 					</div>
 				</div>
@@ -426,7 +426,7 @@
 						required:"持续时间必须填写"
 					},
 					eventDataDelay:{
-						required:"于活动激活后N天激活必须填写"
+						required:"于活动激活后第N小时激活必须填写"
 					},
 					eventDataDes:{
 						maxlength:"最多填写20个汉字"

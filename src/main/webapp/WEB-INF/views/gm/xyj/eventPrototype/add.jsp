@@ -153,9 +153,9 @@
 				</div>
 				<div class="span6">
 					<div class="control-group">
-						<label class="control-label" for="activeDelay">设置激活时间后N天激活：</label>
+						<label class="control-label" for="activeDelay">设置激活时间N小时后激活：</label>
 						<div class="controls">
-							<input type="text" name="activeDelay" id="activeDelay" class="input-large " value="0" placeholder="单位天，如：1"/>
+							<input type="text" name="activeDelay" id="activeDelay" class="input-large " value="0" placeholder="单位小时，如：1"/>
 						</div>
 					</div>
 				</div>
@@ -431,7 +431,7 @@
 						required:"持续时间必须填写"
 					},
 					activeDelay:{
-						required:"设置激活时间后N天激活必须填写"
+						required:"设置激活时间N小时后激活必须填写"
 					},
 					activeDay:{
 						required:"强制星期N激活必须填写"
