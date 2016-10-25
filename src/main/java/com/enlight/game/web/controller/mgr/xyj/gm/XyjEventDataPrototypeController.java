@@ -251,7 +251,7 @@ public class XyjEventDataPrototypeController extends BaseController{
 			return "redirect:/manage/gm/xyj/eventDataPrototype/add?eventId="+eventPrototype2.getId() + "&group="+e.getGroup();
 		}else{
 			redirectAttributes.addFlashAttribute("message", "xyj 活动 "+eventDataPrototype.getEventId()+" 新增一条条目成功！");
-			return "redirect:/manage/gm/xyj/eventDataPrototype/index?search_EQ_eventId="+eventPrototype2.getId();
+			return "redirect:/manage/gm/xyj/eventPrototype/index";
 		}
 	}
 	

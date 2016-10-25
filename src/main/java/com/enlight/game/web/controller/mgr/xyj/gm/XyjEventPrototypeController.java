@@ -171,12 +171,12 @@ public class XyjEventPrototypeController extends BaseController{
 				if(eventPrototype.getActiveType().equals("0")){/*active_type==0 激活时间基点，需要填写激活时间*/
 					String time3 = "";
 					if(eventPrototype.getActiveDay().equals("0")){/*0无时间点要求*/
-						String time1 = xyjEventPrototypeService.getByDay(eventPrototype.getActiveData(), eventPrototype.getActiveDelay()); // （加上延时激活时间）活动激活时间起点
+						String time1 = xyjEventPrototypeService.getByHour(eventPrototype.getActiveData(), eventPrototype.getActiveDelay()); // （加上延时激活时间）活动激活时间起点
 						String time2 = eventPrototype.getTimes(); //活动持续时间（单位小时）
 						time3 = xyjEventPrototypeService.getByHour(time1, time2); //活动结束时间
-						logger.debug(eventPrototype.getId()+" |"+"1：星期几激活选择为 0，通过激活时间基点："+eventPrototype.getActiveData()+"、延时时间（天）："+eventPrototype.getActiveDelay()+"、延时后激活时间基点："+time1+"、持续时间（小时）："+eventPrototype.getTimes()+"、获取活动结束时间："+time3);
+						logger.debug(eventPrototype.getId()+" |"+"1：星期几激活选择为 0，通过激活时间基点："+eventPrototype.getActiveData()+"、延时时间（小时）："+eventPrototype.getActiveDelay()+"、延时后激活时间基点："+time1+"、持续时间（小时）："+eventPrototype.getTimes()+"、获取活动结束时间："+time3);
 					}else { /*指定星期N激活 ，需要与活动激活时间起点 做比较*/
-						String time1 = xyjEventPrototypeService.getByDay(eventPrototype.getActiveData(), eventPrototype.getActiveDelay()); // （加上延时激活时间）活动激活时间起点
+						String time1 = xyjEventPrototypeService.getByHour(eventPrototype.getActiveData(), eventPrototype.getActiveDelay()); // （加上延时激活时间）活动激活时间起点
 						String timeWeek = xyjEventPrototypeService.getDateByWeek(eventPrototype.getActiveDay(), nowDate).compareTo(nowDate) <= 0?
 								xyjEventPrototypeService.getDateByWeek(eventPrototype.getActiveDay(), xyjEventPrototypeService.getDateByWeek("7",xyjEventPrototypeService.getByDay(nowDate, "7")))
 								:xyjEventPrototypeService.getDateByWeek(eventPrototype.getActiveDay(), nowDate); /*nowDate.compareTo() >= 0 代表nowDate 晚于 活动时间，活动时间已过，选下个星期 （活动激活时间起点 按星期几激活活动算）*/
@@ -207,7 +207,7 @@ public class XyjEventPrototypeController extends BaseController{
 						logger.debug(eventPrototype.getId()+" |"+"2：活动不自动关闭，活动结束时间："+time3+" 晚于现在时间："+nowDate);
 					}
 				}else{
-					logger.debug(eventPrototype.getId()+" |"+"激活方式为：" + eventPrototype.getActiveType()+"，不为 0，手动关闭活动");
+					logger.debug(eventPrototype.getId()+" |"+"激活方式为（开服激活、玩家首次登录激活）：" + eventPrototype.getActiveType()+"，不为 0，手动关闭活动");
 				}
 			}
 		}
@@ -487,7 +487,7 @@ public class XyjEventPrototypeController extends BaseController{
 	public void closeEventPrototype(@RequestParam(value = "id")Long id) throws Exception{
 		 ShiroUser user = getCurrentUser();
 		 EventPrototype eventPrototype =  xyjEventPrototypeService.findById(id);
-		 logService.log(user.name, user.name+"：xyj 关闭活动 times 字段 "+eventPrototype.getTimes()+" 修改为 0", Log.TYPE_GM_EVENT);
+		 logService.log(user.name, "自动关闭：xyj 关闭活动 times 字段 "+eventPrototype.getTimes()+" 修改为 0", Log.TYPE_GM_EVENT);
 		 eventPrototype.setTimes("0"); /**times 0 活动关闭 如果填写-1 则无限时长 **/
 		 xyjEventPrototypeService.save(eventPrototype);
 		 
