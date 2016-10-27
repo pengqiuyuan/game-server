@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -248,7 +249,9 @@
 				</div>
 			</div>	
  			<div class="form-actions">
-  			     <button type="submit" class="btn btn-primary" id="submit">保存修改活动</button>
+ 				 <shiro:hasAnyRoles name="admin,xyj_gm_eventprototype_update">
+  			     	<button type="submit" class="btn btn-primary" id="submit">保存修改活动</button>
+  			     </shiro:hasAnyRoles>
 				 <a href="<%=request.getContextPath()%>/manage/gm/xyj/eventPrototype/index" class="btn btn-primary">返回</a>
 	        </div>
 	</form>

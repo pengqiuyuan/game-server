@@ -96,7 +96,7 @@ public class XyjEventPrototypeService {
 			String sortType) {
 		Sort sort = null;
 		if ("auto".equals(sortType)) {
-			sort = new Sort(Direction.ASC, "id");
+			sort = new Sort(Direction.DESC, "id");
 		}
 		return new PageRequest(pageNumber - 1, pagzSize, sort);
 	}

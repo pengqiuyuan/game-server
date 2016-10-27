@@ -204,9 +204,10 @@ public class XyjEventDataPrototypeController extends BaseController{
 			for (GoAllServer goAllServer : servers) {
 				eventPrototype2.setServerId(goAllServer.getServerId());
 				JSONObject jsonObject = JSONObject.fromObject(eventPrototype2);
+				jsonObject.put("id", eventPrototype2.getId().toString());
 				jsonObject.remove("status");
 	    		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/eventPrototype/addEventPrototype" , jsonObject);
-				System.out.println("多个 xyj EventPrototype 保存活动，返回值" + res);
+				System.out.println("多个 xyj EventPrototype 保存活动，返回值："+goAllServer.getServerId()+"  "  + res);
 				choose += Integer.valueOf(res.getString("choose"));
 				success += Integer.valueOf(res.getString("success"));
 				fail += Integer.valueOf(res.getString("fail"));
@@ -237,7 +238,7 @@ public class XyjEventDataPrototypeController extends BaseController{
 			jsonObject.put("eventDataId", e.getEventDataId().toString());//long 转 string
 			System.out.println("新增活动条目    " + jsonObject);
     		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/eventPrototype/addEventDataPrototype" , jsonObject);
-			System.out.println("多个 xyj EventPrototype 保存活动条目，返回值" + res);
+			System.out.println("多个 xyj EventDataPrototype 保存活动条目，返回值："+goAllServer.getServerId()+"  "  + res);
 			choose1 += Integer.valueOf(res.getString("choose"));
 			success1 += Integer.valueOf(res.getString("success"));
 			fail1 += Integer.valueOf(res.getString("fail"));
@@ -372,7 +373,7 @@ public class XyjEventDataPrototypeController extends BaseController{
 			jsonObject.put("eventDataId", eventP1.getEventDataId().toString());//long 转 string
 			System.out.println("修改活动条目    " + jsonObject);
     		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/eventPrototype/addEventDataPrototype" , jsonObject);
-			System.out.println("多个 xyj EventPrototype 修改活动条目，返回值" + res);
+			System.out.println("多个 xyj EventDataPrototype 修改活动条目，返回值："+goAllServer.getServerId()+"  "  + res);
 			choose1 += Integer.valueOf(res.getString("choose"));
 			success1 += Integer.valueOf(res.getString("success"));
 			fail1 += Integer.valueOf(res.getString("fail"));

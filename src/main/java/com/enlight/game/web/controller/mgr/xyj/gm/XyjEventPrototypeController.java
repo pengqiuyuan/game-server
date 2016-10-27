@@ -432,6 +432,7 @@ public class XyjEventPrototypeController extends BaseController{
 		for (GoAllServer goAllServer : servers) {
 			eventP1.setServerId(goAllServer.getServerId());
 			JSONObject jsonObject = JSONObject.fromObject(eventP1);
+			jsonObject.put("id", eventP1.getId().toString());
 			jsonObject.remove("status");
     		JSONObject res = HttpClientUts.doPost(gm_url+"/xyjserver/eventPrototype/updateEventPrototype" , jsonObject);
 			System.out.println("多个 xyj EventPrototype 修改活动，返回值" + res);

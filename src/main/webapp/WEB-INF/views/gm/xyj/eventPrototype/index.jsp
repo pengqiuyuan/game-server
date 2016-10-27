@@ -84,8 +84,12 @@
 										</shiro:hasAnyRoles>
 									</c:if>
 									<c:if test="${item.times != '0'}">
-										<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/add?eventId=${item.id}" target=_blank><i class="icon-edit"></i>新增活动条目</a></li>
-										<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/index?search_EQ_eventId=${item.id}" target=_blank><i class="icon-edit"></i>修改活动条目</a></li>
+										<shiro:hasAnyRoles name="admin,xyj_gm_eventdataprototype_add">
+											<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/add?eventId=${item.id}" target=_blank><i class="icon-edit"></i>新增活动条目</a></li>
+										</shiro:hasAnyRoles>
+										<shiro:hasAnyRoles name="admin,xyj_gm_eventdataprototype_update">
+											<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/index?search_EQ_eventId=${item.id}" target=_blank><i class="icon-edit"></i>修改活动条目</a></li>
+										</shiro:hasAnyRoles>
 									</c:if>
 									<li class="divider"></li>
 									<li><a href="#">sample</a></li>

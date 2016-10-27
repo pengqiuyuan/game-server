@@ -51,7 +51,9 @@
 									<span class="caret"></span>
 								</a>
 								<ul class="dropdown-menu">
-									<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/edit?eventId=${item.eventId}&eventDataId=${item.eventDataId}"><i class="icon-edit"></i>修改活动条目</a></li>
+									<shiro:hasAnyRoles name="admin,xyj_gm_eventdataprototype_update">
+										<li><a href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/edit?eventId=${item.eventId}&eventDataId=${item.eventDataId}"><i class="icon-edit"></i>修改活动条目</a></li>
+									</shiro:hasAnyRoles>
 									<li class="divider"></li>
 									<li><a href="#">sample</a></li>
 								</ul>
@@ -63,7 +65,9 @@
 						<td>${item.eventDataTimes == '0' ? '活动条目关闭' : item.eventDataTimes == '-1' ? '无限时长': item.eventDataTimes}</td>
 						<td>
 							<div class="action-buttons">
-								<a class="exportCode btn table-actions" href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/edit?eventId=${item.eventId}&eventDataId=${item.eventDataId}" ><i class="icon-ok"></i>修改活动条目</a>
+								<shiro:hasAnyRoles name="admin,xyj_gm_eventdataprototype_update">
+									<a class="exportCode btn table-actions" href="<%=request.getContextPath()%>/manage/gm/xyj/eventDataPrototype/edit?eventId=${item.eventId}&eventDataId=${item.eventDataId}" ><i class="icon-ok"></i>修改活动条目</a>
+								</shiro:hasAnyRoles>
 							</div>
 						</td>
 					</tr>
