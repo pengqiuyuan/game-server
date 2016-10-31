@@ -10,5 +10,5 @@
         <util:map id="esProperties">
 		    <entry key="cluster.name" value="guangxian_game"/>
 		</util:map>
-		<elasticsearch:client id="esClient" esNodes="182.92.69.21:9303" properties="esProperties" />
+		<elasticsearch:client id="esClient" esNodes="elasticsearch:9300" properties="esProperties" />
 </beans>

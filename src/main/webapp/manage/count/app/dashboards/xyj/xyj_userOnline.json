@@ -101,7 +101,7 @@
           "linewidth": 3,
           "points": false,
           "pointradius": 5,
-          "bars": false,
+          "bars": true,
           "stack": false,
           "threshold": false,
           "spyable": true,
