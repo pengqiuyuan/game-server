@@ -128,6 +128,7 @@ public class HttpClientUts {
 	   */
 	  
 	  public static JSONObject doPost(String url,JSONObject json){
+		  System.out.println("url  ---------------------------    " + url);
 	    DefaultHttpClient client = new DefaultHttpClient();
 	    HttpPost post = new HttpPost(url);
 	    JSONObject response = null;
