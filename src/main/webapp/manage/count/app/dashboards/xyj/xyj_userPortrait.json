@@ -27,61 +27,61 @@
         "2": {
           "id": 2,
           "color": "#EAB839",
-          "alias": "",
+          "alias": "充值真实币次数",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "充值真实币次数"
+          "query": "money_get"
         }
         ,
         "3": {
           "id": 3,
           "color": "rgb(239, 132, 60)",
-          "alias": "",
+          "alias": "消耗真实币次数",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "消耗真实币次数"
+          "query": "money_cost"
         }
         ,
         "4": {
           "id": 4,
           "color": "rgb(110, 208, 224)",
-          "alias": "",
+          "alias": "获得虚拟币次数",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "获得虚拟币次数"
+          "query": "dummy_get"
         }
         ,
         "5": {
           "id": 5,
           "color": "RGB(255,69,0)",
-          "alias": "",
+          "alias": "消耗虚拟币次数",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "消耗虚拟币次数"
+          "query": "dummy_cost"
         }
         ,
         "6": {
           "id": 6,
           "color": "RGB(34,139,34)",
-          "alias": "",
+          "alias": "获得道具次数",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "获得道具次数"
+          "query": "item_get"
         }
         ,
         "7": {
           "id": 7,
           "color": "RGB(255,99,71)",
-          "alias": "",
+          "alias": "消耗道具次数",
           "pin": false,
           "type": "lucene",
           "enable": true,
-          "query": "消耗道具次数"
+          "query": "item_cost"
         }
         ,
         "8": {
