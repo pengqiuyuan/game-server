@@ -3,6 +3,7 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -103,10 +104,13 @@ public class XyjRetainedScheduled {
 	}
 
 
-	public void esAll() throws IOException {	
+	public void esAll() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
+		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 		
 		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
@@ -122,7 +126,10 @@ public class XyjRetainedScheduled {
 		
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
-			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
+			/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
+			Date date = format.parse(entry.getKeyAsString());
+			String dateBucket = sdf.format(date);
+			/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 			if(dateBucket.equals(esUtilTest.twoDayAgoFrom())){
 			    Cardinality agg = entry.getAggregations().get("agg");
 			    Long aggcount = agg.getValue();
@@ -188,11 +195,14 @@ public class XyjRetainedScheduled {
 		}
 	}	
 	
-	public void esServerZone() throws IOException {	
+	public void esServerZone() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
-		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
+		DecimalFormat df = new DecimalFormat("0.00");//格式化小数 
+		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 		
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
@@ -215,7 +225,10 @@ public class XyjRetainedScheduled {
 
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
-			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
+			/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
+			Date date = format.parse(entry.getKeyAsString());
+			String dateBucket = sdf.format(date);
+			/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 			if(dateBucket.equals(esUtilTest.twoDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("serverZone");
 				
@@ -296,11 +309,14 @@ public class XyjRetainedScheduled {
 	}
 	
 	
-	public void esPlatForm() throws IOException {	
+	public void esPlatForm() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
+		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 		
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
@@ -317,7 +333,10 @@ public class XyjRetainedScheduled {
 
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
-			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
+			/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
+			Date date = format.parse(entry.getKeyAsString());
+			String dateBucket = sdf.format(date);
+			/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 			if(dateBucket.equals(esUtilTest.twoDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("platForm");
 				for (Terms.Bucket e : serverZone.getBuckets()) {
@@ -395,11 +414,14 @@ public class XyjRetainedScheduled {
 		}
 	}
 	
-	public void esServer() throws IOException {	
+	public void esServer() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
+		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 		
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
@@ -416,7 +438,10 @@ public class XyjRetainedScheduled {
 
 		Terms genders = sr.getAggregations().get("create");	
 		for (Terms.Bucket entry : genders.getBuckets()) {
-			String dateBucket = sdf.format(new Date((Long) entry.getKeyAsNumber()));
+			/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
+			Date date = format.parse(entry.getKeyAsString());
+			String dateBucket = sdf.format(date);
+			/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 			if(dateBucket.equals(esUtilTest.twoDayAgoFrom())){
 				Terms serverZone = entry.getAggregations().get("server");
 				for (Terms.Bucket e : serverZone.getBuckets()) {

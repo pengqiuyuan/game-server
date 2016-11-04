@@ -325,32 +325,32 @@
 	
 	<bean id="xyjRetainedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="xyjRetainedMethod" /> 
-     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <property name="cronExpression" value="0 10 3 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
      	 <!--  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
 	<bean id="xyjUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="xyjUserMethod" /> 
-     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <property name="cronExpression" value="0 10 3 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 <!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
 	<bean id="xyjPayTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="xyjPayMethod" /> 
-     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <property name="cronExpression" value="0 10 3 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 <!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
 	<bean id="xyjUserActiveTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="xyjUserActiveMethod" /> 
-     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <property name="cronExpression" value="0 10 3 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 <!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
 	<bean id="xyjUserIncomeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="xyjUserIncomeMethod" /> 
-     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <property name="cronExpression" value="0 10 3 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 <!--      	  <property name="cronExpression" value="0/3 * * * * ?"  />  -->
 	</bean>
 	<bean id="xyjPayPenetrationTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     	 <property name="jobDetail" ref="xyjPayPenetrationMethod" /> 
-     	 <property name="cronExpression" value="0 50 2 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
+     	 <property name="cronExpression" value="0 10 3 * * ?"  /> <!-- 每天凌晨2：30 触发一次 -->
 	</bean>
 	
 <!-- 日志监控值调度 start -->

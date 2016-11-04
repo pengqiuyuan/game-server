@@ -1,4 +1,5 @@
-package com.enlight.game.schedual.kun;
+package com.enlight.game.es;
+
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 import java.io.IOException;
@@ -6,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -14,33 +16,43 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
+import org.elasticsearch.search.aggregations.metrics.sum.Sum;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
+import com.enlight.game.entity.analysis.EsUserTotal;
 import com.enlight.game.entity.analysis.UserRetained;
+import com.enlight.game.schedual.xyj.XyjRetainedScheduled;
+import com.enlight.game.service.analysis.EsUserTotalService;
 import com.enlight.game.util.EsUtil;
 
-@Transactional(readOnly = true)
-public class KunRetainedScheduled {
-	
+
+
+@ContextConfiguration(locations = {"/applicationContext.xml"})
+public class EsRetainedTest extends SpringTransactionalTestCase{
+
 	@Autowired
 	public Client client;
 	
-	public static final Logger logger = LoggerFactory.getLogger(KunRetainedScheduled.class);
+	public static final Logger logger = LoggerFactory.getLogger(XyjRetainedScheduled.class);
 	
 	//项目名称
-	private static final String game = "KUN";
+	private static final String game = "XYJ";
 	
-	private static final String index = "logstash-kun-user-*";
+	private static final String index = "logstash-xyj-user-*";
 	
-	private static final String type = "kun_userlog";
+	private static final String type = "xyj_userlog";
 	
-	private static final String bulk_index = "log_kun_user";
+	private static final String bulk_index = "log_xyj_user";
 	
-	private static final String bulk_type_retained = "kun_user_retained";
+	private static final String bulk_type_retained = "xyj_user_retained";
 	
 	private static final Integer szsize = 10; //运营大区
 	
@@ -199,7 +211,7 @@ public class KunRetainedScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
-		DecimalFormat df = new DecimalFormat("0.00");//格式化小数
+		DecimalFormat df = new DecimalFormat("0.00");//格式化小数 
 		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
@@ -418,7 +430,7 @@ public class KunRetainedScheduled {
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
-		DecimalFormat df = new DecimalFormat("0.00");//格式化小数 
+		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
 		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
@@ -519,39 +531,40 @@ public class KunRetainedScheduled {
 		}
 	}
 	
+	@Test
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
-		logger.info("----------------kun retained begin-----------");
+		logger.info("----------------xyj retained begin-----------");
 		try {
 			esAll();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("kun all retained error " + e);
+			logger.error("xyj all retained error " + e);
 		}
 		
 		try {
 			esServerZone();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("kun serverZone retained error " +e);
+			logger.error("xyj serverZone retained error " +e);
 		}
 		
 		try {
 			esPlatForm();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("kun platForm retained error "+e);
+			logger.error("xyj platForm retained error "+e);
 		}
 		
 		try {
 			esServer();
 		} catch (Exception e) {
 			// TODO: handle exception
-			logger.error("kun server retained error "+e);
+			logger.error("xyj server retained error "+e);
 		}
 
-		logger.info("----------------kun retained end-------------");
+		logger.info("----------------xyj retained end-------------");
 	}
-	
 
+	
 }

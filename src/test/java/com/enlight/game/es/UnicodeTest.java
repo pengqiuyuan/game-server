@@ -36,7 +36,7 @@ public class UnicodeTest extends SpringTransactionalTestCase{
 		System.out.println("44444   "  + URLEncoder.encode(sJava2, "gbk"));
 	}
 
-	@Test
+	//@Test
 	public void test1() throws IOException, ParseException {	
 		String nowDate = "2016-10-21 14:13:40";
 		System.out.println(nowDate);
@@ -61,6 +61,12 @@ public class UnicodeTest extends SpringTransactionalTestCase{
 		
 		System.out.println("测试2 "+ getByHour("2016-07-08 23:59:59", "-1"));
 		System.out.println("测试2 "+ getByDay("2016-07-08 23:59:59", "0"));
+	}
+	@Test
+	public void test3() throws IOException, ParseException {	
+		System.out.println(sdf.format(new Date()));
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		System.out.println(sdf1.format(new Date()));
 	}
 	
 	public static String getDateByWeek(String week,String date) throws ParseException{
