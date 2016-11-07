@@ -13,7 +13,7 @@
 <body>
 	<div >
 		<div class="page-header">
-			<h2>服务器信息</h2>
+			<h4>服务器信息</h4>
 		</div>
 		<div>
 		 <c:if test="${not empty message}">
