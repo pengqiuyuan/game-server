@@ -77,7 +77,7 @@
 				<label class="control-label" for="receiver">收件玩家Guid：</label>
 					<div class="controls">  
 						<input type="text" name="receiver" class="input-large " placeholder="玩家Guid,英文逗号隔开"/>
-						<span class="help-block">多个收件玩家使用英文逗号分割</span>
+						<span class="help-block">多个收件玩家使用英文逗号分割（不填默认为群发！）</span>
 					</div>
 			</div>	
 			<div
