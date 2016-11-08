@@ -73,10 +73,10 @@ margin: 0px 0 0;
 	</form>
 	<script type="text/javascript">
 	function selectAll(id){  
-	    if ($("#"+id).attr("checked")) {
-	        $("input[id='"+id+"']").attr("checked", true);  
+	    if ($("#"+id).prop("checked")) {
+	        $("input[id='"+id+"']").prop("checked", true);  
 	    } else {  
-	    	$("input[id='"+id+"']").attr("checked", false);  
+	    	$("input[id='"+id+"']").prop("checked", false);  
 	    }  
 	}	
 $(function(){

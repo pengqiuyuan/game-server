@@ -106,7 +106,7 @@
 			    {
 				var id = $(this).attr("rel");
 					$.ajax({
-						url: '<%=request.getContextPath()%>/manage/server/del?id=' + id, 
+						url: '<%=request.getContextPath()%>/manage/platForm/del?id=' + id, 
 						type: 'DELETE',
 						contentType: "application/json;charset=UTF-8",
 						dataType: 'json',
