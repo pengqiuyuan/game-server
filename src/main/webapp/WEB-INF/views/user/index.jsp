@@ -131,9 +131,9 @@
 				height:600
 			});
 
-
-
 			$(".del").click(function(){
+				if(confirm("该操作会冻结用户。。。。！"))
+			    {
 				var id = $(this).attr("rel");
 					$.ajax({
 						url: '<%=request.getContextPath()%>/manage/user/del?id=' + id,
@@ -146,10 +146,12 @@
 							alert('错误了，请重试');
 						}
 					});
-
+			    }
 			});
 
 			$(".userdel").click(function(){
+				if(confirm("该操作会删除。。。。！"))
+			    {
 				var id = $(this).attr("rel");
 					$.ajax({
 						url: '<%=request.getContextPath()%>/manage/user/delUser?id=' + id,
@@ -162,7 +164,7 @@
 							alert('错误了，请重试');
 						}
 					});
-
+			    }
 			});
 
 
