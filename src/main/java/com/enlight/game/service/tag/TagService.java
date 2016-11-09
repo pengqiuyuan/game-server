@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -65,8 +66,8 @@ public class TagService {
 	public List<Tag> placeExcelParseDB(HSSFWorkbook wb, InputStream is) {
 		List<Tag> tags = new ArrayList<Tag>(0);
 		
-		String tagId=null;
-		String tagName=null;
+		String tagId="";
+		String tagName="";
 		try {
 			//得到第一个工作表
 			HSSFSheet sheet=wb.getSheetAt(0);
@@ -78,7 +79,7 @@ public class TagService {
 				sheet=wb.getSheetAt(i);
 				System.out.println("行的总数:"+sheet.getPhysicalNumberOfRows());
 				//历该工作表中的所有行j表示行数 getPhysicalNumberOfRows行的总数
-				for(int j=0;j<sheet.getPhysicalNumberOfRows();j++){
+				for(int j=1;j<sheet.getPhysicalNumberOfRows();j++){
 					Tag tag = new Tag();
 					row=sheet.getRow(j);
 					//判断是否存在还需要导入的数据
@@ -86,48 +87,28 @@ public class TagService {
 						System.out.println("这里已没有数据，在第"+i+"页,第"+j+"行");
 						break;
 					}
-					if(row. getCell(0)==null){
-						tagId="";
-					}else if(row.getCell(0).getCellType()==0){
-						//确保返回的数字没有小数，不按科学计数法表示
-						tagId = new DecimalFormat("0").format(row.getCell(0).getNumericCellValue());
-//						name=new Double(row.getCell(0).getNumericCellValue()).toString();
-					}
-					//如果EXCEL表格中的数据类型为字符串型
-					else{
-						tagId=row.getCell(0).getStringCellValue().trim();
-					}
-					//**将EXCEL中的第 j 行，第3列的值插入到实例中*/	
-					if(row.getCell(1)==null){
-						tagName="";
-					}else if(row.getCell(1).getCellType()==0){
-						tagName = new DecimalFormat("0").format(row.getCell(1).getNumericCellValue());
-//						addr=new Double(row.getCell(1).getNumericCellValue()).toString();
-					}else{
-						tagName=row.getCell(1).getStringCellValue().trim();
+					row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+					if (row.getCell(0) != null) {
+						tagId = row.getCell(0).getStringCellValue();
 					}
 
-					if(!isNull(tagId) && !isNull(tagName)){
-						tag.setTagId(Long.valueOf(tagId));
-						tag.setTagName(tagName);
-						tag.setCategory(Tag.CATEGORY_ITEM);
-						tags.add(tag);
+					if (row.getCell(1) != null) {
+						tagName = row.getCell(1).getStringCellValue();
 					}
-					System.out.println(" " + tag.getTagId() + "  " + tag.getTagName() + "  "  + tag.getCategory());
+
+					tag.setTagId(Long.valueOf(tagId));
+					tag.setTagName(tagName);
+					tag.setCategory(Tag.CATEGORY_ITEM);
+					tags.add(tag);
+					System.out.println(j + " " + tag.getTagId() + "  " + tag.getTagName() + "  "  + tag.getCategory());
 				}
 			}
 		} catch (Exception e) {
+			System.out.println("ttttttttttttt" +e);
 			e.getStackTrace();
 		}
 		System.out.println("实际导入条数："+tags.size());
 		return tags;
 	}
 	
-	private boolean isNull(String obj){
-		if(obj == null || obj.trim().equals("")){
-			return true;
-		}else{
-			return false;
-		}
-	}
 }

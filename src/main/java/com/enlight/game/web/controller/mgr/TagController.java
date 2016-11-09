@@ -135,8 +135,13 @@ public class TagController {
 		mav.addObject("tagsUpdate",tagsUpdate);
 		mav.addObject("tagsFails",tagsFails);
 		mav.addObject("tagsAdd",tagsAdd);
-		String lastTag = tags.get(tags.size()-1).getTagName();
-		mav.addObject("lastTag",lastTag);
+		if(tags.size() != 0){
+			String lastTag = tags.get(tags.size()-1).getTagName();
+			mav.addObject("lastTag",lastTag);
+		}else{
+			mav.addObject("lastTag","");
+		}
+
 		mav.addObject("tagsAll",tagService.findByCategoryAndStoreId(category,storeId));
 		mav.setViewName("/tag/addExcel");
 		return mav;
