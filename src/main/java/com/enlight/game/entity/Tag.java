@@ -14,11 +14,14 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)   // 二级缓存
 public class Tag {
 	
-	//道具 获得途径
+	//道具 Id 
 	public static final String CATEGORY_ITEM = "1";
 	
 	//新手引导
 	public static final String CATEGORY_NEWPLAYER_GUIDE  = "2";
+	
+	//道具、金币、真实币 获得消耗途径
+	public static final String CATEGORY_GET_AND_COST  = "3";
 
 	private Long id;
 	

@@ -491,8 +491,13 @@ public class CountController extends BaseController{
 				for (PlatForm platForm : platForms) {
 					map.put(platForm.getPfId(),platForm.getPfName());
 				}
-			}else if(name.equals("获得途径")||name.equals("消耗途径")||name.equals("日志道具id")){
+			}else if(name.equals("日志道具id")){
 				List<Tag> tags = tagService.findByCategoryAndStoreName(Tag.CATEGORY_ITEM,game.toUpperCase());
+				for (Tag tag : tags) {
+					map.put(tag.getTagId().toString(), tag.getTagName());
+				}
+			}else if(name.equals("获得途径")||name.equals("消耗途径")){
+				List<Tag> tags = tagService.findByCategoryAndStoreName(Tag.CATEGORY_GET_AND_COST,game.toUpperCase());
 				for (Tag tag : tags) {
 					map.put(tag.getTagId().toString(), tag.getTagName());
 				}

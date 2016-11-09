@@ -35,6 +35,7 @@
 				        <option value="">请选择类型</option>
 						<option value="1">道具Excel</option>
 						<option value="2">新手引导Excel</option>
+						<option value="3">道具、金币、真实币获得消耗途径Excel</option>
 				</select>	
 			</div>	
 		</div>
