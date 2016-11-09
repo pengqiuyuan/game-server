@@ -87,19 +87,17 @@
 				</div>
 				<div class="span6">
 					<div class="control-group">
-						<label class="control-label" for="eventPic">活动图标：</label>
+						<label class="control-label" for="eventPic">活动图标（填写完整名称带后缀）：</label>
 						<div class="controls">
-								<input type="text" name="eventPic" id="eventPic" class="input-large " value="" readonly="readonly" placeholder="如：huodong_icon_tongyong"/>
-								<span>.png</span>
+								<input type="text" name="eventPic" id="eventPic" class="input-large " value="" readonly="readonly" placeholder="如：huodong_icon_tongyong.png"/>
 						</div>
 					</div>
 				</div>
 				<div class="span6">
 					<div class="control-group">
-						<label class="control-label" for="eventShow">活动大图：</label>
+						<label class="control-label" for="eventShow">活动大图（填写完整名称带后缀）：</label>
 						<div class="controls">
-								<input type="text" name="eventShow" id="eventShow" class="input-large " value="" placeholder="如：huodong_icon_tongyong"/>
-								<span class="add-on">.png</span>
+								<input type="text" name="eventShow" id="eventShow" class="input-large " value="" placeholder="如：huodong_icon_tongyong.png"/>
 						</div>
 					</div>
 				</div>

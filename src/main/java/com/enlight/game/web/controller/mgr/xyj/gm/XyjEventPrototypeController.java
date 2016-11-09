@@ -266,12 +266,12 @@ public class XyjEventPrototypeController extends BaseController{
 	public String saveEventPrototype(EventPrototype eventPrototype,ServletRequest request,RedirectAttributes redirectAttributes,Model model){
 		ShiroUser user = getCurrentUser();
 		if(!eventPrototype.getEventPic().equals("") && eventPrototype.getEventPic() !=null){
-			eventPrototype.setEventPic(eventPrototype.getEventPic()+".png");
+			eventPrototype.setEventPic(eventPrototype.getEventPic());
 		}else{
 			eventPrototype.setEventPic("");
 		}
 		if(!eventPrototype.getEventShow().equals("") && eventPrototype.getEventShow() !=null){
-			eventPrototype.setEventShow(eventPrototype.getEventShow()+".png");
+			eventPrototype.setEventShow(eventPrototype.getEventShow());
 		}else{
 			eventPrototype.setEventShow("");
 		}
@@ -350,7 +350,7 @@ public class XyjEventPrototypeController extends BaseController{
 		if(!eventPrototype.getEventPic().equals(eventP1.getEventPic())){
 			logService.log(user.name, user.name+"：xyj 活动 eventPic 字段 "+eventP1.getEventPic()+" 修改为 "+eventPrototype.getEventPic() , Log.TYPE_GM_EVENT);
 			if(!eventPrototype.getEventPic().equals("") && eventPrototype.getEventPic() !=null){
-				eventP1.setEventPic(eventPrototype.getEventPic()+".png");
+				eventP1.setEventPic(eventPrototype.getEventPic());
 			}else{
 				eventP1.setEventPic("");
 			}
@@ -358,7 +358,7 @@ public class XyjEventPrototypeController extends BaseController{
 		if(!eventPrototype.getEventShow().equals(eventP1.getEventShow())){
 			logService.log(user.name, user.name+"：xyj 活动 eventShow 字段 "+eventP1.getEventShow()+" 修改为 "+eventPrototype.getEventShow() , Log.TYPE_GM_EVENT);
 			if(!eventPrototype.getEventShow().equals("") && eventPrototype.getEventShow() !=null){
-				eventP1.setEventShow(eventPrototype.getEventShow()+".png");
+				eventP1.setEventShow(eventPrototype.getEventShow());
 			}else{
 				eventP1.setEventShow("");
 			}
