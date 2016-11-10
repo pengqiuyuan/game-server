@@ -160,7 +160,7 @@
 			$("#checkAll").click(function(){
 		         var bischecked=$('#checkAll').is(':checked');
 		         var f=$('input[class="checkbox"]');
-		         bischecked?f.attr('checked',true):f.attr('checked',false);
+		         bischecked?f.prop('checked',true):f.prop('checked',false);
 		         var m=$('.cStatus');
 		         bischecked?m.show():m.hide();
 			});
