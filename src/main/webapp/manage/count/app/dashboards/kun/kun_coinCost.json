@@ -134,7 +134,7 @@
             "@timestamp",
             "desc"
           ],
-          "overflow": "height",
+          "overflow": "min-height",
           "fields": [
             "_type",
             "@timestamp",
