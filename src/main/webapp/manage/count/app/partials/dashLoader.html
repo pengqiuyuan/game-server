@@ -6,6 +6,7 @@
 
 <li ng-repeat="pulldown in dashboard.current.nav" ng-controller="PulldownCtrl" ng-show="pulldown.enable"><kibana-simple-panel type="pulldown.type" ng-cloak></kibana-simple-panel></li>
 
+<!-- 
 <li ng-if="dashboard.current.loader.show_home !== false"><a bs-tooltip="'Goto saved default'" data-placement="bottom" href='#/dashboard'><i class='icon-home'></i></a></li>
 <li class="dropdown" ng-show="showDropdown('load')" >
   <a href="#" bs-tooltip="'Load'" data-placement="bottom" class="dropdown-toggle" data-toggle="dropdown" ng-click="elasticsearch_dblist(elasticsearch.query+'*')">
@@ -102,6 +103,6 @@
 
 </li>
 <li ng-show="showDropdown('share')"><a bs-tooltip="'Share'" data-placement="bottom" ng-click="elasticsearch_save('temp',dashboard.current.loader.save_temp_ttl)" bs-modal="'app/partials/dashLoaderShare.html'"><i class='icon-share'></i></a></li>
-
+ -->
 <li ng-show="dashboard.current.editable" bs-tooltip="'Configure dashboard'" data-placement="bottom"><a class="link" config-modal="app/partials/dasheditor.html" kbn-model="dashboard"><i class='icon-cog'></i></a></li>
 
