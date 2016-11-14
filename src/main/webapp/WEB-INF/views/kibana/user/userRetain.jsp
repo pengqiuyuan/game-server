@@ -208,7 +208,6 @@
 
 				</div>
 			</form>
-
 			<div class="row-fluid">
 				<div class="span12">
 					<div class="ibox float-e-margins">
@@ -217,6 +216,30 @@
 								<li class="active"><a href="#a2" data-toggle="tab">2日留存</a></li>
 								<li><a href="#a3" data-toggle="tab">3日留存</a></li>
 								<li><a href="#a4" data-toggle="tab">4日留存</a></li>
+								<li><a href="#a5" data-toggle="tab">5日留存</a></li>
+								<li><a href="#a6" data-toggle="tab">6日留存</a></li>
+								<li><a href="#a8" data-toggle="tab">8日留存</a></li>
+								<li><a href="#a9" data-toggle="tab">9日留存</a></li>
+								<li><a href="#a10" data-toggle="tab">10日留存</a></li>
+								<li><a href="#a11" data-toggle="tab">11日留存</a></li>
+								<li><a href="#a12" data-toggle="tab">12日留存</a></li>
+								<li><a href="#a13" data-toggle="tab">13日留存</a></li>
+								<li><a href="#a14" data-toggle="tab">14日留存</a></li>
+								<li><a href="#a15" data-toggle="tab">15日留存</a></li>
+								<li><a href="#a16" data-toggle="tab">16日留存</a></li>
+								<li><a href="#a17" data-toggle="tab">17日留存</a></li>
+								<li><a href="#a18" data-toggle="tab">18日留存</a></li>
+								<li><a href="#a19" data-toggle="tab">19日留存</a></li>
+								<li><a href="#a20" data-toggle="tab">20日留存</a></li>
+								<li><a href="#a21" data-toggle="tab">21日留存</a></li>
+								<li><a href="#a22" data-toggle="tab">22日留存</a></li>
+								<li><a href="#a23" data-toggle="tab">23日留存</a></li>
+								<li><a href="#a24" data-toggle="tab">24日留存</a></li>
+								<li><a href="#a25" data-toggle="tab">25日留存</a></li>
+								<li><a href="#a26" data-toggle="tab">26日留存</a></li>
+								<li><a href="#a27" data-toggle="tab">27日留存</a></li>
+								<li><a href="#a28" data-toggle="tab">28日留存</a></li>
+								<li><a href="#a29" data-toggle="tab">29日留存</a></li>
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="a2">
@@ -228,15 +251,113 @@
 								<div class="tab-pane" id="a4">
 									<div id="maind4Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
 								</div>
+								<div class="tab-pane" id="a5">
+									<div id="maind5Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a6">
+									<div id="maind6Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a7">
+									<div id="maind8Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a9">
+									<div id="maind9Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a10">
+									<div id="maind10Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a11">
+									<div id="maind11Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a12">
+									<div id="maind12Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a13">
+									<div id="maind13Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a14">
+									<div id="maind14Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a15">
+									<div id="maind15Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a16">
+									<div id="maind16Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a17">
+									<div id="maind17Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a18">
+									<div id="maind18Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a19">
+									<div id="maind19Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a20">
+									<div id="maind20Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a21">
+									<div id="maind21Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a22">
+									<div id="maind22Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a23">
+									<div id="maind23Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a24">
+									<div id="maind24Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a25">
+									<div id="maind25Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a26">
+									<div id="maind26Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a27">
+									<div id="maind27Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a28">
+									<div id="maind28Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a29">
+									<div id="maind29Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content">
+						    <div id="mainNextDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content">
+						    <div id="mainSevenDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span12" id="choose">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content">
+						    <div id="mainThirtyDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-
 
     <script src="<%=request.getContextPath()%>/static/echarts/js/echarts.js"></script>
     <script src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
