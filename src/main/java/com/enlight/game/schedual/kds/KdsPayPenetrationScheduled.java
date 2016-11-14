@@ -97,7 +97,7 @@ public class KdsPayPenetrationScheduled {
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
 		        .addAggregation(
-		        		AggregationBuilders.cardinality("agg").field("玩家GUID")
+		        		AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    ).execute().actionGet();
 		Cardinality peoplen = peoplenum.getAggregations().get("agg");
 		
@@ -109,7 +109,7 @@ public class KdsPayPenetrationScheduled {
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
-			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
+			    		AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    ).execute().actionGet();
 		Cardinality ac = active.getAggregations().get("agg");
 		
@@ -193,7 +193,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g2 = peoplenum.getAggregations().get("serverZone");
@@ -212,7 +212,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g3 = active.getAggregations().get("serverZone");
@@ -295,7 +295,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g2 = peoplenum.getAggregations().get("platForm");
@@ -314,7 +314,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g3 = active.getAggregations().get("platForm");
@@ -397,7 +397,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g2 = peoplenum.getAggregations().get("server");
@@ -416,7 +416,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g3 = active.getAggregations().get("server");
@@ -490,7 +490,7 @@ public class KdsPayPenetrationScheduled {
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
 		        .addAggregation(
-		        		AggregationBuilders.cardinality("agg").field("玩家GUID")
+		        		AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    ).execute().actionGet();
 		Cardinality peoplen = peoplenum.getAggregations().get("agg");
 		
@@ -502,7 +502,7 @@ public class KdsPayPenetrationScheduled {
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
-			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
+			    		AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    ).execute().actionGet();
 		Cardinality ac = active.getAggregations().get("agg");
 		
@@ -587,7 +587,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g2 = peoplenum.getAggregations().get("serverZone");
@@ -606,7 +606,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g3 = active.getAggregations().get("serverZone");
@@ -691,7 +691,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g2 = peoplenum.getAggregations().get("platForm");
@@ -710,7 +710,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g3 = active.getAggregations().get("platForm");
@@ -794,7 +794,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g2 = peoplenum.getAggregations().get("server");
@@ -813,7 +813,7 @@ public class KdsPayPenetrationScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms g3 = active.getAggregations().get("server");

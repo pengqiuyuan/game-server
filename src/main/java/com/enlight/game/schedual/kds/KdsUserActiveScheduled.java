@@ -67,7 +67,7 @@ public class KdsUserActiveScheduled {
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
-			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
+			    		AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    ).execute().actionGet();
 		
 		Cardinality aggDay = dayactive.getAggregations().get("agg");
@@ -93,7 +93,7 @@ public class KdsUserActiveScheduled {
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
-			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
+			    		AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    ).execute().actionGet();
 		
 		Cardinality aggWeek = weekactive.getAggregations().get("agg");
@@ -119,7 +119,7 @@ public class KdsUserActiveScheduled {
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
-			    		AggregationBuilders.cardinality("agg").field("玩家GUID")
+			    		AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    ).execute().actionGet();
 		
 		Cardinality aggMouth = mouthactive.getAggregations().get("agg");
@@ -154,7 +154,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms daygenders = dayactive.getAggregations().get("serverZone");	
@@ -185,7 +185,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms weekgenders = weekactive.getAggregations().get("serverZone");	
@@ -217,7 +217,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms mouthgenders = mouthactive.getAggregations().get("serverZone");	
@@ -256,7 +256,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms daygenders = dayactive.getAggregations().get("platform");	
@@ -287,7 +287,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 		        		AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms weekgenders = weekactive.getAggregations().get("platform");	
@@ -319,7 +319,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 		        		AggregationBuilders.terms("platform").field("渠道ID").size(pfsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms mouthgenders = mouthactive.getAggregations().get("platform");	
@@ -358,7 +358,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms daygenders = dayactive.getAggregations().get("server");	
@@ -389,7 +389,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 		        		AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms weekgenders = weekactive.getAggregations().get("server");	
@@ -421,7 +421,7 @@ public class KdsUserActiveScheduled {
 		        )
 		        .addAggregation(
 		        		AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms mouthgenders = mouthactive.getAggregations().get("server");	

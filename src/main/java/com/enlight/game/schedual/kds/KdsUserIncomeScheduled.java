@@ -457,7 +457,7 @@ public class KdsUserIncomeScheduled {
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
 		        .addAggregation(
-		        		AggregationBuilders.cardinality("agg").field("玩家GUID")
+		        		AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    ).execute().actionGet();
 		Cardinality agg = peoplenum.getAggregations().get("agg");
 		
@@ -489,7 +489,7 @@ public class KdsUserIncomeScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms genders = peoplenum.getAggregations().get("serverZone");	
@@ -525,7 +525,7 @@ public class KdsUserIncomeScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms genders = peoplenum.getAggregations().get("platForm");	
@@ -561,7 +561,7 @@ public class KdsUserIncomeScheduled {
 		        )
 		        .addAggregation(
 						AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(
-								AggregationBuilders.cardinality("agg").field("玩家GUID")
+								AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 								)
 			    ).execute().actionGet();
 		Terms genders = peoplenum.getAggregations().get("server");	
