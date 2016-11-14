@@ -26,7 +26,18 @@
     <script src="${ctx}/static/jquery-validation/1.11.1/jquery.validate.min.js" type="text/javascript"></script>
     
     <link href="<%=request.getContextPath()%>/static/echarts/css/echartsHome.css" rel="stylesheet">
-
+	<style type="text/css">
+		.tab-content > .tab-pane,
+		.pill-content > .pill-pane {
+			display: block;     /* undo display:none          */
+			height: 0;          /* height:0 is also invisible */
+			overflow-y: hidden; /* no-overflow                */
+		}
+		.tab-content > .active,
+		.pill-content > .active {
+			height: auto; /* let the content decide it */
+		}
+	</style>
   <body>
 	<div id="wrapper">
 		<div class="wrapper wrapper-content animated fadeInRight">
@@ -202,36 +213,34 @@
 				<div class="span12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
-						    <div id="mainNextDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+						    <ul class="nav nav-tabs">
+								<li class="active"><a href="#a2" data-toggle="tab">2日留存</a></li>
+								<li><a href="#a3" data-toggle="tab">3日留存</a></li>
+								<li><a href="#a4" data-toggle="tab">4日留存</a></li>
+							</ul>
+							<div class="tab-content">
+								<div class="tab-pane active" id="a2">
+									<div id="maind2Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a3">
+									<div id="maind3Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+								<div class="tab-pane" id="a4">
+									<div id="maind4Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row-fluid">
-				<div class="span12">
-					<div class="ibox float-e-margins">
-						<div class="ibox-content">
-						    <div id="mainSevenDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<div class="span12" id="choose">
-					<div class="ibox float-e-margins">
-						<div class="ibox-content">
-						    <div id="mainThirtyDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-						</div>
-					</div>
-				</div>
-			</div>
+
 		</div>
 	</div>
 
 
     <script src="<%=request.getContextPath()%>/static/echarts/js/echarts.js"></script>
     <script src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
-    
+    <%@ include file="userRetainChart.jsp"%>
 	<script type="text/javascript">
 
 		$("#chooseBtn").click(function(){
@@ -330,221 +339,4 @@
 		})
 		
 	</script>
-	
-	<script type="text/javascript">
-	
-    require.config({
-        paths: {
-            echarts: '../../../static/echarts/js'
-        }
-    });
-    
-    require(
-        [
-            'echarts',
-            'echarts/chart/bar',
-            'echarts/chart/line',
-            'echarts/chart/map'
-        ],
-        function (ec) {
-            var nextName = [];
-            var nextDate =[];
-            var nextSeries = [];
-        	var nd = 0;
-            for(var key in ${next}){
-            	nextName.push(key);
-            	var da = [];
-            	for ( var datakey in ${next}[key]) {  
-            		if(nd == 0){
-            			nextDate.push(datakey)
-            		}
-            		da.push(${next}[key][datakey])                    
-                }  
-            	nextSeries.push({name:key,type:'line',data:da});
-            	nd = 1;
-            }
-            
-            
-            var sevenName = [];
-            var sevenDate = [];
-            var sevenSeries = [];
-            var sd = 0;
-            for(var key in ${seven}){
-            	sevenName.push(key);
-            	var da = [];
-            	for ( var datakey in ${seven}[key]) {  
-            		if(sd == 0){
-            			sevenDate.push(datakey)
-            		}
-            		da.push(${seven}[key][datakey])                   
-                } 
-            	sevenSeries.push({name:key,type:'line',data:da});
-            	sd = 1;
-            }
-            
-            var thirtyName = [];
-            var thirtyDate = [];
-            var thirtySeries = [];
-            var td = 0;
-            for(var key in ${thirty}){
-            	thirtyName.push(key);
-            	var da = [];
-            	for ( var datakey in ${thirty}[key]) {  
-            		if(td == 0){
-            			thirtyDate.push(datakey)
-            		}
-            		da.push(${thirty}[key][datakey])                   
-                } 
-            	thirtySeries.push({name:key,type:'line',data:da});
-            	td = 1;
-            }
-            
-            //--- 折柱 ---
-            var myChart = ec.init(document.getElementById('mainNextDay'));
-            myChart.setTheme('macarons');
-            myChart.setOption({
-                title : {
-                    text: '次日留存率',
-                    subtext: '某日新增的玩家/设备中，在该日后的第N日中，还有进行游戏的玩家/设备比例。例 如：5月3日新增玩家为100人，这100人中有24人在5月4日这一天内还有玩过游戏，5月3日的次日留存率=24/100=24%'
-                },
-                tooltip : {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:nextName
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
-                        magicType : {show: true, type: ['line', 'bar']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
-                    }
-                },
-                dataZoom : {
-                    show : true,
-                    realtime : true,
-                    start : 0,
-                    end : 100
-                },
-                calculable : true,
-                xAxis : [
-                    {
-                        type : 'category',
-                        data : nextDate
-                    }
-                ],
-                yAxis : [
-                    {
-                        type : 'value',
-                        axisLabel : {
-                            formatter: '{value}％'
-                        },
-                        splitArea : {show : true}
-                    }
-                ],
-                series : nextSeries
-            });
-            
-            var myChart = ec.init(document.getElementById('mainSevenDay'));
-            myChart.setTheme('macarons');
-            myChart.setOption({
-                title : {
-                    text: '七日留存率',
-                    subtext: '某日新增的玩家/设备中，在该日后的第N日中，还有进行游戏的玩家/设备比例。例 如：5月3日新增玩家为100人，这100人中有24人在5月10日这一天内还有玩过游戏，5月3日的7日留存率=24/100=24%'
-                },
-                tooltip : {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:sevenName
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
-                        magicType : {show: true, type: ['line', 'bar']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
-                    }
-                },
-                dataZoom : {
-                    show : true,
-                    realtime : true,
-                    start : 0,
-                    end : 100
-                },
-                calculable : true,
-                xAxis : [
-                    {
-                        type : 'category',
-                        data : sevenDate
-                    }
-                ],
-                yAxis : [
-                    {
-                        type : 'value',
-                        axisLabel : {
-                            formatter: '{value}％'
-                        },
-                        splitArea : {show : true}
-                    }
-                ],
-                series : sevenSeries
-            });
-            
-            var myChart = ec.init(document.getElementById('mainThirtyDay'));
-            myChart.setTheme('macarons');
-            myChart.setOption({
-                title : {
-                    text: '三十日留存率',
-                    subtext: '某日新增的玩家/设备中，在该日后的第N日中，还有进行游戏的玩家/设备比例。例 如：5月3日新增玩家为100人，这100人中有24人在6月2日这一天内还有玩过游戏，5月3日的30日留存率=24/100=24%'
-                },
-                tooltip : {
-                    trigger: 'axis'
-                },
-                legend: {
-                    data:thirtyName
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
-                        magicType : {show: true, type: ['line', 'bar']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
-                    }
-                },
-                dataZoom : {
-                    show : true,
-                    realtime : true,
-                    start : 0,
-                    end : 100
-                },
-                calculable : true,
-                xAxis : [
-                    {
-                        type : 'category',
-                        data : thirtyDate
-                    }
-                ],
-                yAxis : [
-                    {
-                        type : 'value',
-                        axisLabel : {
-                            formatter: '{value}％'
-                        },
-                        splitArea : {show : true}
-                    }
-                ],
-                series : thirtySeries
-            });
-            
-        }
-    );
-    </script>
   </body>

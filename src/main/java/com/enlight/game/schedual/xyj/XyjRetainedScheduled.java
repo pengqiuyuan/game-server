@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.enlight.game.entity.analysis.UserRetained;
 import com.enlight.game.util.EsUtil;
+import com.google.common.collect.Maps;
 
 @Transactional(readOnly = true)
 public class XyjRetainedScheduled {
@@ -50,7 +52,77 @@ public class XyjRetainedScheduled {
 	
 	private static final Integer num = 35; //35天以内的留存
 	
-	EsUtil esUtilTest = new EsUtil();
+	static EsUtil esUtilTest = new EsUtil();
+	
+	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
+	
+	private static Map<String, String> sortTypes2 = Maps.newLinkedHashMap();
+
+	static {
+		/*次日留存 这一条忽略*/
+		sortTypes.put(esUtilTest.xOneDay(-3), esUtilTest.xOneDay(-2));
+		sortTypes.put(esUtilTest.xOneDay(-4), esUtilTest.xOneDay(-3));
+		sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
+		sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
+		sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
+		/*7日留存 这一条忽略*/
+		sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
+		sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
+		sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
+		sortTypes.put(esUtilTest.xOneDay(-12), esUtilTest.xOneDay(-11));
+		sortTypes.put(esUtilTest.xOneDay(-13), esUtilTest.xOneDay(-12));
+		sortTypes.put(esUtilTest.xOneDay(-14), esUtilTest.xOneDay(-13));
+		sortTypes.put(esUtilTest.xOneDay(-15), esUtilTest.xOneDay(-14));
+		sortTypes.put(esUtilTest.xOneDay(-16), esUtilTest.xOneDay(-15));
+		sortTypes.put(esUtilTest.xOneDay(-17), esUtilTest.xOneDay(-16));
+		sortTypes.put(esUtilTest.xOneDay(-18), esUtilTest.xOneDay(-17));
+		sortTypes.put(esUtilTest.xOneDay(-19), esUtilTest.xOneDay(-18));
+		sortTypes.put(esUtilTest.xOneDay(-20), esUtilTest.xOneDay(-19));
+		sortTypes.put(esUtilTest.xOneDay(-21), esUtilTest.xOneDay(-20));
+		sortTypes.put(esUtilTest.xOneDay(-22), esUtilTest.xOneDay(-21));
+		sortTypes.put(esUtilTest.xOneDay(-23), esUtilTest.xOneDay(-22));
+		sortTypes.put(esUtilTest.xOneDay(-24), esUtilTest.xOneDay(-23));
+		sortTypes.put(esUtilTest.xOneDay(-25), esUtilTest.xOneDay(-24));
+		sortTypes.put(esUtilTest.xOneDay(-26), esUtilTest.xOneDay(-25));
+		sortTypes.put(esUtilTest.xOneDay(-27), esUtilTest.xOneDay(-26));
+		sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
+		sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
+		sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
+		/*30日留存 这一条忽略*/
+	}
+	
+	static {
+		/*次日留存 这一条忽略*/
+		sortTypes2.put(esUtilTest.xOneDay(-3),"2Day");
+		sortTypes2.put(esUtilTest.xOneDay(-4), "3Day");
+		sortTypes2.put(esUtilTest.xOneDay(-5), "4Day");
+		sortTypes2.put(esUtilTest.xOneDay(-6), "5Day");
+		sortTypes2.put(esUtilTest.xOneDay(-7), "6Day");
+		/*7日留存 这一条忽略*/
+		sortTypes2.put(esUtilTest.xOneDay(-9), "8Day");
+		sortTypes2.put(esUtilTest.xOneDay(-10), "9Day");
+		sortTypes2.put(esUtilTest.xOneDay(-11), "10Day");
+		sortTypes2.put(esUtilTest.xOneDay(-12), "11Day");
+		sortTypes2.put(esUtilTest.xOneDay(-13), "12Day");
+		sortTypes2.put(esUtilTest.xOneDay(-14), "13Day");
+		sortTypes2.put(esUtilTest.xOneDay(-15), "14Day");
+		sortTypes2.put(esUtilTest.xOneDay(-16), "15Day");
+		sortTypes2.put(esUtilTest.xOneDay(-17), "16Day");
+		sortTypes2.put(esUtilTest.xOneDay(-18), "17Day");
+		sortTypes2.put(esUtilTest.xOneDay(-19), "18Day");
+		sortTypes2.put(esUtilTest.xOneDay(-20), "19Day");
+		sortTypes2.put(esUtilTest.xOneDay(-21), "20Day");
+		sortTypes2.put(esUtilTest.xOneDay(-22), "21Day");
+		sortTypes2.put(esUtilTest.xOneDay(-23), "22Day");
+		sortTypes2.put(esUtilTest.xOneDay(-24), "23Day");
+		sortTypes2.put(esUtilTest.xOneDay(-25), "24Day");
+		sortTypes2.put(esUtilTest.xOneDay(-26), "25Day");
+		sortTypes2.put(esUtilTest.xOneDay(-27), "26Day");
+		sortTypes2.put(esUtilTest.xOneDay(-28), "27Day");
+		sortTypes2.put(esUtilTest.xOneDay(-29), "28Day");
+		sortTypes2.put(esUtilTest.xOneDay(-30), "29Day");
+		/*30日留存 这一条忽略*/
+	}
 	
 	public Long createCount(String from , String to){
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
@@ -188,6 +260,23 @@ public class XyjRetainedScheduled {
 			                    .endObject()
 				                  )
 				        );
+			}else if(sortTypes.containsKey(dateBucket)){
+			    Cardinality agg = entry.getAggregations().get("agg");
+			    Long aggcount = agg.getValue();
+			    Double x ;
+				x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+				        .setSource(jsonBuilder()
+					           	 .startObject()
+			                        .field("date", dateBucket.split("T")[0])
+			                        .field("gameId", game)
+			                        .field("ctRetained", sortTypes2.get(dateBucket))
+			                        .field("retained", df.format(x))
+			                        .field("key", UserRetained.KEY_ALL)
+			                        .field("@timestamp", new Date())
+			                    .endObject()
+				                  )
+				        );
 			}
 		}
 		if(bulkRequest.numberOfActions()!=0){
@@ -301,6 +390,27 @@ public class XyjRetainedScheduled {
 					                  )
 					        );
 				}
+			}else if(sortTypes.containsKey(dateBucket)){
+				Terms serverZone = entry.getAggregations().get("serverZone");
+				for (Terms.Bucket e : serverZone.getBuckets()) {
+				    Cardinality agg = entry.getAggregations().get("agg");
+				    Long aggcount = agg.getValue();
+				    Double x ;
+					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date", dateBucket.split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", sortTypes2.get(dateBucket))
+				                        .field("retained", df.format(x))
+				                        .field("key", UserRetained.KEY_SEVSERZONE)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
+				}
 			}
 		}
 		if(bulkRequest.numberOfActions()!=0){
@@ -407,6 +517,27 @@ public class XyjRetainedScheduled {
 					                  )
 					        );
 				}
+			}else if(sortTypes.containsKey(dateBucket)){
+				Terms serverZone = entry.getAggregations().get("platForm");
+				for (Terms.Bucket e : serverZone.getBuckets()) {
+				    Cardinality agg = entry.getAggregations().get("agg");
+				    Long aggcount = agg.getValue();
+				    Double x ;
+					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",dateBucket.split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", sortTypes2.get(dateBucket))
+				                        .field("retained", df.format(x))
+				                        .field("key", UserRetained.KEY_PLATFORM)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
+				}
 			}
 		}
 		if(bulkRequest.numberOfActions()!=0){
@@ -505,6 +636,27 @@ public class XyjRetainedScheduled {
 				                        .field("gameId", game)
 				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
 				                        .field("retained", df.format(RetentionThirty))
+				                        .field("key", UserRetained.KEY_SEVSER)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                    .endObject()
+					                  )
+					        );
+				}
+			}else if(sortTypes.containsKey(dateBucket)){
+				Terms serverZone = entry.getAggregations().get("server");
+				for (Terms.Bucket e : serverZone.getBuckets()) {
+				    Cardinality agg = entry.getAggregations().get("agg");
+				    Long aggcount = agg.getValue();
+				    Double x ;
+					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",dateBucket.split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", sortTypes2.get(dateBucket))
+				                        .field("retained", df.format(x))
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())

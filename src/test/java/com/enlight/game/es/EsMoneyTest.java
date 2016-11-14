@@ -58,7 +58,7 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 	EsUtil esUtilTest = new EsUtil();
 	
 	//收入金额
-	@Test
+	//@Test
 	public void test1() throws IOException, ParseException {	
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
@@ -119,5 +119,47 @@ public class EsMoneyTest extends SpringTransactionalTestCase{
 	}
 	
 
+	@Test
+	public void test2() throws IOException, ParseException {	
+		System.out.println(esUtilTest.oneDayAgoFrom()  +"  "+esUtilTest.nowDate());
+		System.out.println(esUtilTest.twoDayAgoFrom()  +"  "+esUtilTest.twoDayAgoTo());
+		System.out.println(esUtilTest.eightDayAgoFrom()+"  "+esUtilTest.eightDayAgoTo());
+		System.out.println(esUtilTest.thirtyOneDayAgoFrom()+"  "+esUtilTest.thirtyOneDayAgoTo());
+		
+		System.out.println("------------------------------");
+		System.out.println(esUtilTest.twoDayAgoFrom()  +" 次日留存 "+esUtilTest.twoDayAgoTo());
+		System.out.println(esUtilTest.xOneDay(-2)  +" 次日.. "+esUtilTest.xOneDay(-1));
+		System.out.println(esUtilTest.xOneDay(-3)  +" 2日  "+esUtilTest.xOneDay(-2));
+		System.out.println(esUtilTest.xOneDay(-4)  +" 3日  "+esUtilTest.xOneDay(-3));
+		System.out.println(esUtilTest.xOneDay(-5)  +" 4日  "+esUtilTest.xOneDay(-4));
+		System.out.println(esUtilTest.xOneDay(-6)  +" 5日  "+esUtilTest.xOneDay(-5));
+		System.out.println(esUtilTest.xOneDay(-7)  +" 6日  "+esUtilTest.xOneDay(-6));
+		System.out.println(esUtilTest.eightDayAgoFrom()+" 七日.. "+esUtilTest.eightDayAgoTo());
+		System.out.println(esUtilTest.xOneDay(-8)  +" 7日  "+esUtilTest.xOneDay(-7));
+		System.out.println(esUtilTest.xOneDay(-9)  +" 8日  "+esUtilTest.xOneDay(-8));
+		System.out.println(esUtilTest.xOneDay(-10)  +" 9日  "+esUtilTest.xOneDay(-9));
+		System.out.println(esUtilTest.xOneDay(-11)  +" 10日  "+esUtilTest.xOneDay(-10));
+		System.out.println(esUtilTest.xOneDay(-12)  +" 11日  "+esUtilTest.xOneDay(-11));
+		System.out.println(esUtilTest.xOneDay(-13)  +" 12日  "+esUtilTest.xOneDay(-12));
+		System.out.println(esUtilTest.xOneDay(-14)  +" 13日  "+esUtilTest.xOneDay(-13));
+		System.out.println(esUtilTest.xOneDay(-15)  +" 14日  "+esUtilTest.xOneDay(-14));
+		System.out.println(esUtilTest.xOneDay(-16)  +" 15日  "+esUtilTest.xOneDay(-15));
+		System.out.println(esUtilTest.xOneDay(-17)  +" 16日  "+esUtilTest.xOneDay(-16));
+		System.out.println(esUtilTest.xOneDay(-18)  +" 17日  "+esUtilTest.xOneDay(-17));
+		System.out.println(esUtilTest.xOneDay(-19)  +" 18日  "+esUtilTest.xOneDay(-18));
+		System.out.println(esUtilTest.xOneDay(-20)  +" 19日  "+esUtilTest.xOneDay(-19));
+		System.out.println(esUtilTest.xOneDay(-21)  +" 20日  "+esUtilTest.xOneDay(-20));
+		System.out.println(esUtilTest.xOneDay(-22)  +" 21日  "+esUtilTest.xOneDay(-21));
+		System.out.println(esUtilTest.xOneDay(-23)  +" 22日  "+esUtilTest.xOneDay(-22));
+		System.out.println(esUtilTest.xOneDay(-24)  +" 23日  "+esUtilTest.xOneDay(-23));
+		System.out.println(esUtilTest.xOneDay(-25)  +" 24日  "+esUtilTest.xOneDay(-24));
+		System.out.println(esUtilTest.xOneDay(-26)  +" 25日  "+esUtilTest.xOneDay(-25));
+		System.out.println(esUtilTest.xOneDay(-27)  +" 26日  "+esUtilTest.xOneDay(-26));
+		System.out.println(esUtilTest.xOneDay(-28)  +" 27日  "+esUtilTest.xOneDay(-27));
+		System.out.println(esUtilTest.xOneDay(-29)  +" 28日  "+esUtilTest.xOneDay(-28));
+		System.out.println(esUtilTest.xOneDay(-30)  +" 29日  "+esUtilTest.xOneDay(-29));
+		System.out.println(esUtilTest.thirtyOneDayAgoFrom()+" 30日.. "+esUtilTest.thirtyOneDayAgoTo());
+		System.out.println(esUtilTest.xOneDay(-31)  +" 30日  "+esUtilTest.xOneDay(-30));
+	}
 	
 }

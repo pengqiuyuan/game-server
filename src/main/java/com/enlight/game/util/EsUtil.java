@@ -81,6 +81,14 @@ public class EsUtil {
 		return da;
 	}
 	
+	public String xOneDay(int x){
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,x);
+	    Date date=calendar.getTime();
+	    String da = sdf.format(date); 
+		return da;
+	}
+	
 	//--------首日 首周 首月付费率 ----------
 	
 	public String dayFrom(){
