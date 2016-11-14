@@ -119,8 +119,8 @@ public class XyjRetainedScheduled {
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(
-			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false))
-			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")).size(num)
+			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
+			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000))
 			    ).execute().actionGet();
 		logger.debug("----------------esAll---------------");
 		
@@ -213,11 +213,11 @@ public class XyjRetainedScheduled {
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
 			    		.subAggregation(
-			    				AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(10000)
+			    				AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    				)
 			    		.subAggregation(
 			    				AggregationBuilders.terms("serverZone").field("运营大区ID").size(szsize).subAggregation(
-			    						AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(10000)
+			    						AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)
 			    						)
 			    				)
 			    ).execute().actionGet();
@@ -326,8 +326,8 @@ public class XyjRetainedScheduled {
 		        )
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
-			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
-			    		.subAggregation(AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
+			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000))
+			    		.subAggregation(AggregationBuilders.terms("platForm").field("渠道ID").size(pfsize).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)))
 			    ).execute().actionGet();
 		logger.debug("------------esPlatForm--------------");
 
@@ -431,8 +431,8 @@ public class XyjRetainedScheduled {
 		        )
 			    .addAggregation(
 			    		AggregationBuilders.terms("create").field("注册时间").order(Terms.Order.term(false)).size(num)
-			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID"))
-			    		.subAggregation(AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID")))
+			    		.subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000))
+			    		.subAggregation(AggregationBuilders.terms("server").field("服务器ID").size(srsize).subAggregation(AggregationBuilders.cardinality("agg").field("玩家GUID").precisionThreshold(40000)))
 			    ).execute().actionGet();
 		logger.debug("-----------esServer---------------");
 
