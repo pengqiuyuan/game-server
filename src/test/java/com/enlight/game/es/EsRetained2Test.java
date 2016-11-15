@@ -272,6 +272,7 @@ public class EsRetained2Test extends SpringTransactionalTestCase{
 			    Long aggcount = agg.getValue();
 			    Double x ;
 				x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+				logger.debug("-----------xyj all 留存---------------"+dateBucket.split("T")[0]+"  "+game+"  "+sortTypes2.get(dateBucket)+"  "+df.format(x)+"  "+UserRetained.KEY_ALL);
 				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 				        .setSource(jsonBuilder()
 					           	 .startObject()
@@ -403,7 +404,8 @@ public class EsRetained2Test extends SpringTransactionalTestCase{
 				    Cardinality agg = entry.getAggregations().get("agg");
 				    Long aggcount = agg.getValue();
 				    Double x ;
-					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));
+					logger.debug("-----------xyj serverzone 留存---------------"+dateBucket.split("T")[0]+"  "+game+"  "+sortTypes2.get(dateBucket)+"  "+df.format(x)+"  "+UserRetained.KEY_SEVSERZONE+"  "+e.getKey());
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 					        .setSource(jsonBuilder()
 						           	 .startObject()
@@ -531,6 +533,7 @@ public class EsRetained2Test extends SpringTransactionalTestCase{
 				    Long aggcount = agg.getValue();
 				    Double x ;
 					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+					logger.debug("-----------xyj platform 留存---------------"+dateBucket.split("T")[0]+"  "+game+"  "+sortTypes2.get(dateBucket)+"  "+df.format(x)+"  "+UserRetained.KEY_PLATFORM+"  "+e.getKey());
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 					        .setSource(jsonBuilder()
 						           	 .startObject()
@@ -657,6 +660,7 @@ public class EsRetained2Test extends SpringTransactionalTestCase{
 				    Long aggcount = agg.getValue();
 				    Double x ;
 					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+					logger.debug("-----------xyj server 留存---------------"+dateBucket.split("T")[0]+"  "+game+"  "+sortTypes2.get(dateBucket)+"  "+df.format(x)+"  "+UserRetained.KEY_PLATFORM+"  "+e.getKey());
 					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
 					        .setSource(jsonBuilder()
 						           	 .startObject()

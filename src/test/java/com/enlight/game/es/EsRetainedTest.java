@@ -19,6 +19,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
 import org.elasticsearch.search.aggregations.metrics.sum.Sum;
+import org.hibernate.validator.constraints.br.TituloEleitoral;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -515,7 +516,7 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 		}
 	}
 	
-	@Test
+	//@Test
 	@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 	public void schedual() throws Exception{
 		logger.info("----------------xyj retained begin-----------");
@@ -549,6 +550,37 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 
 		logger.info("----------------xyj retained end-------------");
 	}
+	
+	@Test
+	public void test2() throws IOException, ParseException {	
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
+		SimpleDateFormat sdf2 =   new SimpleDateFormat("yyyy-MM-dd 00:00:00.000" ); 
+		System.out.println( sdf2.format(new Date()));
+		//新增用户
+		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
+		        .setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("日期").from("2016-11-11 00:00:00.000").to("2016-11-12 00:00:00.000"))
+		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
+		        ).execute().actionGet();
+		
+		BulkRequestBuilder bulkRequest = client.prepareBulk();
+		Long ts1 = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
+		Long ts2 = sdf2.parse(esUtilTest.oneDayAgoFrom()).getTime();
+System.out.println(ts1+"   " +ts2);
+		logger.debug("昨天新增用户all："+sr.getHits().totalHits());
+		//累计用户
+		
+		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").
+				setQuery(
+		        		QueryBuilders.boolQuery()
+		        		.must( QueryBuilders.rangeQuery("日期").from("2014-01-11").to("2016-11-12 00:00:00.000"))
+						.must( QueryBuilders.termsQuery("日志分类关键字", "create")
+						)).execute().actionGet();
 
+		logger.debug("历史累计用户all："+srTotal.getHits().totalHits());
+
+
+	}
 	
 }
