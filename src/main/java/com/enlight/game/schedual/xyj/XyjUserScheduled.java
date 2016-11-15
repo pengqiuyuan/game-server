@@ -58,10 +58,9 @@ public class XyjUserScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 		        ).execute().actionGet();
-		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		Long ts = sdf.parse(esUtilTest.oneDayAgoFrom()).getTime();
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_add)
@@ -82,7 +81,7 @@ public class XyjUserScheduled {
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count").
 				setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must( QueryBuilders.termsQuery("日志分类关键字", "create")
 						)).execute().actionGet();
 		bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_total)
@@ -112,7 +111,7 @@ public class XyjUserScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 		        )
 				.addAggregation(
@@ -145,7 +144,7 @@ public class XyjUserScheduled {
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 				)
 				.addAggregation(
@@ -186,7 +185,7 @@ public class XyjUserScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count").
 				setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate()) ))
 						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
 				)
 				.addAggregation(
@@ -218,7 +217,7 @@ public class XyjUserScheduled {
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
 				)
 				.addAggregation(
@@ -258,7 +257,7 @@ public class XyjUserScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate()) ))
 						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
 		        )
 				.addAggregation(
@@ -290,7 +289,7 @@ public class XyjUserScheduled {
 		SearchResponse srTotal = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate()) ))
 						.must(QueryBuilders.termQuery("日志分类关键字", "create"))
 		        )
 				.addAggregation(

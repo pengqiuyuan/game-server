@@ -1,5 +1,6 @@
 package com.enlight.game.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -185,8 +186,14 @@ public class EsUtil {
 	 * @throws Exception
 	 */
 	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-	public String utcMinus8(String UtcDate) throws Exception {
-	    calendar.setTime(df.parse(UtcDate)); 
+	public String utcMinus8(String UtcDate){
+	    try {
+			calendar.setTime(df.parse(UtcDate));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			System.out.println("异常    "+e);
+			e.printStackTrace();
+		} 
 	    calendar.add(calendar.HOUR_OF_DAY,-8);
 	    Date date=calendar.getTime();
 	    String da = df.format(date); 

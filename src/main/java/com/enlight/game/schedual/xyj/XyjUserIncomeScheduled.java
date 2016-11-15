@@ -67,7 +67,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate()) ))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -92,7 +92,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -123,7 +123,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -153,7 +153,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -190,7 +190,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -220,7 +220,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -256,7 +256,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse sum = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -286,7 +286,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse sumtotal = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -325,7 +325,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -352,7 +352,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -385,7 +385,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -418,7 +418,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse count = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -452,7 +452,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -483,7 +483,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -519,7 +519,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )
@@ -555,7 +555,7 @@ public class XyjUserIncomeScheduled {
 		SearchResponse peoplenum = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 						QueryBuilders.boolQuery()
-						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+						.must(QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must(QueryBuilders.termQuery("日志分类关键字", "money_get"))
 						.must(QueryBuilders.termQuery("支付货币", paytype))
 		        )

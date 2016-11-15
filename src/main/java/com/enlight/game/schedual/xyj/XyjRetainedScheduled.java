@@ -59,7 +59,7 @@ public class XyjRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(from)).to(esUtilTest.utcMinus8(to)))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 		        )
 				.execute().actionGet();
@@ -71,7 +71,7 @@ public class XyjRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(from)).to(esUtilTest.utcMinus8(to)))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 		        		.must( QueryBuilders.termsQuery("运营大区ID", object))
 		        )
@@ -84,7 +84,7 @@ public class XyjRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(from)).to(esUtilTest.utcMinus8(to)))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 		        		.must( QueryBuilders.termsQuery("渠道ID", key))
 		        )
@@ -97,7 +97,7 @@ public class XyjRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(from).to(to))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(from)).to(esUtilTest.utcMinus8(to)))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 		        		.must( QueryBuilders.termsQuery("服务器ID", key))
 		        )
@@ -189,7 +189,7 @@ public class XyjRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(
@@ -373,7 +373,7 @@ public class XyjRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(
@@ -583,7 +583,7 @@ public class XyjRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(
@@ -784,7 +784,7 @@ public class XyjRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()) )
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(

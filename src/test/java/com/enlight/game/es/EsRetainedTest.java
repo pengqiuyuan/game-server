@@ -588,6 +588,6 @@ public class EsRetainedTest extends SpringTransactionalTestCase{
 	    Date date=calendar.getTime();
 	    String da = df.format(date); 
 	    System.out.println(da);
-	    System.out.println("111111   "+esUtilTest.utcMinus8("2016-11-12T00:00:00.000Z") );
+	    System.out.println("111111   "+esUtilTest.utcMinus8("2016-11-12") );
 	}
 }

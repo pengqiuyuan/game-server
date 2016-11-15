@@ -79,7 +79,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
@@ -92,7 +92,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
@@ -105,7 +105,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -167,7 +167,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
 		       .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
@@ -187,7 +187,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
@@ -207,7 +207,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -269,7 +269,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
@@ -289,7 +289,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
@@ -309,7 +309,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -371,7 +371,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse paysum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
@@ -391,7 +391,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse peoplenum = client.prepareSearch(index_money).setSearchType("count").setTypes(type_money)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
 		        )
@@ -411,7 +411,7 @@ public class XyjPayPenetrationScheduled {
 		SearchResponse active = client.prepareSearch(index_user).setSearchType("count").setTypes(type_user)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
