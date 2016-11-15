@@ -178,4 +178,19 @@ public class EsUtil {
 		return da;
 	}
 	
+	/**
+	 * 2016-11-12T00:00:00.000Z 的北京时间是 2016-11-12 00:08:00.000
+	 * 2016-11-11T00:00:00.000Z 的北京时间是 2016-11-11 00:08:00.000
+	 * 需要的是 2016-11-12T00:00:00.000Z 转为 2016-11-11T16:00:00.000Z 的北京时间是 2016-11-12 00:00:00.000
+	 * @throws Exception
+	 */
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+	public String utcMinus8(String UtcDate) throws Exception {
+	    calendar.setTime(df.parse(UtcDate)); 
+	    calendar.add(calendar.HOUR_OF_DAY,-8);
+	    Date date=calendar.getTime();
+	    String da = df.format(date); 
+	    return da;
+	}
+	
 }
