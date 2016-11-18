@@ -63,7 +63,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -89,7 +89,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		       .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.weekFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -115,7 +115,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.mouthFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -149,7 +149,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -180,7 +180,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.weekFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -212,7 +212,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.mouthFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -251,7 +251,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -282,7 +282,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.weekFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -314,7 +314,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.mouthFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -353,7 +353,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse dayactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -384,7 +384,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse weekactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.weekFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(
@@ -416,7 +416,7 @@ public class KdsUserActiveScheduled {
 		SearchResponse mouthactive = client.prepareSearch(index).setSearchType("count").setTypes(type)
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.mouthFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 		        .addAggregation(

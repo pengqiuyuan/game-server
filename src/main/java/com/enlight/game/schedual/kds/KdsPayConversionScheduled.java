@@ -66,7 +66,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 		        		.must( QueryBuilders.termsQuery("是否首次充值", "1"))
 		        		.must( QueryBuilders.termsQuery("支付货币", paytype))
@@ -91,7 +91,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 				        		.must( QueryBuilders.termsQuery("是否首次充值", "1"))
 				        		.must( QueryBuilders.termsQuery("支付货币", paytype))
@@ -115,14 +115,14 @@ public class KdsPayConversionScheduled {
 		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.dayFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 				        )
 						.execute().actionGet();
 		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.dayFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 				        		.must( QueryBuilders.termsQuery("是否首次充值", "1"))
@@ -153,7 +153,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.weekFrom())).to(esUtilTest.utcMinus8(esUtilTest.weekTo())))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 				        )
 						.execute().actionGet();
@@ -193,7 +193,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.mouthFrom())).to(esUtilTest.utcMinus8(esUtilTest.mouthTo())))
 				        		.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 				        )
 						.execute().actionGet();
@@ -239,7 +239,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 		        .setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 				        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 				        .must( QueryBuilders.termsQuery("是否首次充值", "1"))
 				        .must( QueryBuilders.termsQuery("支付货币", paytype))
@@ -271,7 +271,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 						        .must( QueryBuilders.termsQuery("是否首次充值", "1"))
 						        .must( QueryBuilders.termsQuery("支付货币", paytype))
@@ -304,7 +304,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.dayFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
@@ -320,7 +320,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.dayFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 				        		.must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 						        .must( QueryBuilders.termsQuery("是否首次充值", "1"))
@@ -362,7 +362,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.weekFrom())).to(esUtilTest.utcMinus8(esUtilTest.weekTo())))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
@@ -420,7 +420,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 				        		QueryBuilders.boolQuery()
-				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
+				        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.mouthFrom())).to(esUtilTest.utcMinus8(esUtilTest.mouthTo())))
 						        .must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
@@ -485,7 +485,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 		        .setQuery(
 				        QueryBuilders.boolQuery()
-				        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+				        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 						.must( QueryBuilders.termsQuery("是否首次充值", "1"))
 						.must( QueryBuilders.termsQuery("支付货币", paytype))
@@ -516,7 +516,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 						.setQuery(
 						        QueryBuilders.boolQuery()
-						        .must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
 								.must( QueryBuilders.termsQuery("支付货币", paytype))
@@ -549,7 +549,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 						        QueryBuilders.boolQuery()
-						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.dayFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
@@ -565,7 +565,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 						.setQuery(
 						        QueryBuilders.boolQuery()
-						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.dayFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
@@ -607,7 +607,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 						        QueryBuilders.boolQuery()
-						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.weekFrom())).to(esUtilTest.utcMinus8(esUtilTest.weekTo())))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
@@ -665,7 +665,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 						        QueryBuilders.boolQuery()
-						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.mouthFrom())).to(esUtilTest.utcMinus8(esUtilTest.mouthTo())))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
@@ -731,7 +731,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse sr = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 		        .setQuery(
 						QueryBuilders.boolQuery()
-						.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.oneDayAgoFrom()).to(esUtilTest.nowDate()))
+						.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 						.must( QueryBuilders.termsQuery("是否首次充值", "1"))
 						.must( QueryBuilders.termsQuery("支付货币", paytype))
@@ -762,7 +762,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse srTotal = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 						.setQuery(
 								QueryBuilders.boolQuery()
-								.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.nowDate()))
+								.must( QueryBuilders.rangeQuery("@timestamp").from("2014-01-11").to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
 								.must( QueryBuilders.termsQuery("支付货币", paytype))
@@ -796,7 +796,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse dayPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 								QueryBuilders.boolQuery()
-								.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+								.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.dayFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
@@ -812,7 +812,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse dayPayRate_money = client.prepareSearch(index_money).setTypes(type_money).setSearchType("count")
 						.setQuery(
 						        QueryBuilders.boolQuery()
-						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.dayFrom()).to(esUtilTest.nowDate()))
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.dayFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
 						        .must( QueryBuilders.termsQuery("注册时间", esUtilTest.dayFrom().split("T")[0]))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "money_get"))
 								.must( QueryBuilders.termsQuery("是否首次充值", "1"))
@@ -854,7 +854,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse weekPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 						        QueryBuilders.boolQuery()
-						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.weekFrom()).to(esUtilTest.weekTo()))
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.weekFrom())).to(esUtilTest.utcMinus8(esUtilTest.weekTo())))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
@@ -912,7 +912,7 @@ public class KdsPayConversionScheduled {
 		SearchResponse mouthPayRate_user = client.prepareSearch(index_user).setTypes(type_user).setSearchType("count")
 						.setQuery(
 						        QueryBuilders.boolQuery()
-						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.mouthFrom()).to(esUtilTest.mouthTo()))
+						        .must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.mouthFrom())).to(esUtilTest.utcMinus8(esUtilTest.mouthTo())))
 								.must( QueryBuilders.termsQuery("日志分类关键字", "create"))
 						)
 						.addAggregation(
