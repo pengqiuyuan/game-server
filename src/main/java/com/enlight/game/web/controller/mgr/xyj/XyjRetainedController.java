@@ -14,9 +14,12 @@ import java.util.Set;
 
 import javax.servlet.ServletRequest;
 
+import net.sf.json.JSONObject;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.codehaus.jackson.type.TypeReference;
 import org.elasticsearch.ElasticsearchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +36,13 @@ import com.enlight.game.entity.PlatForm;
 import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
+import com.enlight.game.entity.gm.Retained1;
+import com.enlight.game.entity.gm.Retained2;
+import com.enlight.game.entity.gm.Retained3;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.es.RetainedServer;
+import com.enlight.game.service.es.RetainedServer2;
 import com.enlight.game.service.platForm.PlatFormService;
 import com.enlight.game.service.server.ServerService;
 import com.enlight.game.service.serverZone.ServerZoneService;
@@ -74,6 +81,9 @@ public class XyjRetainedController extends BaseController{
 	
 	@Autowired
 	private RetainedServer retainedServer;
+	
+	@Autowired
+	private RetainedServer2 retainedServer2;
 	
 	@Autowired
 	private AccountService accountService;
@@ -374,6 +384,97 @@ public class XyjRetainedController extends BaseController{
 		return "/kibana/user/userRetain";
 	}
 	
+	/**
+	 * 用户留存
+	 * @throws ParseException 
+	 * @throws IOException 
+	 * @throws ElasticsearchException 
+	 */
+	@RequiresRoles(value = { "admin", "XYJ_OFF_USER_RETAINED" }, logical = Logical.OR)
+	@RequestMapping(value = "/xyj/userRetained2", method = RequestMethod.GET)
+	public String userRetained2(Model model,ServletRequest request,
+			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
+			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
+			@RequestParam(value = "server", defaultValue = "") String[] sv) throws ElasticsearchException, IOException, ParseException{
+		logger.debug("user add total...");
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Stores stores = storeService.findById(Long.valueOf(storeId));
+		List<ServerZone> serverZones = serverZoneService.findAll();
+		
+		List<String> sZones = new ArrayList<String>();
+		List<String> pForms = new ArrayList<String>();
+		List<String> svs = new ArrayList<String>();
+
+		Map<String, Object> n = new HashMap<String, Object>();
+		if(searchParams.isEmpty()){
+			//条件为空时
+			String dateFrom = xDayAgoFrom();
+			String dateTo = nowDate();
+			n =retainedServer2.searchAllRetained(index, type, dateFrom, dateTo);
+			
+			model.addAttribute("dateFrom", dateFrom);
+			model.addAttribute("dateTo", dateTo);
+			model.addAttribute("platForm", platFormService.findAll());
+			model.addAttribute("server", serverService.findByStoreId(storeId));
+			sZones.add("所有运营大区");
+		}else{
+		    if(sZone != null && sZone.length>0){
+				for (int i = 0; i < sZone.length; i++) {
+					if(sZone[i].equals("all")){
+						sZones.add("所有运营大区");
+						n =retainedServer2.searchAllRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+					}else{
+						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
+						sZones.add(szName);
+						n =retainedServer2.searchServerZoneRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+					}
+
+				}
+			}
+			if(pForm != null && pForm.length>0){
+				for (int i = 0; i < pForm.length; i++) {
+					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
+					pForms.add(pfName);
+					n =retainedServer2.searchPlatFormRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+				}
+			}
+			if(sv != null && sv.length>0){
+				for (int i = 0; i < sv.length; i++) {
+					svs.add(sv[i]);
+					n =retainedServer2.searchServerRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+				}
+			}
+		   
+		}
+
+		//logger.debug(binder.toJson(next));
+		//logger.debug(binder.toJson(seven));
+		//logger.debug(binder.toJson(thirty));
+		
+		System.out.println("Retained1   "  + binder.toJson(n.get("retained1s")));
+		List<Retained1> beanList1 = binder.getMapper().readValue(binder.toJson(n.get("retained1s")), new TypeReference<List<Retained1>>() {}); 
+		System.out.println("Retained2   "  + binder.toJson(n.get("retained2s")));
+		List<Retained2> beanList2 = binder.getMapper().readValue(binder.toJson(n.get("retained2s")), new TypeReference<List<Retained2>>() {}); 
+		System.out.println("Retained3   "  + binder.toJson(n.get("retained3s")));
+		List<Retained3> beanList3 = binder.getMapper().readValue(binder.toJson(n.get("retained3s")), new TypeReference<List<Retained3>>() {}); 
+		
+		model.addAttribute("retained1s", beanList1);
+		model.addAttribute("retained2s", beanList2);
+		model.addAttribute("retained3s", beanList3);
+		
+		model.addAttribute("store", stores);
+		model.addAttribute("serverZone", serverZones);
+		model.addAttribute("platForm", platFormService.findAll());
+		model.addAttribute("server", serverService.findByStoreId(storeId));
+		
+		model.addAttribute("sZones", sZones);
+		model.addAttribute("pForms", pForms);
+		model.addAttribute("svs", svs);
+		
+		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+		return "/kibana/user2/userRetain";
+	}
+	
 	
 	public String nowDate(){
 		String nowDate = sdf.format(new Date());
@@ -383,6 +484,14 @@ public class XyjRetainedController extends BaseController{
 	public String thirtyDayAgoFrom(){
 	    calendar.setTime(new Date()); 
 	    calendar.add(calendar.DATE,-30);
+	    Date date=calendar.getTime();
+	    String da = sdf.format(date); 
+		return da;
+	}
+	
+	public String xDayAgoFrom(){
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-15);
 	    Date date=calendar.getTime();
 	    String da = sdf.format(date); 
 		return da;

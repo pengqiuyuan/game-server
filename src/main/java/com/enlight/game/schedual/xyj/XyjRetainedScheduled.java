@@ -225,6 +225,8 @@ public class XyjRetainedScheduled {
 			                        .field("retained", df.format(RetentionTwo))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
+			                        .field("value1", createCount(esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo()))
+			                        .field("value2", aggcount)
 			                    .endObject()
 				                  )
 				        );
@@ -242,6 +244,8 @@ public class XyjRetainedScheduled {
 			                        .field("retained", df.format(RetentionEight))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
+			                        .field("value1", createCount(esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo()))
+			                        .field("value2", aggcount)
 			                    .endObject()
 				                  )
 				        );
@@ -259,6 +263,8 @@ public class XyjRetainedScheduled {
 			                        .field("retained", df.format(RetentionThirty))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
+			                        .field("value1", createCount(esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo()))
+			                        .field("value2", aggcount)
 			                    .endObject()
 				                  )
 				        );
@@ -279,6 +285,8 @@ public class XyjRetainedScheduled {
 			                        .field("retained", df.format(x))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
+			                        .field("value1", createCount(dateBucket, sortTypes.get(dateBucket)))
+			                        .field("value2", aggcount)
 			                    .endObject()
 				                  )
 				        );
@@ -420,6 +428,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerZoneCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );			    	
@@ -441,6 +451,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerZoneCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -463,6 +475,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerZoneCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -487,6 +501,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createCount(dateBucket, sortTypes.get(dateBucket)))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -623,6 +639,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createPlatFormCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -644,6 +662,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createPlatFormCount((String) e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -665,6 +685,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createPlatFormCount((String) e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -689,6 +711,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createCount(dateBucket, sortTypes.get(dateBucket)))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -823,6 +847,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -844,6 +870,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerCount((String) e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -866,6 +894,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerCount((String) e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -890,6 +920,8 @@ public class XyjRetainedScheduled {
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createCount(dateBucket, sortTypes.get(dateBucket)))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
