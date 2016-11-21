@@ -415,90 +415,6 @@
 				    <shiro:hasAnyRoles name="admin,10002">
 					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">实时统计日志<b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<shiro:hasAnyRoles name="admin,KUN_AP,KUN_ITEM,KUN_MONEY,KUN_DUMMY,KUN_COIN,KUN_USER">
-										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN实时日志</a>
-											<ul class="dropdown-menu">
-												<shiro:hasAnyRoles name="admin,KUN_ITEM">
-												<li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">道具日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/kunItem#/dashboard/file/kun_item.json">道具日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/kunItem#/dashboard/file/kun_itemGet.json">道具获得</a></li>
-									                  <li><a href="${ctx}/manage/count/kunItem#/dashboard/file/kun_itemCost.json">道具消耗</a></li>
-									                </ul>
-								               </li>
-								               </shiro:hasAnyRoles>
-								               <!-- 
-								               <shiro:hasAnyRoles name="admin,KUN_AP">
-								               <li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">体力日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/kunAp#/dashboard/file/kun_ap.json">体力日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/kunAp#/dashboard/file/kun_apGet.json">体力获得</a></li>
-									                  <li><a href="${ctx}/manage/count/kunAp#/dashboard/file/kun_apCost.json">体力消耗</a></li>
-									                </ul>
-								               </li>
-												</shiro:hasAnyRoles>
-												 -->
-											   <shiro:hasAnyRoles name="admin,KUN_MONEY">
-														<li class="dropdown-submenu">
-										                    <a tabindex="-1" href="#">真实充值币日志</a>
-											                <ul class="dropdown-menu">
-											                  <li><a tabindex="-1" href="${ctx}/manage/count/kunMoney#/dashboard/file/kun_money.json">真实充值币日志(总)</a></li>
-											                  <li><a href="${ctx}/manage/count/kunMoney#/dashboard/file/kun_moneyGet.json">真实充值币获得</a></li>
-											                  <li><a href="${ctx}/manage/count/kunMoney#/dashboard/file/kun_moneyCost.json">真实充值币消耗</a></li>
-											                </ul>
-										               </li>
-												</shiro:hasAnyRoles>
-												<shiro:hasAnyRoles name="admin,KUN_DUMMY">
-												<li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">虚拟充值币日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/kunDummy#/dashboard/file/kun_dummy.json">虚拟充值币日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/kunDummy#/dashboard/file/kun_dummyGet.json">虚拟充值币获得</a></li>
-									                  <li><a href="${ctx}/manage/count/kunDummy#/dashboard/file/kun_dummyCost.json">虚拟充值币消耗</a></li>
-									                </ul>
-								               </li>
-								               </shiro:hasAnyRoles>
-								               <shiro:hasAnyRoles name="admin,KUN_COIN">
-								               <li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">游戏币日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/kunCoin#/dashboard/file/kun_coin.json">游戏币日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/kunCoin#/dashboard/file/kun_coinGet.json">游戏币获得</a></li>
-									                  <li><a href="${ctx}/manage/count/kunCoin#/dashboard/file/kun_coinCost.json">游戏币消耗</a></li>
-									                </ul>
-								               </li>
-								               </shiro:hasAnyRoles>
-								               <shiro:hasAnyRoles name="admin,KUN_USER">
-													  <li class="dropdown-submenu">
-										                    <a tabindex="-1" href="#">用户相关日志</a>
-											                <ul class="dropdown-menu">
-											                  <li class="dropdown-submenu">
-											                  	<a tabindex="-1" href="${ctx}/manage/count/kunUser#/dashboard/file/kun_user.json">用户相关日志(总)</a>
-											                  </li>
-											                  <li><a href="${ctx}/manage/count/kunUser#/dashboard/file/kun_userLogin.json">用户登录</a></li>
-											                  <li><a href="${ctx}/manage/count/kunUser#/dashboard/file/kun_userCreate.json">用户创建</a></li>
-											                  <li><a href="${ctx}/manage/count/kunUser#/dashboard/file/kun_userOnline.json">在线用户</a></li>
-											                  <li><a href="${ctx}/manage/count/kunUser#/dashboard/file/kun_userNewbieguide.json">新手引导与功能引导</a></li>
-											                </ul>
-										               </li>	
-												</shiro:hasAnyRoles>
-												<shiro:hasAnyRoles name="admin,KUN_USER_PORTRAIT">
-													  <li class="dropdown-submenu">
-										                    <a tabindex="-1" href="#">用户画像</a>
-											                <ul class="dropdown-menu">
-											                  <li >
-											                  	<a tabindex="-1" href="${ctx}/manage/count/kunUserPortrait#/dashboard/file/kun_userPortrait.json">用户画像</a>
-											                  </li>
-											                </ul>
-										               </li>	
-												</shiro:hasAnyRoles>
-												<li class="divider"></li>
-												<li><a href="#">sample</a></li>
-											</ul>
-										</li>
-									</shiro:hasAnyRoles>
 									<shiro:hasAnyRoles name="admin,KDS_AP,KDS_ITEM,KDS_MONEY,KDS_DUMMY,KDS_COIN,KDS_USER">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS实时日志</a>
 											<ul class="dropdown-menu">
@@ -581,113 +497,6 @@
 												<li class="divider"></li>
 												<li><a href="#">sample</a></li>
 											</ul>
-										</li>
-									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin,FB_AP,FB_ITEM,FB_MONEY,FB_DUMMY,FB_COIN,FB_ARENACOIN,FB_EXPEDITIONC,FB_USER">
-										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB实时日志</a>
-											<ul class="dropdown-menu">
-												<shiro:hasAnyRoles name="admin,FB_ITEM">
-												<li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">道具日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/fbItem#/dashboard/file/fb_item.json">道具日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/fbItem#/dashboard/file/fb_itemGet.json">道具获得</a></li>
-									                  <li><a href="${ctx}/manage/count/fbItem#/dashboard/file/fb_itemCost.json">道具消耗</a></li>
-									                </ul>
-								               </li>
-								               </shiro:hasAnyRoles>
-								               <!--  
-								               <shiro:hasAnyRoles name="admin,FB_AP">
-								               <li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">体力日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/fbAp#/dashboard/file/fb_ap.json">体力日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/fbAp#/dashboard/file/fb_apGet.json">体力获得</a></li>
-									                  <li><a href="${ctx}/manage/count/fbAp#/dashboard/file/fb_apCost.json">体力消耗</a></li>
-									                </ul>
-								               </li>
-												</shiro:hasAnyRoles>
-												-->
-												<shiro:hasAnyRoles name="admin,FB_MONEY">
-														<li class="dropdown-submenu">
-										                    <a tabindex="-1" href="#">真实充值币日志</a>
-											                <ul class="dropdown-menu">
-											                  <li><a tabindex="-1" href="${ctx}/manage/count/fbMoney#/dashboard/file/fb_money.json">真实充值币日志(总)</a></li>
-											                  <li><a href="${ctx}/manage/count/fbMoney#/dashboard/file/fb_moneyGet.json">真实充值币获得</a></li>
-											                  <li><a href="${ctx}/manage/count/fbMoney#/dashboard/file/fb_moneyCost.json">真实充值币消耗</a></li>
-											                </ul>
-										               </li>
-												</shiro:hasAnyRoles>
-												<shiro:hasAnyRoles name="admin,FB_DUMMY">
-												<li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">虚拟充值币日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/fbDummy#/dashboard/file/fb_dummy.json">虚拟充值币日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/fbDummy#/dashboard/file/fb_dummyGet.json">虚拟充值币获得</a></li>
-									                  <li><a href="${ctx}/manage/count/fbDummy#/dashboard/file/fb_dummyCost.json">虚拟充值币消耗</a></li>
-									                </ul>
-								               </li>
-								               </shiro:hasAnyRoles>
-								               <shiro:hasAnyRoles name="admin,FB_COIN">
-								               <li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">游戏币日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/fbCoin#/dashboard/file/fb_coin.json">游戏币日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/fbCoin#/dashboard/file/fb_coinGet.json">游戏币获得</a></li>
-									                  <li><a href="${ctx}/manage/count/fbCoin#/dashboard/file/fb_coinCost.json">游戏币消耗</a></li>
-									                </ul>
-								               </li>
-								               </shiro:hasAnyRoles>
-								               <!--  
-								               <shiro:hasAnyRoles name="admin,FB_ARENACOIN">
-								               <li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">竞技场徽章(货币)日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/fbArenacoin#/dashboard/file/fb_arenacoin.json">竞技场徽章(货币)日志(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/fbArenacoin#/dashboard/file/fb_arenacoinGet.json">竞技场徽章获得</a></li>
-									                  <li><a href="${ctx}/manage/count/fbArenacoin#/dashboard/file/fb_arenacoinCost.json">竞技场徽章消耗</a></li>
-									                </ul>
-								               </li>
-								               </shiro:hasAnyRoles>
-								               <shiro:hasAnyRoles name="admin,FB_EXPEDITIONC">
-								               <li class="dropdown-submenu">
-								                    <a tabindex="-1" href="#">燃烧远征龙鳞币(货币)日志</a>
-									                <ul class="dropdown-menu">
-									                  <li><a tabindex="-1" href="${ctx}/manage/count/fbExpeditioncoin#/dashboard/file/fb_expeditioncoin.json">燃烧远征龙鳞币(货币)(总)</a></li>
-									                  <li><a href="${ctx}/manage/count/fbExpeditioncoin#/dashboard/file/fb_expeditioncoinGet.json">燃烧远征龙鳞币获得</a></li>
-									                  <li><a href="${ctx}/manage/count/fbExpeditioncoin#/dashboard/file/fb_expeditioncoinCost.json">燃烧远征龙鳞币消耗</a></li>
-									                </ul>
-								               </li>
-								               </shiro:hasAnyRoles>
-								                -->
-												<shiro:hasAnyRoles name="admin,FB_USER">
-													  <li class="dropdown-submenu">
-										                    <a tabindex="-1" href="#">用户相关日志</a>
-											                <ul class="dropdown-menu">
-											                  <li>
-											                  	<a tabindex="-1" href="${ctx}/manage/count/fbUser#/dashboard/file/fb_user.json">用户相关日志(总)</a>
-											                  </li>
-											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userLogin.json">用户登录</a></li>
-											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userCreate.json">用户创建</a></li>
-											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userOnline.json">在线用户</a></li>
-											                  <li><a href="${ctx}/manage/count/fbUser#/dashboard/file/fb_userNewbieguide.json">新手引导与功能引导</a></li>
-											                </ul>
-										               </li>	
-												</shiro:hasAnyRoles>
-												<shiro:hasAnyRoles name="admin,FB_USER_PORTRAIT">
-													  <li class="dropdown-submenu">
-										                    <a tabindex="-1" href="#">用户画像</a>
-											                <ul class="dropdown-menu">
-											                  <li>
-											                  	<a tabindex="-1" href="${ctx}/manage/count/fbUserPortrait#/dashboard/file/fb_userPortrait.json">用户画像</a>
-											                  </li>
-											                </ul>
-										               </li>	
-												</shiro:hasAnyRoles>
-												<li class="divider"></li>
-												<li><a href="#">sample</a></li>
-											</ul>
-
 										</li>
 									</shiro:hasAnyRoles>
 									<shiro:hasAnyRoles name="admin,XYJ_AP,XYJ_ITEM,XYJ_MONEY,XYJ_DUMMY,XYJ_COIN,XYJ_USER">
@@ -774,52 +583,12 @@
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									
 									<li class="divider"></li>
 									<li><a href="#">sample</a></li>
 								</ul>
 						</li>
 					    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">离线统计日志<b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<shiro:hasAnyRoles name="admin,KUN_OFF_USER_RETAINED,KUN_OFF_USER_ADD,KUN_OFF_USER_ACTIVE,KUN_OFF_USER_PAY,KUN_OFF_USER_INCOME">
-										<li class="dropdown-submenu"><a tabindex="-1" href="#">KUN离线日志</a>
-											<ul class="dropdown-menu">
-												<li class="dropdown-submenu">
-													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_RETAINED">
-														<li><a href="${ctx}/manage/kunRetained/kun/userRetained?serverZone=all">用户留存</a></li>
-													</shiro:hasAnyRoles>
-													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_ADD">
-														<li><a href="${ctx}/manage/kunUserAdd/kun/userAdd?serverZone=all">用户新增</a></li>
-													</shiro:hasAnyRoles>	
-													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_ACTIVE">
-														<li><a href="${ctx}/manage/kunActive/kun/userActive?serverZone=all">活跃用户</a></li>
-													</shiro:hasAnyRoles>	
-													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_PAY">
-														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
-															<ul class="dropdown-menu">
-																<li class="dropdown-submenu">
-																	<li><a href="${ctx}/manage/kunUserPay/kun/userPay?serverZone=all">新增付费用户</a></li>
-																	<li><a href="${ctx}/manage/kunUserPay/kun/userDay?serverZone=all">当日付费率</a></li>
-																	<li><a href="${ctx}/manage/kunUserPay/kun/userWeek?serverZone=all">当周付费率</a></li>
-																	<li><a href="${ctx}/manage/kunUserPay/kun/userMouth?serverZone=all">当月付费率</a></li>
-																<li>
-															</ul>
-														</li>
-													</shiro:hasAnyRoles>
-													<shiro:hasAnyRoles name="admin,KUN_OFF_USER_INCOME">
-														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
-																<ul class="dropdown-menu">
-																	<li class="dropdown-submenu">
-																		<li><a href="${ctx}/manage/kunIncome/kun/userIncome?serverZone=all">收入分析</a></li>
-																		<li><a href="${ctx}/manage/kunMoneyPayP/kun/moneyPayP?serverZone=all">ARPU与ARPPU</a></li>
-																	<li>
-																</ul>
-														</li>
-													</shiro:hasAnyRoles>
-												<li>	
-											</ul>
-										</li>
-									</shiro:hasAnyRoles>
 									<shiro:hasAnyRoles name="admin,KDS_OFF_USER_RETAINED,KDS_OFF_USER_ADD,KDS_OFF_USER_ACTIVE,KDS_OFF_USER_PAY,KDS_OFF_USER_INCOME">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">KDS离线日志</a>
 											<ul class="dropdown-menu">
@@ -859,46 +628,7 @@
 											</ul>
 										</li>
 									</shiro:hasAnyRoles>
-									<shiro:hasAnyRoles name="admin,FB_OFF_USER_RETAINED,FB_OFF_USER_ADD,FB_OFF_USER_ACTIVE,FB_OFF_USER_PAY,FB_OFF_USER_INCOME">
-										<li class="dropdown-submenu"><a tabindex="-1" href="#">FB离线日志</a>
-											<ul class="dropdown-menu">
-												<li class="dropdown-submenu">
-													<shiro:hasAnyRoles name="admin,FB_OFF_USER_RETAINED">
-														<li><a href="${ctx}/manage/fbRetained/fb/userRetained?serverZone=all">用户留存</a></li>
-													</shiro:hasAnyRoles>
-													<shiro:hasAnyRoles name="admin,FB_OFF_USER_ADD">
-														<li><a href="${ctx}/manage/fbUserAdd/fb/userAdd?serverZone=all">用户新增</a></li>
-													</shiro:hasAnyRoles>	
-													<shiro:hasAnyRoles name="admin,FB_OFF_USER_ACTIVE">
-														<li><a href="${ctx}/manage/fbActive/fb/userActive?serverZone=all">活跃用户</a></li>
-													</shiro:hasAnyRoles>	
-													<shiro:hasAnyRoles name="admin,FB_OFF_USER_PAY">
-														<li class="dropdown-submenu"><a tabindex="-1" href="#">用户付费率</a>
-															<ul class="dropdown-menu">
-																<li class="dropdown-submenu">
-																	<li><a href="${ctx}/manage/fbUserPay/fb/userPay?serverZone=all">新增付费用户</a></li>
-																	<li><a href="${ctx}/manage/fbUserPay/fb/userDay?serverZone=all">当日付费率</a></li>
-																	<li><a href="${ctx}/manage/fbUserPay/fb/userWeek?serverZone=all">当周付费率</a></li>
-																	<li><a href="${ctx}/manage/fbUserPay/fb/userMouth?serverZone=all">当月付费率</a></li>
-																<li>
-															</ul>
-														</li>
-													</shiro:hasAnyRoles>
-													<shiro:hasAnyRoles name="admin,FB_OFF_USER_INCOME">
-														<li class="dropdown-submenu"><a tabindex="-1" href="#">收入分析</a>
-																<ul class="dropdown-menu">
-																	<li class="dropdown-submenu">
-																		<li><a href="${ctx}/manage/fbIncome/fb/userIncome?serverZone=all">收入分析</a></li>
-																		<li><a href="${ctx}/manage/fbMoneyPayP/fb/moneyPayP?serverZone=all">ARPU与ARPPU</a></li>
-																	<li>
-																</ul>
-														</li>
-													</shiro:hasAnyRoles>
-												<li>	
-											</ul>
 
-										</li>
-									</shiro:hasAnyRoles>
 									<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_RETAINED,XYJ_OFF_USER_ADD,XYJ_OFF_USER_ACTIVE,XYJ_OFF_USER_PAY,XYJ_OFF_USER_INCOME">
 										<li class="dropdown-submenu"><a tabindex="-1" href="#">XYJ离线日志</a>
 											<ul class="dropdown-menu">
