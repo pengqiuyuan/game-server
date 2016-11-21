@@ -37,6 +37,10 @@
 		.pill-content > .active {
 			height: auto; /* let the content decide it */
 		}
+		.table-responsive {
+		    min-height: .01%;
+		    overflow-x: auto;
+		}
 	</style>
 </head>	
   <body>
@@ -69,8 +73,6 @@
 										<c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有运营大区' }">checked="checked" </c:if></c:forEach>>
 										所有运营大区
 									</label>
-									<%--                                     <label class="checkbox inline"> <input type="checkbox" name="serverZone"  value="所有Ios"  <c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有Ios' }">checked="checked" </c:if></c:forEach> > 所有Ios </label> 
-                                    <label class="checkbox inline"> <input type="checkbox" name="serverZone"  value="所有Android"  <c:forEach items="${sZones}" var="i" ><c:if test="${i == '所有Android' }">checked="checked" </c:if></c:forEach> > 所有Android</label> --%>
 									<c:forEach items="${serverZone}" var="item">
 										<label class="checkbox inline"> <input type="checkbox"
 											name="serverZone" value="${item.id }"
@@ -115,7 +117,7 @@
 							<div class="ibox-content">
 								<div>
 									<h3>
-										日期选择器
+										日期选择器（注：一次查询的时间区间不超过30天）
 										<div class="ibox-tools">
 											<label class="label label-primary" id="chooseBtn">添加筛选条件</label>
 										</div>
@@ -159,12 +161,16 @@
 											<button data-dismiss="alert" class="close">×</button>
 											结束时间不能小于开始时间
 										</div>
+										<div id="time1"
+											style="display: none; width: 20%; margin-top: 10px;">
+											<button data-dismiss="alert" class="close">×</button>
+											一次查询的时间区间不能超过30天
+										</div>
 									</div>
 
 									<div class="form-group">
-										<a href="#" class="btn btn-primary" id="yesterday">昨日</a> <a
-											href="#" class="btn btn-primary" id="sevenDayAgo">近7日</a> <a
-											href="#" class="btn btn-primary" id="thirtyDayAgo">近30日</a>
+										<a href="#" class="btn btn-primary" id="sevenDayAgo">近7日</a> 
+										<a href="#" class="btn btn-primary" id="thirtyDayAgo">近30日</a> 
 										<button class="btn btn-success" id="sub" type="submit">
 											<i class="fa fa-check"></i>&nbsp;&nbsp;<span class="bold">确定</span>
 										</button>
@@ -208,163 +214,131 @@
 					</div>
 
 				</div>
-			</form>
+			</form>		
 			<div class="row-fluid">
-				<div class="span12">
-					<div class="ibox float-e-margins">
-						<div class="ibox-content">
-						    <ul class="nav nav-tabs">
-								<li class="active"><a href="#a2" data-toggle="tab">2日留存</a></li>
-								<li><a href="#a3" data-toggle="tab">3日留存</a></li>
-								<li><a href="#a4" data-toggle="tab">4日留存</a></li>
-								<li><a href="#a5" data-toggle="tab">5日留存</a></li>
-								<li><a href="#a6" data-toggle="tab">6日留存</a></li>
-								<li><a href="#a8" data-toggle="tab">8日留存</a></li>
-								<li><a href="#a9" data-toggle="tab">9日留存</a></li>
-								<li><a href="#a10" data-toggle="tab">10日留存</a></li>
-								<li><a href="#a11" data-toggle="tab">11日留存</a></li>
-								<li><a href="#a12" data-toggle="tab">12日留存</a></li>
-								<li><a href="#a13" data-toggle="tab">13日留存</a></li>
-								<li><a href="#a14" data-toggle="tab">14日留存</a></li>
-								<li><a href="#a15" data-toggle="tab">15日留存</a></li>
-								<li><a href="#a16" data-toggle="tab">16日留存</a></li>
-								<li><a href="#a17" data-toggle="tab">17日留存</a></li>
-								<li><a href="#a18" data-toggle="tab">18日留存</a></li>
-								<li><a href="#a19" data-toggle="tab">19日留存</a></li>
-								<li><a href="#a20" data-toggle="tab">20日留存</a></li>
-								<li><a href="#a21" data-toggle="tab">21日留存</a></li>
-								<li><a href="#a22" data-toggle="tab">22日留存</a></li>
-								<li><a href="#a23" data-toggle="tab">23日留存</a></li>
-								<li><a href="#a24" data-toggle="tab">24日留存</a></li>
-								<li><a href="#a25" data-toggle="tab">25日留存</a></li>
-								<li><a href="#a26" data-toggle="tab">26日留存</a></li>
-								<li><a href="#a27" data-toggle="tab">27日留存</a></li>
-								<li><a href="#a28" data-toggle="tab">28日留存</a></li>
-								<li><a href="#a29" data-toggle="tab">29日留存</a></li>
-							</ul>
-							<div class="tab-content">
-								<div class="tab-pane active" id="a2">
-									<div id="maind2Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a3">
-									<div id="maind3Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a4">
-									<div id="maind4Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a5">
-									<div id="maind5Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a6">
-									<div id="maind6Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a7">
-									<div id="maind8Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a9">
-									<div id="maind9Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a10">
-									<div id="maind10Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a11">
-									<div id="maind11Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a12">
-									<div id="maind12Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a13">
-									<div id="maind13Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a14">
-									<div id="maind14Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a15">
-									<div id="maind15Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a16">
-									<div id="maind16Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a17">
-									<div id="maind17Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a18">
-									<div id="maind18Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a19">
-									<div id="maind19Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a20">
-									<div id="maind20Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a21">
-									<div id="maind21Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a22">
-									<div id="maind22Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a23">
-									<div id="maind23Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a24">
-									<div id="maind24Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a25">
-									<div id="maind25Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a26">
-									<div id="maind26Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a27">
-									<div id="maind27Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a28">
-									<div id="maind28Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-								<div class="tab-pane" id="a29">
-									<div id="maind29Day" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-								</div>
-							</div>
-						</div>
+					<div class="table-responsive ibox-content span12">
+							<p><code>次日~10日留存（留存|登录|新增）</code></p>
+							<table class="table table-striped table-bordered table-condensed" id="table">
+								<thead>
+									<tr>
+										<th title="时间">时间</th>
+										<th title="次日留存">次日留存</th>
+										<th title="3日留存">3日留存</th>
+										<th title="4日留存">4日留存</th>
+										<th title="5日留存">5日留存</th>
+										<th title="6日留存">6日留存</th>
+										<th title="7日留存">7日留存</th>
+										<th title="8日留存">8日留存</th>
+										<th title="9日留存">9日留存</th>
+										<th title="10日留存">10日留存</th>
+										<th title="11日留存">11日留存</th>
+									</tr>
+								</thead>
+								<tbody id="tbody">
+									<c:forEach items="${retained1s}" var="item" varStatus="s">
+									<tr id="">
+										<td>${item.xDate}</td>
+										<td>${item.day2}</td>
+										<td>${item.day3}</td>
+										<td>${item.day4}</td>
+										<td>${item.day5}</td>
+										<td>${item.day6}</td>
+										<td>${item.day7}</td>
+										<td>${item.day8}</td>
+										<td>${item.day9}</td>
+										<td>${item.day10}</td>
+										<td>${item.day11}</td>
+									</tr>
+									</c:forEach>
+								</tbody>
+							</table>
 					</div>
-				</div>
-			</div>
-
+			</div>	
 			<div class="row-fluid">
-				<div class="span12">
-					<div class="ibox float-e-margins">
-						<div class="ibox-content">
-						    <div id="mainNextDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-						</div>
+					<div class="table-responsive ibox-content span12">
+							<p><code>11日~20日留存（留存|登录|新增）</code></p>
+							<table class="table table-striped table-bordered table-condensed" id="table">
+								<thead>
+									<tr>
+										<th title="时间">时间</th>
+										<th title="12日留存">12日留存</th>
+										<th title="13日留存">13日留存</th>
+										<th title="14日留存">14日留存</th>
+										<th title="15日留存">15日留存</th>
+										<th title="16日留存">16日留存</th>
+										<th title="17日留存">17日留存</th>
+										<th title="18日留存">18日留存</th>
+										<th title="19日留存">19日留存</th>
+										<th title="20日留存">20日留存</th>
+										<th title="21日留存">21日留存</th>
+									</tr>
+								</thead>
+								<tbody id="tbody">
+									<c:forEach items="${retained2s}" var="item" varStatus="s">
+									<tr id="">
+										<td>${item.xDate}</td>
+										<td>${item.day12}</td>
+										<td>${item.day13}</td>
+										<td>${item.day14}</td>
+										<td>${item.day15}</td>
+										<td>${item.day16}</td>
+										<td>${item.day17}</td>
+										<td>${item.day18}</td>
+										<td>${item.day19}</td>
+										<td>${item.day20}</td>
+										<td>${item.day21}</td>
+									</tr>
+									</c:forEach>
+								</tbody>
+							</table>
 					</div>
-				</div>
-			</div>
+			</div>	
 			<div class="row-fluid">
-				<div class="span12">
-					<div class="ibox float-e-margins">
-						<div class="ibox-content">
-						    <div id="mainSevenDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-						</div>
+					<div class="table-responsive ibox-content span12">
+							<p><code>21日~30日留存（留存|登录|新增）</code></p>
+							<table class="table table-striped table-bordered table-condensed" id="table">
+								<thead>
+									<tr>
+										<th title="时间">时间</th>
+										<th title="22日留存">22日留存</th>
+										<th title="23日留存">23日留存</th>
+										<th title="24日留存">24日留存</th>
+										<th title="25日留存">25日留存</th>
+										<th title="26日留存">26日留存</th>
+										<th title="27日留存">27日留存</th>
+										<th title="28日留存">28日留存</th>
+										<th title="29日留存">29日留存</th>
+										<th title="30日留存">30日留存</th>
+										<th title="31日留存">31日留存</th>
+									</tr>
+								</thead>
+								<tbody id="tbody">
+									<c:forEach items="${retained3s}" var="item" varStatus="s">
+									<tr id="">
+										<td>${item.xDate}</td>
+										<td>${item.day22}</td>
+										<td>${item.day23}</td>
+										<td>${item.day24}</td>
+										<td>${item.day25}</td>
+										<td>${item.day26}</td>
+										<td>${item.day27}</td>
+										<td>${item.day28}</td>
+										<td>${item.day29}</td>
+										<td>${item.day30}</td>
+										<td>${item.day31}</td>
+									</tr>
+									</c:forEach>
+								</tbody>
+							</table>
 					</div>
-				</div>
-			</div>
-			<div class="row-fluid">
-				<div class="span12" id="choose">
-					<div class="ibox float-e-margins">
-						<div class="ibox-content">
-						    <div id="mainThirtyDay" style="height:500px;border:0px solid #ccc;padding:10px;"></div>
-						</div>
-					</div>
-				</div>
-			</div>
+			</div>	
+			
 		</div>
 	</div>
 
     <script src="<%=request.getContextPath()%>/static/echarts/js/echarts.js"></script>
     <script src="<%=request.getContextPath()%>/static/flot/js/bootstrap-datepicker.js"></script>
-    <%@ include file="userRetainChart.jsp"%>
 	<script type="text/javascript">
-
 		$("#chooseBtn").click(function(){
 			if($("#chooseSPS").attr("hidden")=="hidden"){ 
 				$("#chooseSPS").removeAttr("hidden"); 
@@ -383,10 +357,16 @@
 	             	$("#time").show();
 	             	return false;
 	        	 }else{
-	        		 $("#time").hide();
-	        		 return true;
+	        		 if(endTime-30*24*3600*1000 > startTime){
+	        			 $("#time1").show();
+		        		 return false;
+	        		 }else{
+	 	             	$("#time1").hide();
+		             	return true;
+	        		 }
 	        	 }
 	        }else{
+	        	$("#time1").hide();
 	        	$("#time").hide();
 	        	return true;
 	        }
@@ -394,7 +374,12 @@
 		});
 	
 		$(function(){
-			
+			//单选组事件
+		    $(":checkbox").bind("click", function () {
+		        $(":checkbox").prop("checked", false);  
+		        $(this).prop("checked", true);  
+		    })
+		    
 			$("#inputForm").validate({
 				rules:{
 					search_EQ_dateFrom:{

@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.elasticsearch.ElasticsearchException;
@@ -23,6 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.enlight.game.entity.gm.Retained1;
+import com.enlight.game.entity.gm.Retained2;
+import com.enlight.game.entity.gm.Retained3;
+
 @Component
 @Transactional
 public class RetainedServer {
@@ -35,21 +41,21 @@ public class RetainedServer {
 	
 	private static final String type = "fb_user_retained";
 	**/
-	public Map<String, Map<String, Object>> searchAllRetained(String index ,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Object> searchAllRetained(String index ,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
                 		.must(QueryBuilders.termQuery("key", "all"));
 		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	
-	public Map<String, Map<String, Object>> searchServerZoneRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Object> searchServerZoneRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
                 		.must(QueryBuilders.termQuery("key", "serverZone"))
                 		.must(QueryBuilders.termQuery("value", value));
 		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
-	public Map<String, Map<String, Object>> searchPlatFormRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Object> searchPlatFormRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
                 		.must(QueryBuilders.termQuery("key", "platForm"))
@@ -57,7 +63,7 @@ public class RetainedServer {
 		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	
-	public Map<String, Map<String, Object>> searchServerRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Object> searchServerRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
                 		.must(QueryBuilders.termQuery("key", "server"))
@@ -66,7 +72,7 @@ public class RetainedServer {
 		return esSearch(builder, index, type, dateFrom, dateTo);
 	}
 	
-	public Map<String, Map<String, Object>> esSearch(BoolQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String,Object> esSearch(BoolQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		try {
 			TypesExistsResponse typeEx = client.admin().indices() .prepareTypesExists(index).setTypes(type).execute().actionGet(); 
 			if( typeEx.isExists() == true){
@@ -75,33 +81,34 @@ public class RetainedServer {
 				        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 				        .setQuery(builder)
 				        .addSort("date", SortOrder.DESC)		
-				        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)).setExplain(true)
+				        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)*32).setExplain(true)
 				        .execute()
 				        .actionGet();
 				return retained(response,dateFrom,dateTo);
 			}else{
-				Map<String, Map<String, Object>> map = new HashMap<String, Map<String, Object>>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				return map;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			Map<String, Map<String, Object>> map = new HashMap<String, Map<String, Object>>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			return map;
 		}
 	}
 	
 	
-	public Map<String, Map<String, Object>> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
-		Map<String, Map<String, Object>> m = new HashMap<String, Map<String, Object>>();
+	public Map<String, Object> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
+		Map<String, Object> m = new HashMap<String, Object>();
+		List<Retained1> retained1s = new LinkedList<Retained1>();
+		List<Retained2> retained2s = new LinkedList<Retained2>();
+		List<Retained3> retained3s = new LinkedList<Retained3>();
 
-		Map<String, Object> datenext = new HashMap<String, Object>();
-		Map<String, Object> dateSeven = new HashMap<String, Object>();
-		Map<String, Object> datethirty = new HashMap<String, Object>();
-		Map<String, Object> date2 = new HashMap<String, Object>();
+		Map<String, Object> date2= new HashMap<String, Object>();
 		Map<String, Object> date3 = new HashMap<String, Object>();
 		Map<String, Object> date4 = new HashMap<String, Object>();
 		Map<String, Object> date5 = new HashMap<String, Object>();
 		Map<String, Object> date6 = new HashMap<String, Object>();
+		Map<String, Object> date7 = new HashMap<String, Object>();
 		Map<String, Object> date8 = new HashMap<String, Object>();
 		Map<String, Object> date9 = new HashMap<String, Object>();
 		Map<String, Object> date10 = new HashMap<String, Object>();
@@ -124,100 +131,71 @@ public class RetainedServer {
 		Map<String, Object> date27 = new HashMap<String, Object>();
 		Map<String, Object> date28 = new HashMap<String, Object>();
 		Map<String, Object> date29 = new HashMap<String, Object>();
-
-		Map<String, Object> next = new LinkedHashMap<String, Object>();
-		Map<String, Object> seven = new LinkedHashMap<String, Object>();
-		Map<String, Object> thirty = new LinkedHashMap<String, Object>();
-		Map<String, Object> d2 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d3 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d4 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d5 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d6 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d8 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d9 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d10 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d11 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d12 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d13 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d14 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d15 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d16 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d17 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d18 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d19 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d20 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d21 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d22 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d23 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d24 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d25 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d26 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d27 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d28 = new LinkedHashMap<String, Object>();
-		Map<String, Object> d29 = new LinkedHashMap<String, Object>();
+		Map<String, Object> date30 = new HashMap<String, Object>();
+		Map<String, Object> date31 = new HashMap<String, Object>();
 		
 		for (SearchHit hit : response.getHits()) {
 			Map<String, Object> source = hit.getSource();
-			if(source.get("ctRetained").equals("nextDay")){
-				datenext.put(source.get("date").toString(), source.get("retained").toString());
-			}else if(source.get("ctRetained").equals("sevenDay")){
-				dateSeven.put(source.get("date").toString(), source.get("retained").toString());
-			}else if(source.get("ctRetained").equals("thirtyDay")){
-				datethirty.put(source.get("date").toString(), source.get("retained").toString());
-			}else if(source.get("ctRetained").equals("2Day")){
-				date2.put(source.get("date").toString(), source.get("retained").toString());
+			if(source.get("ctRetained").equals("2Day")){
+				date2.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("3Day")){
-				date3.put(source.get("date").toString(), source.get("retained").toString());
+				date3.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("4Day")){
-				date4.put(source.get("date").toString(), source.get("retained").toString());
+				date4.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("5Day")){
-				date5.put(source.get("date").toString(), source.get("retained").toString());
+				date5.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("6Day")){
-				date6.put(source.get("date").toString(), source.get("retained").toString());
+				date6.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
+			}else if(source.get("ctRetained").equals("7Day")){
+				date6.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("8Day")){
-				date8.put(source.get("date").toString(), source.get("retained").toString());
+				date8.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("9Day")){
-				date9.put(source.get("date").toString(), source.get("retained").toString());
+				date9.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("10Day")){
-				date10.put(source.get("date").toString(), source.get("retained").toString());
+				date10.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("11Day")){
-				date11.put(source.get("date").toString(), source.get("retained").toString());
+				date11.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("12Day")){
-				date12.put(source.get("date").toString(), source.get("retained").toString());
+				date12.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("13Day")){
-				date13.put(source.get("date").toString(), source.get("retained").toString());
+				date13.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("14Day")){
-				date14.put(source.get("date").toString(), source.get("retained").toString());
+				date14.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("15Day")){
-				date15.put(source.get("date").toString(), source.get("retained").toString());
+				date15.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("16Day")){
-				date16.put(source.get("date").toString(), source.get("retained").toString());
+				date16.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("17Day")){
-				date17.put(source.get("date").toString(), source.get("retained").toString());
+				date17.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("18Day")){
-				date18.put(source.get("date").toString(), source.get("retained").toString());
+				date18.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("19Day")){
-				date19.put(source.get("date").toString(), source.get("retained").toString());
+				date19.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("20Day")){
-				date20.put(source.get("date").toString(), source.get("retained").toString());
+				date20.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("21Day")){
-				date21.put(source.get("date").toString(), source.get("retained").toString());
+				date21.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("22Day")){
-				date22.put(source.get("date").toString(), source.get("retained").toString());
+				date22.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("23Day")){
-				date23.put(source.get("date").toString(), source.get("retained").toString());
+				date23.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("24Day")){
-				date24.put(source.get("date").toString(), source.get("retained").toString());
+				date24.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("25Day")){
-				date25.put(source.get("date").toString(), source.get("retained").toString());
+				date25.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("26Day")){
-				date26.put(source.get("date").toString(), source.get("retained").toString());
+				date26.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("27Day")){
-				date27.put(source.get("date").toString(), source.get("retained").toString());
+				date27.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("28Day")){
-				date28.put(source.get("date").toString(), source.get("retained").toString());
+				date28.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("29Day")){
-				date29.put(source.get("date").toString(), source.get("retained").toString());
+				date29.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
+			}else if(source.get("ctRetained").equals("30Day")){
+				date29.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
+			}else if(source.get("ctRetained").equals("31Day")){
+				date29.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}
 		}
 
@@ -238,192 +216,174 @@ public class RetainedServer {
 		Long oneDay = 1000 * 60 * 60 * 24l;
 		Long time = startTIme;
 		while (time <= endTime) {
+			Retained1 retained1 = new Retained1();
+			Retained2 retained2 = new Retained2();
+			Retained3 retained3 = new Retained3();
 			Date d = new Date(time);
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String key = df.format(d);
-			if(datenext.containsKey(key)){
-				next.put(key, datenext.get(key));
-			}else{
-				next.put(key, "0.00");
-			}
-			if(dateSeven.containsKey(df.format(d))){
-				seven.put(key, dateSeven.get(key));
-			}else{
-				seven.put(key, "0.00");
-			}
-			if(datethirty.containsKey(df.format(d))){
-				thirty.put(key, datethirty.get(key));
-			}else{
-				thirty.put(key, "0.00");
-			}
+			retained1.setxDate(key);
+			retained2.setxDate(key);
+			retained3.setxDate(key);
 			if(date2.containsKey(df.format(d))){
-				d2.put(key, date2.get(key));
+				retained1.setDay2(date2.get(key).toString());
 			}else{
-				d2.put(key, "0.00");
+				retained1.setDay2("");
 			}
 			if(date3.containsKey(df.format(d))){
-				d3.put(key, date3.get(key));
+				retained1.setDay3(date3.get(key).toString());
 			}else{
-				d3.put(key, "0.00");
+				retained1.setDay3("");
 			}
 			if(date4.containsKey(df.format(d))){
-				d4.put(key, date4.get(key));
+				retained1.setDay4(date4.get(key).toString());
 			}else{
-				d4.put(key, "0.00");
+				retained1.setDay4("");
 			}
 			if(date5.containsKey(df.format(d))){
-				d5.put(key, date5.get(key));
+				retained1.setDay5(date5.get(key).toString());
 			}else{
-				d5.put(key, "0.00");
+				retained1.setDay5("");
 			}
 			if(date6.containsKey(df.format(d))){
-				d6.put(key, date6.get(key));
+				retained1.setDay6(date6.get(key).toString());
 			}else{
-				d6.put(key, "0.00");
+				retained1.setDay6("");
+			}
+			if(date7.containsKey(df.format(d))){
+				retained1.setDay7(date7.get(key).toString());
+			}else{
+				retained1.setDay7("");
 			}
 			if(date8.containsKey(df.format(d))){
-				d8.put(key, date8.get(key));
+				retained1.setDay8(date8.get(key).toString());
 			}else{
-				d8.put(key, "0.00");
+				retained1.setDay8("");
 			}
 			if(date9.containsKey(df.format(d))){
-				d9.put(key, date9.get(key));
+				retained1.setDay9(date9.get(key).toString());
 			}else{
-				d9.put(key, "0.00");
+				retained1.setDay9("");
 			}
 			if(date10.containsKey(df.format(d))){
-				d10.put(key, date10.get(key));
+				retained1.setDay10(date10.get(key).toString());
 			}else{
-				d10.put(key, "0.00");
+				retained1.setDay10("");
 			}
 			if(date11.containsKey(df.format(d))){
-				d11.put(key, date11.get(key));
+				retained1.setDay11(date11.get(key).toString());
 			}else{
-				d11.put(key, "0.00");
+				retained1.setDay11("");
 			}			
 			if(date12.containsKey(df.format(d))){
-				d12.put(key, date12.get(key));
+				retained2.setDay12(date12.get(key).toString());
 			}else{
-				d12.put(key, "0.00");
+				retained2.setDay12("");
 			}
 			if(date13.containsKey(df.format(d))){
-				d13.put(key, date13.get(key));
+				retained2.setDay13(date13.get(key).toString());
 			}else{
-				d13.put(key, "0.00");
+				retained2.setDay13("");
 			}
 			if(date14.containsKey(df.format(d))){
-				d14.put(key, date14.get(key));
+				retained2.setDay14(date14.get(key).toString());
 			}else{
-				d14.put(key, "0.00");
+				retained2.setDay14("");
 			}
 			if(date15.containsKey(df.format(d))){
-				d15.put(key, date15.get(key));
+				retained2.setDay15(date15.get(key).toString());
 			}else{
-				d15.put(key, "0.00");
+				retained2.setDay15("");
 			}
 			if(date16.containsKey(df.format(d))){
-				d16.put(key, date16.get(key));
+				retained2.setDay16(date16.get(key).toString());
 			}else{
-				d16.put(key, "0.00");
+				retained2.setDay16("");
 			}
 			if(date17.containsKey(df.format(d))){
-				d17.put(key, date17.get(key));
+				retained2.setDay17(date17.get(key).toString());
 			}else{
-				d17.put(key, "0.00");
+				retained2.setDay17("");
 			}
 			if(date18.containsKey(df.format(d))){
-				d18.put(key, date18.get(key));
+				retained2.setDay18(date18.get(key).toString());
 			}else{
-				d18.put(key, "0.00");
+				retained2.setDay18("");
 			}
 			if(date19.containsKey(df.format(d))){
-				d19.put(key, date19.get(key));
+				retained2.setDay19(date19.get(key).toString());
 			}else{
-				d19.put(key, "0.00");
+				retained2.setDay19("");
 			}
 			if(date20.containsKey(df.format(d))){
-				d20.put(key, date20.get(key));
+				retained2.setDay20(date20.get(key).toString());
 			}else{
-				d20.put(key, "0.00");
+				retained2.setDay20("");
 			}
 			if(date21.containsKey(df.format(d))){
-				d21.put(key, date21.get(key));
+				retained2.setDay21(date21.get(key).toString());
 			}else{
-				d21.put(key, "0.00");
+				retained2.setDay21("");
 			}
 			if(date22.containsKey(df.format(d))){
-				d22.put(key, date22.get(key));
+				retained3.setDay22(date22.get(key).toString());
 			}else{
-				d22.put(key, "0.00");
+				retained3.setDay22("");
 			}
 			if(date23.containsKey(df.format(d))){
-				d23.put(key, date23.get(key));
+				retained3.setDay23(date23.get(key).toString());
 			}else{
-				d23.put(key, "0.00");
+				retained3.setDay23("");
 			}
 			if(date24.containsKey(df.format(d))){
-				d24.put(key, date24.get(key));
+				retained3.setDay24(date24.get(key).toString());
 			}else{
-				d24.put(key, "0.00");
+				retained3.setDay24("");
 			}
 			if(date25.containsKey(df.format(d))){
-				d25.put(key, date25.get(key));
+				retained3.setDay25(date25.get(key).toString());
 			}else{
-				d25.put(key, "0.00");
+				retained3.setDay25("");
 			}
 			if(date26.containsKey(df.format(d))){
-				d26.put(key, date26.get(key));
+				retained3.setDay26(date26.get(key).toString());
 			}else{
-				d26.put(key, "0.00");
+				retained3.setDay26("");
 			}
 			if(date27.containsKey(df.format(d))){
-				d27.put(key, date27.get(key));
+				retained3.setDay27(date27.get(key).toString());
 			}else{
-				d27.put(key, "0.00");
+				retained3.setDay27("");
 			}
 			if(date28.containsKey(df.format(d))){
-				d28.put(key, date28.get(key));
+				retained3.setDay28(date28.get(key).toString());
 			}else{
-				d28.put(key, "0.00");
+				retained3.setDay28("");
 			}
 			if(date29.containsKey(df.format(d))){
-				d29.put(key, date29.get(key));
+				retained3.setDay29(date29.get(key).toString());
 			}else{
-				d29.put(key, "0.00");
+				retained3.setDay29("");
 			}
+			if(date30.containsKey(df.format(d))){
+				retained3.setDay30(date30.get(key).toString());
+			}else{
+				retained3.setDay30("");
+			}
+			if(date31.containsKey(df.format(d))){
+				retained3.setDay31(date31.get(key).toString());
+			}else{
+				retained3.setDay31("");
+			}
+			retained1s.add(retained1);
+			retained2s.add(retained2);
+			retained3s.add(retained3);
 			time += oneDay;
 		}
-
-		m.put("next", next);
-		m.put("seven", seven);
-		m.put("thirty", thirty);
-		m.put("d2", d2);
-		m.put("d3", d3);
-		m.put("d4", d4);
-		m.put("d5", d5);
-		m.put("d6", d6);
-		m.put("d8", d8);
-		m.put("d9", d9);
-		m.put("d10", d10);
-		m.put("d11", d11);
-		m.put("d12", d12);
-		m.put("d13", d13);
-		m.put("d14", d14);
-		m.put("d15", d15);
-		m.put("d16", d16);
-		m.put("d17", d17);
-		m.put("d18", d18);
-		m.put("d19", d19);
-		m.put("d20", d20);
-		m.put("d21", d21);
-		m.put("d22", d22);
-		m.put("d23", d23);
-		m.put("d24", d24);
-		m.put("d25", d25);
-		m.put("d26", d26);
-		m.put("d27", d27);
-		m.put("d28", d28);
-		m.put("d29", d29);
+		m.put("retained1s", retained1s);
+		m.put("retained2s", retained2s);
+		m.put("retained3s", retained3s);
+		
 		return m;
 	}
 	
@@ -440,5 +400,5 @@ public class RetainedServer {
 		return Integer.parseInt(String.valueOf(between_days));
 	}
 
-		
 }
+

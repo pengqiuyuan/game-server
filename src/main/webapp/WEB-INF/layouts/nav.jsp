@@ -906,9 +906,6 @@
 													<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_RETAINED">
 														<li><a href="${ctx}/manage/xyjRetained/xyj/userRetained?serverZone=all">用户留存</a></li>
 													</shiro:hasAnyRoles>
-													<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_RETAINED">
-														<li><a href="${ctx}/manage/xyjRetained/xyj/userRetained2?serverZone=all">用户留存（表格）</a></li>
-													</shiro:hasAnyRoles>
 													<shiro:hasAnyRoles name="admin,XYJ_OFF_USER_ADD">
 														<li><a href="${ctx}/manage/xyjUserAdd/xyj/userAdd?serverZone=all">用户新增</a></li>
 													</shiro:hasAnyRoles>	

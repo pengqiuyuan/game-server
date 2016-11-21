@@ -12,11 +12,11 @@ public class UserRetained {
 	
 	public final static String KEY_SEVSER="server";
 	
-	public final static String CT_NEXTDAY="nextDay";
+	public final static String CT_2DAY="2Day";
 	
-	public final static String CT_SEVENDAY="sevenDay";
+	public final static String CT_8DAY="8Day";
 	
-	public final static String CT_THIRYTDAY="thirtyDay";
+	public final static String CT_31DAY="31Day";
 	
 	private String date;
 	
@@ -38,7 +38,7 @@ public class UserRetained {
 	private String value;
 	
 	/**
-	 * 留存率分类 次日、7日、30日
+	 * 留存率分类 次日、8日、31日
 	 */
 	private String ctRetained;
 	

@@ -2,7 +2,6 @@ package com.enlight.game.entity.gm;
 
 public	class Retained2{
 	private String xDate;
-	private String day11;
 	private String day12;
 	private String day13;
 	private String day14;
@@ -12,17 +11,12 @@ public	class Retained2{
 	private String day18;
 	private String day19;
 	private String day20;
+	private String day21;
 	public String getxDate() {
 		return xDate;
 	}
 	public void setxDate(String xDate) {
 		this.xDate = xDate;
-	}
-	public String getDay11() {
-		return day11;
-	}
-	public void setDay11(String day11) {
-		this.day11 = day11;
 	}
 	public String getDay12() {
 		return day12;
@@ -77,6 +71,12 @@ public	class Retained2{
 	}
 	public void setDay20(String day20) {
 		this.day20 = day20;
+	}
+	public String getDay21() {
+		return day21;
+	}
+	public void setDay21(String day21) {
+		this.day21 = day21;
 	}
 	
 }

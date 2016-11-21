@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.enlight.game.entity.analysis.UserRetained;
 import com.enlight.game.util.EsUtil;
+import com.google.common.collect.Maps;
 
 @Transactional(readOnly = true)
 public class KdsRetainedScheduled {
@@ -51,6 +53,7 @@ public class KdsRetainedScheduled {
 	private static final Integer num = 35; //35天以内的留存
 	
 	EsUtil esUtilTest = new EsUtil();
+	
 	
 	public Long createCount(String from , String to){
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
@@ -105,6 +108,77 @@ public class KdsRetainedScheduled {
 
 
 	public void esAll() throws IOException, ParseException {	
+		
+		Map<String, String> sortTypes = Maps.newLinkedHashMap();
+		
+		Map<String, String> sortTypes2 = Maps.newLinkedHashMap();
+
+		{
+			/*次日留存 这一条忽略*/
+			sortTypes.put(esUtilTest.xOneDay(-3), esUtilTest.xOneDay(-2));
+			sortTypes.put(esUtilTest.xOneDay(-4), esUtilTest.xOneDay(-3));
+			sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
+			sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
+			sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
+			/*8日留存 这一条忽略*/
+			sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
+			sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
+			sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
+			sortTypes.put(esUtilTest.xOneDay(-12), esUtilTest.xOneDay(-11));
+			sortTypes.put(esUtilTest.xOneDay(-13), esUtilTest.xOneDay(-12));
+			sortTypes.put(esUtilTest.xOneDay(-14), esUtilTest.xOneDay(-13));
+			sortTypes.put(esUtilTest.xOneDay(-15), esUtilTest.xOneDay(-14));
+			sortTypes.put(esUtilTest.xOneDay(-16), esUtilTest.xOneDay(-15));
+			sortTypes.put(esUtilTest.xOneDay(-17), esUtilTest.xOneDay(-16));
+			sortTypes.put(esUtilTest.xOneDay(-18), esUtilTest.xOneDay(-17));
+			sortTypes.put(esUtilTest.xOneDay(-19), esUtilTest.xOneDay(-18));
+			sortTypes.put(esUtilTest.xOneDay(-20), esUtilTest.xOneDay(-19));
+			sortTypes.put(esUtilTest.xOneDay(-21), esUtilTest.xOneDay(-20));
+			sortTypes.put(esUtilTest.xOneDay(-22), esUtilTest.xOneDay(-21));
+			sortTypes.put(esUtilTest.xOneDay(-23), esUtilTest.xOneDay(-22));
+			sortTypes.put(esUtilTest.xOneDay(-24), esUtilTest.xOneDay(-23));
+			sortTypes.put(esUtilTest.xOneDay(-25), esUtilTest.xOneDay(-24));
+			sortTypes.put(esUtilTest.xOneDay(-26), esUtilTest.xOneDay(-25));
+			sortTypes.put(esUtilTest.xOneDay(-27), esUtilTest.xOneDay(-26));
+			sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
+			sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
+			sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
+			/*31日留存 这一条忽略*/
+		}
+		
+		{
+			/*次日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-3),"3Day");
+			sortTypes2.put(esUtilTest.xOneDay(-4), "4Day");
+			sortTypes2.put(esUtilTest.xOneDay(-5), "5Day");
+			sortTypes2.put(esUtilTest.xOneDay(-6), "6Day");
+			sortTypes2.put(esUtilTest.xOneDay(-7), "7Day");
+			/*8日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-9), "9Day");
+			sortTypes2.put(esUtilTest.xOneDay(-10), "10Day");
+			sortTypes2.put(esUtilTest.xOneDay(-11), "11Day");
+			sortTypes2.put(esUtilTest.xOneDay(-12), "12Day");
+			sortTypes2.put(esUtilTest.xOneDay(-13), "13Day");
+			sortTypes2.put(esUtilTest.xOneDay(-14), "14Day");
+			sortTypes2.put(esUtilTest.xOneDay(-15), "15Day");
+			sortTypes2.put(esUtilTest.xOneDay(-16), "16Day");
+			sortTypes2.put(esUtilTest.xOneDay(-17), "17Day");
+			sortTypes2.put(esUtilTest.xOneDay(-18), "18Day");
+			sortTypes2.put(esUtilTest.xOneDay(-19), "19Day");
+			sortTypes2.put(esUtilTest.xOneDay(-20), "20Day");
+			sortTypes2.put(esUtilTest.xOneDay(-21), "21Day");
+			sortTypes2.put(esUtilTest.xOneDay(-22), "22Day");
+			sortTypes2.put(esUtilTest.xOneDay(-23), "23Day");
+			sortTypes2.put(esUtilTest.xOneDay(-24), "24Day");
+			sortTypes2.put(esUtilTest.xOneDay(-25), "25Day");
+			sortTypes2.put(esUtilTest.xOneDay(-26), "26Day");
+			sortTypes2.put(esUtilTest.xOneDay(-27), "27Day");
+			sortTypes2.put(esUtilTest.xOneDay(-28), "28Day");
+			sortTypes2.put(esUtilTest.xOneDay(-29), "29Day");
+			sortTypes2.put(esUtilTest.xOneDay(-30), "30Day");
+			/*31日留存 这一条忽略*/
+		}
+		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
@@ -115,7 +189,7 @@ public class KdsRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setSearchType("count").setTypes(type)
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(
@@ -147,10 +221,12 @@ public class KdsRetainedScheduled {
 					           	 .startObject()
 			                        .field("date", esUtilTest.twoDayAgoFrom().split("T")[0])
 			                        .field("gameId", game)
-			                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+			                        .field("ctRetained", UserRetained.CT_2DAY)
 			                        .field("retained", df.format(RetentionTwo))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
+			                        .field("value1", createCount(esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo()))
+			                        .field("value2", aggcount)
 			                    .endObject()
 				                  )
 				        );
@@ -164,10 +240,12 @@ public class KdsRetainedScheduled {
 					           	 .startObject()
 			                        .field("date", esUtilTest.eightDayAgoFrom().split("T")[0])
 			                        .field("gameId", game)
-			                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+			                        .field("ctRetained", UserRetained.CT_8DAY)
 			                        .field("retained", df.format(RetentionEight))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
+			                        .field("value1", createCount(esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo()))
+			                        .field("value2", aggcount)
 			                    .endObject()
 				                  )
 				        );
@@ -181,10 +259,34 @@ public class KdsRetainedScheduled {
 					           	 .startObject()
 			                        .field("date", esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
 			                        .field("gameId", game)
-			                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+			                        .field("ctRetained", UserRetained.CT_31DAY)
 			                        .field("retained", df.format(RetentionThirty))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
+			                        .field("value1", createCount(esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo()))
+			                        .field("value2", aggcount)
+			                    .endObject()
+				                  )
+				        );
+			}
+			logger.debug("xyj all xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   " +sortTypes.containsKey(dateBucket)   + dateBucket);
+			if(sortTypes.containsKey(dateBucket)){
+			    Cardinality agg = entry.getAggregations().get("agg");
+			    Long aggcount = agg.getValue();
+			    Double x ;
+				x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+				logger.debug("-----------xyj all 留存---------------"+dateBucket.split("T")[0]+"  "+game+"  "+sortTypes2.get(dateBucket)+"  "+df.format(x)+"  "+UserRetained.KEY_ALL);
+				bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+				        .setSource(jsonBuilder()
+					           	 .startObject()
+			                        .field("date", dateBucket.split("T")[0])
+			                        .field("gameId", game)
+			                        .field("ctRetained", sortTypes2.get(dateBucket))
+			                        .field("retained", df.format(x))
+			                        .field("key", UserRetained.KEY_ALL)
+			                        .field("@timestamp", new Date())
+			                        .field("value1", createCount(dateBucket, sortTypes.get(dateBucket)))
+			                        .field("value2", aggcount)
 			                    .endObject()
 				                  )
 				        );
@@ -196,10 +298,82 @@ public class KdsRetainedScheduled {
 	}	
 	
 	public void esServerZone() throws IOException, ParseException {	
+		
+		
+		Map<String, String> sortTypes = Maps.newLinkedHashMap();
+		
+		Map<String, String> sortTypes2 = Maps.newLinkedHashMap();
+
+		{
+			/*次日留存 这一条忽略*/
+			sortTypes.put(esUtilTest.xOneDay(-3), esUtilTest.xOneDay(-2));
+			sortTypes.put(esUtilTest.xOneDay(-4), esUtilTest.xOneDay(-3));
+			sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
+			sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
+			sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
+			/*8日留存 这一条忽略*/
+			sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
+			sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
+			sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
+			sortTypes.put(esUtilTest.xOneDay(-12), esUtilTest.xOneDay(-11));
+			sortTypes.put(esUtilTest.xOneDay(-13), esUtilTest.xOneDay(-12));
+			sortTypes.put(esUtilTest.xOneDay(-14), esUtilTest.xOneDay(-13));
+			sortTypes.put(esUtilTest.xOneDay(-15), esUtilTest.xOneDay(-14));
+			sortTypes.put(esUtilTest.xOneDay(-16), esUtilTest.xOneDay(-15));
+			sortTypes.put(esUtilTest.xOneDay(-17), esUtilTest.xOneDay(-16));
+			sortTypes.put(esUtilTest.xOneDay(-18), esUtilTest.xOneDay(-17));
+			sortTypes.put(esUtilTest.xOneDay(-19), esUtilTest.xOneDay(-18));
+			sortTypes.put(esUtilTest.xOneDay(-20), esUtilTest.xOneDay(-19));
+			sortTypes.put(esUtilTest.xOneDay(-21), esUtilTest.xOneDay(-20));
+			sortTypes.put(esUtilTest.xOneDay(-22), esUtilTest.xOneDay(-21));
+			sortTypes.put(esUtilTest.xOneDay(-23), esUtilTest.xOneDay(-22));
+			sortTypes.put(esUtilTest.xOneDay(-24), esUtilTest.xOneDay(-23));
+			sortTypes.put(esUtilTest.xOneDay(-25), esUtilTest.xOneDay(-24));
+			sortTypes.put(esUtilTest.xOneDay(-26), esUtilTest.xOneDay(-25));
+			sortTypes.put(esUtilTest.xOneDay(-27), esUtilTest.xOneDay(-26));
+			sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
+			sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
+			sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
+			/*31日留存 这一条忽略*/
+		}
+		
+		{
+			/*次日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-3),"3Day");
+			sortTypes2.put(esUtilTest.xOneDay(-4), "4Day");
+			sortTypes2.put(esUtilTest.xOneDay(-5), "5Day");
+			sortTypes2.put(esUtilTest.xOneDay(-6), "6Day");
+			sortTypes2.put(esUtilTest.xOneDay(-7), "7Day");
+			/*8日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-9), "9Day");
+			sortTypes2.put(esUtilTest.xOneDay(-10), "10Day");
+			sortTypes2.put(esUtilTest.xOneDay(-11), "11Day");
+			sortTypes2.put(esUtilTest.xOneDay(-12), "12Day");
+			sortTypes2.put(esUtilTest.xOneDay(-13), "13Day");
+			sortTypes2.put(esUtilTest.xOneDay(-14), "14Day");
+			sortTypes2.put(esUtilTest.xOneDay(-15), "15Day");
+			sortTypes2.put(esUtilTest.xOneDay(-16), "16Day");
+			sortTypes2.put(esUtilTest.xOneDay(-17), "17Day");
+			sortTypes2.put(esUtilTest.xOneDay(-18), "18Day");
+			sortTypes2.put(esUtilTest.xOneDay(-19), "19Day");
+			sortTypes2.put(esUtilTest.xOneDay(-20), "20Day");
+			sortTypes2.put(esUtilTest.xOneDay(-21), "21Day");
+			sortTypes2.put(esUtilTest.xOneDay(-22), "22Day");
+			sortTypes2.put(esUtilTest.xOneDay(-23), "23Day");
+			sortTypes2.put(esUtilTest.xOneDay(-24), "24Day");
+			sortTypes2.put(esUtilTest.xOneDay(-25), "25Day");
+			sortTypes2.put(esUtilTest.xOneDay(-26), "26Day");
+			sortTypes2.put(esUtilTest.xOneDay(-27), "27Day");
+			sortTypes2.put(esUtilTest.xOneDay(-28), "28Day");
+			sortTypes2.put(esUtilTest.xOneDay(-29), "29Day");
+			sortTypes2.put(esUtilTest.xOneDay(-30), "30Day");
+			/*31日留存 这一条忽略*/
+		}
+		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
-		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
+		DecimalFormat df = new DecimalFormat("0.00");//格式化小数 
 		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		/* game-server 注册时间这个字段传入的是 2016-11-4 为 java.text.ParseException: Unparseable date: "2016-11-4" */
@@ -207,7 +381,7 @@ public class KdsRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(
@@ -249,11 +423,13 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date", esUtilTest.twoDayAgoFrom().split("T")[0])
 				                        .field("gameId",game)
-				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("ctRetained", UserRetained.CT_2DAY)
 				                        .field("retained", df.format(RetentionTwo))
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerZoneCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );			    	
@@ -270,11 +446,13 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date", esUtilTest.eightDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("ctRetained", UserRetained.CT_8DAY)
 				                        .field("retained", df.format(RetentionEight))
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerZoneCount(e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -292,11 +470,39 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date", esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("ctRetained", UserRetained.CT_31DAY)
 				                        .field("retained", df.format(RetentionThirty))
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerZoneCount(e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo()))
+			                            .field("value2", aggcount)
+				                    .endObject()
+					                  )
+					        );
+				}
+			} 
+			logger.debug("xyj serverzone xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   " +sortTypes.containsKey(dateBucket)   + dateBucket);	
+			if(sortTypes.containsKey(dateBucket)){
+				Terms serverZone = entry.getAggregations().get("serverZone");
+				for (Terms.Bucket e : serverZone.getBuckets()) {
+				    Cardinality agg = entry.getAggregations().get("agg");
+				    Long aggcount = agg.getValue();
+				    Double x ;
+					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));
+					logger.debug("-----------xyj serverzone 留存---------------"+dateBucket.split("T")[0]+"  "+game+"  "+sortTypes2.get(dateBucket)+"  "+df.format(x)+"  "+UserRetained.KEY_SEVSERZONE+"  "+e.getKey());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date", dateBucket.split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", sortTypes2.get(dateBucket))
+				                        .field("retained", df.format(x))
+				                        .field("key", UserRetained.KEY_SEVSERZONE)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                        .field("value1", createCount(dateBucket, sortTypes.get(dateBucket)))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -310,6 +516,78 @@ public class KdsRetainedScheduled {
 	
 	
 	public void esPlatForm() throws IOException, ParseException {	
+		
+		
+		Map<String, String> sortTypes = Maps.newLinkedHashMap();
+		
+		Map<String, String> sortTypes2 = Maps.newLinkedHashMap();
+
+		{
+			/*次日留存 这一条忽略*/
+			sortTypes.put(esUtilTest.xOneDay(-3), esUtilTest.xOneDay(-2));
+			sortTypes.put(esUtilTest.xOneDay(-4), esUtilTest.xOneDay(-3));
+			sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
+			sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
+			sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
+			/*8日留存 这一条忽略*/
+			sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
+			sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
+			sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
+			sortTypes.put(esUtilTest.xOneDay(-12), esUtilTest.xOneDay(-11));
+			sortTypes.put(esUtilTest.xOneDay(-13), esUtilTest.xOneDay(-12));
+			sortTypes.put(esUtilTest.xOneDay(-14), esUtilTest.xOneDay(-13));
+			sortTypes.put(esUtilTest.xOneDay(-15), esUtilTest.xOneDay(-14));
+			sortTypes.put(esUtilTest.xOneDay(-16), esUtilTest.xOneDay(-15));
+			sortTypes.put(esUtilTest.xOneDay(-17), esUtilTest.xOneDay(-16));
+			sortTypes.put(esUtilTest.xOneDay(-18), esUtilTest.xOneDay(-17));
+			sortTypes.put(esUtilTest.xOneDay(-19), esUtilTest.xOneDay(-18));
+			sortTypes.put(esUtilTest.xOneDay(-20), esUtilTest.xOneDay(-19));
+			sortTypes.put(esUtilTest.xOneDay(-21), esUtilTest.xOneDay(-20));
+			sortTypes.put(esUtilTest.xOneDay(-22), esUtilTest.xOneDay(-21));
+			sortTypes.put(esUtilTest.xOneDay(-23), esUtilTest.xOneDay(-22));
+			sortTypes.put(esUtilTest.xOneDay(-24), esUtilTest.xOneDay(-23));
+			sortTypes.put(esUtilTest.xOneDay(-25), esUtilTest.xOneDay(-24));
+			sortTypes.put(esUtilTest.xOneDay(-26), esUtilTest.xOneDay(-25));
+			sortTypes.put(esUtilTest.xOneDay(-27), esUtilTest.xOneDay(-26));
+			sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
+			sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
+			sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
+			/*31日留存 这一条忽略*/
+		}
+		
+		{
+			/*次日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-3),"3Day");
+			sortTypes2.put(esUtilTest.xOneDay(-4), "4Day");
+			sortTypes2.put(esUtilTest.xOneDay(-5), "5Day");
+			sortTypes2.put(esUtilTest.xOneDay(-6), "6Day");
+			sortTypes2.put(esUtilTest.xOneDay(-7), "7Day");
+			/*8日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-9), "9Day");
+			sortTypes2.put(esUtilTest.xOneDay(-10), "10Day");
+			sortTypes2.put(esUtilTest.xOneDay(-11), "11Day");
+			sortTypes2.put(esUtilTest.xOneDay(-12), "12Day");
+			sortTypes2.put(esUtilTest.xOneDay(-13), "13Day");
+			sortTypes2.put(esUtilTest.xOneDay(-14), "14Day");
+			sortTypes2.put(esUtilTest.xOneDay(-15), "15Day");
+			sortTypes2.put(esUtilTest.xOneDay(-16), "16Day");
+			sortTypes2.put(esUtilTest.xOneDay(-17), "17Day");
+			sortTypes2.put(esUtilTest.xOneDay(-18), "18Day");
+			sortTypes2.put(esUtilTest.xOneDay(-19), "19Day");
+			sortTypes2.put(esUtilTest.xOneDay(-20), "20Day");
+			sortTypes2.put(esUtilTest.xOneDay(-21), "21Day");
+			sortTypes2.put(esUtilTest.xOneDay(-22), "22Day");
+			sortTypes2.put(esUtilTest.xOneDay(-23), "23Day");
+			sortTypes2.put(esUtilTest.xOneDay(-24), "24Day");
+			sortTypes2.put(esUtilTest.xOneDay(-25), "25Day");
+			sortTypes2.put(esUtilTest.xOneDay(-26), "26Day");
+			sortTypes2.put(esUtilTest.xOneDay(-27), "27Day");
+			sortTypes2.put(esUtilTest.xOneDay(-28), "28Day");
+			sortTypes2.put(esUtilTest.xOneDay(-29), "29Day");
+			sortTypes2.put(esUtilTest.xOneDay(-30), "30Day");
+			/*31日留存 这一条忽略*/
+		}
+		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
@@ -321,7 +599,7 @@ public class KdsRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(
@@ -356,11 +634,13 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.twoDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("ctRetained", UserRetained.CT_2DAY)
 				                        .field("retained", df.format(RetentionTwo))
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createPlatFormCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -377,11 +657,13 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.eightDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("ctRetained", UserRetained.CT_8DAY)
 				                        .field("retained", df.format(RetentionEight))
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createPlatFormCount((String) e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -398,11 +680,39 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("ctRetained", UserRetained.CT_31DAY)
 				                        .field("retained", df.format(RetentionThirty))
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createPlatFormCount((String) e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo()))
+			                            .field("value2", aggcount)
+				                    .endObject()
+					                  )
+					        );
+				}
+			} 
+			logger.debug("xyj platform xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   " +sortTypes.containsKey(dateBucket)   + dateBucket);
+			if(sortTypes.containsKey(dateBucket)){
+				Terms serverZone = entry.getAggregations().get("platForm");
+				for (Terms.Bucket e : serverZone.getBuckets()) {
+				    Cardinality agg = entry.getAggregations().get("agg");
+				    Long aggcount = agg.getValue();
+				    Double x ;
+					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+					logger.debug("-----------xyj platform 留存---------------"+dateBucket.split("T")[0]+"  "+game+"  "+sortTypes2.get(dateBucket)+"  "+df.format(x)+"  "+UserRetained.KEY_PLATFORM+"  "+e.getKey());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",dateBucket.split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", sortTypes2.get(dateBucket))
+				                        .field("retained", df.format(x))
+				                        .field("key", UserRetained.KEY_PLATFORM)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                        .field("value1", createCount(dateBucket, sortTypes.get(dateBucket)))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -415,6 +725,78 @@ public class KdsRetainedScheduled {
 	}
 	
 	public void esServer() throws IOException, ParseException {	
+		
+		
+		Map<String, String> sortTypes = Maps.newLinkedHashMap();
+		
+		Map<String, String> sortTypes2 = Maps.newLinkedHashMap();
+
+		{
+			/*次日留存 这一条忽略*/
+			sortTypes.put(esUtilTest.xOneDay(-3), esUtilTest.xOneDay(-2));
+			sortTypes.put(esUtilTest.xOneDay(-4), esUtilTest.xOneDay(-3));
+			sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
+			sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
+			sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
+			/*8日留存 这一条忽略*/
+			sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
+			sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
+			sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
+			sortTypes.put(esUtilTest.xOneDay(-12), esUtilTest.xOneDay(-11));
+			sortTypes.put(esUtilTest.xOneDay(-13), esUtilTest.xOneDay(-12));
+			sortTypes.put(esUtilTest.xOneDay(-14), esUtilTest.xOneDay(-13));
+			sortTypes.put(esUtilTest.xOneDay(-15), esUtilTest.xOneDay(-14));
+			sortTypes.put(esUtilTest.xOneDay(-16), esUtilTest.xOneDay(-15));
+			sortTypes.put(esUtilTest.xOneDay(-17), esUtilTest.xOneDay(-16));
+			sortTypes.put(esUtilTest.xOneDay(-18), esUtilTest.xOneDay(-17));
+			sortTypes.put(esUtilTest.xOneDay(-19), esUtilTest.xOneDay(-18));
+			sortTypes.put(esUtilTest.xOneDay(-20), esUtilTest.xOneDay(-19));
+			sortTypes.put(esUtilTest.xOneDay(-21), esUtilTest.xOneDay(-20));
+			sortTypes.put(esUtilTest.xOneDay(-22), esUtilTest.xOneDay(-21));
+			sortTypes.put(esUtilTest.xOneDay(-23), esUtilTest.xOneDay(-22));
+			sortTypes.put(esUtilTest.xOneDay(-24), esUtilTest.xOneDay(-23));
+			sortTypes.put(esUtilTest.xOneDay(-25), esUtilTest.xOneDay(-24));
+			sortTypes.put(esUtilTest.xOneDay(-26), esUtilTest.xOneDay(-25));
+			sortTypes.put(esUtilTest.xOneDay(-27), esUtilTest.xOneDay(-26));
+			sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
+			sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
+			sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
+			/*31日留存 这一条忽略*/
+		}
+		
+		{
+			/*次日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-3),"3Day");
+			sortTypes2.put(esUtilTest.xOneDay(-4), "4Day");
+			sortTypes2.put(esUtilTest.xOneDay(-5), "5Day");
+			sortTypes2.put(esUtilTest.xOneDay(-6), "6Day");
+			sortTypes2.put(esUtilTest.xOneDay(-7), "7Day");
+			/*8日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-9), "9Day");
+			sortTypes2.put(esUtilTest.xOneDay(-10), "10Day");
+			sortTypes2.put(esUtilTest.xOneDay(-11), "11Day");
+			sortTypes2.put(esUtilTest.xOneDay(-12), "12Day");
+			sortTypes2.put(esUtilTest.xOneDay(-13), "13Day");
+			sortTypes2.put(esUtilTest.xOneDay(-14), "14Day");
+			sortTypes2.put(esUtilTest.xOneDay(-15), "15Day");
+			sortTypes2.put(esUtilTest.xOneDay(-16), "16Day");
+			sortTypes2.put(esUtilTest.xOneDay(-17), "17Day");
+			sortTypes2.put(esUtilTest.xOneDay(-18), "18Day");
+			sortTypes2.put(esUtilTest.xOneDay(-19), "19Day");
+			sortTypes2.put(esUtilTest.xOneDay(-20), "20Day");
+			sortTypes2.put(esUtilTest.xOneDay(-21), "21Day");
+			sortTypes2.put(esUtilTest.xOneDay(-22), "22Day");
+			sortTypes2.put(esUtilTest.xOneDay(-23), "23Day");
+			sortTypes2.put(esUtilTest.xOneDay(-24), "24Day");
+			sortTypes2.put(esUtilTest.xOneDay(-25), "25Day");
+			sortTypes2.put(esUtilTest.xOneDay(-26), "26Day");
+			sortTypes2.put(esUtilTest.xOneDay(-27), "27Day");
+			sortTypes2.put(esUtilTest.xOneDay(-28), "28Day");
+			sortTypes2.put(esUtilTest.xOneDay(-29), "29Day");
+			sortTypes2.put(esUtilTest.xOneDay(-30), "30Day");
+			/*31日留存 这一条忽略*/
+		}
+		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
 		//计算时间（当前）2015-04-15 ，统计出2015-04-14到2015-04-15的数据 ，得出2015-04-13的次日留存、得出2015-04-07的7日留存、得出2015-03-15的30日留存
 		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" ); 
@@ -426,7 +808,7 @@ public class KdsRetainedScheduled {
 		SearchResponse sr = client.prepareSearch(index).setTypes(type).setSearchType("count")
 				.setQuery(
 		        		QueryBuilders.boolQuery()
-		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())))
+		        		.must( QueryBuilders.rangeQuery("@timestamp").from(esUtilTest.utcMinus8(esUtilTest.oneDayAgoFrom())).to(esUtilTest.utcMinus8(esUtilTest.nowDate())) )
 		        		.must( QueryBuilders.termsQuery("日志分类关键字", "login"))
 		        )
 			    .addAggregation(
@@ -460,11 +842,13 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.twoDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("ctRetained", UserRetained.CT_2DAY)
 				                        .field("retained", df.format(RetentionTwo))
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerCount((String) e.getKey(),esUtilTest.twoDayAgoFrom(), esUtilTest.twoDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -481,11 +865,13 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.eightDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("ctRetained", UserRetained.CT_8DAY)
 				                        .field("retained", df.format(RetentionEight))
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerCount((String) e.getKey(),esUtilTest.eightDayAgoFrom(), esUtilTest.eightDayAgoTo()))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );
@@ -503,11 +889,39 @@ public class KdsRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("ctRetained", UserRetained.CT_31DAY)
 				                        .field("retained", df.format(RetentionThirty))
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
 				                        .field("@timestamp", new Date())
+				                        .field("value1", createServerCount((String) e.getKey(),esUtilTest.thirtyOneDayAgoFrom(), esUtilTest.thirtyOneDayAgoTo()))
+			                            .field("value2", aggcount)
+				                    .endObject()
+					                  )
+					        );
+				}
+			} 
+			logger.debug("xyj server xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   " +sortTypes.containsKey(dateBucket)   + dateBucket);	
+			if(sortTypes.containsKey(dateBucket)){
+				Terms serverZone = entry.getAggregations().get("server");
+				for (Terms.Bucket e : serverZone.getBuckets()) {
+				    Cardinality agg = entry.getAggregations().get("agg");
+				    Long aggcount = agg.getValue();
+				    Double x ;
+					x = (double)aggcount*100/createCount(dateBucket, sortTypes.get(dateBucket));	
+					logger.debug("-----------xyj server 留存---------------"+dateBucket.split("T")[0]+"  "+game+"  "+sortTypes2.get(dateBucket)+"  "+df.format(x)+"  "+UserRetained.KEY_SEVSER+"  "+e.getKey());
+					bulkRequest.add(client.prepareIndex(bulk_index, bulk_type_retained)
+					        .setSource(jsonBuilder()
+						           	 .startObject()
+				                        .field("date",dateBucket.split("T")[0])
+				                        .field("gameId", game)
+				                        .field("ctRetained", sortTypes2.get(dateBucket))
+				                        .field("retained", df.format(x))
+				                        .field("key", UserRetained.KEY_SEVSER)
+				                        .field("value", e.getKey())
+				                        .field("@timestamp", new Date())
+				                        .field("value1", createCount(dateBucket, sortTypes.get(dateBucket)))
+			                            .field("value2", aggcount)
 				                    .endObject()
 					                  )
 					        );

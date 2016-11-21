@@ -120,7 +120,7 @@ public class XyjRetainedScheduled {
 			sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
 			sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
 			sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
-			/*7日留存 这一条忽略*/
+			/*8日留存 这一条忽略*/
 			sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
 			sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
 			sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
@@ -143,40 +143,40 @@ public class XyjRetainedScheduled {
 			sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
 			sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
 			sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
-			/*30日留存 这一条忽略*/
+			/*31日留存 这一条忽略*/
 		}
 		
 		{
 			/*次日留存 这一条忽略*/
-			sortTypes2.put(esUtilTest.xOneDay(-3),"2Day");
-			sortTypes2.put(esUtilTest.xOneDay(-4), "3Day");
-			sortTypes2.put(esUtilTest.xOneDay(-5), "4Day");
-			sortTypes2.put(esUtilTest.xOneDay(-6), "5Day");
-			sortTypes2.put(esUtilTest.xOneDay(-7), "6Day");
-			/*7日留存 这一条忽略*/
-			sortTypes2.put(esUtilTest.xOneDay(-9), "8Day");
-			sortTypes2.put(esUtilTest.xOneDay(-10), "9Day");
-			sortTypes2.put(esUtilTest.xOneDay(-11), "10Day");
-			sortTypes2.put(esUtilTest.xOneDay(-12), "11Day");
-			sortTypes2.put(esUtilTest.xOneDay(-13), "12Day");
-			sortTypes2.put(esUtilTest.xOneDay(-14), "13Day");
-			sortTypes2.put(esUtilTest.xOneDay(-15), "14Day");
-			sortTypes2.put(esUtilTest.xOneDay(-16), "15Day");
-			sortTypes2.put(esUtilTest.xOneDay(-17), "16Day");
-			sortTypes2.put(esUtilTest.xOneDay(-18), "17Day");
-			sortTypes2.put(esUtilTest.xOneDay(-19), "18Day");
-			sortTypes2.put(esUtilTest.xOneDay(-20), "19Day");
-			sortTypes2.put(esUtilTest.xOneDay(-21), "20Day");
-			sortTypes2.put(esUtilTest.xOneDay(-22), "21Day");
-			sortTypes2.put(esUtilTest.xOneDay(-23), "22Day");
-			sortTypes2.put(esUtilTest.xOneDay(-24), "23Day");
-			sortTypes2.put(esUtilTest.xOneDay(-25), "24Day");
-			sortTypes2.put(esUtilTest.xOneDay(-26), "25Day");
-			sortTypes2.put(esUtilTest.xOneDay(-27), "26Day");
-			sortTypes2.put(esUtilTest.xOneDay(-28), "27Day");
-			sortTypes2.put(esUtilTest.xOneDay(-29), "28Day");
-			sortTypes2.put(esUtilTest.xOneDay(-30), "29Day");
-			/*30日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-3),"3Day");
+			sortTypes2.put(esUtilTest.xOneDay(-4), "4Day");
+			sortTypes2.put(esUtilTest.xOneDay(-5), "5Day");
+			sortTypes2.put(esUtilTest.xOneDay(-6), "6Day");
+			sortTypes2.put(esUtilTest.xOneDay(-7), "7Day");
+			/*8日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-9), "9Day");
+			sortTypes2.put(esUtilTest.xOneDay(-10), "10Day");
+			sortTypes2.put(esUtilTest.xOneDay(-11), "11Day");
+			sortTypes2.put(esUtilTest.xOneDay(-12), "12Day");
+			sortTypes2.put(esUtilTest.xOneDay(-13), "13Day");
+			sortTypes2.put(esUtilTest.xOneDay(-14), "14Day");
+			sortTypes2.put(esUtilTest.xOneDay(-15), "15Day");
+			sortTypes2.put(esUtilTest.xOneDay(-16), "16Day");
+			sortTypes2.put(esUtilTest.xOneDay(-17), "17Day");
+			sortTypes2.put(esUtilTest.xOneDay(-18), "18Day");
+			sortTypes2.put(esUtilTest.xOneDay(-19), "19Day");
+			sortTypes2.put(esUtilTest.xOneDay(-20), "20Day");
+			sortTypes2.put(esUtilTest.xOneDay(-21), "21Day");
+			sortTypes2.put(esUtilTest.xOneDay(-22), "22Day");
+			sortTypes2.put(esUtilTest.xOneDay(-23), "23Day");
+			sortTypes2.put(esUtilTest.xOneDay(-24), "24Day");
+			sortTypes2.put(esUtilTest.xOneDay(-25), "25Day");
+			sortTypes2.put(esUtilTest.xOneDay(-26), "26Day");
+			sortTypes2.put(esUtilTest.xOneDay(-27), "27Day");
+			sortTypes2.put(esUtilTest.xOneDay(-28), "28Day");
+			sortTypes2.put(esUtilTest.xOneDay(-29), "29Day");
+			sortTypes2.put(esUtilTest.xOneDay(-30), "30Day");
+			/*31日留存 这一条忽略*/
 		}
 		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
@@ -221,7 +221,7 @@ public class XyjRetainedScheduled {
 					           	 .startObject()
 			                        .field("date", esUtilTest.twoDayAgoFrom().split("T")[0])
 			                        .field("gameId", game)
-			                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+			                        .field("ctRetained", UserRetained.CT_2DAY)
 			                        .field("retained", df.format(RetentionTwo))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
@@ -240,7 +240,7 @@ public class XyjRetainedScheduled {
 					           	 .startObject()
 			                        .field("date", esUtilTest.eightDayAgoFrom().split("T")[0])
 			                        .field("gameId", game)
-			                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+			                        .field("ctRetained", UserRetained.CT_8DAY)
 			                        .field("retained", df.format(RetentionEight))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
@@ -259,7 +259,7 @@ public class XyjRetainedScheduled {
 					           	 .startObject()
 			                        .field("date", esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
 			                        .field("gameId", game)
-			                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+			                        .field("ctRetained", UserRetained.CT_31DAY)
 			                        .field("retained", df.format(RetentionThirty))
 			                        .field("key", UserRetained.KEY_ALL)
 			                        .field("@timestamp", new Date())
@@ -311,7 +311,7 @@ public class XyjRetainedScheduled {
 			sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
 			sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
 			sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
-			/*7日留存 这一条忽略*/
+			/*8日留存 这一条忽略*/
 			sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
 			sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
 			sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
@@ -334,40 +334,40 @@ public class XyjRetainedScheduled {
 			sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
 			sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
 			sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
-			/*30日留存 这一条忽略*/
+			/*31日留存 这一条忽略*/
 		}
 		
 		{
 			/*次日留存 这一条忽略*/
-			sortTypes2.put(esUtilTest.xOneDay(-3),"2Day");
-			sortTypes2.put(esUtilTest.xOneDay(-4), "3Day");
-			sortTypes2.put(esUtilTest.xOneDay(-5), "4Day");
-			sortTypes2.put(esUtilTest.xOneDay(-6), "5Day");
-			sortTypes2.put(esUtilTest.xOneDay(-7), "6Day");
-			/*7日留存 这一条忽略*/
-			sortTypes2.put(esUtilTest.xOneDay(-9), "8Day");
-			sortTypes2.put(esUtilTest.xOneDay(-10), "9Day");
-			sortTypes2.put(esUtilTest.xOneDay(-11), "10Day");
-			sortTypes2.put(esUtilTest.xOneDay(-12), "11Day");
-			sortTypes2.put(esUtilTest.xOneDay(-13), "12Day");
-			sortTypes2.put(esUtilTest.xOneDay(-14), "13Day");
-			sortTypes2.put(esUtilTest.xOneDay(-15), "14Day");
-			sortTypes2.put(esUtilTest.xOneDay(-16), "15Day");
-			sortTypes2.put(esUtilTest.xOneDay(-17), "16Day");
-			sortTypes2.put(esUtilTest.xOneDay(-18), "17Day");
-			sortTypes2.put(esUtilTest.xOneDay(-19), "18Day");
-			sortTypes2.put(esUtilTest.xOneDay(-20), "19Day");
-			sortTypes2.put(esUtilTest.xOneDay(-21), "20Day");
-			sortTypes2.put(esUtilTest.xOneDay(-22), "21Day");
-			sortTypes2.put(esUtilTest.xOneDay(-23), "22Day");
-			sortTypes2.put(esUtilTest.xOneDay(-24), "23Day");
-			sortTypes2.put(esUtilTest.xOneDay(-25), "24Day");
-			sortTypes2.put(esUtilTest.xOneDay(-26), "25Day");
-			sortTypes2.put(esUtilTest.xOneDay(-27), "26Day");
-			sortTypes2.put(esUtilTest.xOneDay(-28), "27Day");
-			sortTypes2.put(esUtilTest.xOneDay(-29), "28Day");
-			sortTypes2.put(esUtilTest.xOneDay(-30), "29Day");
-			/*30日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-3),"3Day");
+			sortTypes2.put(esUtilTest.xOneDay(-4), "4Day");
+			sortTypes2.put(esUtilTest.xOneDay(-5), "5Day");
+			sortTypes2.put(esUtilTest.xOneDay(-6), "6Day");
+			sortTypes2.put(esUtilTest.xOneDay(-7), "7Day");
+			/*8日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-9), "9Day");
+			sortTypes2.put(esUtilTest.xOneDay(-10), "10Day");
+			sortTypes2.put(esUtilTest.xOneDay(-11), "11Day");
+			sortTypes2.put(esUtilTest.xOneDay(-12), "12Day");
+			sortTypes2.put(esUtilTest.xOneDay(-13), "13Day");
+			sortTypes2.put(esUtilTest.xOneDay(-14), "14Day");
+			sortTypes2.put(esUtilTest.xOneDay(-15), "15Day");
+			sortTypes2.put(esUtilTest.xOneDay(-16), "16Day");
+			sortTypes2.put(esUtilTest.xOneDay(-17), "17Day");
+			sortTypes2.put(esUtilTest.xOneDay(-18), "18Day");
+			sortTypes2.put(esUtilTest.xOneDay(-19), "19Day");
+			sortTypes2.put(esUtilTest.xOneDay(-20), "20Day");
+			sortTypes2.put(esUtilTest.xOneDay(-21), "21Day");
+			sortTypes2.put(esUtilTest.xOneDay(-22), "22Day");
+			sortTypes2.put(esUtilTest.xOneDay(-23), "23Day");
+			sortTypes2.put(esUtilTest.xOneDay(-24), "24Day");
+			sortTypes2.put(esUtilTest.xOneDay(-25), "25Day");
+			sortTypes2.put(esUtilTest.xOneDay(-26), "26Day");
+			sortTypes2.put(esUtilTest.xOneDay(-27), "27Day");
+			sortTypes2.put(esUtilTest.xOneDay(-28), "28Day");
+			sortTypes2.put(esUtilTest.xOneDay(-29), "29Day");
+			sortTypes2.put(esUtilTest.xOneDay(-30), "30Day");
+			/*31日留存 这一条忽略*/
 		}
 		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
@@ -423,7 +423,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date", esUtilTest.twoDayAgoFrom().split("T")[0])
 				                        .field("gameId",game)
-				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("ctRetained", UserRetained.CT_2DAY)
 				                        .field("retained", df.format(RetentionTwo))
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
@@ -446,7 +446,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date", esUtilTest.eightDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("ctRetained", UserRetained.CT_8DAY)
 				                        .field("retained", df.format(RetentionEight))
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
@@ -470,7 +470,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date", esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("ctRetained", UserRetained.CT_31DAY)
 				                        .field("retained", df.format(RetentionThirty))
 				                        .field("key", UserRetained.KEY_SEVSERZONE)
 				                        .field("value", e.getKey())
@@ -529,7 +529,7 @@ public class XyjRetainedScheduled {
 			sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
 			sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
 			sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
-			/*7日留存 这一条忽略*/
+			/*8日留存 这一条忽略*/
 			sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
 			sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
 			sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
@@ -552,40 +552,40 @@ public class XyjRetainedScheduled {
 			sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
 			sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
 			sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
-			/*30日留存 这一条忽略*/
+			/*31日留存 这一条忽略*/
 		}
 		
 		{
 			/*次日留存 这一条忽略*/
-			sortTypes2.put(esUtilTest.xOneDay(-3),"2Day");
-			sortTypes2.put(esUtilTest.xOneDay(-4), "3Day");
-			sortTypes2.put(esUtilTest.xOneDay(-5), "4Day");
-			sortTypes2.put(esUtilTest.xOneDay(-6), "5Day");
-			sortTypes2.put(esUtilTest.xOneDay(-7), "6Day");
-			/*7日留存 这一条忽略*/
-			sortTypes2.put(esUtilTest.xOneDay(-9), "8Day");
-			sortTypes2.put(esUtilTest.xOneDay(-10), "9Day");
-			sortTypes2.put(esUtilTest.xOneDay(-11), "10Day");
-			sortTypes2.put(esUtilTest.xOneDay(-12), "11Day");
-			sortTypes2.put(esUtilTest.xOneDay(-13), "12Day");
-			sortTypes2.put(esUtilTest.xOneDay(-14), "13Day");
-			sortTypes2.put(esUtilTest.xOneDay(-15), "14Day");
-			sortTypes2.put(esUtilTest.xOneDay(-16), "15Day");
-			sortTypes2.put(esUtilTest.xOneDay(-17), "16Day");
-			sortTypes2.put(esUtilTest.xOneDay(-18), "17Day");
-			sortTypes2.put(esUtilTest.xOneDay(-19), "18Day");
-			sortTypes2.put(esUtilTest.xOneDay(-20), "19Day");
-			sortTypes2.put(esUtilTest.xOneDay(-21), "20Day");
-			sortTypes2.put(esUtilTest.xOneDay(-22), "21Day");
-			sortTypes2.put(esUtilTest.xOneDay(-23), "22Day");
-			sortTypes2.put(esUtilTest.xOneDay(-24), "23Day");
-			sortTypes2.put(esUtilTest.xOneDay(-25), "24Day");
-			sortTypes2.put(esUtilTest.xOneDay(-26), "25Day");
-			sortTypes2.put(esUtilTest.xOneDay(-27), "26Day");
-			sortTypes2.put(esUtilTest.xOneDay(-28), "27Day");
-			sortTypes2.put(esUtilTest.xOneDay(-29), "28Day");
-			sortTypes2.put(esUtilTest.xOneDay(-30), "29Day");
-			/*30日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-3),"3Day");
+			sortTypes2.put(esUtilTest.xOneDay(-4), "4Day");
+			sortTypes2.put(esUtilTest.xOneDay(-5), "5Day");
+			sortTypes2.put(esUtilTest.xOneDay(-6), "6Day");
+			sortTypes2.put(esUtilTest.xOneDay(-7), "7Day");
+			/*8日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-9), "9Day");
+			sortTypes2.put(esUtilTest.xOneDay(-10), "10Day");
+			sortTypes2.put(esUtilTest.xOneDay(-11), "11Day");
+			sortTypes2.put(esUtilTest.xOneDay(-12), "12Day");
+			sortTypes2.put(esUtilTest.xOneDay(-13), "13Day");
+			sortTypes2.put(esUtilTest.xOneDay(-14), "14Day");
+			sortTypes2.put(esUtilTest.xOneDay(-15), "15Day");
+			sortTypes2.put(esUtilTest.xOneDay(-16), "16Day");
+			sortTypes2.put(esUtilTest.xOneDay(-17), "17Day");
+			sortTypes2.put(esUtilTest.xOneDay(-18), "18Day");
+			sortTypes2.put(esUtilTest.xOneDay(-19), "19Day");
+			sortTypes2.put(esUtilTest.xOneDay(-20), "20Day");
+			sortTypes2.put(esUtilTest.xOneDay(-21), "21Day");
+			sortTypes2.put(esUtilTest.xOneDay(-22), "22Day");
+			sortTypes2.put(esUtilTest.xOneDay(-23), "23Day");
+			sortTypes2.put(esUtilTest.xOneDay(-24), "24Day");
+			sortTypes2.put(esUtilTest.xOneDay(-25), "25Day");
+			sortTypes2.put(esUtilTest.xOneDay(-26), "26Day");
+			sortTypes2.put(esUtilTest.xOneDay(-27), "27Day");
+			sortTypes2.put(esUtilTest.xOneDay(-28), "28Day");
+			sortTypes2.put(esUtilTest.xOneDay(-29), "29Day");
+			sortTypes2.put(esUtilTest.xOneDay(-30), "30Day");
+			/*31日留存 这一条忽略*/
 		}
 		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
@@ -634,7 +634,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.twoDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("ctRetained", UserRetained.CT_2DAY)
 				                        .field("retained", df.format(RetentionTwo))
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
@@ -657,7 +657,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.eightDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("ctRetained", UserRetained.CT_8DAY)
 				                        .field("retained", df.format(RetentionEight))
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
@@ -680,7 +680,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("ctRetained", UserRetained.CT_31DAY)
 				                        .field("retained", df.format(RetentionThirty))
 				                        .field("key", UserRetained.KEY_PLATFORM)
 				                        .field("value", e.getKey())
@@ -738,7 +738,7 @@ public class XyjRetainedScheduled {
 			sortTypes.put(esUtilTest.xOneDay(-5), esUtilTest.xOneDay(-4));
 			sortTypes.put(esUtilTest.xOneDay(-6), esUtilTest.xOneDay(-5));
 			sortTypes.put(esUtilTest.xOneDay(-7), esUtilTest.xOneDay(-6));
-			/*7日留存 这一条忽略*/
+			/*8日留存 这一条忽略*/
 			sortTypes.put(esUtilTest.xOneDay(-9), esUtilTest.xOneDay(-8));
 			sortTypes.put(esUtilTest.xOneDay(-10), esUtilTest.xOneDay(-9));
 			sortTypes.put(esUtilTest.xOneDay(-11), esUtilTest.xOneDay(-10));
@@ -761,40 +761,40 @@ public class XyjRetainedScheduled {
 			sortTypes.put(esUtilTest.xOneDay(-28), esUtilTest.xOneDay(-27));
 			sortTypes.put(esUtilTest.xOneDay(-29), esUtilTest.xOneDay(-28));
 			sortTypes.put(esUtilTest.xOneDay(-30), esUtilTest.xOneDay(-29));
-			/*30日留存 这一条忽略*/
+			/*31日留存 这一条忽略*/
 		}
 		
 		{
 			/*次日留存 这一条忽略*/
-			sortTypes2.put(esUtilTest.xOneDay(-3),"2Day");
-			sortTypes2.put(esUtilTest.xOneDay(-4), "3Day");
-			sortTypes2.put(esUtilTest.xOneDay(-5), "4Day");
-			sortTypes2.put(esUtilTest.xOneDay(-6), "5Day");
-			sortTypes2.put(esUtilTest.xOneDay(-7), "6Day");
-			/*7日留存 这一条忽略*/
-			sortTypes2.put(esUtilTest.xOneDay(-9), "8Day");
-			sortTypes2.put(esUtilTest.xOneDay(-10), "9Day");
-			sortTypes2.put(esUtilTest.xOneDay(-11), "10Day");
-			sortTypes2.put(esUtilTest.xOneDay(-12), "11Day");
-			sortTypes2.put(esUtilTest.xOneDay(-13), "12Day");
-			sortTypes2.put(esUtilTest.xOneDay(-14), "13Day");
-			sortTypes2.put(esUtilTest.xOneDay(-15), "14Day");
-			sortTypes2.put(esUtilTest.xOneDay(-16), "15Day");
-			sortTypes2.put(esUtilTest.xOneDay(-17), "16Day");
-			sortTypes2.put(esUtilTest.xOneDay(-18), "17Day");
-			sortTypes2.put(esUtilTest.xOneDay(-19), "18Day");
-			sortTypes2.put(esUtilTest.xOneDay(-20), "19Day");
-			sortTypes2.put(esUtilTest.xOneDay(-21), "20Day");
-			sortTypes2.put(esUtilTest.xOneDay(-22), "21Day");
-			sortTypes2.put(esUtilTest.xOneDay(-23), "22Day");
-			sortTypes2.put(esUtilTest.xOneDay(-24), "23Day");
-			sortTypes2.put(esUtilTest.xOneDay(-25), "24Day");
-			sortTypes2.put(esUtilTest.xOneDay(-26), "25Day");
-			sortTypes2.put(esUtilTest.xOneDay(-27), "26Day");
-			sortTypes2.put(esUtilTest.xOneDay(-28), "27Day");
-			sortTypes2.put(esUtilTest.xOneDay(-29), "28Day");
-			sortTypes2.put(esUtilTest.xOneDay(-30), "29Day");
-			/*30日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-3),"3Day");
+			sortTypes2.put(esUtilTest.xOneDay(-4), "4Day");
+			sortTypes2.put(esUtilTest.xOneDay(-5), "5Day");
+			sortTypes2.put(esUtilTest.xOneDay(-6), "6Day");
+			sortTypes2.put(esUtilTest.xOneDay(-7), "7Day");
+			/*8日留存 这一条忽略*/
+			sortTypes2.put(esUtilTest.xOneDay(-9), "9Day");
+			sortTypes2.put(esUtilTest.xOneDay(-10), "10Day");
+			sortTypes2.put(esUtilTest.xOneDay(-11), "11Day");
+			sortTypes2.put(esUtilTest.xOneDay(-12), "12Day");
+			sortTypes2.put(esUtilTest.xOneDay(-13), "13Day");
+			sortTypes2.put(esUtilTest.xOneDay(-14), "14Day");
+			sortTypes2.put(esUtilTest.xOneDay(-15), "15Day");
+			sortTypes2.put(esUtilTest.xOneDay(-16), "16Day");
+			sortTypes2.put(esUtilTest.xOneDay(-17), "17Day");
+			sortTypes2.put(esUtilTest.xOneDay(-18), "18Day");
+			sortTypes2.put(esUtilTest.xOneDay(-19), "19Day");
+			sortTypes2.put(esUtilTest.xOneDay(-20), "20Day");
+			sortTypes2.put(esUtilTest.xOneDay(-21), "21Day");
+			sortTypes2.put(esUtilTest.xOneDay(-22), "22Day");
+			sortTypes2.put(esUtilTest.xOneDay(-23), "23Day");
+			sortTypes2.put(esUtilTest.xOneDay(-24), "24Day");
+			sortTypes2.put(esUtilTest.xOneDay(-25), "25Day");
+			sortTypes2.put(esUtilTest.xOneDay(-26), "26Day");
+			sortTypes2.put(esUtilTest.xOneDay(-27), "27Day");
+			sortTypes2.put(esUtilTest.xOneDay(-28), "28Day");
+			sortTypes2.put(esUtilTest.xOneDay(-29), "29Day");
+			sortTypes2.put(esUtilTest.xOneDay(-30), "30Day");
+			/*31日留存 这一条忽略*/
 		}
 		
 		BulkRequestBuilder bulkRequest = client.prepareBulk();
@@ -842,7 +842,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.twoDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_NEXTDAY)
+				                        .field("ctRetained", UserRetained.CT_2DAY)
 				                        .field("retained", df.format(RetentionTwo))
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
@@ -865,7 +865,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.eightDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_SEVENDAY)
+				                        .field("ctRetained", UserRetained.CT_8DAY)
 				                        .field("retained", df.format(RetentionEight))
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())
@@ -889,7 +889,7 @@ public class XyjRetainedScheduled {
 						           	 .startObject()
 				                        .field("date",esUtilTest.thirtyOneDayAgoFrom().split("T")[0])
 				                        .field("gameId", game)
-				                        .field("ctRetained", UserRetained.CT_THIRYTDAY)
+				                        .field("ctRetained", UserRetained.CT_31DAY)
 				                        .field("retained", df.format(RetentionThirty))
 				                        .field("key", UserRetained.KEY_SEVSER)
 				                        .field("value", e.getKey())

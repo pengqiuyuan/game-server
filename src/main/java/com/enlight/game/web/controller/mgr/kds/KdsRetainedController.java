@@ -17,6 +17,7 @@ import javax.servlet.ServletRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.codehaus.jackson.type.TypeReference;
 import org.elasticsearch.ElasticsearchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,9 @@ import com.enlight.game.entity.PlatForm;
 import com.enlight.game.entity.Server;
 import com.enlight.game.entity.ServerZone;
 import com.enlight.game.entity.Stores;
+import com.enlight.game.entity.gm.Retained1;
+import com.enlight.game.entity.gm.Retained2;
+import com.enlight.game.entity.gm.Retained3;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.es.RetainedServer;
@@ -98,24 +102,17 @@ public class KdsRetainedController extends BaseController{
 		Stores stores = storeService.findById(Long.valueOf(storeId));
 		List<ServerZone> serverZones = serverZoneService.findAll();
 		
-		Map<String, Map<String,Object>> next = new HashMap<String, Map<String,Object>>();
-		Map<String, Map<String,Object>> seven = new HashMap<String, Map<String,Object>>();
-		Map<String, Map<String,Object>> thirty = new HashMap<String, Map<String,Object>>();
-
-		Map<String, Map<String, Object>> n = new HashMap<String, Map<String, Object>>();
-		
 		List<String> sZones = new ArrayList<String>();
 		List<String> pForms = new ArrayList<String>();
 		List<String> svs = new ArrayList<String>();
 
+		Map<String, Object> n = new HashMap<String, Object>();
 		if(searchParams.isEmpty()){
 			//条件为空时
-			String dateFrom = thirtyDayAgoFrom();
+			String dateFrom = xDayAgoFrom();
 			String dateTo = nowDate();
 			n =retainedServer.searchAllRetained(index, type, dateFrom, dateTo);
-			next.put("所有运营大区", n.get("next"));
-			seven.put("所有运营大区", n.get("seven"));
-			thirty.put("所有运营大区", n.get("thirty"));
+			
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
 			model.addAttribute("platForm", platFormService.findAll());
@@ -127,16 +124,10 @@ public class KdsRetainedController extends BaseController{
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
 						n =retainedServer.searchAllRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
-						next.put("所有运营大区", n.get("next"));
-						seven.put("所有运营大区", n.get("seven"));
-						thirty.put("所有运营大区", n.get("thirty"));
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
 						n =retainedServer.searchServerZoneRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
-						next.put(szName, n.get("next"));
-						seven.put(szName, n.get("seven"));
-						thirty.put(szName, n.get("thirty"));
 					}
 
 				}
@@ -146,29 +137,31 @@ public class KdsRetainedController extends BaseController{
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
 					n =retainedServer.searchPlatFormRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
-					next.put(pfName, n.get("next"));
-					seven.put(pfName, n.get("seven"));
-					thirty.put(pfName, n.get("thirty"));
 				}
 			}
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
 					n =retainedServer.searchServerRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
-					next.put(sv[i], n.get("next"));
-					seven.put(sv[i], n.get("seven"));
-					thirty.put(sv[i], n.get("thirty"));
 				}
 			}
 		   
 		}
 
-		logger.debug(binder.toJson(next));
-		logger.debug(binder.toJson(seven));
-		logger.debug(binder.toJson(thirty));
-		model.addAttribute("next", binder.toJson(next));
-		model.addAttribute("seven", binder.toJson(seven));
-		model.addAttribute("thirty", binder.toJson(thirty));
+		//logger.debug(binder.toJson(next));
+		//logger.debug(binder.toJson(seven));
+		//logger.debug(binder.toJson(thirty));
+		
+		System.out.println("Retained1   "  + binder.toJson(n.get("retained1s")));
+		List<Retained1> beanList1 = binder.getMapper().readValue(binder.toJson(n.get("retained1s")), new TypeReference<List<Retained1>>() {}); 
+		System.out.println("Retained2   "  + binder.toJson(n.get("retained2s")));
+		List<Retained2> beanList2 = binder.getMapper().readValue(binder.toJson(n.get("retained2s")), new TypeReference<List<Retained2>>() {}); 
+		System.out.println("Retained3   "  + binder.toJson(n.get("retained3s")));
+		List<Retained3> beanList3 = binder.getMapper().readValue(binder.toJson(n.get("retained3s")), new TypeReference<List<Retained3>>() {}); 
+		
+		model.addAttribute("retained1s", beanList1);
+		model.addAttribute("retained2s", beanList2);
+		model.addAttribute("retained3s", beanList3);
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);
@@ -192,6 +185,14 @@ public class KdsRetainedController extends BaseController{
 	public String thirtyDayAgoFrom(){
 	    calendar.setTime(new Date()); 
 	    calendar.add(calendar.DATE,-30);
+	    Date date=calendar.getTime();
+	    String da = sdf.format(date); 
+		return da;
+	}
+	
+	public String xDayAgoFrom(){
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-15);
 	    Date date=calendar.getTime();
 	    String da = sdf.format(date); 
 		return da;
