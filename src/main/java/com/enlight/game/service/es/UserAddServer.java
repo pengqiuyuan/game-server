@@ -30,11 +30,6 @@ public class UserAddServer {
 	@Autowired
 	private Client client;
 	
-	/**
-	private static final String index = "log_fb_user";
-	
-	private static final String type_add = "fb_user_add";
-	**/
 	public Map<String, String> searchAllUserAdd(String index ,String type_add , String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
                 BoolQueryBuilder builder = QueryBuilders.boolQuery()

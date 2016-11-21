@@ -29,11 +29,7 @@ public class UserTotalServer {
 
 	@Autowired
 	private Client client;
-	/**
-	private static final String index = "log_fb_user";
-	
-	private static final String type_total = "fb_user_total";
-	**/
+
 	public Map<String, String> searchAllUserTotal(String index,String type_total,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
                 BoolQueryBuilder builder = QueryBuilders.boolQuery()

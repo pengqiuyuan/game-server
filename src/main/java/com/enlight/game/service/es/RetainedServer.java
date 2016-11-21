@@ -36,11 +36,7 @@ public class RetainedServer {
 
 	@Autowired
 	private Client client;
-	/**
-	private static final String index = "log_fb_user";
-	
-	private static final String type = "fb_user_retained";
-	**/
+
 	public Map<String, Object> searchAllRetained(String index ,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
@@ -147,7 +143,7 @@ public class RetainedServer {
 			}else if(source.get("ctRetained").equals("6Day")){
 				date6.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("7Day")){
-				date6.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
+				date7.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("8Day")){
 				date8.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("9Day")){
@@ -193,9 +189,9 @@ public class RetainedServer {
 			}else if(source.get("ctRetained").equals("29Day")){
 				date29.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("30Day")){
-				date29.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
+				date30.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}else if(source.get("ctRetained").equals("31Day")){
-				date29.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
+				date31.put(source.get("date").toString(), source.get("retained").toString()+"（"+source.get("value2").toString()+"/"+source.get("value1").toString()+"）");
 			}
 		}
 

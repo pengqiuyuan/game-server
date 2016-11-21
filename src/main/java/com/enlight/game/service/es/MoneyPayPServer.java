@@ -29,18 +29,7 @@ public class MoneyPayPServer {
 
 	@Autowired
 	private Client client;
-	/**
-	private static final String index = "log_fb_money";
-	
-	private static final String type_money_arpu_day = "fb_money_arpu_day";
-	
-	private static final String type_money_arpu_mouth = "fb_money_arpu_mouth";
-	
-	private static final String type_money_arppu_day = "fb_money_arppu_day";
-	
-	private static final String type_money_arppu_mouth = "fb_money_arppu_mouth";
-	
-	**/
+
 	public Map<String, String> searchAllArpuDay(String index ,String type_money_arpu_day,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
 				.must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo) )

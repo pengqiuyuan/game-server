@@ -29,15 +29,7 @@ public class UserIncomeServer {
 
 	@Autowired
 	private Client client;
-	/**
-	private static final String index = "log_fb_money";
-	
-	private static final String type_income_sum = "fb_money_income_sum";
-	
-	private static final String type_income_count = "fb_money_income_count";
-	
-	private static final String type_income_peoplenum = "fb_money_income_peoplenum";
-	**/
+
 	public Map<String, String> searchAllIncomesum(String index ,String type_income_sum ,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
                 BoolQueryBuilder builder = QueryBuilders.boolQuery()

@@ -30,22 +30,6 @@ public class UserPayServer {
 	@Autowired
 	private Client client;
 	
-	/**
-	
-	private static final String index_money = "log_fb_money";
-	
-	private static final String type_add = "fb_money_add";
-	
-	private static final String type_all = "fb_money_all";
-	
-	private static final String type_day = "fb_money_day"; //首日付费率
-	
-	private static final String type_week = "fb_money_week"; //首周付费率
-	
-	private static final String type_mouth = "fb_money_mouth"; //首月付费率
-	
-	**/
-	
 	private static final String key_add = "add";
 	
 	private static final String key_all = "all";

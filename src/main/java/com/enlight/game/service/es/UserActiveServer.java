@@ -29,15 +29,7 @@ public class UserActiveServer {
 
 	@Autowired
 	private Client client;
-	/**
-	private static final String index = "log_fb_user";
-	
-	private static final String type_active_day = "fb_user_active_day";
-	
-	private static final String type_active_week = "fb_user_active_week";
-	
-	private static final String type_active_mouth = "fb_user_active_mouth";
-	**/
+
 	//all 日活
 	public Map<String, String> searchAllUserDay(String index ,String type_active_day,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
 
