@@ -1,5 +1,9 @@
 package com.enlight.game.web.controller.mgr;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -311,5 +315,35 @@ public class CountController extends BaseController{
 			}
 		}
 		return value;
+	}
+	
+	/**
+	 * 服务器获取时间
+	 */
+	@RequestMapping(value="/getDate")
+	@ResponseBody
+	public Map<String, String> getDate(){
+		Map<String,String> dateMap = new HashMap<String, String>();
+		SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd" ); 
+		Calendar calendar = new GregorianCalendar(); 
+		String nowDate = sdf.format(new Date());
+		
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-1);
+	    String yesterday = sdf.format(calendar.getTime());
+	    
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-7);
+	    String sevenDayAgo = sdf.format(calendar.getTime()); 
+	    
+	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-30);
+	    String thirtyDayAgo = sdf.format(calendar.getTime()); 
+		
+	    dateMap.put("nowDate",nowDate);
+	    dateMap.put("yesterday",yesterday);
+	    dateMap.put("sevenDayAgo",sevenDayAgo);
+	    dateMap.put("thirtyDayAgo",thirtyDayAgo);
+		return dateMap;
 	}
 }

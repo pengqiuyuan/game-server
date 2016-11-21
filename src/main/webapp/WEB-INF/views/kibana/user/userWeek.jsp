@@ -283,7 +283,7 @@
 		    
 			$("#yesterday").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
+					url: '<%=request.getContextPath()%>/manage/count/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -296,7 +296,7 @@
 			});
 			$("#sevenDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
+					url: '<%=request.getContextPath()%>/manage/count/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',
@@ -309,7 +309,7 @@
 			});
 			$("#thirtyDayAgo").click(function(){
 				$.ajax({                                               
-					url: '<%=request.getContextPath()%>/manage/fbRetained/getDate',
+					url: '<%=request.getContextPath()%>/manage/count/getDate',
 					type: 'GET',
 					contentType: "application/json;charset=UTF-8",		
 					dataType: 'text',

@@ -40,36 +40,6 @@ public class GameValueScheduled {
 	private Client client;
 	
 	/**
-	 * 这个controller默认为fb项目的控制层。项目id文档已定
-	 */
-	private static final String fbStoreId = "1";
-	
-	private static final String fbStoreName = "FB";
-	
-	private static final String fb_index = "logstash-fb-all-*";
-	
-	private static final String fb_item_type = "fb_itemlog";
-	
-	private static final String fb_money_type = "fb_moneylog";
-	
-	private static final String fb_coin_type = "fb_coinlog";
-	
-	/**
-	 * 这个controller默认为kun项目的控制层。项目id文档已定
-	 */
-	private static final String kunStoreId = "2";
-	
-	private static final String kunStoreName = "KUN";
-	
-	private static final String kun_index = "logstash-kun-all-*";
-	
-	private static final String kun_item_type = "kun_itemlog";
-	
-	private static final String kun_money_type = "kun_moneylog";
-	
-	private static final String kun_coin_type = "kun_coinlog";
-	
-	/**
 	 * 这个controller默认为kds项目的控制层。项目id文档已定
 	 */
 	private static final String kdsStoreId = "3";
@@ -111,8 +81,6 @@ public class GameValueScheduled {
 		//mimeMailService.sendNotificationMail("彭秋源");
 		try {
 			logger.debug("----------------Monitor调度开始");
-			xMonitor(fbStoreId, fbStoreName, fb_index, fb_item_type, fb_money_type, fb_coin_type);
-			xMonitor(kunStoreId, kunStoreName, kun_index, kun_item_type, kun_money_type, kun_coin_type);
 			xMonitor(kdsStoreId, kdsStoreName, kds_index, kds_item_type, kds_money_type, kds_coin_type);
 			xMonitor(xyjStoreId, xyjStoreName, xyj_index, xyj_item_type, xyj_money_type, xyj_coin_type);
 			logger.debug("----------------Monitor调度结束");

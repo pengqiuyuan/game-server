@@ -40,12 +40,6 @@ public class MimeMailService {
 	private JavaMailSender mailSender;
 
 	private Template template;
-
-	@Value("#{envProps.fbEmail}")
-	private String fbEmail;
-	
-	@Value("#{envProps.kunEmail}")
-	private String kunEmail;
 	
 	@Value("#{envProps.kdsEmail}")
 	private String kdsEmail;
@@ -66,11 +60,7 @@ public class MimeMailService {
 			MimeMessageHelper helper = new MimeMessageHelper(msg, true, DEFAULT_ENCODING);
 
 			helper.setFrom("pengqiuyuan@126.com");
-			if(xStoreName.equals("FB")){
-				helper.setTo(fbEmail);
-			}else if(xStoreName.equals("KUN")){
-				helper.setTo(kunEmail);
-			}else if(xStoreName.equals("KDS")){
+			if(xStoreName.equals("KDS")){
 				helper.setTo(kdsEmail);
 			}
 			
