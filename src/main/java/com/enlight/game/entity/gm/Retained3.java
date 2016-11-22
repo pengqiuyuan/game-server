@@ -2,6 +2,7 @@ package com.enlight.game.entity.gm;
 
 public class Retained3{
 	private String xDate;
+	private String addUser;
 	private String day22;
 	private String day23;
 	private String day24;
@@ -77,5 +78,11 @@ public class Retained3{
 	}
 	public void setDay31(String day31) {
 		this.day31 = day31;
+	}
+	public String getAddUser() {
+		return addUser;
+	}
+	public void setAddUser(String addUser) {
+		this.addUser = addUser;
 	}
 }

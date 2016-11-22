@@ -93,13 +93,15 @@ public class XyjRetainedController extends BaseController{
 	 * @throws ParseException 
 	 * @throws IOException 
 	 * @throws ElasticsearchException 
+	 * switchTable 留存页面的三张表切换 1、2、3   1所有 2登录 3留存
 	 */
 	@RequiresRoles(value = { "admin", "XYJ_OFF_USER_RETAINED" }, logical = Logical.OR)
 	@RequestMapping(value = "/xyj/userRetained", method = RequestMethod.GET)
 	public String userRetained(Model model,ServletRequest request,
 			@RequestParam(value = "serverZone", defaultValue = "") String[] sZone,
 			@RequestParam(value = "platForm", defaultValue = "") String[] pForm,
-			@RequestParam(value = "server", defaultValue = "") String[] sv) throws ElasticsearchException, IOException, ParseException{
+			@RequestParam(value = "server", defaultValue = "") String[] sv,
+			@RequestParam(value = "switchTable", defaultValue = "1") String switchTable) throws ElasticsearchException, IOException, ParseException{
 		logger.debug("user add total...");
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Stores stores = storeService.findById(Long.valueOf(storeId));
@@ -114,7 +116,7 @@ public class XyjRetainedController extends BaseController{
 			//条件为空时
 			String dateFrom = xDayAgoFrom();
 			String dateTo = nowDate();
-			n =retainedServer.searchAllRetained(index, type, dateFrom, dateTo);
+			n =retainedServer.searchAllRetained(index, type, dateFrom, dateTo,switchTable);
 			
 			model.addAttribute("dateFrom", dateFrom);
 			model.addAttribute("dateTo", dateTo);
@@ -126,11 +128,11 @@ public class XyjRetainedController extends BaseController{
 				for (int i = 0; i < sZone.length; i++) {
 					if(sZone[i].equals("all")){
 						sZones.add("所有运营大区");
-						n =retainedServer.searchAllRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString());
+						n =retainedServer.searchAllRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(),switchTable);
 					}else{
 						String szName = serverZoneService.findById(Long.valueOf(sZone[i])).getServerName();
 						sZones.add(szName);
-						n =retainedServer.searchServerZoneRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i]);
+						n =retainedServer.searchServerZoneRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sZone[i],switchTable);
 					}
 
 				}
@@ -139,13 +141,13 @@ public class XyjRetainedController extends BaseController{
 				for (int i = 0; i < pForm.length; i++) {
 					String pfName = platFormService.findByPfId(pForm[i]).getPfName();
 					pForms.add(pfName);
-					n =retainedServer.searchPlatFormRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i]);
+					n =retainedServer.searchPlatFormRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), pForm[i],switchTable);
 				}
 			}
 			if(sv != null && sv.length>0){
 				for (int i = 0; i < sv.length; i++) {
 					svs.add(sv[i]);
-					n =retainedServer.searchServerRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i]);
+					n =retainedServer.searchServerRetained(index, type, searchParams.get("EQ_dateFrom").toString(), searchParams.get("EQ_dateTo").toString(), sv[i],switchTable);
 				}
 			}
 		   
@@ -162,6 +164,7 @@ public class XyjRetainedController extends BaseController{
 		System.out.println("Retained3   "  + binder.toJson(n.get("retained3s")));
 		List<Retained3> beanList3 = binder.getMapper().readValue(binder.toJson(n.get("retained3s")), new TypeReference<List<Retained3>>() {}); 
 		
+		model.addAttribute("switchTable", switchTable);
 		model.addAttribute("retained1s", beanList1);
 		model.addAttribute("retained2s", beanList2);
 		model.addAttribute("retained3s", beanList3);

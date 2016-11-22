@@ -117,15 +117,14 @@
 							<div class="ibox-content">
 								<div>
 									<h3>
-										日期选择器（注：一次查询的时间区间不超过30天）
+										日期选择器
 										<div class="ibox-tools">
 											<label class="label label-primary" id="chooseBtn">添加筛选条件</label>
 										</div>
 									</h3>
 									<div class="control-group">
 										<label class="control-label" for=beginD>活动时间：
-											<div class="input-append date dp3"
-												data-date-format="yyyy-mm-dd">
+											<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
 												<c:if test="${not empty param.search_EQ_dateFrom}">
 													<input size="16" type="text" id="dateFrom"
 														value="${param.search_EQ_dateFrom == dateFrom  ? dateFrom : param.search_EQ_dateFrom }"
@@ -142,8 +141,7 @@
 
 									<div class="control-group">
 										<label class="control-label" for="endD">结束时间：
-											<div class="input-append date dp3"
-												data-date-format="yyyy-mm-dd">
+											<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
 												<c:if test="${not empty param.search_EQ_dateFrom}">
 													<input size="16" type="text" id="dateTo"
 														value="${param.search_EQ_dateTo == dateTo  ? dateTo : param.search_EQ_dateTo }"
@@ -222,22 +220,24 @@
 								<thead>
 									<tr>
 										<th title="时间">时间</th>
-										<th title="次日留存">次日留存</th>
-										<th title="3日留存">3日留存</th>
-										<th title="4日留存">4日留存</th>
-										<th title="5日留存">5日留存</th>
-										<th title="6日留存">6日留存</th>
-										<th title="7日留存">7日留存</th>
-										<th title="8日留存">8日留存</th>
-										<th title="9日留存">9日留存</th>
-										<th title="10日留存">10日留存</th>
-										<th title="11日留存">11日留存</th>
+										<th title="新增">新增</th>
+										<th title="次日">${switchTable == '2'? '次日登录':'次日留存'}</th>
+										<th title="3日">${switchTable == '2'? '3日登录':'3日留存'}</th>
+										<th title="4日">${switchTable == '2'? '4日登录':'4日留存'}</th>
+										<th title="5日">${switchTable == '2'? '5日登录':'5日留存'}</th>
+										<th title="6日">${switchTable == '2'? '6日登录':'6日留存'}</th>
+										<th title="7日">${switchTable == '2'? '7日登录':'7日留存'}</th>
+										<th title="8日">${switchTable == '2'? '8日登录':'8日留存'}</th>
+										<th title="9日">${switchTable == '2'? '9日登录':'9日留存'}</th>
+										<th title="10日">${switchTable == '2'? '10日登录':'10日留存'}</th>
+										<th title="11日">${switchTable == '2'? '11日登录':'11日留存'}</th>
 									</tr>
 								</thead>
 								<tbody id="tbody">
 									<c:forEach items="${retained1s}" var="item" varStatus="s">
 									<tr id="">
 										<td>${item.xDate}</td>
+										<td>${item.addUser}</td>
 										<td>${item.day2}</td>
 										<td>${item.day3}</td>
 										<td>${item.day4}</td>
@@ -261,22 +261,24 @@
 								<thead>
 									<tr>
 										<th title="时间">时间</th>
-										<th title="12日留存">12日留存</th>
-										<th title="13日留存">13日留存</th>
-										<th title="14日留存">14日留存</th>
-										<th title="15日留存">15日留存</th>
-										<th title="16日留存">16日留存</th>
-										<th title="17日留存">17日留存</th>
-										<th title="18日留存">18日留存</th>
-										<th title="19日留存">19日留存</th>
-										<th title="20日留存">20日留存</th>
-										<th title="21日留存">21日留存</th>
+										<th title="新增">新增</th>
+										<th title="12日">${switchTable == '2'? '12日登录':'11日留存'}</th>
+										<th title="13日">${switchTable == '2'? '13日登录':'12日留存'}</th>
+										<th title="14日">${switchTable == '2'? '14日登录':'13日留存'}</th>
+										<th title="15日">${switchTable == '2'? '15日登录':'14日留存'}</th>
+										<th title="16日">${switchTable == '2'? '16日登录':'15日留存'}</th>
+										<th title="17日">${switchTable == '2'? '17日登录':'16日留存'}</th>
+										<th title="18日">${switchTable == '2'? '18日登录':'17日留存'}</th>
+										<th title="19日">${switchTable == '2'? '19日登录':'18日留存'}</th>
+										<th title="20日">${switchTable == '2'? '20日登录':'19日留存'}</th>
+										<th title="21日">${switchTable == '2'? '21日登录':'21日留存'}</th>
 									</tr>
 								</thead>
 								<tbody id="tbody">
 									<c:forEach items="${retained2s}" var="item" varStatus="s">
 									<tr id="">
 										<td>${item.xDate}</td>
+										<td>${item.addUser}</td>
 										<td>${item.day12}</td>
 										<td>${item.day13}</td>
 										<td>${item.day14}</td>
@@ -300,22 +302,24 @@
 								<thead>
 									<tr>
 										<th title="时间">时间</th>
-										<th title="22日留存">22日留存</th>
-										<th title="23日留存">23日留存</th>
-										<th title="24日留存">24日留存</th>
-										<th title="25日留存">25日留存</th>
-										<th title="26日留存">26日留存</th>
-										<th title="27日留存">27日留存</th>
-										<th title="28日留存">28日留存</th>
-										<th title="29日留存">29日留存</th>
-										<th title="30日留存">30日留存</th>
-										<th title="31日留存">31日留存</th>
+										<th title="新增">新增</th>
+										<th title="22日">${switchTable == '2'? '22日登录':'22日留存'}</th>
+										<th title="23日">${switchTable == '2'? '23日登录':'23日留存'}</th>
+										<th title="24日">${switchTable == '2'? '24日登录':'24日留存'}</th>
+										<th title="25日">${switchTable == '2'? '25日登录':'25日留存'}</th>
+										<th title="26日">${switchTable == '2'? '26日登录':'26日留存'}</th>
+										<th title="27日">${switchTable == '2'? '27日登录':'27日留存'}</th>
+										<th title="28日">${switchTable == '2'? '28日登录':'28日留存'}</th>
+										<th title="29日">${switchTable == '2'? '29日登录':'29日留存'}</th>
+										<th title="30日">${switchTable == '2'? '30日登录':'30日留存'}</th>
+										<th title="31日">${switchTable == '2'? '31日登录':'31日留存'}</th>
 									</tr>
 								</thead>
 								<tbody id="tbody">
 									<c:forEach items="${retained3s}" var="item" varStatus="s">
 									<tr id="">
 										<td>${item.xDate}</td>
+										<td>${item.addUser}</td>
 										<td>${item.day22}</td>
 										<td>${item.day23}</td>
 										<td>${item.day24}</td>

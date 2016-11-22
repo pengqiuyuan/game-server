@@ -37,38 +37,38 @@ public class RetainedServer {
 	@Autowired
 	private Client client;
 
-	public Map<String, Object> searchAllRetained(String index ,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Object> searchAllRetained(String index ,String type,String dateFrom,String dateTo,String switchTable) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
                 		.must(QueryBuilders.termQuery("key", "all"));
-		return esSearch(builder, index, type, dateFrom, dateTo);
+		return esSearch(builder, index, type, dateFrom, dateTo,switchTable);
 	}
 	
-	public Map<String, Object> searchServerZoneRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Object> searchServerZoneRetained(String index ,String type,String dateFrom,String dateTo,String value,String switchTable) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
                 		.must(QueryBuilders.termQuery("key", "serverZone"))
                 		.must(QueryBuilders.termQuery("value", value));
-		return esSearch(builder, index, type, dateFrom, dateTo);
+		return esSearch(builder, index, type, dateFrom, dateTo,switchTable);
 	}
-	public Map<String, Object> searchPlatFormRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Object> searchPlatFormRetained(String index ,String type,String dateFrom,String dateTo,String value,String switchTable) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
                 		.must(QueryBuilders.termQuery("key", "platForm"))
                 		.must(QueryBuilders.termQuery("value", value));
-		return esSearch(builder, index, type, dateFrom, dateTo);
+		return esSearch(builder, index, type, dateFrom, dateTo,switchTable);
 	}
 	
-	public Map<String, Object> searchServerRetained(String index ,String type,String dateFrom,String dateTo,String value) throws IOException, ElasticsearchException, ParseException{
+	public Map<String, Object> searchServerRetained(String index ,String type,String dateFrom,String dateTo,String value,String switchTable) throws IOException, ElasticsearchException, ParseException{
 		BoolQueryBuilder builder = QueryBuilders.boolQuery()
         		        .must(QueryBuilders.rangeQuery("date").from(dateFrom).to(dateTo))
                 		.must(QueryBuilders.termQuery("key", "server"))
                 		.must(QueryBuilders.termQuery("value", value)
                 		);
-		return esSearch(builder, index, type, dateFrom, dateTo);
+		return esSearch(builder, index, type, dateFrom, dateTo,switchTable);
 	}
 	
-	public Map<String,Object> esSearch(BoolQueryBuilder builder,String index,String type,String dateFrom,String dateTo) throws IOException, ElasticsearchException, ParseException{
+	public Map<String,Object> esSearch(BoolQueryBuilder builder,String index,String type,String dateFrom,String dateTo,String switchTable) throws IOException, ElasticsearchException, ParseException{
 		try {
 			TypesExistsResponse typeEx = client.admin().indices() .prepareTypesExists(index).setTypes(type).execute().actionGet(); 
 			if( typeEx.isExists() == true){
@@ -80,7 +80,7 @@ public class RetainedServer {
 				        .setFrom(0).setSize(daysBetween(dateFrom,dateTo)*32).setExplain(true)
 				        .execute()
 				        .actionGet();
-				return retained(response,dateFrom,dateTo);
+				return retained(response,dateFrom,dateTo,switchTable);
 			}else{
 				Map<String, Object> map = new HashMap<String, Object>();
 				return map;
@@ -93,7 +93,7 @@ public class RetainedServer {
 	}
 	
 	
-	public Map<String, Object> retained(SearchResponse response,String dateFrom,String dateTo) throws ParseException{
+	public Map<String, Object> retained(SearchResponse response,String dateFrom,String dateTo,String switchTable) throws ParseException{
 		Map<String, Object> m = new HashMap<String, Object>();
 		List<Retained1> retained1s = new LinkedList<Retained1>();
 		List<Retained2> retained2s = new LinkedList<Retained2>();
@@ -221,153 +221,337 @@ public class RetainedServer {
 			retained1.setxDate(key);
 			retained2.setxDate(key);
 			retained3.setxDate(key);
+			/*switchTable 留存页面的三张表切换 1、2、3   1所有 2登录 3留存*/
 			if(date2.containsKey(df.format(d))){
-				retained1.setDay2(date2.get(key).toString());
+				retained1.setAddUser(date2.get(key).toString().split("（|/|）")[2]); //新增的人数
+				if(switchTable.equals("1")){
+					retained1.setDay2(date2.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay2(date2.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay2(date2.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay2("");
 			}
 			if(date3.containsKey(df.format(d))){
-				retained1.setDay3(date3.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay3(date3.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay3(date3.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay3(date3.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay3("");
 			}
 			if(date4.containsKey(df.format(d))){
-				retained1.setDay4(date4.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay4(date4.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay4(date4.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay4(date4.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay4("");
 			}
 			if(date5.containsKey(df.format(d))){
-				retained1.setDay5(date5.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay5(date5.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay5(date5.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay5(date5.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay5("");
 			}
 			if(date6.containsKey(df.format(d))){
-				retained1.setDay6(date6.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay6(date6.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay6(date6.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay6(date6.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay6("");
 			}
 			if(date7.containsKey(df.format(d))){
-				retained1.setDay7(date7.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay7(date7.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay7(date7.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay7(date7.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay7("");
 			}
 			if(date8.containsKey(df.format(d))){
-				retained1.setDay8(date8.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay8(date8.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay8(date8.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay8(date8.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay8("");
 			}
 			if(date9.containsKey(df.format(d))){
-				retained1.setDay9(date9.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay9(date9.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay9(date9.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay9(date9.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay9("");
 			}
 			if(date10.containsKey(df.format(d))){
-				retained1.setDay10(date10.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay10(date10.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay10(date10.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay10(date10.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay10("");
 			}
 			if(date11.containsKey(df.format(d))){
-				retained1.setDay11(date11.get(key).toString());
+				if(switchTable.equals("1")){
+					retained1.setDay11(date11.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained1.setDay11(date11.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained1.setDay11(date11.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained1.setDay11("");
 			}			
 			if(date12.containsKey(df.format(d))){
-				retained2.setDay12(date12.get(key).toString());
+				retained2.setAddUser(date12.get(key).toString().split("（|/|）")[2]); //新增的人数
+				if(switchTable.equals("1")){
+					retained2.setDay12(date12.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay12(date12.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay12(date12.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay12("");
 			}
 			if(date13.containsKey(df.format(d))){
-				retained2.setDay13(date13.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay13(date13.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay13(date13.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay13(date13.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay13("");
 			}
 			if(date14.containsKey(df.format(d))){
-				retained2.setDay14(date14.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay14(date14.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay14(date14.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay14(date14.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay14("");
 			}
 			if(date15.containsKey(df.format(d))){
-				retained2.setDay15(date15.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay15(date15.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay15(date15.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay15(date15.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay15("");
 			}
 			if(date16.containsKey(df.format(d))){
-				retained2.setDay16(date16.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay16(date16.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay16(date16.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay16(date16.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay16("");
 			}
 			if(date17.containsKey(df.format(d))){
-				retained2.setDay17(date17.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay17(date17.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay17(date17.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay17(date17.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay17("");
 			}
 			if(date18.containsKey(df.format(d))){
-				retained2.setDay18(date18.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay18(date18.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay18(date18.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay18(date18.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay18("");
 			}
 			if(date19.containsKey(df.format(d))){
-				retained2.setDay19(date19.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay19(date19.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay19(date19.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay19(date19.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay19("");
 			}
 			if(date20.containsKey(df.format(d))){
-				retained2.setDay20(date20.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay20(date20.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay20(date20.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay20(date20.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay20("");
 			}
 			if(date21.containsKey(df.format(d))){
-				retained2.setDay21(date21.get(key).toString());
+				if(switchTable.equals("1")){
+					retained2.setDay21(date21.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained2.setDay21(date21.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained2.setDay21(date21.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained2.setDay21("");
 			}
 			if(date22.containsKey(df.format(d))){
-				retained3.setDay22(date22.get(key).toString());
+				retained3.setAddUser(date22.get(key).toString().split("（|/|）")[2]); //新增的人数
+				if(switchTable.equals("1")){
+					retained3.setDay22(date22.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay22(date22.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay22(date22.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay22("");
 			}
 			if(date23.containsKey(df.format(d))){
-				retained3.setDay23(date23.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay23(date23.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay23(date23.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay23(date23.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay23("");
 			}
 			if(date24.containsKey(df.format(d))){
-				retained3.setDay24(date24.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay24(date24.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay24(date24.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay24(date24.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay24("");
 			}
 			if(date25.containsKey(df.format(d))){
-				retained3.setDay25(date25.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay25(date25.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay25(date25.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay25(date25.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay25("");
 			}
 			if(date26.containsKey(df.format(d))){
-				retained3.setDay26(date26.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay26(date26.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay26(date26.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay26(date26.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay26("");
 			}
 			if(date27.containsKey(df.format(d))){
-				retained3.setDay27(date27.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay27(date27.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay27(date27.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay27(date27.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay27("");
 			}
 			if(date28.containsKey(df.format(d))){
-				retained3.setDay28(date28.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay28(date28.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay28(date28.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay28(date28.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay28("");
 			}
 			if(date29.containsKey(df.format(d))){
-				retained3.setDay29(date29.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay29(date29.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay29(date29.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay29(date29.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay29("");
 			}
 			if(date30.containsKey(df.format(d))){
-				retained3.setDay30(date30.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay30(date30.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay30(date30.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay30(date30.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay30("");
 			}
 			if(date31.containsKey(df.format(d))){
-				retained3.setDay31(date31.get(key).toString());
+				if(switchTable.equals("1")){
+					retained3.setDay31(date31.get(key).toString());
+				}else if(switchTable.equals("2")){
+					retained3.setDay31(date31.get(key).toString().split("（|/|）")[1]);
+				}else if(switchTable.equals("3")){
+					retained3.setDay31(date31.get(key).toString().split("（|/|）")[0]);
+				}
 			}else{
 				retained3.setDay31("");
 			}
