@@ -123,6 +123,15 @@
 										</div>
 									</h3>
 									<div class="control-group">
+										<label class="control-label" for=beginD>图表切换：
+											<div class="input-append">
+												<label class="checkbox inline"> <input type="radio" name="switchTable" value="1" ${switchTable == '1'?'checked' : ''}> 查看所有</label>
+												<label class="checkbox inline"> <input type="radio" name="switchTable" value="2" ${switchTable == '2'?'checked' : ''}> 查看登录</label>
+												<label class="checkbox inline"> <input type="radio" name="switchTable" value="3" ${switchTable == '3'?'checked' : ''}> 查看留存</label>
+											</div>
+										</label>
+									</div>
+									<div class="control-group">
 										<label class="control-label" for=beginD>活动时间：
 											<div class="input-append date dp3" data-date-format="yyyy-mm-dd">
 												<c:if test="${not empty param.search_EQ_dateFrom}">
