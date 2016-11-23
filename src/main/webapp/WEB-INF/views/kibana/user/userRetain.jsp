@@ -271,15 +271,15 @@
 									<tr>
 										<th title="时间">时间</th>
 										<th title="新增">新增</th>
-										<th title="12日">${switchTable == '2'? '12日登录':'11日留存'}</th>
-										<th title="13日">${switchTable == '2'? '13日登录':'12日留存'}</th>
-										<th title="14日">${switchTable == '2'? '14日登录':'13日留存'}</th>
-										<th title="15日">${switchTable == '2'? '15日登录':'14日留存'}</th>
-										<th title="16日">${switchTable == '2'? '16日登录':'15日留存'}</th>
-										<th title="17日">${switchTable == '2'? '17日登录':'16日留存'}</th>
-										<th title="18日">${switchTable == '2'? '18日登录':'17日留存'}</th>
-										<th title="19日">${switchTable == '2'? '19日登录':'18日留存'}</th>
-										<th title="20日">${switchTable == '2'? '20日登录':'19日留存'}</th>
+										<th title="12日">${switchTable == '2'? '12日登录':'12日留存'}</th>
+										<th title="13日">${switchTable == '2'? '13日登录':'13日留存'}</th>
+										<th title="14日">${switchTable == '2'? '14日登录':'14日留存'}</th>
+										<th title="15日">${switchTable == '2'? '15日登录':'15日留存'}</th>
+										<th title="16日">${switchTable == '2'? '16日登录':'16日留存'}</th>
+										<th title="17日">${switchTable == '2'? '17日登录':'17日留存'}</th>
+										<th title="18日">${switchTable == '2'? '18日登录':'18日留存'}</th>
+										<th title="19日">${switchTable == '2'? '19日登录':'19日留存'}</th>
+										<th title="20日">${switchTable == '2'? '20日登录':'20日留存'}</th>
 										<th title="21日">${switchTable == '2'? '21日登录':'21日留存'}</th>
 									</tr>
 								</thead>
