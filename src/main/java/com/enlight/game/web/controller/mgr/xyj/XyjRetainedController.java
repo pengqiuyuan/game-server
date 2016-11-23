@@ -39,6 +39,7 @@ import com.enlight.game.entity.Stores;
 import com.enlight.game.entity.gm.Retained1;
 import com.enlight.game.entity.gm.Retained2;
 import com.enlight.game.entity.gm.Retained3;
+import com.enlight.game.entity.gm.RetainedAll1;
 import com.enlight.game.service.account.AccountService;
 import com.enlight.game.service.account.ShiroDbRealm.ShiroUser;
 import com.enlight.game.service.es.RetainedServer;
@@ -163,11 +164,14 @@ public class XyjRetainedController extends BaseController{
 		List<Retained2> beanList2 = binder.getMapper().readValue(binder.toJson(n.get("retained2s")), new TypeReference<List<Retained2>>() {}); 
 		System.out.println("Retained3   "  + binder.toJson(n.get("retained3s")));
 		List<Retained3> beanList3 = binder.getMapper().readValue(binder.toJson(n.get("retained3s")), new TypeReference<List<Retained3>>() {}); 
+		System.out.println("retainedAll1   "  + binder.toJson(n.get("retainedAll1")));
+		RetainedAll1 retainedAll1 = binder.fromJson(binder.toJson(n.get("retainedAll1")), RetainedAll1.class);
 		
 		model.addAttribute("switchTable", switchTable);
 		model.addAttribute("retained1s", beanList1);
 		model.addAttribute("retained2s", beanList2);
 		model.addAttribute("retained3s", beanList3);
+		model.addAttribute("retainedAll1", retainedAll1);
 		
 		model.addAttribute("store", stores);
 		model.addAttribute("serverZone", serverZones);

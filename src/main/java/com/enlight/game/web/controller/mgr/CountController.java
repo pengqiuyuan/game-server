@@ -337,12 +337,17 @@ public class CountController extends BaseController{
 	    String sevenDayAgo = sdf.format(calendar.getTime()); 
 	    
 	    calendar.setTime(new Date()); 
+	    calendar.add(calendar.DATE,-15);
+	    String fifteenDayAgo = sdf.format(calendar.getTime()); 
+	    
+	    calendar.setTime(new Date()); 
 	    calendar.add(calendar.DATE,-30);
 	    String thirtyDayAgo = sdf.format(calendar.getTime()); 
 		
 	    dateMap.put("nowDate",nowDate);
 	    dateMap.put("yesterday",yesterday);
 	    dateMap.put("sevenDayAgo",sevenDayAgo);
+	    dateMap.put("fifteenDayAgo",fifteenDayAgo);
 	    dateMap.put("thirtyDayAgo",thirtyDayAgo);
 		return dateMap;
 	}
